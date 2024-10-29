@@ -691,6 +691,67 @@ function flrt_acf_terms_order( $entity_items, $filter ){
     return $entity_items;
 }
 
+/**
+ * Adds correct pagination URLs to the Load more/Infinite scroll button for Elementor posts block
+ */
+add_filter( 'elementor/widget/render_content', 'flrt_elementor_load_more_anchor', 10, 2 );
+function flrt_elementor_load_more_anchor( $widget_content, $module ){
+    // Nothing is needed if there is no Filter request
+    if( ! flrt_is_filter_request() ){
+        return $widget_content;
+    }
+
+    if( $module instanceof ElementorPro\Modules\Posts\Widgets\Posts ){
+        global $wp_rewrite;
+
+        $urlManager = \FilterEverything\Filter\Container::instance()->getUrlManager();
+        $current_page = $module->get_current_page();
+        $next_page = intval( $current_page ) + 1;
+        $data_next_page = $module->get_wp_link_page( $next_page );
+        $rewrite = $wp_rewrite->wp_rewrite_rules();
+
+        if ( defined('FLRT_PERMALINKS_ENABLED') && FLRT_PERMALINKS_ENABLED ) {
+            // This is ok when permalinks are enabled.
+            $data_next_page = str_replace( $urlManager->removePaginationBase( $data_next_page ), $urlManager->getFormActionOrFullPageUrl(), $data_next_page );
+            $uri_components = explode( "?", $urlManager->getFormActionOrFullPageUrl( true ) );
+            if( isset( $uri_components[1] ) ){
+                $data_next_page = $data_next_page . '?'.$uri_components[1];
+            }
+        } else if ( ! FLRT_PERMALINKS_ENABLED && ! empty( $rewrite ) ) {
+            // WordPress permalinks are Enabled, but Filter Everything permalinks are Disabled
+            $uri_components = explode( "?", $urlManager->getFormActionOrFullPageUrl( true ) );
+            // If URI part after ? exists
+            if( isset( $uri_components[1] ) ){
+                $data_next_page = $data_next_page . '?'.$uri_components[1];
+            }
+        } else {
+            // No permalinks at all
+            $current_page_url = $urlManager->getFormActionOrFullPageUrl( true );
+            $url_parts = parse_url( $data_next_page );
+            if( isset( $url_parts['query'] ) ){
+                parse_str( $url_parts['query'], $params );
+                if( isset( $params['page'] ) && $params['page'] ) {
+                    $data_next_page = flrt_add_query_arg( 'page', $params['page'], $current_page_url );
+                }
+            }
+        }
+
+        $widget_content = preg_replace('%data-next-page\="[^"]+"%', 'data-next-page="' . $data_next_page . '"', $widget_content);
+    }
+
+    return $widget_content;
+}
+
+add_filter( 'wpc_remove_pagination_base', 'flrt_remove_pagination_base' );
+function flrt_remove_pagination_base( $url ){
+    global $wp_rewrite;
+
+    $rewrite = $wp_rewrite->wp_rewrite_rules();
+    $url = ( ! empty( $rewrite ) ) ? user_trailingslashit( $url ) : rtrim( $url, '/' ) . '/';
+
+    return $url;
+}
+
 //@todo check this with PLL support
 //function flrt_add_cpt_to_pll_tmp( $post_types, $is_settings ) {
 //    if ( $is_settings ) {

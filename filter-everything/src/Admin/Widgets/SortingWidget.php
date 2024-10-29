@@ -72,7 +72,7 @@ class SortingWidget extends \WP_Widget
         $templateManager->includeFrontView(
             'orderby',
             array(
-                'action'    => $url_manager->getFormActionUrl(),
+                'action'    => $url_manager->getFormActionOrFullPageUrl(),
                 'selected_orderby'   => $orderby,
                 'titles'    => $instance['titles'],
                 'orderbies' => $instance['orderbies'],

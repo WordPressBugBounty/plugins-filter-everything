@@ -273,7 +273,18 @@ function flrt_unnecessary_get_parameters( $params ){
     $unnecessary_params = array(
         'product-page' => true,
         '_pjax' => true,
+        'cst'   => true,
     );
+
+    $get = \FilterEverything\Filter\Container::instance()->getTheGet();
+
+    if( ! empty( $get ) && is_array( $get ) ) {
+        foreach ( $get as $param_name => $param_value ) {
+            if( preg_match( '%query\-[0-9]+\-page%', $param_name ) ) {
+                $unnecessary_params[$param_name] = true;
+            }
+        }
+    }
 
     return array_merge( $params, $unnecessary_params );
 }
@@ -411,4 +422,26 @@ function flrt_chips_labels( $term_name, $term, $filter ) {
     }
 
     return $term_name;
+}
+
+add_filter( 'query_loop_block_query_vars', 'flrt_query_loop_block_query_vars', 10, 2 );
+
+function flrt_query_loop_block_query_vars( $query, $block ){
+    global $xd;
+    $xd++;
+
+    if( ! is_null( $block ) && property_exists( $block, 'parsed_block' ) ){
+        if( isset( $block->parsed_block['blockName'] ) ) {
+            if( in_array( $block->parsed_block['blockName'],
+                [
+                    'core/query-pagination-next',
+                    'core/query-pagination-numbers',
+                ]
+                ) ){
+                $query['flrt_pagination'] = true;
+            }
+        }
+    }
+
+    return $query;
 }

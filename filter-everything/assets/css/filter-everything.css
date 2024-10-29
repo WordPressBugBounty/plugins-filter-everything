@@ -1,5 +1,5 @@
 /*!
- * Filter Everything admin 1.8.6
+ * Filter Everything admin 1.8.7
  */
 .rtl .wpc-filter-layout-dropdown .select2-container--default .select2-selection--single .select2-selection__arrow b,
 .rtl .wpc-filter-search-wrapper button.wpc-search-clear,
@@ -466,7 +466,7 @@ li.wpc-filter-chip {
     margin-top: 10px;
 }
 .wpc-filters-range-slider-wrapper {
-    margin: 1.5em 13px 10px 0;
+    margin: 1.5em 0 10px 0;
 }
 .wpc-filters-range-inputs .ui-button.ui-state-active:hover,
 .wpc-filters-range-inputs .ui-button:active,
@@ -522,6 +522,8 @@ html .wpc-filters-range-inputs .ui-button.ui-state-disabled:hover {
 .wpc-filters-range-inputs .ui-slider {
     position: relative;
     text-align: left;
+    display: flex;
+    align-items: center;
 }
 .wpc-filters-range-inputs .ui-slider .ui-slider-range {
     position: absolute;
@@ -537,10 +539,12 @@ html .wpc-filters-range-inputs .ui-button.ui-state-disabled:hover {
 }
 .wpc-filters-range-inputs .ui-slider-horizontal .ui-slider-handle {
     top: -12px;
-    margin-left: -6px;
     border-radius: 50%;
     outline: 0;
     box-shadow: 0 2px 9px rgba(0, 0, 0, 0.23);
+}
+.wpc-filters-range-inputs .ui-slider-horizontal .ui-slider-handle:last-child{
+    transform: translateX(-100%);
 }
 .wpc-filters-range-inputs .ui-slider-horizontal .ui-slider-range {
     top: 0;
@@ -596,7 +600,7 @@ html .wpc-filters-range-inputs .ui-button.ui-state-disabled:hover {
 .widget-area,
 .widget_wpc_filters_widget,
 .wpc-filter-collapsible .wpc-filter-title,
-.wpc-filters-main-wrap {
+.wpc-filters-main-wrap{
     position: relative;
 }
 .wpc-filter-header .wpc-filter-title button {

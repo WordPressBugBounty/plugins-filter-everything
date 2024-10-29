@@ -32,7 +32,7 @@ $cancel_url      = $url_manager->getTermUrl( '', '', '', '', [ 'srch'=> true ] )
     <?php if ( $label !== '' ) {
         flrt_filter_header( array( 'label' => $label, 'collapse' => 'no', 'values' => [], 'tooltip' => false ), [] );
     } ?>
-    <form action="<?php echo esc_url( $url_manager->getFormActionUrl() ); ?>" role="search" method="GET" class="wpc-filter-search-form">
+    <form action="<?php echo esc_url( $url_manager->getFormActionOrFullPageUrl() ); ?>" role="search" method="GET" class="wpc-filter-search-form">
         <div class="wpc-search-field-wrapper wpc-search-field-wrapper-<?php echo $search_id; ?>">
             <span class="wpc-search-icon"></span>
             <input type="text" class="wpc-search-field" placeholder="<?php echo $placeholder; ?>" value="<?php echo $search; ?>" name="srch">

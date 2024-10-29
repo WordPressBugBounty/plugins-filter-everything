@@ -1,5 +1,5 @@
 /*!
- * Filter Everything admin 1.8.6
+ * Filter Everything admin 1.8.7
  */
 #filters-seo-rules .inside,
 #filters-set-items .inside{
@@ -216,7 +216,6 @@ li.wpc-filter-slug{
 }
 .wpc-filter-head{
     font-size: 13px;
-    background: #f9f9f9;
     border: 1px solid #e3e3e3;
     box-shadow: 0 1px 1px rgba(0,0,0,.04);
 }

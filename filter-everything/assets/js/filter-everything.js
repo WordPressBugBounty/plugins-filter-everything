@@ -1,5 +1,5 @@
 /*!
- * Filter Everything 1.8.6
+ * Filter Everything 1.8.7
  */
 (function ($) {
     "use strict";
@@ -718,7 +718,7 @@
             templateSelection: function( data ) {
                 return wpcSelect2Template( data );
             },
-            minimumResultsForSearch: wpcAllowSearchField
+            minimumResultsForSearch: wpcAllowSearchField,
         });
 
         $('.wpc-orderby-select').select2({

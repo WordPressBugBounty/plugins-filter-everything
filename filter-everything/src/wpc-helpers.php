@@ -1463,8 +1463,10 @@ function flrt_get_term_swatch_image( $term_id, $filter ) {
     $image_key = apply_filters( 'wpc_image_term_meta_key', $image_key, $filter );
 
     $image_id = get_term_meta( $term_id, $image_key, true );
+    $swatch_image_size = apply_filters( 'wpc_swatch_image_size', 'thumbnail' );
+
     if ( $image_id ) {
-        $src = wp_get_attachment_image_url( $image_id, 'thumbnail' );
+        $src = wp_get_attachment_image_url( $image_id, $swatch_image_size );
     }
 
     return $src;
@@ -1692,6 +1694,15 @@ function flrt_split_date_time( $date_time = '' ) {
 }
 
 function flrt_string_polyfill( $string ) {
+
+    if( is_array( $string ) ){
+        return array_map( 'flrt_string_polyfill_body', $string );
+    }
+
+    return flrt_string_polyfill_body( $string );
+}
+
+function flrt_string_polyfill_body( $string ){
     $str = preg_replace('/\x00|<[^>]*>?/', '', $string );
     return str_replace( ["'", '"'], ['&#39;', '&#34;'], $str );
 }

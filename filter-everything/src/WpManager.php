@@ -168,7 +168,7 @@ class WpManager
         // - one time and store it into Container
         // - do it before comparing with the current query
         global $wpc_not_fired;
-        $this->collectWPQueries($wp_query);
+        $this->collectWPQueries( $wp_query );
 
         if ( $wp_query->is_main_query() && $wpc_not_fired ) {
             global $flrt_sets;
@@ -425,7 +425,10 @@ class WpManager
                 } else {
                     $user_id    = $wp_query->get('author');
                     $user       = get_user_by('ID', $user_id);
-                    $wp_queried_object['author'] = $user->data->user_nicename;
+
+                    if( ! is_null( $user ) && property_exists( $user, 'data' ) && property_exists( $user->data, 'user_nicename' ) ) {
+                        $wp_queried_object['author'] = $user->data->user_nicename;
+                    }
                 }
 
             }
@@ -671,7 +674,7 @@ class WpManager
                 return $wp_query;
             }
 
-            global $flrt_queries;
+            global $flrt_queries, $wpcQueryOrder;
             // We must always get post type to compare with selected Post type in Filter Set
 
             $flrt_query_vars = [];
@@ -752,9 +755,18 @@ class WpManager
 
             $flrt_query_vars['query_vars']  = serialize( $to_save_query_vars );
             $flrt_queries[ $hash ][]        = $flrt_query_vars;
-
+            // Every Query Vars equal combination starts counter from zero value
             $currentOrder = array_key_last( $flrt_queries[ $hash ] );
-            $wp_query->set( 'flrt_query_hash', md5($hash . $currentOrder ) );
+
+            if( $currentOrder === 0 ) {
+                $wpcQueryOrder = $currentOrder;
+            }
+
+            if( ! $wp_query->get('flrt_pagination') ) {
+                $wpcQueryOrder = $currentOrder;
+            }
+
+            $wp_query->set( 'flrt_query_hash', md5($hash . $wpcQueryOrder ) );
         }
 
         return $wp_query;
@@ -775,10 +787,19 @@ class WpManager
             $home_url = trim( $parts[0], '/' );
 
             $res =  str_replace( $home_url, '', $postData['flrt_ajax_link'] );
-            return $res;
+
+            if( gettype( $res ) === 'string' ){
+                return $res;
+            }
         }
 
-        return $_SERVER['REQUEST_URI'];
+        $res = '';
+
+        if( gettype( $_SERVER['REQUEST_URI'] ) === 'string' ){
+            $res = $_SERVER['REQUEST_URI'];
+        }
+
+        return $res;
     }
 
     public function customParseRequest( $do_parse_request, $WP, $extra_query_vars ){

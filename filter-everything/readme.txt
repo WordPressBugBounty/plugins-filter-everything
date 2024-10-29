@@ -1,9 +1,9 @@
 === Filter Everything&nbsp;— Product Filter & WordPress Filter ===
 Contributors: stepasyuk
 Tags: woocommerce product filter, woocommerce filter, product filter, post filter, ajax filter
-Stable tag: 1.8.6
+Stable tag: 1.8.7
 Requires at least: 4.6
-Tested up to: 6.6.1
+Tested up to: 6.6.2
 Requires PHP: 5.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -167,8 +167,17 @@ Uploading via FTP
 
 == Changelog ==
 
+= 1.8.7 =
+*Release Date - 29 October 2024*
+* Tweak - Added hook 'wpc_swatch_image_size'
+* Fix   - Fixed issues with Select2 dropdowns after WooCommerce update to the > 9.0.0
+* Fix   - Fixed style issues with the Avada theme
+* Fix   - Fixed compatibility with the Load more button/Infinite scroll in Elementor
+* Fix   - Fixed bug with sorting terms
+
 = 1.8.6 =
 *Release Date - 18 July 2024*
+* Dev   - Added ability to translate SEO Rules with Polylang
 * Fix   - Fixed compatibility issue with Polylang plugin
 * Fix   - Fixed the ability to rewrite functions wrapped with function_exists()
 * Fix   - Fixed small issue with terms order equal to the order in ACF field
@@ -187,17 +196,20 @@ Uploading via FTP
 = 1.8.4 =
 *Release Date - 08 April 2024*
 * Dev   - Tested and improved compatibility with WordPress 6.5
+* Fix   - Fixed issue with Filter Set for a post page
 * Fix   - Fixed issue with preview products in draft status and PHP > 8.2
 * Fix   - Fixed JS error occurred on type in the Search field input
 * Fix   - Issue with incorrect attribute 'for' in the Filters Widget title label
 
 = 1.8.3 =
 *Release Date - 14 February 2024*
+* Dev   - Increased plugin performance and made faster it up to 10 times
 * Fix   - Added compatibility with PHP > 8.1, removed FILTER_SANITIZE_STRING error
 * Fix   - Fixed bug with Date view available by default in a filter
 * Fix   - Fixed the issue with products with empty '_sale_price' meta values and wrong On sale counters
 * Fix   - Fixed issue with a parent filter, when current WordPress term archive page is selected term in the parent filter
 * Fix   - Fixed bug when the only Search Field presents in a Filter Set
+* Fix   - Fixed issues with Polylang plugin when language functions are not defined
 * Fix   - Fixed issue with double click on the Apply Button after using the Search Field
 * Fix   - Set correct permissions for the /assets dir
 * Tweak - Added hook 'wpc_plugin_user_caps' to allow to modify user roles that can use the plugin
@@ -205,15 +217,26 @@ Uploading via FTP
 
 = 1.8.2 =
 *Release Date - 10 January 2024*
-* Dev   - Added new filter type by Post Date
-* Tweak - Made Numeric Range filters collapsible
+* Fix   - Fixed issue with GET-style parameters in filter URLs after 1.8.0 update
+
+= 1.8.1 =
+*Release Date - 10 January 2024*
 * Fix   - Fixed warning message on the login screen
 * Fix   - Fixed issue with resetting filters cache
+
+= 1.8.0 =
+*Release Date - 08 January 2024*
+* Dev   - Added new filter type by Post Date
+* Tweak - Made Numeric Range filters collapsible
 * Fix   - Renamed 'wpc_clean' function to 'flrt_clean' to avoid conflicts
 
 = 1.7.16 =
 *Release Date - 14 December 2023*
+* Dev   - Added support for Dokan store pages
+* Dev   - Added Experimental option that hides variable products with out of stock variations
+* Tweak - Improved search field and added variations to search by SKU
 * Tweak - Added global variable $flrt_plugin to access the class
+* Tweak - Added ability to create translations for "Any %entity%" Filter Set type
 * Fix   - Fixed the issue with double SEO titles and SEO Rules entities on block themes
 * Fix   - Fixed issue with term_taxonomy_id and taxonomy filter counters
 * Fix   - Fixed Select2 CSS conflict in Woocommerce admin forms
@@ -222,17 +245,23 @@ Uploading via FTP
 *Release Date - 01 August 2023*
 * Dev   - Added Spanish translation
 * Dev   - Tested compatibility with WordPress 6.3
+* Fix   - Added 301 redirect to canonical URL with (or without) correct user trailing slash on filtering pages
 * Fix   - Added hook 'wpc_do_filter_request' to the collectFilteredPostsIds(); method to fix term counter
 * Fix   - Fixed hover "checked" effect for Color swatches on mobile devices
 * Fix   - Improved On Sale and Regular price translations for the On Sale filter
 * Tweak - Added hook 'wpc_set_min_max' to modify the $min_and_max array
-* Tweak - Sorted Filter terms alphabetically for greater convenience
+* Tweak - Sorted Filter and SEO Rule terms alphabetically for greater convenience
 
 = 1.7.14 =
 *Release Date - 19 June 2023*
+* Dev   - Added German translation. Thanks to Daniel (microteq)
 * Tweak - Added the "How to?" Meta box on the Filter Set edit screen for quick help with popular questions
-* Tweak - Added German translation. Thanks to Daniel (microteq)
+* Fix   - Hotfix for the 'MetaBoxes::adviceMetabox() cannot be called statically' error
+
+= 1.7.11 =
+*Release Date - 31 May 2023*
 * Tweak - Added support for multi-currency for the WOOCS and CURCY plugins
+* Fix   - Fixed location for the Apply button, when Filter Set is directed to All archive pages/Any taxonomy,post,author
 * Fix   - Fixed posts search count for the search by SKU
 
 = 1.7.10 =
@@ -241,8 +270,10 @@ Uploading via FTP
 
 = 1.7.9 =
 *Release Date - 25 May 2023*
+* Fix   - Fixed location for the Apply button, when Filter Set is directed to All archive pages/Any taxonomy,post,author
 * Fix   - Fixed bug when the Apply button does not appear on frontend in the latest position of the Filter Set
 * Fix   - Fixed bug with negative numbers for Numeric filters
+* Fix   - Fixed bug with 404 errors, when Filter Set was in Trash and there were filters without Filter Set in DB
 * Fix   - Fixed bug with JS alert for mobile Pop-up widget when AJAX is disabled
 * Tweak - Replaced /page/ with $wp_query->pagination_base in permalinks
 
@@ -253,17 +284,21 @@ Uploading via FTP
 = 1.7.7 =
 *Release Date - 08 May 2023*
 * Dev   - Added Search field in the Filters widget. It is compatible with filtered posts, supports AJAX and allows to search by SKU among Woo products
+* Dev   - Added ability to direct Filter Set to all singular pages (Any page)
+* Fix   - Fixed compatibility issue for Bricks Builder and Filter Set for "Any taxonomy"
+* Fix   - Improved CURL outer request to avoid 10 seconds freezing in /wp-admin when the request is failed
 * Fix   - Fixed fatal error in FiltersWidget.php(32): extract()
 * Tweak - Added filter get terms hooks to allow to select terms from external tables
 * Tweak - Added hook 'widget_title' for all widget titles
 * Tweak - Added hook 'wpc_do_filter_request' to handle every filter action for wp_query
-* Tweak - Added hooks 'wpc_all_set_wp_queried_posts'
-* Tweak - Added notice, when "CSS id or class of the Posts Container" configured wrong
+* Tweak - Added hooks 'wpc_all_set_wp_queried_posts' and 'wpc_variations_meta_query'
+* Tweak - Added notice, when "HTML id or class of the Posts Container" configured wrong
 
 = 1.7.6 =
 *Release Date - 14 March 2023*
 * Dev   - Added [fe_posts_found] shortcode to display filtered posts number
 * Fix   - Fixed bug with "+" symbol in ACF fields
+* Fix   - Fixed compatibility related with post types for the latest Polylang Pro
 * Tweak - Optimized main CSS file
 * Tweak - Disabled including assets on pages does not related with filters
 * Tweak - Improved frontend for the RTL version
@@ -281,6 +316,7 @@ Uploading via FTP
 * Tweak - Improved compatibility with PHP > 8.0
 * Fix   - Fixed CSS bug with Show more/Show less and Search field
 * Fix   - Fixed bug with Chips that sometimes disappeared with enabled AJAX feature
+* Fix   - Fixed identifyWpQueriedObject(); method to be more compatible with WPML on singular pages
 
 = 1.7.3 =
 *Release Date - 04 January 2023*
@@ -290,20 +326,26 @@ Uploading via FTP
 *Release Date - 02 January 2023*
 * Dev   - Added Color Swatches support and improved Brand logo support
 * Tweak - Added hook 'wpc_filter_classes' to handle filter classes
+* Tweak - Added support for SEO Rules when permalinks (FLRT_PERMALINKS_ENABLED) are disabled
 * Tweak - Added sorting by Menu order for Product Categories
 * Tweak - Added hooks 'wpc_unset_num_shift' and 'wpc_set_num_shift' for numeric filters to allow shifting
 * Tweak - Added support for the Woodmart brand images
+* Tweak - Added license deactivate to the plugin uninstalling process
+* Fix   - Removed hreflang tags on filtering result pages to avoid SEO problems
+* Fix   - Fixed license activation for Wordpress Multisite
 * Fix   - Fixed bug with untranslatable post type and Custom Field, Custom Field Num filters
 * Fix   - Fixed bug with opened filters widget on 768px screens
+* Fix   - Fixed bug with transient name for Post Meta Exists filters
+* Fix   - Fixed bug for Latest posts Gutenberg module that show posts by Category
 
 [See changelog for all versions](https://demo.filtereverything.pro/changelog.txt).
 
 == Upgrade Notice ==
 
-= 1.8.6 =
-*Release Date - 18 July 2024*
-* Fix   - Fixed compatibility issue with Polylang plugin
-* Fix   - Fixed the ability to rewrite functions wrapped with function_exists()
-* Fix   - Fixed small issue with terms order equal to the order in ACF field
-* Fix   - Fixed issue with text search through filtered posts and apostrophe character
-* Tweak - Added hooks 'wpc_taxonomy_location_terms', 'wpc_post_type_location_terms', 'wpc_author_location_terms'
+= 1.8.7 =
+*Release Date - 29 October 2024*
+* Tweak - Added hook 'wpc_swatch_image_size'
+* Fix   - Fixed issues with Select2 dropdowns after WooCommerce update to the > 9.0.0
+* Fix   - Fixed style issues with the Avada theme
+* Fix   - Fixed compatibility with the Load more button/Infinite scroll in Elementor
+* Fix   - Fixed bug with sorting terms

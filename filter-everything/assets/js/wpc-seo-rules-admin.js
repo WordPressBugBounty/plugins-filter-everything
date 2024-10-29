@@ -1,5 +1,5 @@
 /*!
- * Filter Everything seo rules admin 1.8.6
+ * Filter Everything seo rules admin 1.8.7
  */
 (function($) {
     "use strict";

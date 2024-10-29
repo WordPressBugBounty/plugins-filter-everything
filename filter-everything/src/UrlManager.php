@@ -146,7 +146,7 @@ class UrlManager
         return apply_filters( 'wpc_filter_term_url', $url );
     }
 
-    public function getFormActionUrl( $queryParams = false )
+    public function getFormActionOrFullPageUrl( $fullPageUrl = false )
     {
         $query          = [];
         $homeUrl        = parse_url(home_url());
@@ -174,12 +174,11 @@ class UrlManager
         }
 
         $formAction = $this->removePaginationBase( $fullPath );
-        $formAction = FLRT_PERMALINKS_ENABLED ? user_trailingslashit( $formAction ) : rtrim( $formAction, '/' ) . '/';
 
         // Add GET parameters
-        if( $queryParams && ! empty( $query ) ) {
+        if( $fullPageUrl && ! empty( $query ) ) {
             foreach ($query as $name => $value) {
-                $formAction = flrt_add_query_arg($name, $value, $formAction);
+                $formAction = flrt_add_query_arg( $name, $value, $formAction );
             }
         }
 
@@ -221,7 +220,6 @@ class UrlManager
             $requested      = $this->wpManager->getQueryVar('queried_values', [] );
 
             $this->resetUrl = $this->removePaginationBase( $this->resetUrl );
-            $this->resetUrl = FLRT_PERMALINKS_ENABLED ? user_trailingslashit( $this->resetUrl ) : rtrim( $this->resetUrl, '/' ) . '/';
 
             // Maybe add GET parameters
             $exclude_params   = array_keys( $this->setCorrectGetKeys( $requested ) );
@@ -244,7 +242,7 @@ class UrlManager
      * @param $url
      * @return string
      */
-    private function removePaginationBase( $url = '' )
+    public function removePaginationBase( $url = '' )
     {
         global $wp_rewrite;
 
@@ -255,7 +253,7 @@ class UrlManager
         $url = preg_replace('%\/'.$comments_pagination_base.'\-[0-9]+%', '', $url );
         $url = preg_replace('%\/[0-9]+[\/]?$%m', '', $url );
 
-        return $url;
+        return apply_filters( 'wpc_remove_pagination_base', $url );
     }
 
     public function getValuesSeparator()

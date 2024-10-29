@@ -46,7 +46,7 @@ if ( ! defined('ABSPATH') ) {
                     $max = isset( $filter['values']['max'] ) ? $filter['values']['max'] : $absMax;
                     $min = isset( $filter['values']['min'] ) ? $filter['values']['min'] : $absMin;
                 ?>
-                <form action="<?php echo esc_url( $url_manager->getFormActionUrl() ); ?>" method="GET" class="wpc-filter-range-form <?php echo esc_attr( $hasSliderClass ); ?>" id="wpc-filter-range-form-<?php echo esc_attr($filter['ID']); ?>">
+                <form action="<?php echo esc_url( $url_manager->getFormActionOrFullPageUrl() ); ?>" method="GET" class="wpc-filter-range-form <?php echo esc_attr( $hasSliderClass ); ?>" id="wpc-filter-range-form-<?php echo esc_attr($filter['ID']); ?>">
                     <div class="wpc-filters-range-wrapper">
                         <div class="wpc-filters-range-column wpc-filters-range-min-column">
                             <?php // if there are value in $_GET we have to put it into field ?>

@@ -112,7 +112,7 @@ class FiltersWidget extends \WP_Widget
 
         $related_filters        = $em->getSetsRelatedFilters( array( $theSet ) );
         $found_posts            = flrt_posts_found_quantity( $setId, true );
-        $actionUrl              = $urlManager->getFormActionUrl(true);
+        $actionUrl              = $urlManager->getFormActionOrFullPageUrl(true);
         $view_args              = [ 'ask_to_select_parent' => false ];
 
         // Apply button preparations

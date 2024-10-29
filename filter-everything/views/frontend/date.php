@@ -86,7 +86,7 @@ use \FilterEverything\Filter\PostDateEntity;
                         </div>
                     </form>
                     <!-- Hidden part of the date form -->
-                    <form style="display: none;" action="<?php echo esc_url( $url_manager->getFormActionUrl() ); ?>" method="GET" class="wpc-filter-date-range-form" id="wpc-filter-date-range-form-<?php echo esc_attr( $filter['ID'] ); ?>">
+                    <form style="display: none;" action="<?php echo esc_url( $url_manager->getFormActionOrFullPageUrl() ); ?>" method="GET" class="wpc-filter-date-range-form" id="wpc-filter-date-range-form-<?php echo esc_attr( $filter['ID'] ); ?>">
                         <div class="wpc-filters-date-range-wrapper">
                             <div class="wpc-filters-date-range-column wpc-filters-date-range-from-column">
                                 <input type="text" id="wpc-filters-date-from-<?php echo esc_attr( $filter['ID'] ); ?>" class="wpc-filters-range-from" name="<?php echo esc_attr( $fromName ); ?>" value="<?php echo esc_attr( $from ); ?>" data-from="<?php echo esc_attr( $absFrom ); ?>" />
