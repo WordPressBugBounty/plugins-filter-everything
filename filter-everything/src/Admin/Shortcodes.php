@@ -144,12 +144,19 @@ class Shortcodes
 
     public function postsFound( $atts )
     {
-        $set_id = 0;
+        $set_id     = 0;
+        $all        = false;
+        $wpManager  = Container::instance()->getWpManager();
 
-        if( isset( $atts['sid'] ) ){
+        if ( isset( $atts['all'] ) && $atts['all'] ){
+            if ( $wpManager->getQueryVar('wpc_is_filter_request') ){
+                $all = true;
+            }
+        }
+
+        if ( isset( $atts['sid'] ) ){
             $set_id = preg_replace('/[^\d]?/', '', $atts['sid'] );
-        }else{
-            $wpManager = Container::instance()->getWpManager();
+        } else {
             $sets = $wpManager->getQueryVar( 'wpc_page_related_set_ids', [] );
             if ( isset( $sets[0]['ID'] ) && $sets[0]['ID'] ) {
                 $set_id = $sets[0]['ID'];
@@ -158,7 +165,7 @@ class Shortcodes
 
         ob_start();
 
-        flrt_posts_found( $set_id );
+        flrt_posts_found( $set_id, $all );
 
         $html = ob_get_clean();
         return $html;

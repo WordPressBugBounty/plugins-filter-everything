@@ -1,5 +1,5 @@
 /*!
- * Filter Everything 1.8.7
+ * Filter Everything 1.8.8
  */
 (function ($) {
     "use strict";

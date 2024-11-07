@@ -672,11 +672,11 @@ function flrt_filters_button( $setId = 0, $class = '' )
     $templateManager->includeFrontView( 'filters-button', array( 'wpc_found_posts' => $wpc_found_posts, 'class' => $attrClass, 'set_id' => $setId ) );
 }
 
-function flrt_posts_found( $setid = 0 )
+function flrt_posts_found( $setid = 0, $all = false )
 {
     $templateManager = \FilterEverything\Filter\Container::instance()->getTemplateManager();
     $fss             = \FilterEverything\Filter\Container::instance()->getFilterSetService();
-    $all             = false;
+
     if ( isset( $_GET['srch'] ) && $_GET['srch'] ) {
         $all         = true;
     }

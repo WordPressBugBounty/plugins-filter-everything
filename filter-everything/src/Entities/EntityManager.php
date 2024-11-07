@@ -999,17 +999,14 @@ class EntityManager
     public static function compareAsc( $key ){
 
         return function ($a, $b) use ($key) {
+            $value_1 = isset( $a->$key ) ? strtolower($a->$key) : 0;
+            $value_2 = isset( $b->$key ) ? strtolower($b->$key) : 0;
 
-            $value_1 = isset( $a->$key ) ? mb_strtolower($a->$key) : 0;
-            $value_2 = isset( $b->$key ) ? mb_strtolower($b->$key) : 0;
-
-            $comparison = strcoll($value_1, $value_2);
-
-            if ($comparison == 0) {
+            if ($value_1 == $value_2) {
                 return 0;
             }
 
-            return ($comparison > 0) ? +1 : -1;
+            return ($value_1 > $value_2) ? +1 : -1;
         };
     }
 

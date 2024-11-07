@@ -1,7 +1,7 @@
 === Filter Everything&nbsp;— Product Filter & WordPress Filter ===
 Contributors: stepasyuk
 Tags: woocommerce product filter, woocommerce filter, product filter, post filter, ajax filter
-Stable tag: 1.8.7
+Stable tag: 1.8.8
 Requires at least: 4.6
 Tested up to: 6.6.2
 Requires PHP: 5.7
@@ -167,6 +167,11 @@ Uploading via FTP
 
 == Changelog ==
 
+= 1.8.8 =
+*Release Date - 07 November 2024*
+* Fix   - Fixed bug with sorting method
+* Tweak - Added attribute all="true" for the [fe_posts_found] shortcode that counts all posts for all Filter Sets on a page
+
 = 1.8.7 =
 *Release Date - 29 October 2024*
 * Tweak - Added hook 'wpc_swatch_image_size'
@@ -322,30 +327,11 @@ Uploading via FTP
 *Release Date - 04 January 2023*
 * Fix   - Fixed bug with undefined variables data_default, data_color and wrapper_class
 
-= 1.7.2 =
-*Release Date - 02 January 2023*
-* Dev   - Added Color Swatches support and improved Brand logo support
-* Tweak - Added hook 'wpc_filter_classes' to handle filter classes
-* Tweak - Added support for SEO Rules when permalinks (FLRT_PERMALINKS_ENABLED) are disabled
-* Tweak - Added sorting by Menu order for Product Categories
-* Tweak - Added hooks 'wpc_unset_num_shift' and 'wpc_set_num_shift' for numeric filters to allow shifting
-* Tweak - Added support for the Woodmart brand images
-* Tweak - Added license deactivate to the plugin uninstalling process
-* Fix   - Removed hreflang tags on filtering result pages to avoid SEO problems
-* Fix   - Fixed license activation for Wordpress Multisite
-* Fix   - Fixed bug with untranslatable post type and Custom Field, Custom Field Num filters
-* Fix   - Fixed bug with opened filters widget on 768px screens
-* Fix   - Fixed bug with transient name for Post Meta Exists filters
-* Fix   - Fixed bug for Latest posts Gutenberg module that show posts by Category
-
 [See changelog for all versions](https://demo.filtereverything.pro/changelog.txt).
 
 == Upgrade Notice ==
 
-= 1.8.7 =
-*Release Date - 29 October 2024*
-* Tweak - Added hook 'wpc_swatch_image_size'
-* Fix   - Fixed issues with Select2 dropdowns after WooCommerce update to the > 9.0.0
-* Fix   - Fixed style issues with the Avada theme
-* Fix   - Fixed compatibility with the Load more button/Infinite scroll in Elementor
-* Fix   - Fixed bug with sorting terms
+= 1.8.8 =
+*Release Date - 07 November 2024*
+* Fix   - Fixed bug with sorting method
+* Tweak - Added attribute all="true" for the [fe_posts_found] shortcode that counts all posts for all Filter Sets on a page
