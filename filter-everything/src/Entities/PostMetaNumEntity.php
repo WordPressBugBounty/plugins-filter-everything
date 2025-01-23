@@ -509,7 +509,7 @@ class PostMetaNumEntity implements Entity
         return false;
     }
 
-    public function addMetaQueryArray( $meta_query_array, $relation = false )
+    public function addMetaQueryArray( $meta_query_array, $relation = false, $top_index = false )
     {
         if( ! isset( $meta_query_array['key'] ) ){
             return false;
@@ -538,11 +538,16 @@ class PostMetaNumEntity implements Entity
 
         }
 
-        if( $relation && in_array( $relation, array( 'AND', 'OR' ) ) ){
-            $nested_index = $this->findNestedIndexForQuery($meta_query_array);
+        if ( $relation && in_array( $relation, array( 'AND', 'OR' ) ) ) {
+            if( $top_index !== false ) {
+                $nested_index = $top_index;
+            }else{
+                $nested_index = $this->findNestedIndexForQuery( $meta_query_array );
+            }
+
             $this->new_meta_query[$nested_index][] = $meta_query_array;
             $this->new_meta_query[$nested_index]['relation'] = $relation;
-        }else{
+        } else {
             $this->new_meta_query[] = $meta_query_array;
         }
 
@@ -601,10 +606,11 @@ class PostMetaNumEntity implements Entity
         $already_existing_meta_query = $wp_query->get('meta_query');
 
         if( is_array( $already_existing_meta_query ) ){
-            foreach( $already_existing_meta_query as $value ){
+            foreach( $already_existing_meta_query as $top_index => $value ){
+
                 if( $this->hasNestedQueries( $value ) ){
                     foreach( $value as $n => $nested_meta_query ){
-                        $this->addMetaQueryArray( $nested_meta_query, $value['relation'] );
+                        $this->addMetaQueryArray( $nested_meta_query, $value['relation'], $top_index );
                     }
                 }else{
                     $this->addMetaQueryArray( $value );
@@ -665,6 +671,7 @@ class PostMetaNumEntity implements Entity
         }
 
         $wp_query->set('meta_query', $this->new_meta_query );
+
         $this->new_meta_query = [];
 
         return $wp_query;

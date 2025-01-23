@@ -287,8 +287,8 @@ abstract class BaseSettings implements TabInterface{
                 }
             }
 
-            if( $field['id'] === 'color_swatches_taxonomies' ){
-                if( flrt_get_experimental_option('use_color_swatches') === 'on' ){
+            if( $field['id'] === 'color_swatches_taxonomies' || $field['id'] === 'rounded_swatches' ) {
+                if( flrt_get_experimental_option('use_color_swatches') === 'on' ) {
                     $field['args']['class'] .= ' wpc-opened';
                 }
             }

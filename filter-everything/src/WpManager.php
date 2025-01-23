@@ -425,8 +425,7 @@ class WpManager
                 } else {
                     $user_id    = $wp_query->get('author');
                     $user       = get_user_by('ID', $user_id);
-
-                    if( ! is_null( $user ) && property_exists( $user, 'data' ) && property_exists( $user->data, 'user_nicename' ) ) {
+                    if( ! is_null( $user ) && is_object( $user ) && property_exists( $user, 'data' ) && property_exists( $user->data, 'user_nicename' ) ) {
                         $wp_queried_object['author'] = $user->data->user_nicename;
                     }
                 }

@@ -1,5 +1,5 @@
 /*!
- * Filter Everything admin 1.8.8
+ * Filter Everything admin 1.8.9
  */
 #filters-seo-rules .inside,
 #filters-set-items .inside{
@@ -112,6 +112,7 @@
 .wpc-column-labels .wpc-filter-order{
     min-width: 51px;
     text-align: center;
+    border-radius: 5px;
 }
 .wpc-filter-item-labels li.wpc-filter-order{
     padding-top: 0 !important;
@@ -148,6 +149,7 @@ li.wpc-filter-slug{
     background: 0 0;
     cursor: pointer;
     outline: none;
+    border-radius: 5px;
 }
 .wpc-title-action .wpc-action:hover{
     background: #ffffff;
@@ -218,6 +220,7 @@ li.wpc-filter-slug{
     font-size: 13px;
     border: 1px solid #e3e3e3;
     box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    border-radius: 5px;
 }
 .wpc-date-type-tr,
 .wpc-date-format-tr,
@@ -525,6 +528,7 @@ label[for="wpc_seo_rules-wp_entity"],
     margin: 0 auto 10px;
     width: 100%;
     box-sizing: border-box;
+    border-radius: 5px;
 }
 .wpc-filter-field-shadow{
     height: 60px;

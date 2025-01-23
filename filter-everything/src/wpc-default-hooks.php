@@ -225,6 +225,35 @@ function flrt_initiate_overridden_functions()
             return $terms;
         }
     }
+
+    /**
+     * Fix for the LiveCanvas page builder
+     */
+    if( defined( 'LC_MU_PLUGIN_NAME' ) && LC_MU_PLUGIN_NAME === 'livecanvas-must-use-plugin.php' ) {
+        add_filter('wpc_pre_save_set_fields', 'flrt_safe_save_set_fields');
+        function flrt_safe_save_set_fields($setFields)
+        {
+
+            if (isset($setFields['wp_filter_query_vars'])) {
+                $query_vars = $setFields['wp_filter_query_vars'];
+                $new_query_vars = [];
+                $search_values = [
+                    '…'
+                ];
+                $replace_values = [
+                    '&hellip;'
+                ];
+
+                foreach ($query_vars as $hash => $vars_serialized_str) {
+                    $new_query_vars[$hash] = str_replace($search_values, $replace_values, $vars_serialized_str);
+                }
+
+                $setFields['wp_filter_query_vars'] = $new_query_vars;
+            }
+
+            return $setFields;
+        }
+    }
 }
 
 function flrt_chips( $showReset = false, $setIds = [] ) {
@@ -281,6 +310,10 @@ function flrt_unnecessary_get_parameters( $params ){
     if( ! empty( $get ) && is_array( $get ) ) {
         foreach ( $get as $param_name => $param_value ) {
             if( preg_match( '%query\-[0-9]+\-page%', $param_name ) ) {
+                $unnecessary_params[$param_name] = true;
+            }
+
+            if( preg_match( '%e\-page\-[a-zA-Z0-9]+%im', $param_name ) ) {
                 $unnecessary_params[$param_name] = true;
             }
         }
@@ -367,6 +400,23 @@ function flrt_frontend_filter_classes( $classes, $filter ){
 
     return $classes;
 }
+
+//add_filter( 'wpc_filter_classes', 'flrt_same_swatches_width', 20, 4 );
+//function flrt_same_swatches_width( $classes, $filter, $default_classes, $terms, $args ){
+//    if( in_array( 'wpc-filter-has-swatches', $classes ) ){
+//        if( ! empty( $terms ) ) {
+//            $counters = [];
+//            foreach ( $terms as $single_term ) {
+//                $counters[] = $single_term->cross_count;
+//            }
+//
+//            $max = max( $counters );
+//            $classes[] = 'wpc-counter-width-'. strlen( (string)$max );
+//        }
+//    }
+//    return $classes;
+//}
+
 
 // Bricks Builder fix for Any Category Filter Set
 add_action( 'wpc_all_set_wp_queried_posts', 'flrt_bricks_builder_category_compat', 10, 2 );

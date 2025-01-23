@@ -65,7 +65,7 @@ class Swatches
         $taxonomies = flrt_get_experimental_option( 'color_swatches_taxonomies', [] );
 
         if( ! empty( $taxonomies ) ) {
-            add_filter( 'wpc_filter_classes', [ $this, 'frontend_filter_classes'], 10, 2 );
+            add_filter( 'wpc_filter_classes', [ $this, 'frontend_filter_classes'], 10, 4 );
 
             add_filter( 'wpc_filters_radio_term_html', [ $this, 'frontend_display_swatch' ], 10, 4 );
             add_filter( 'wpc_filters_checkbox_term_html', [ $this, 'frontend_display_swatch' ], 10, 4 );
@@ -74,10 +74,20 @@ class Swatches
 
     }
 
-    public function frontend_filter_classes( $classes, $filter ){
+    public function frontend_filter_classes( $classes, $filter, $default_classes, $terms ){
         $taxonomies = flrt_get_experimental_option( 'color_swatches_taxonomies', [] );
         if( in_array( $filter['e_name'], $taxonomies ) ) {
             $classes[] = 'wpc-filter-has-swatches';
+
+            if( ! empty( $terms ) ) {
+                $counters = [];
+                foreach ( $terms as $single_term ) {
+                    $counters[] = $single_term->cross_count;
+                }
+
+                $max = max( $counters );
+                $classes[] = 'wpc-counter-width-'. strlen( (string)$max );
+            }
         }
 
         return $classes;

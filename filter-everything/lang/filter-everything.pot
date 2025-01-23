@@ -2356,3 +2356,12 @@ msgstr ""
 
 msgid "For example, \"Price from <span class=\"wpc-variable-inserter\" data-field=\"%s\" title=\"Click to insert the variable\">{value}</span> $\" will be displayed as \"Price from 150 $\""
 msgstr ""
+
+msgid "First, select another filter"
+msgstr ""
+
+msgid "Rounded swatches"
+msgstr ""
+
+msgid "Make swatches rounded"
+msgstr ""

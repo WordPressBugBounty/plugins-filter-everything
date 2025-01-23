@@ -1,9 +1,9 @@
 === Filter Everything&nbsp;— Product Filter & WordPress Filter ===
 Contributors: stepasyuk
 Tags: woocommerce product filter, woocommerce filter, product filter, post filter, ajax filter
-Stable tag: 1.8.8
+Stable tag: 1.8.9
 Requires at least: 4.6
-Tested up to: 6.6.2
+Tested up to: 6.7.1
 Requires PHP: 5.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -21,7 +21,7 @@ Please see demos of filtering for [Clothing](https://demo.filtereverything.pro/p
 - Filters any post types
 - Supports any filtering criteria
 - Easy integration on a page using Widgets or Shortcodes
-- Compatible with almost all page builders
+- Compatible with almost all page builders (*PRO)
 - Contains a lot of useful filter options
 - Supports search by keyword
 - Allows you to sort filtered results by any criteria
@@ -166,6 +166,14 @@ Uploading via FTP
 6. URL prefixes settings
 
 == Changelog ==
+
+= 1.8.9 =
+*Release Date - 21 January 2025*
+* Dev   - Added ability to make Color swatches rounded
+* Fix   - Small CSS fixes for range slider, widget element margins.
+* Fix   - Fixed bug in JS code for the mobile widget button counter ((18)) issue
+* Fix   - Fixed bug with empty Parent filter label
+* Fix   - Fixed bug with Elementor pagination e.g. "e-page-5dabfd1=2"
 
 = 1.8.8 =
 *Release Date - 07 November 2024*
@@ -323,15 +331,13 @@ Uploading via FTP
 * Fix   - Fixed bug with Chips that sometimes disappeared with enabled AJAX feature
 * Fix   - Fixed identifyWpQueriedObject(); method to be more compatible with WPML on singular pages
 
-= 1.7.3 =
-*Release Date - 04 January 2023*
-* Fix   - Fixed bug with undefined variables data_default, data_color and wrapper_class
-
 [See changelog for all versions](https://demo.filtereverything.pro/changelog.txt).
 
 == Upgrade Notice ==
 
-= 1.8.8 =
-*Release Date - 07 November 2024*
-* Fix   - Fixed bug with sorting method
-* Tweak - Added attribute all="true" for the [fe_posts_found] shortcode that counts all posts for all Filter Sets on a page
+*Release Date - 21 January 2025*
+* Dev   - Added ability to make Color swatches rounded
+* Fix   - Small CSS fixes for range slider, widget element margins.
+* Fix   - Fixed bug in JS code for the mobile widget button counter ((18)) issue
+* Fix   - Fixed bug with empty Parent filter label
+* Fix   - Fixed bug with Elementor pagination e.g. "e-page-5dabfd1=2"

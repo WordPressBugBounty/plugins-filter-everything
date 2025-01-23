@@ -44,6 +44,7 @@ $args = [
                         $disabled_class  = $disabled ? ' wpc-term-disabled' : '';
                         $link            = $url_manager->getTermUrl( $term_object->slug, $filter['e_name'], $filter['entity'] );
                         $link_attributes = 'href="'.esc_url($link).'"';
+                        $link_attributes .= ' class="wpc-filter-link"';
                         $name            = ( $disabled > 0 ) ? $filter['e_name'] . '-disabled' : $filter['e_name'];
 
                     ?>
@@ -57,7 +58,7 @@ $args = [
                                  */
                                 echo apply_filters( 'wpc_filters_radio_term_html', '<a '.$link_attributes.'>'.$term_object->name.'</a>', $link_attributes, $term_object, $filter );
 
-                                ?>&nbsp;<?php flrt_filter_count( $term_object, $set['show_count']['value'] ); ?>
+                                ?><?php flrt_filter_count( $term_object, $set['show_count']['value'] ); ?>
                             </label>
                         </div>
                     </li>

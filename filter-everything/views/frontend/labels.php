@@ -55,6 +55,7 @@ if ( $is_brand ){
                         $disabled_class  = $disabled ? ' wpc-term-disabled' : '';
                         $link            = $url_manager->getTermUrl( $term_object->slug, $filter['e_name'], $filter['entity'] );
                         $link_attributes = 'href="'.esc_url($link).'"';
+                        $link_attributes .= ' class="wpc-filter-link"';
 
                         if ( $is_brand ) {
                             $image_class = '';
@@ -74,7 +75,7 @@ if ( $is_brand ){
                                          */
                                         echo apply_filters( 'wpc_filters_label_term_html', '<a '.$link_attributes.'>'.$term_object->name.'</a>', $link_attributes, $term_object, $filter );
 
-                                        ?>&nbsp;<?php flrt_filter_count( $term_object, $set['show_count']['value'] ); // Safe, escaped?>
+                                        ?><?php flrt_filter_count( $term_object, $set['show_count']['value'] ); // Safe, escaped?>
                                     </span>
                                 </label>
                             </div>

@@ -171,7 +171,7 @@ class TaxonomyEntity implements Entity
             }
         }
 
-        foreach ( $this->getAllExistingTerms() as $term ){
+        foreach ( $this->getAllExistingTerms() as $term ) {
             $termTaxonomyIds[] = $term->term_taxonomy_id;
             $termIds[]         = $term->term_id;
         }
@@ -181,8 +181,8 @@ class TaxonomyEntity implements Entity
             $termPosts = $this->getTermTaxonomyPostsIds( $termTaxonomyIds, $termIds, $the_filter );
         }
 
-        if( $this->getName() === 'product_shipping_class' ){
-            foreach ( $termPosts as $term_id => $the_posts ){
+        if( $this->getName() === 'product_shipping_class' ) {
+            foreach ( $termPosts as $term_id => $the_posts ) {
                 $termPosts[$term_id] = apply_filters( 'wpc_from_variations_to_products', $the_posts );
             }
         }
@@ -374,8 +374,8 @@ class TaxonomyEntity implements Entity
     }
 
     private function isTheSameTaxQuery( $tax_query_1, $tax_query_2 ){
-        $tax_query_1 = $this->normalizeTaxQueryArray($tax_query_1);
-        $tax_query_2 = $this->normalizeTaxQueryArray($tax_query_2);
+        $tax_query_1 = $this->normalizeTaxQueryArray( $tax_query_1 );
+        $tax_query_2 = $this->normalizeTaxQueryArray( $tax_query_2 );
 
         $diff = array_diff( $tax_query_1, $tax_query_2 );
 
@@ -389,7 +389,7 @@ class TaxonomyEntity implements Entity
     private function normalizeTaxQueryArray( $tax_query ){
         $normalized_tax_query = [];
 
-        if( ! is_array( $tax_query ) || ! isset( $tax_query['taxonomy'] ) ){
+        if( ! is_array( $tax_query ) || ! isset( $tax_query['taxonomy'] ) ) {
             return false;
         }
 

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Filter Everything PRO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-16 14:04+0000\n"
-"PO-Revision-Date: 2024-05-15 18:55+0000\n"
+"PO-Revision-Date: 2025-01-21 12:39+0000\n"
 "Last-Translator: Administrator\n"
 "Language-Team: Italian\n"
 "Language: it_IT\n"
@@ -1197,6 +1197,9 @@ msgstr "Impostazioni dei filtri"
 msgid "Filters WordPress things."
 msgstr "Filtra le cose di WordPress."
 
+msgid "First, select another filter"
+msgstr ""
+
 #: src/Admin/FilterFields.php:134
 msgid "Folding"
 msgstr "Pieghevole"
@@ -1467,6 +1470,9 @@ msgstr ""
 
 msgid "Main Query."
 msgstr "Query principale."
+
+msgid "Make swatches rounded"
+msgstr ""
 
 #: src/Admin/FilterFields.php:137
 msgid "Makes filter collapsible in the widget"
@@ -1821,6 +1827,9 @@ msgstr "Azzeramento di tutti"
 
 msgid "Reset Button label"
 msgstr "Etichetta del pulsante di reset"
+
+msgid "Rounded swatches"
+msgstr ""
 
 #: pro/Admin/Admin.php:59
 msgid "Rule ID"

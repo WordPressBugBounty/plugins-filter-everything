@@ -75,7 +75,7 @@ class ExperimentalTab extends BaseSettings
                         'select2_dropdowns' => array(
                             'type'  => 'checkbox',
                             'title' => esc_html__('Improved dropdowns', 'filter-everything'),
-                            'id'    => 'styled_inputs',
+                            'id'    => 'select2_dropdowns',
                             'label' => esc_html__('Use improved dropdowns instead of regular ones (jQuery plugin Select2)', 'filter-everything'),
                         ),
                     )
@@ -109,7 +109,7 @@ class ExperimentalTab extends BaseSettings
         $settings['experimental_other'] = array(
             'label'  => esc_html__('Other', 'filter-everything'),
             'fields' => array(
-                'use_color_swatches'    => array(
+                'use_color_swatches' => array(
                     'type'  => 'checkbox',
                     'title' => esc_html__('Color swatches for Filters', 'filter-everything'),
                     'id'    => 'use_color_swatches',
@@ -123,6 +123,13 @@ class ExperimentalTab extends BaseSettings
                     'options' => $taxonomiesForSelect,
                     'multiple' => true,
                     'description' => esc_html__( 'Please specify taxonomies whose filters should display color swatches', 'filter-everything' )
+                ),
+                'rounded_swatches' => array(
+                    'type'  => 'checkbox',
+                    'class' => 'wpc-color-swatches-taxonomies',
+                    'title' => esc_html__('Rounded swatches', 'filter-everything'),
+                    'id'    => 'rounded_swatches',
+                    'label' => esc_html__('Make swatches rounded', 'filter-everything'),
                 ),
             )
         );

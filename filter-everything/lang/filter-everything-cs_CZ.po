@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Filter Everything PRO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 21:45+0000\n"
-"PO-Revision-Date: 2024-05-15 19:05+0000\n"
+"PO-Revision-Date: 2025-01-21 12:38+0000\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "Language: cs_CZ\n"
@@ -1292,6 +1292,9 @@ msgstr "Nastavení filtrů"
 msgid "Filters WordPress things."
 msgstr "Filtry Wordpress věci."
 
+msgid "First, select another filter"
+msgstr ""
+
 #: src/Admin/FilterFields.php:134
 msgid "Folding"
 msgstr "Sbalitelný"
@@ -1583,6 +1586,9 @@ msgstr ""
 
 msgid "Main Query."
 msgstr "Hlavní dotaz."
+
+msgid "Make swatches rounded"
+msgstr ""
 
 #: src/Admin/FilterFields.php:137
 #| msgid "Makes filter collapsible in widget"
@@ -1954,6 +1960,9 @@ msgstr "Vymazat filtry"
 
 msgid "Reset Button label"
 msgstr "Štítek tlačítka Reset"
+
+msgid "Rounded swatches"
+msgstr ""
 
 #: pro/Admin/Admin.php:59
 msgid "Rule ID"

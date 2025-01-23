@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Filter Everything PRO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 21:45+0000\n"
-"PO-Revision-Date: 2024-05-15 19:17+0000\n"
+"PO-Revision-Date: 2025-01-21 12:36+0000\n"
 "Last-Translator: Administrator\n"
 "Language-Team: Ukrainian\n"
 "Language: uk\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.6.6; wp-6.5.3\n"
+"X-Loco-Version: 2.6.14; wp-6.7.1\n"
 "X-Domain: filter-everything"
 
 msgid "%s #%s"
@@ -1296,6 +1296,9 @@ msgstr "Налаштування"
 msgid "Filters WordPress things."
 msgstr "Фільтрує будь-які дописи у WordPress."
 
+msgid "First, select another filter"
+msgstr "Спочатку виберіть інакший фільтр"
+
 #: src/Admin/FilterFields.php:134
 msgid "Folding"
 msgstr "Згортання"
@@ -1586,6 +1589,9 @@ msgstr ""
 
 msgid "Main Query."
 msgstr "Main Query."
+
+msgid "Make swatches rounded"
+msgstr "Зробити взірці заокругленими"
 
 #: src/Admin/FilterFields.php:137
 #| msgid "Makes filter collapsible in widget"
@@ -1960,6 +1966,9 @@ msgstr "Скинути всі"
 
 msgid "Reset Button label"
 msgstr "Назва кнопки «Скинути»"
+
+msgid "Rounded swatches"
+msgstr "Заокруглені взірці"
 
 #: pro/Admin/Admin.php:59
 msgid "Rule ID"

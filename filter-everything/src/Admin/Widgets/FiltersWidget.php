@@ -294,7 +294,11 @@ class FiltersWidget extends \WP_Widget
                                 }
                                 $terms = $actual_filter_terms;
                             } else {
-                                $view_args['ask_to_select_parent'] = sprintf(esc_html__('Select %s first', 'filter-everything'), $parent_filter['label']);
+                                if( isset( $parent_filter['label'] ) && $parent_filter['label'] ) {
+                                    $view_args['ask_to_select_parent'] = sprintf( esc_html__('Select %s first', 'filter-everything'), $parent_filter['label'] );
+                                } else {
+                                    $view_args['ask_to_select_parent'] = esc_html__('First, select another filter', 'filter-everything');
+                                }
                             }
 
                             // Here we have to setup signal that forces message "Select parent first"

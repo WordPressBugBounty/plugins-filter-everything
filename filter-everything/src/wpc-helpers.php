@@ -594,7 +594,7 @@ if ( ! function_exists( 'flrt_filter_count' ) ){
  * @return string
  */
 function flrt_filter_get_count( $term ){
-    return '<span class="wpc-term-count">(<span class="wpc-term-count-value">'.esc_html( $term->cross_count ).'</span>)</span>';
+    return '<span class="wpc-term-count"><span class="wpc-term-count-brackets-open">(</span><span class="wpc-term-count-value">'.esc_html( $term->cross_count ).'</span><span class="wpc-term-count-brackets-close">)</span></span>&nbsp;';
 }
 
 if ( ! function_exists( 'flrt_spinner_html' ) ) {
@@ -871,6 +871,7 @@ function flrt_filter_class( $filter, $default_classes = [], $terms = [], $args =
     }
 
     $classes[] = 'wpc-filter-terms-count-'.count( $terms );
+
     $classes = apply_filters( 'wpc_filter_classes', $classes, $filter, $default_classes, $terms, $args );
 
     return implode( " ", $classes );

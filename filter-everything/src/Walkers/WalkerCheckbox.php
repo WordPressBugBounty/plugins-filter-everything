@@ -110,6 +110,7 @@ class WalkerCheckbox extends \Walker
 
         $atts         = array();
         $atts['href'] = $url_manager->getTermUrl( $term->slug, $filter['e_name'], $filter['entity'] );
+        $atts['class'] = 'wpc-filter-link';
 
         $attributes = '';
         foreach ( $atts as $attr => $value ) {
@@ -122,7 +123,7 @@ class WalkerCheckbox extends \Walker
         $link =  apply_filters( 'wpc_filters_checkbox_term_html', '<a'.$attributes.'>'.$term->name.'</a>', $attributes, $term, $filter );
 
         if ( isset( $args['set']['show_count']['value'] ) && $args['set']['show_count']['value'] === 'yes' ) {
-            $link .= '&nbsp;'. flrt_filter_get_count( $term );
+            $link .= flrt_filter_get_count( $term );
         }
 
         $output     .= "\t<li";

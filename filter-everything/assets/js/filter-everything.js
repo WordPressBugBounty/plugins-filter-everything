@@ -1,5 +1,5 @@
 /*!
- * Filter Everything 1.8.8
+ * Filter Everything 1.8.9
  */
 (function ($) {
     "use strict";
@@ -453,13 +453,16 @@
             wpcIsMobile = false;
         }
 
-        if( wpcUseSelect2 === 'yes' ){
-            $(wpcWidgetContainer).each( function ( index, widget ){
-                let widgetSet = $(widget).data('set');
-                let widgetClass = 'wpc-filter-set-'+widgetSet;
-                wpcInitSelect2(widgetClass);
-            });
+        if ( ! wpcSsMobileBrowser() ){
+            if( wpcUseSelect2 === 'yes' ){
+                $(wpcWidgetContainer).each( function ( index, widget ){
+                    let widgetSet = $(widget).data('set');
+                    let widgetClass = 'wpc-filter-set-'+widgetSet;
+                    wpcInitSelect2(widgetClass);
+                });
+            }
         }
+
     });
 
     if ($.support.pjax) {
@@ -697,6 +700,21 @@
         });
     }
 
+    function wpcSsMobileBrowser() {
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+        const isMobile = /Mobile|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+
+        return isMobile;
+    }
+
+    function wpcIsDesktopSafari() {
+        const userAgent = navigator.userAgent;
+        const isSafari = /^((?!chrome|android|crios|fxios).)*safari/i.test(userAgent);
+        const isNotMobile = !/Mobile|iPhone|iPad|iPod/i.test(userAgent);
+
+        return isSafari && isNotMobile;
+    }
+
     function wpcInitSelect2( widgetClass ) {
         if( typeof $.fn.select2 === 'undefined'){
             return;
@@ -704,9 +722,14 @@
 
         let wpcUserAgent = navigator.userAgent.toLowerCase();
         let wpcIsAndroid = wpcUserAgent.indexOf("android") > -1;
+
         let wpcAllowSearchField = 0;
-        if(wpcIsAndroid) {
+        if( wpcIsAndroid ) {
             wpcAllowSearchField = Infinity;
+        }
+
+        if( wpcIsDesktopSafari() ){
+            wpcAllowSearchField = 10;
         }
 
         $('.wpc-filters-widget-select').select2({
@@ -1405,7 +1428,7 @@
                 }
                 // Replace found posts number
                 if( newPostsFound.length > 0  ){
-                    $(widgetClass).find('.wpc-filters-found-posts').replaceWith( newPostsFound );
+                    $(widgetClass).find('.wpc-filters-found-posts').html( newPostsFound.html() );
                 }
 
                 if( wpcApplyButtonSets.includes( widgetSet ) ){
