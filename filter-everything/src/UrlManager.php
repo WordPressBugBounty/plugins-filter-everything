@@ -53,8 +53,10 @@ class UrlManager
 
         if ( empty( $e_nameActualFilters ) ) {
             $the_filter = $this->getSingleActualFilter( $e_name );
-            $entity_and_e_name = $the_filter['entity'].'#'.$the_filter['e_name'];
-            $e_nameActualFilters[$entity_and_e_name] = $the_filter;
+            if( isset( $the_filter['entity'] ) && isset( $the_filter['e_name'] ) ) {
+                $entity_and_e_name = $the_filter['entity'].'#'.$the_filter['e_name'];
+                $e_nameActualFilters[$entity_and_e_name] = $the_filter;
+            }
         }
 
         foreach( $this->entityAndEnamesOrder as $entityAndEName ) {

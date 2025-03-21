@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: Filter Everything PRO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-16 14:04+0000\n"
-"PO-Revision-Date: 2025-01-21 12:39+0000\n"
-"Last-Translator: Administrator\n"
+"PO-Revision-Date: 2025-03-05 09:16+0000\n"
+"Last-Translator: \n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.6.6; wp-6.5.3\n"
+"X-Loco-Version: 2.7.1; wp-6.7.2\n"
 "X-Domain: filter-everything"
 
 msgid "%s #%s"
@@ -1189,7 +1189,7 @@ msgid "Filters WordPress things."
 msgstr "Filtert WordPress-dingen."
 
 msgid "First, select another filter"
-msgstr ""
+msgstr "Selecteer eerst een ander filter"
 
 #: src/Admin/FilterFields.php:134
 msgid "Folding"
@@ -1460,7 +1460,7 @@ msgid "Main Query."
 msgstr "Hoofd Query"
 
 msgid "Make swatches rounded"
-msgstr ""
+msgstr "Maak kleurstalen rond"
 
 #: src/Admin/FilterFields.php:137
 msgid "Makes filter collapsible in the widget"
@@ -1818,7 +1818,7 @@ msgid "Reset Button label"
 msgstr "Knoplabel opnieuw instellen"
 
 msgid "Rounded swatches"
-msgstr ""
+msgstr "Afgeronde kleurstalen"
 
 #: pro/Admin/Admin.php:59
 msgid "Rule ID"

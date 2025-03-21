@@ -419,9 +419,9 @@ class Plugin
         $rounded_swatch = flrt_get_experimental_option('rounded_swatches');
         $contrastColor  = false;
 
-        $swatches_measurements = [ 'width' => 25, 'height' => 25 ];
+        $swatches_measurements = [ 'width' => 24, 'height' => 24 ];
         if( $rounded_swatch ) {
-            $swatches_measurements = [ 'width' => 30, 'height' => 30 ];
+            $swatches_measurements = [ 'width' => 31, 'height' => 31 ];
         }
 
         $swatches       = apply_filters( 'wpc_swatches_width_height', $swatches_measurements );
@@ -444,7 +444,7 @@ class Plugin
         $css .= '.wpc-term-image-wrapper{width:'.$brands['width'].'px;min-width:'.$brands['width'].'px;height:'.$brands['height'].'px;}';
 
         if( $maxHeight ){
-            $css .= '.wpc-filters-section:not(.wpc-filter-more-less):not(.wpc-filter-post_meta_num):not(.wpc-filter-tax_numeric):not(.wpc-filter-layout-dropdown) .wpc-filter-content:not(.wpc-filter-has-hierarchy) ul.wpc-filters-ul-list{
+            $css .= '.wpc-filters-section:not(.wpc-filter-more-less):not(.wpc-filter-post_meta_num):not(.wpc-filter-tax_numeric):not(.wpc-filter-layout-dropdown):not(.wpc-filter-terms-count-0) .wpc-filter-content:not(.wpc-filter-has-hierarchy) ul.wpc-filters-ul-list{
                         max-height: '.$maxHeight.'px;
                         overflow-y: auto;
                 }'."\r\n";
@@ -509,11 +509,11 @@ class Plugin
                     color: '.$contrastColor.';
                 }'."\r\n";
 
-            $css .= 'body .wpc-filter-chips-list li.wpc-filter-chip:not(.wpc-chip-reset-all) a:hover{
+            $css .= 'body .wpc-filter-chips-list li.wpc-filter-chip a:hover{
                     opacity: 0.9;
                 }'."\r\n";
 
-            $css .= 'body .wpc-filter-chips-list li.wpc-filter-chip:not(.wpc-chip-reset-all) a:active{
+            $css .= 'body .wpc-filter-chips-list li.wpc-filter-chip a:active{
                     opacity: 0.75;
                 }'."\r\n";
 
@@ -553,10 +553,6 @@ class Plugin
                         border-color: '.$color.';
                     }'."\r\n";
 
-            $css .= '.wpc-filters-labels li.wpc-term-has-image label:hover .wpc-term-image-wrapper,
-                    .wpc-filters-labels li.wpc-term-has-image input[type=checkbox]:checked + label .wpc-term-image-wrapper{
-                        border-color: '.$color.';
-                    }'."\r\n";
 
             $css .= '#ui-datepicker-div.wpc-filter-datepicker .ui-state-active, 
             #ui-datepicker-div.ui-widget-content.wpc-filter-datepicker .ui-state-active, 
@@ -588,7 +584,7 @@ class Plugin
         if( $styled_inputs ){
             $styled_color   = $color ? $color : '#0570e2';
             $contrastColor  = $contrastColor ? $contrastColor : flrt_get_contrast_color($styled_color);
-
+            $no_hex_color   = substr( $color, 1, 6 );
             $css .= '.wpc-filters-main-wrap input[type=checkbox],
                         .wpc-filters-main-wrap input[type=radio]{
                             -webkit-appearance: none;
@@ -596,18 +592,42 @@ class Plugin
                             position: relative;
                             width: 20px;
                             height: 20px;
-                            border: 2px solid #bdbdbd;
-                            border: 2px solid #ccd0dc;
+                            border: 1px solid #c9d1e0;
                             background: #ffffff;
                             border-radius: 5px;
                             min-width: 20px;
+                        }
+                        i.wpc-toggle-children-list:after,
+                        i.wpc-toggle-children-list:before{
+                            background-color: #b8bcc8;
+                        }
+                        i.wpc-toggle-children-list:hover:after,
+                        i.wpc-toggle-children-list:hover:before{
+                            background-color: '.$color.';
+                        }
+                        .wpc-filters-widget-content input[type=email], 
+                        .wpc-filters-widget-content input[type=number], 
+                        .wpc-filters-widget-content input[type=password], 
+                        .wpc-filters-widget-content input[type=search], 
+                        .wpc-filters-widget-content input[type=tel], 
+                        .wpc-filters-widget-content input[type=text], 
+                        .wpc-filters-widget-content input[type=url]{
+                            height: 44px;
+                        }
+                        .wpc-filters-widget-content .wpc-filters-section input[type="number"],
+                        .wpc-filters-widget-content .wpc-filters-section input[type="text"]{
+                            border: 1px solid #ccd0dc;
+                            border-radius: 6px;
+                            background: transparent;
+                            box-shadow: none; 
+                            padding: 8px 16px;
                         }
                         .wpc-filters-main-wrap input[type=checkbox]:after {
                             content: "";
                             opacity: 0;
                             display: block;
-                            left: 5px;
-                            top: 2px;
+                            left: 6px;
+                            top: 3px;
                             position: absolute;
                             width: 4px;
                             height: 8px;
@@ -621,8 +641,8 @@ class Plugin
                             content: "";
                             opacity: 0;
                             display: block;
-                            left: 4px;
-                            top: 4px;
+                            left: 5px;
+                            top: 5px;
                             position: absolute;
                             width: 8px;
                             height: 8px;
@@ -653,7 +673,92 @@ class Plugin
                         .wpc-filters-main-wrap input[type=radio] {
                             border-radius: 50%;
                         }
-                        
+                        .wpc-filters-widget-content .wpc-filters-date-range-wrapper input[type="text"]{
+                            padding-right: 48px;
+                            background-image: url("data:image/svg+xml,%3Csvg width=\'16\' height=\'16\' viewBox=\'0 0 16 16\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect x=\'2\' y=\'4\' width=\'12\' height=\'10\' rx=\'1.33333\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\'/%3E%3Cpath d=\'M2.66699 7.3335H13.3337\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M6 10.6667H10\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M5.33301 2L5.33301 4.66667\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M10.667 2L10.667 4.66667\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3C/svg%3E%0A");
+                            background-repeat: no-repeat;
+                            background-position: right 16px bottom 50%;
+                        }    
+                        .wpc-filters-widget-content .wpc-filters-date-range-wrapper input[type="text"]:focus,
+                        .wpc-filters-widget-content .wpc-filters-date-range-wrapper input[type="text"]:hover{
+                            background-image: url("data:image/svg+xml,%3Csvg width=\'16\' height=\'16\' viewBox=\'0 0 16 16\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect x=\'2\' y=\'4\' width=\'12\' height=\'10\' rx=\'1.33333\' stroke=\'%23'.$no_hex_color.'\' stroke-width=\'1.33333\'/%3E%3Cpath d=\'M2.66699 7.3335H13.3337\' stroke=\'%23'.$no_hex_color.'\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M6 10.6667H10\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M5.33301 2L5.33301 4.66667\' stroke=\'%23'.$no_hex_color.'\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M10.667 2L10.667 4.66667\' stroke=\'%23'.$no_hex_color.'\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3C/svg%3E%0A");
+                        }
+                        .wpc-help-tip::after{
+                            color: #b8bcc8;
+                            border: 1px solid #b8bcc8; 
+                        }
+                        .wpc-filter-layout-dropdown .select2-container--default .select2-selection--single .select2-selection__arrow b, 
+                        .wpc-sorting-form .select2-container--default .select2-selection--single .select2-selection__arrow b{
+                            border-left: 1px solid #b8bcc8;
+                            border-top: 1px solid #b8bcc8;
+                        }
+                        .wpc-filter-layout-dropdown .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b, 
+                        .wpc-sorting-form .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b{
+                            border-left: 1px solid #b8bcc8;
+                            border-top: 1px solid #b8bcc8;
+                        }
+                        .wpc-filter-collapsible .wpc-filter-title .wpc-open-icon, 
+                        .wpc-filter-collapsible-reverse.wpc-filter-collapsible.wpc-closed .wpc-filter-title .wpc-open-icon, 
+                        .wpc-filter-collapsible.wpc-closed .wpc-filter-title .wpc-open-icon, 
+                        .wpc-filter-has-selected.wpc-closed .wpc-filter-title .wpc-open-icon{
+                            border-left: 1px solid #b8bcc8;
+                            border-top: 1px solid #b8bcc8;
+                        }
+                        .wpc-help-tip:hover::after,
+                        .wpc-filter-layout-dropdown .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b, 
+                        .wpc-sorting-form .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b,
+                        .widget_wpc_sorting_widget .select2-container--default .select2-selection--single:hover .select2-selection__arrow b,
+                        .wpc-filter-layout-dropdown .select2-container--default .select2-selection--single:hover .select2-selection__arrow b,
+                        .wpc-filter-layout-dropdown .select2-container--default .select2-selection--single:hover, 
+                        .select2-container--default.select2-container--open .wpc-filter-everything-dropdown.select2-dropdown,
+                        .widget_wpc_sorting_widget .select2-container--open .select2-selection--single,
+                        .wpc-filter-layout-dropdown .select2-container--open .select2-selection--single, 
+                        .select2-container--default.select2-container--open .wpc-filter-everything-dropdown.select2-dropdown:hover,
+                        .wpc-sorting-form .select2-container--default .select2-selection--single:hover,
+                        .wpc-filters-widget-content input[type=email]:hover, 
+                        .wpc-filters-widget-content input[type=number]:hover, 
+                        .wpc-filters-widget-content input[type=password]:hover, 
+                        .wpc-filters-widget-content input[type=search]:hover, 
+                        .wpc-filters-widget-content input[type=tel]:hover, 
+                        .wpc-filters-widget-content input[type=text]:hover, 
+                        .wpc-filters-widget-content input[type=url]:hover,
+                        .wpc-filters-widget-content input[type=email]:focus, 
+                        .wpc-filters-widget-content input[type=number]:focus, 
+                        .wpc-filters-widget-content input[type=password]:focus, 
+                        .wpc-filters-widget-content input[type=search]:focus, 
+                        .wpc-filters-widget-content input[type=tel]:focus, 
+                        .wpc-filters-widget-content input[type=text]:focus, 
+                        .wpc-filters-widget-content input[type=url]:focus,
+                        .wpc-filter-collapsible .wpc-filter-title button:hover .wpc-open-icon, 
+                        .wpc-filter-collapsible-reverse.wpc-filter-collapsible.wpc-closed .wpc-filter-title button:hover .wpc-open-icon, 
+                        .wpc-filter-collapsible.wpc-closed .wpc-filter-title button:hover .wpc-open-icon, 
+                        .wpc-filter-has-selected.wpc-closed .wpc-filter-title button:hover .wpc-open-icon{
+                            border-color: '.$color.';
+                        }
+                        .wpc-filters-main-wrap a.wpc-toggle-a:hover,
+                        .wpc-help-tip:hover::after{
+                            color: '.$color.';
+                        }
+                        .wpc-sorting-form .select2-container--default.select2-container--open.select2-container--above .select2-selection--multiple, 
+                        .wpc-filter-layout-dropdown .select2-container--default.select2-container--open.select2-container--above .select2-selection--single,
+                        .wpc-sorting-form .select2-container--default.select2-container--open.select2-container--above .select2-selection--multiple, 
+                        .wpc-filter-layout-dropdown .select2-container--default.select2-container--open.select2-container--above .select2-selection--single{
+                            border-top: 1px solid transparent;
+                        }
+                        .wpc-search-field-wrapper .wpc-search-clear-icon-wrapper, 
+                        .wpc-filter-search-wrapper button.wpc-search-clear{
+                            color: #b8bcc8;
+                        }
+                        .wpc-filters-main-wrap .wpc-filters-labels li.wpc-term-item label {
+                            border-color: #ccd0dc;
+                        }
+                        .wpc-filters-main-wrap .wpc-filters-labels li.wpc-term-item label span.wpc-filter-label-wrapper{
+                            padding: 8px 7px;
+                        }
+                        .wpc-filters-labels li.wpc-term-has-image label:hover .wpc-term-image-wrapper, 
+                        .wpc-filters-labels li.wpc-term-has-image input[type=checkbox]:checked + label .wpc-term-image-wrapper{
+                            border-color: '.$color.';
+                        }
                         @media screen and (min-width: '.$wpc_mobile_width.'px) {
                             .wpc-filters-main-wrap input[type=radio]:hover,
                             .wpc-filters-main-wrap input[type=checkbox]:hover{
@@ -673,15 +778,15 @@ class Plugin
             $css .= '.wpc-sorting-form select,
                         .wpc-filter-content select{
                             padding: 2px 8px 2px 10px;
-                            border-color: #ccd0dc;
+                            border-color: #c9d1e0;
                             border-radius: 3px;
                             color: inherit;
                             -webkit-appearance: none;
                         }
                         .select2-container--default .wpc-filter-everything-dropdown .select2-results__option--highlighted[aria-selected],
                         .select2-container--default .wpc-filter-everything-dropdown .select2-results__option--highlighted[data-selected]{
-                            background-color: '.$styled_color.';
-                            color: '.$contrastColor.';  
+                            background-color: rgba(0,0,0,0.05); 
+                            color: inherit;
                         }
                         ';
             $css .= '@media screen and (max-width: '.$wpc_mobile_width.'px) {'."\r\n";

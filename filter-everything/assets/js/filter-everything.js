@@ -1,5 +1,5 @@
 /*!
- * Filter Everything 1.8.9
+ * Filter Everything 1.9.0
  */
 (function ($) {
     "use strict";
@@ -691,6 +691,7 @@
         }
 
         $('.wpc-help-tip').tipTip({
+            'activation': 'click',
             'attribute': 'data-tip',
             'fadeIn':    50,
             'fadeOut':   50,
@@ -810,7 +811,7 @@
         }
         $dr_wrapper.html( innerHtml );
         if ( typeof postsCount !== 'undefined' ){
-            $dr_wrapper.append( '<span class="wpc-term-count">(<span class="wpc-term-count-value">'+postsCount+'</span>)</span>' );
+            $dr_wrapper.append( '<span class="wpc-term-count"><span class="wpc-term-count-brackets-open">(</span><span class="wpc-term-count-value">'+postsCount+'</span><span class="wpc-term-count-brackets-close">)</span></span>' );
         }
 
         return $dr_wrapper;

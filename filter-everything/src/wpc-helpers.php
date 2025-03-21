@@ -765,7 +765,7 @@ if ( ! function_exists('flrt_filter_header') ) {
 
         if ( $filter['collapse'] === 'yes' && !empty($filter['values']) && !empty($terms) ) {
             $selected = [];
-            $list = '<div class="wpc-filter-selected-values">&mdash; ';
+            $list = '<span class="wpc-filter-selected-values">&mdash; ';
             // Does not work for numeric filters
             // @todo
             foreach ( $terms as $id => $term_object ) {
@@ -775,7 +775,7 @@ if ( ! function_exists('flrt_filter_header') ) {
                 }
             }
 
-            $list .= implode(", ", $selected) . '</div>';
+            $list .= implode(", ", $selected) . '</span>';
 
             $closeButton = $list . $closeButton;
         }
@@ -787,23 +787,33 @@ if ( ! function_exists('flrt_filter_header') ) {
         $filter_label = apply_filters( 'wpc_filter_title', $filter['label'], $filter );
 
         ?>
-        <div class="wpc-filter-header">
-            <div class="widget-title wpc-filter-title">
-                <?php echo $openButton . esc_html( $filter_label ) . $tooltip . $closeButton;  ?>
-            </div>
-        </div>
-        <?php
+        <div class="wpc-filter-header"><div class="widget-title wpc-filter-title"><?php
+                echo $openButton . esc_html( $filter_label ) . $tooltip . $closeButton;
+                ?></div></div><?php
     }
 }
 
 function flrt_filter_class( $filter, $default_classes = [], $terms = [], $args = [] )
 {
+    $digits = [];
+    $length = 1;
+    if( ! empty( $terms ) ) {
+        foreach ( $terms as $term ) {
+            $digits[] = $term->cross_count;
+        }
+    }
+
+    if( ! empty( $digits ) ){
+        $length = strlen( (string) max( $digits ) );
+    }
+
     $classes = array(
         'wpc-filters-section',
         'wpc-filters-section-'.esc_attr( $filter['ID'] ),
         'wpc-filter-'.esc_attr( $filter['e_name'] ),
         'wpc-filter-'.esc_attr( $filter['entity'] ),
-        'wpc-filter-layout-'.esc_attr( $filter['view'] )
+        'wpc-filter-layout-'.esc_attr( $filter['view'] ),
+        'wpc-counter-length-'.esc_attr( $length )
     );
 
     if ( isset( $filter['values'] ) && ! empty( $filter['values'] ) ) {
@@ -914,7 +924,7 @@ if ( ! function_exists( 'flrt_filter_no_terms_message' ) ) {
 
         $srch = isset( $_GET['srch'] ) ? filter_input( INPUT_GET, 'srch', FILTER_SANITIZE_SPECIAL_CHARS ) : '';
 
-        echo '<'.$tag.'>';
+        echo '<'.$tag.' class="wpc-no-filter-terms">';
             if ( ! flrt_is_filter_request() && ! $srch ) {
                 esc_html_e('There are no filter terms yet', 'filter-everything' );
                 if( flrt_is_debug_mode() ){
@@ -1429,7 +1439,7 @@ function flrt_get_term_brand_image( $term_id, $filter ) {
         $attachment_id = get_term_meta($term_id, 'pwb_brand_image', true);
         $attachment_props = wp_get_attachment_image_src($attachment_id, 'small');
         $src = isset($attachment_props[0]) ? $attachment_props[0] : false;
-    } elseif ( $filter['e_name'] === 'yith_product_brand' ) {
+    } elseif ( in_array( $filter['e_name'], ['yith_product_brand', 'product_brand'] ) ) {
         $attachment_id = get_term_meta($term_id, 'thumbnail_id', true);
         $attachment_props = wp_get_attachment_image_src($attachment_id, 'small');
         $src = isset($attachment_props[0]) ? $attachment_props[0] : false;

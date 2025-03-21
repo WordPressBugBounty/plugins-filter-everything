@@ -32,19 +32,10 @@ $cancel_url      = $url_manager->getTermUrl( '', '', '', '', [ 'srch'=> true ] )
     <?php if ( $label !== '' ) {
         flrt_filter_header( array( 'label' => $label, 'collapse' => 'no', 'values' => [], 'tooltip' => false ), [] );
     } ?>
-    <form action="<?php echo esc_url( $url_manager->getFormActionOrFullPageUrl() ); ?>" role="search" method="GET" class="wpc-filter-search-form">
-        <div class="wpc-search-field-wrapper wpc-search-field-wrapper-<?php echo $search_id; ?>">
-            <span class="wpc-search-icon"></span>
-            <input type="text" class="wpc-search-field" placeholder="<?php echo $placeholder; ?>" value="<?php echo $search; ?>" name="srch">
-            <span class="wpc-search-clear-icon-wrapper">
-                <a class="wpc-search-clear-icon" href="<?php echo esc_url( $cancel_url ); ?>" title="<?php esc_html_e('Clear search', 'filter-everything' ) ?>">&#215;</a>
-            </span>
+<form action="<?php echo esc_url( $url_manager->getFormActionOrFullPageUrl() ); ?>" role="search" method="GET" class="wpc-filter-search-form"><div class="wpc-search-field-wrapper wpc-search-field-wrapper-<?php echo $search_id; ?>"><span class="wpc-search-icon"></span><label for="srch" class="screen-reader-text"><?php esc_html_e( 'Search', 'filter-everything' ); ?></label><input type="text" class="wpc-search-field" placeholder="<?php echo $placeholder; ?>" value="<?php echo $search; ?>" name="srch"><span class="wpc-search-clear-icon-wrapper"><a class="wpc-search-clear-icon" href="<?php echo esc_url( $cancel_url ); ?>" title="<?php esc_html_e('Clear search', 'filter-everything' ) ?>">&#215;</a></span>
                 <?php
                 flrt_query_string_form_fields(
                     flrt_get_query_string_parameters(),
                     ['srch']
                 );
-            ?>
-        </div>
-    </form>
-</div>
+            ?></div></form></div>

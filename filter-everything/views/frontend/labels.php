@@ -26,15 +26,15 @@ if ( $is_brand ){
     $image_meta_key = 'image';
     if ( $filter['e_name'] === 'pwb-brand' ) {
         $image_meta_key = 'pwb_brand_image';
-    } else if ( $filter['e_name'] === 'yith_product_brand' ) {
+    } else if ( in_array( $filter['e_name'], ['yith_product_brand', 'product_brand'] ) ) {
         $image_meta_key = 'thumbnail_id';
     }
 }
 
 ?>
-<div class="<?php echo flrt_filter_class( $filter, [], $terms, $args ); // Already escaped ?>" data-fid="<?php echo esc_attr( $filter['ID'] ); ?>">
-    <?php flrt_filter_header( $filter, $terms ); // Safe, escaped ?>
-    <div class="<?php echo esc_attr( flrt_filter_content_class( $filter ) ); ?>">
+<div class="<?php echo flrt_filter_class( $filter, [], $terms, $args ); // Already escaped ?>" data-fid="<?php echo esc_attr( $filter['ID'] ); ?>"><?php
+    flrt_filter_header( $filter, $terms ); // Safe, escaped
+    ?><div class="<?php echo esc_attr( flrt_filter_content_class( $filter ) ); ?>">
         <?php flrt_filter_search_field( $filter, $view_args, $terms ); ?>
         <ul class="wpc-filters-ul-list wpc-filters-labels wpc-filters-list-<?php echo esc_attr( $filter['ID'] ); ?>">
             <?php if( ! empty( $terms ) || $view_args['ask_to_select_parent'] ):
@@ -66,18 +66,13 @@ if ( $is_brand ){
                     ?>
                         <li class="wpc-label-item wpc-term-item<?php echo esc_attr( $active_class ); ?><?php echo esc_attr( $disabled_class ); ?><?php echo esc_attr( $image_class ); ?> wpc-term-count-<?php echo esc_attr( $term_object->cross_count ); ?> wpc-term-id-<?php echo esc_attr( $id ); ?>" id="<?php flrt_term_id('term', $filter, $id ); ?>">
                             <div class="wpc-term-item-content-wrapper">
-                                <input class="wpc-label-input" <?php checked( 1, $checked ); disabled( 1, $disabled ); ?> type="checkbox" data-wpc-link="<?php echo esc_url( $link ); ?>" id="<?php flrt_term_id('checkbox', $filter, $id); ?>" />
-                                <label for="<?php flrt_term_id('checkbox', $filter, $id); ?>">
-                                    <span class="wpc-filter-label-wrapper">
-                                        <?php
-                                        /**
-                                         * Allow developers to change filter terms html
-                                         */
-                                        echo apply_filters( 'wpc_filters_label_term_html', '<a '.$link_attributes.'>'.$term_object->name.'</a>', $link_attributes, $term_object, $filter );
+                                <input class="wpc-label-input" <?php checked( 1, $checked ); disabled( 1, $disabled ); ?> type="checkbox" data-wpc-link="<?php echo esc_url( $link ); ?>" id="<?php flrt_term_id('checkbox', $filter, $id); ?>" /><label for="<?php flrt_term_id('checkbox', $filter, $id); ?>"><span class="wpc-filter-label-wrapper"><?php
+                                /**
+                                 * Allow developers to change filter terms html
+                                 */
+                                echo apply_filters( 'wpc_filters_label_term_html', '<a '.$link_attributes.'>'.$term_object->name.'</a>', $link_attributes, $term_object, $filter );
 
-                                        ?><?php flrt_filter_count( $term_object, $set['show_count']['value'] ); // Safe, escaped?>
-                                    </span>
-                                </label>
+                                ?><?php flrt_filter_count( $term_object, $set['show_count']['value'] ); // Safe, escaped?></span></label>
                             </div>
                         </li>
                     <?php } /* end foreach */ ?>

@@ -333,8 +333,8 @@ class PostMetaNumEntity implements Entity
 
         if( ! empty( $new_result ) ){
             $min_and_max = [
-                'min' => floor( apply_filters( 'wpc_set_num_shift', min( $new_result ), $this->getName() ) ),
-                'max' => ceil( apply_filters( 'wpc_set_num_shift', max( $new_result ), $this->getName() ) ),
+                'min' => apply_filters( 'wpc_set_num_shift', min( $new_result ), $this->getName(), 'min' ),
+                'max' => apply_filters( 'wpc_set_num_shift', max( $new_result ), $this->getName(), 'max' ),
             ];
         }
 
@@ -459,11 +459,11 @@ class PostMetaNumEntity implements Entity
     public function isTermAlreadyInQuery( $queried_value, $wp_query )
     {
         // Is term in Key
-        if( $duplicate = $this->isTermInMetaKey( $queried_value, $wp_query ) ){
+        if( $duplicate = $this->isTermInMetaKey( $queried_value, $wp_query ) ) {
             return $duplicate;
         }
         // Is term in Query
-        if( $duplicate = $this->isTermInMetaQuery( $queried_value, $wp_query ) ){
+        if( $duplicate = $this->isTermInMetaQuery( $queried_value, $wp_query ) ) {
             return $duplicate;
         }
 
@@ -638,7 +638,7 @@ class PostMetaNumEntity implements Entity
 
         // Compare with false because $min can be 0
         if( $min !== false ){
-            $min  = apply_filters( 'wpc_unset_num_shift', $min, $this->getName()  );
+            $min  = apply_filters( 'wpc_unset_num_shift', $min, $this->getName() );
 
             $type = $this->isDecimal( $queried_value['step'], $min ) ? 'DECIMAL(15,6)' : 'NUMERIC';
             $meta_query = array(

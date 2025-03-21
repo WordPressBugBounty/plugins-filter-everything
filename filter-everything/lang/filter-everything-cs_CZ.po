@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Filter Everything PRO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 21:45+0000\n"
-"PO-Revision-Date: 2025-01-21 12:38+0000\n"
+"PO-Revision-Date: 2025-03-05 09:18+0000\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "Language: cs_CZ\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.6.9; wp-6.5.3\n"
+"X-Loco-Version: 2.7.1; wp-6.7.2\n"
 "X-Domain: filter-everything"
 
 msgid "%s #%s"
@@ -1293,7 +1293,7 @@ msgid "Filters WordPress things."
 msgstr "Filtry Wordpress věci."
 
 msgid "First, select another filter"
-msgstr ""
+msgstr "Nejprve vyberte jiný filtr"
 
 #: src/Admin/FilterFields.php:134
 msgid "Folding"
@@ -1588,7 +1588,7 @@ msgid "Main Query."
 msgstr "Hlavní dotaz."
 
 msgid "Make swatches rounded"
-msgstr ""
+msgstr "Zaoblení barevných vzorků"
 
 #: src/Admin/FilterFields.php:137
 #| msgid "Makes filter collapsible in widget"
@@ -1962,7 +1962,7 @@ msgid "Reset Button label"
 msgstr "Štítek tlačítka Reset"
 
 msgid "Rounded swatches"
-msgstr ""
+msgstr "Zaoblené vzorky barev"
 
 #: pro/Admin/Admin.php:59
 msgid "Rule ID"

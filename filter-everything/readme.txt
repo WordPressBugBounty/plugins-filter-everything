@@ -1,12 +1,12 @@
 === Filter Everything&nbsp;— Product Filter & WordPress Filter ===
 Contributors: stepasyuk
 Tags: woocommerce product filter, woocommerce filter, product filter, post filter, ajax filter
-Stable tag: 1.8.9
+Stable tag: 1.9.0
 Requires at least: 4.6
-Tested up to: 6.7.1
+Tested up to: 6.7.2
 Requires PHP: 5.7
-License: GPLv2 or later
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
+License: Envato split license
+License URI: https://codecanyon.net/licenses
 
 The most universal filters plugin for WordPress and WooCommerce products.
 
@@ -167,6 +167,15 @@ Uploading via FTP
 
 == Changelog ==
 
+= 1.9.0 =
+*Release Date - 21 March 2025*
+* Dev   - Added support for Woo Brands
+* Tweak - Improved and fixed CSS styles for filters widget
+* Tweak - Made floor(); and ceil(); for range values optional via apply_filters(); function
+* Tweak - Added FLRT_DISABLE_CREDENTIALS constant to disable credentials link on filtered pages
+* Fix   - Fixed bug with a Filter Set that contains the only Search field
+* Fix   - Fixed bug with Fatal error /filter-everything/src/Admin/AdminHooks.php:144
+
 = 1.8.9 =
 *Release Date - 21 January 2025*
 * Dev   - Added ability to make Color swatches rounded
@@ -323,21 +332,15 @@ Uploading via FTP
 * Tweak - Added columns parameter to the [fe_widget] shortcode
 * Fix   - Fixed notice about Undefined array key "cols_count"
 
-= 1.7.4 =
-*Release Date - 31 January 2023*
-* Dev   - Added checkbox "Horizontal layout" for the Filters widget and option with columns number
-* Tweak - Improved compatibility with PHP > 8.0
-* Fix   - Fixed CSS bug with Show more/Show less and Search field
-* Fix   - Fixed bug with Chips that sometimes disappeared with enabled AJAX feature
-* Fix   - Fixed identifyWpQueriedObject(); method to be more compatible with WPML on singular pages
-
 [See changelog for all versions](https://demo.filtereverything.pro/changelog.txt).
 
 == Upgrade Notice ==
 
-*Release Date - 21 January 2025*
-* Dev   - Added ability to make Color swatches rounded
-* Fix   - Small CSS fixes for range slider, widget element margins.
-* Fix   - Fixed bug in JS code for the mobile widget button counter ((18)) issue
-* Fix   - Fixed bug with empty Parent filter label
-* Fix   - Fixed bug with Elementor pagination e.g. "e-page-5dabfd1=2"
+= 1.9.0 =
+*Release Date - 21 March 2025*
+* Dev   - Added support for Woo Brands
+* Tweak - Improved and fixed CSS styles for filters widget
+* Tweak - Made floor(); and ceil(); for range values optional via apply_filters(); function
+* Tweak - Added FLRT_DISABLE_CREDENTIALS constant to disable credentials link on filtered pages
+* Fix   - Fixed bug with a Filter Set that contains the only Search field
+* Fix   - Fixed bug with Fatal error /filter-everything/src/Admin/AdminHooks.php:144

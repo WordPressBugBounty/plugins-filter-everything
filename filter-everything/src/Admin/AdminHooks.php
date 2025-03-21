@@ -138,6 +138,14 @@ class AdminHooks
     {
         $forbiddenPrefixes  = flrt_get_forbidden_prefixes();
         $savedPrefixes      = get_option( 'wpc_filter_permalinks', [] );
+
+        if ( ! is_array( $savedPrefixes ) ) {
+            $savedPrefixes = maybe_unserialize( $savedPrefixes );
+        }
+        if ( ! is_array( $savedPrefixes ) ) {
+            $savedPrefixes = []; // If still not an array, default to an empty array
+        }
+
         $warningPrefixes    = [];
 
         foreach( $forbiddenPrefixes as $prefix ){

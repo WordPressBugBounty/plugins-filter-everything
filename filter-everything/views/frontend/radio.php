@@ -49,19 +49,14 @@ $args = [
 
                     ?>
                     <li class="wpc-radio-item wpc-term-item<?php echo esc_attr( $active_class ); ?><?php echo esc_attr( $disabled_class ); ?> wpc-term-count-<?php echo esc_attr( $term_object->cross_count ); ?> wpc-term-id-<?php echo esc_attr($id); ?>" id="<?php flrt_term_id('term', $filter, $id); ?>">
-                        <div class="wpc-term-item-content-wrapper">
-                            <input <?php checked( 1, $checked ); disabled( 1, $disabled ) ?> type="radio" data-wpc-link="<?php echo esc_url( $link ); ?>" name="<?php echo esc_attr( $name ); ?>" id="<?php flrt_term_id('radio', $filter, $id); ?>"/>
-                            <label for="<?php flrt_term_id('radio', $filter, $id); ?>"><?php
+                        <div class="wpc-term-item-content-wrapper"><input <?php checked( 1, $checked ); disabled( 1, $disabled ) ?> type="radio" data-wpc-link="<?php echo esc_url( $link ); ?>" name="<?php echo esc_attr( $name ); ?>" id="<?php flrt_term_id('radio', $filter, $id); ?>"/><label for="<?php flrt_term_id('radio', $filter, $id); ?>"><?php
 
                                 /**
                                  * Allow developers to change filter terms html
                                  */
                                 echo apply_filters( 'wpc_filters_radio_term_html', '<a '.$link_attributes.'>'.$term_object->name.'</a>', $link_attributes, $term_object, $filter );
 
-                                ?><?php flrt_filter_count( $term_object, $set['show_count']['value'] ); ?>
-                            </label>
-                        </div>
-                    </li>
+                                ?><?php flrt_filter_count( $term_object, $set['show_count']['value'] ); ?></label></div></li>
                     <?php } /* end foreach */ ?>
                 <?php } /* end if ask to select parent */ ?>
             <?php  else:

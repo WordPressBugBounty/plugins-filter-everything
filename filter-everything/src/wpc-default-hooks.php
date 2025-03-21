@@ -30,6 +30,7 @@ function flrt_initiate_overridden_functions()
     add_filter('wpc_filters_radio_term_html', 'wpc_term_brand_logo', 5, 4);
     add_filter('wpc_filters_label_term_html', 'wpc_term_brand_logo', 5, 4);
     add_filter('wpc_taxonomy_location_terms', 'flrt_remove_default_category_location', 10, 2);
+    add_filter( 'wpc_set_num_shift', 'flrt_round_numeric_values', 10, 3 );
 
     if (!function_exists('flrt_ucfirst_term_slug_name')) {
         function flrt_ucfirst_term_slug_name($term_name)
@@ -198,9 +199,10 @@ function flrt_initiate_overridden_functions()
             $src = flrt_get_term_brand_image($term->term_id, $filter);
 
             $link_attributes .= ' title="' . $term->name . '"';
+
             if ($src) {
                 $img = '<span class="wpc-term-image-wrapper"><img src="' . $src . '" alt="' . $term->name . '" /></span>';
-                $html = '<a ' . $link_attributes . '>' . $img . ' <span class="wpc-term-name">' . $term->name . '</span></a>';
+                $html = '<a ' . $link_attributes . '>' . $img . '<span class="wpc-term-name">' . $term->name . '</span></a>';
             }
 
             return $html;
@@ -254,6 +256,18 @@ function flrt_initiate_overridden_functions()
             return $setFields;
         }
     }
+
+    function flrt_round_numeric_values( $value, $entity_name, $limit )
+    {
+        if( $limit === 'min' ) {
+            $value = floor( $value );
+        } elseif ( $limit === 'max' ){
+            $value = ceil( $value );
+        }
+
+        return $value;
+    }
+
 }
 
 function flrt_chips( $showReset = false, $setIds = [] ) {
@@ -378,7 +392,7 @@ function flrt_dropdown_default_option( $filter ) {
 }
 
 function flrt_brand_filter_entities(){
-    return apply_filters( 'wpc_brand_filter_entities', ['pa_brand', 'pwb-brand', 'yith_product_brand'] );
+    return apply_filters( 'wpc_brand_filter_entities', ['product_brand', 'pa_brand', 'pwb-brand', 'yith_product_brand'] );
 }
 
 add_filter( 'wpc_filter_classes', 'wpc_frontend_filter_classes', 10, 2 );
@@ -495,3 +509,13 @@ function flrt_query_loop_block_query_vars( $query, $block ){
 
     return $query;
 }
+
+//add_filter( 'stackable/posts/post_query', 'flrt_stackable_block_query_vars', 10, 3 );
+//function flrt_stackable_block_query_vars( $post_query, $context, $query_string ){
+//    if( is_user_logged_in() ) {
+//        var_dump( $context );
+//        var_dump( $query_string );
+//    }
+//
+//    return $post_query;
+//}

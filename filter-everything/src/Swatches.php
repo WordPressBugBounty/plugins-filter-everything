@@ -76,18 +76,9 @@ class Swatches
 
     public function frontend_filter_classes( $classes, $filter, $default_classes, $terms ){
         $taxonomies = flrt_get_experimental_option( 'color_swatches_taxonomies', [] );
+
         if( in_array( $filter['e_name'], $taxonomies ) ) {
             $classes[] = 'wpc-filter-has-swatches';
-
-            if( ! empty( $terms ) ) {
-                $counters = [];
-                foreach ( $terms as $single_term ) {
-                    $counters[] = $single_term->cross_count;
-                }
-
-                $max = max( $counters );
-                $classes[] = 'wpc-counter-width-'. strlen( (string)$max );
-            }
         }
 
         return $classes;
