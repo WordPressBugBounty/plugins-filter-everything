@@ -476,7 +476,7 @@ class EntityManager
     private function makeFiltersQuery()
     {
         $transient_key = 'wpc_filters_query';
-        if ( false === ( $results = get_transient( $transient_key ) ) ) {
+        if ( false === ( $results = flrt_get_transient( $transient_key ) ) ) {
             global $wpdb;
 
             $sql[] = "SELECT {$wpdb->posts}.ID, {$wpdb->posts}.post_title, {$wpdb->posts}.post_content,";
@@ -492,7 +492,7 @@ class EntityManager
             $query      = $wpdb->prepare( $sql, FLRT_FILTERS_POST_TYPE );
             $results    = $wpdb->get_results( $query, OBJECT );
 
-            set_transient( $transient_key, $results, FLRT_TRANSIENT_PERIOD_HOURS * HOUR_IN_SECONDS );
+            flrt_set_transient( $transient_key, $results, FLRT_TRANSIENT_PERIOD_HOURS * HOUR_IN_SECONDS );
         }
 
         if( ! $results ){
@@ -932,6 +932,11 @@ class EntityManager
                             $entity->items[$k]  = $term;
                         }
                     }
+                }
+
+                $is_rating = ($filter['view'] === 'rating' && $filter['e_name'] === 'product_visibility' ) ? true : false;
+                if($is_rating){
+                    $filter['orderby'] = 'default';
                 }
 
                 if( $filter['orderby'] === 'default' ) {

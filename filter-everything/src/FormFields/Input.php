@@ -105,7 +105,7 @@ class Checkbox extends Input {
             $html .= '<span class="wpc-checkbox-placeholder">'.esc_html( $this->getAttribute('placeholder') ).'</span>';
         }
 
-        return apply_filters( 'wpc_input_type_checkbox', $html, $this->getAttributes() );
+        return apply_filters( 'wpc_input_type_checkbox', $html, $this->getAttributes()  );
     }
 }
 
@@ -189,16 +189,16 @@ class Radio extends Input {
 
         foreach ( $this->getAttribute('options' ) as $value => $label ) {
             $html .= '<li>';
-                $html .= '<label>';
-                    $html .= '<input type="radio"';
-                        $html .= $this->renderAttributes( $skip = array( 'options', 'value', 'id' ) );
-                        $html .= ' value="' . $value . '"';
-                        if ( $value === $current_value ) {
-                            $html .= ' checked="checked"';
-                        }
-                    $html .= ' />';
-                    $html .= $label;
-                $html .= '</label>';
+            $html .= '<label>';
+            $html .= '<input type="radio"';
+            $html .= $this->renderAttributes( $skip = array( 'options', 'value', 'id' ) );
+            $html .= ' value="' . $value . '"';
+            if ( $value === $current_value ) {
+                $html .= ' checked="checked"';
+            }
+            $html .= ' />';
+            $html .= $label;
+            $html .= '</label>';
             $html .= '</li>';
         }
 
@@ -287,6 +287,8 @@ class Select extends Input {
                 $html .= ' disabled="disabled"';
             }
         }
+
+        $html .= apply_filters('flrt_before_render_admin_select_option', $value, $this->getAttributes());
 
         $html .= '>' . $label . '</option>'."\r\n";
 

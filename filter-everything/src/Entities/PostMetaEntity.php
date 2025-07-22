@@ -178,7 +178,7 @@ class PostMetaEntity implements Entity
         $transient_key = flrt_get_terms_transient_key( 'post_meta_' . $e_name );
         $translatable_post_type_exists = false;
 
-        if ( false === ( $result = get_transient( $transient_key ) ) ) {
+        if ( false === ( $result = flrt_get_transient( $transient_key ) ) ) {
 
             $sql[] = "SELECT {$wpdb->postmeta}.post_id,{$wpdb->postmeta}.meta_value,{$wpdb->posts}.post_type";
             $sql[] = "FROM {$wpdb->postmeta}";
@@ -247,7 +247,7 @@ class PostMetaEntity implements Entity
 
             $result = $this->convertSelectResult( $result );
 
-            set_transient( $transient_key, $result, FLRT_TRANSIENT_PERIOD_HOURS * HOUR_IN_SECONDS );
+            flrt_set_transient( $transient_key, $result, FLRT_TRANSIENT_PERIOD_HOURS * HOUR_IN_SECONDS );
         }
 
         return $result;

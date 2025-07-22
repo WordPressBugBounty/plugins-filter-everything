@@ -20,6 +20,8 @@ class PostMetaNumEntity implements Entity
 
     public $postTypes       = [];
 
+    public $wdr_product_ids = [];
+
     public function __construct( $postMetaName, $postType ){
         /**
          * @feature clean code from unused methods
@@ -186,7 +188,7 @@ class PostMetaNumEntity implements Entity
          */
         $transient_key = flrt_get_terms_transient_key( 'post_meta_num_'. $this->getName() . $key_in );
 
-        if ( false === ( $result = get_transient( $transient_key ) ) ) {
+        if ( false === ( $result = flrt_get_transient( $transient_key ) ) ) {
             // Get all post meta values
             $sql[] = "SELECT {$wpdb->postmeta}.post_id,{$wpdb->postmeta}.meta_value,{$wpdb->posts}.post_type";
             $sql[] = "FROM {$wpdb->postmeta}";
@@ -262,7 +264,7 @@ class PostMetaNumEntity implements Entity
             }
             $result = $clean_from_non_numeric;
 
-            set_transient( $transient_key, $result, FLRT_TRANSIENT_PERIOD_HOURS * HOUR_IN_SECONDS );
+            flrt_set_transient( $transient_key, $result, FLRT_TRANSIENT_PERIOD_HOURS * HOUR_IN_SECONDS );
         }
 
         if( ! empty( $result ) ) {
@@ -300,6 +302,9 @@ class PostMetaNumEntity implements Entity
                 }
             }
 
+            if(flrt_is_woo_discount_rules() && (strpos($this->entityName, '_price') !== false))
+                $wdr_woo_discount_rules = $this->getWooDiscountRulesClass();
+
             foreach ( $result as $single_post ) {
                 /**
                  * If there are already filtered posts, we have to skip posts
@@ -311,12 +316,27 @@ class PostMetaNumEntity implements Entity
                     }
                 }
 
+                if (flrt_is_woo_discount_rules()) {
+                    if (strpos($this->entityName, '_price') !== false) {
+                        $product = wc_get_product($single_post['post_id']);
+                        if ($product) {
+                            $wdr_product_has_sale = $wdr_woo_discount_rules->getProductPriceToDisplay($product);
+                            if ($wdr_product_has_sale) {
+                                $single_post['meta_value'] = $wdr_product_has_sale['discounted_price'];
+                            }
+                        }
+                    }
+                }
+
+
+
                 /**
                  * We have to generate and fill two arrays
                  * First to detect $min and $max values
                  * Second to map post_types with post IDs
                  */
-                $new_result[] = (float) $single_post['meta_value'];
+                $single_post['meta_value'] = (is_float($single_post['meta_value']) ) ? $single_post['meta_value'] : (float) $single_post['meta_value'];
+                $new_result[] = $single_post['meta_value'];
 
                 if ( $min !== false && $single_post['meta_value'] < $min ){
                     continue;
@@ -326,6 +346,7 @@ class PostMetaNumEntity implements Entity
                     continue;
                 }
 
+                $this->wdr_product_ids[] = (int)$single_post['post_id'];
                 $post_and_types[ $single_post['post_id'] ] = $single_post['post_type'];
             }
 
@@ -637,43 +658,86 @@ class PostMetaNumEntity implements Entity
         $max = isset( $queried_value['values']['max'] ) ? $queried_value['values']['max'] : false;
 
         // Compare with false because $min can be 0
-        if( $min !== false ){
-            $min  = apply_filters( 'wpc_unset_num_shift', $min, $this->getName() );
+        if ((strpos($key, '_price') !== false) && flrt_is_woocommerce() && flrt_is_woo_discount_rules()) {
+            $query_post_in = $this->wdrAddProductsRangeToFilterQuery($wp_query);
+            $wp_query->set('post__in', $query_post_in);
+            if (empty($query_post_in)){
+                $wp_query->set('posts_per_page', $query_post_in);
+            }
+        } else {
+            if ($min !== false) {
+                $min = apply_filters('wpc_unset_num_shift', $min, $this->getName());
 
-            $type = $this->isDecimal( $queried_value['step'], $min ) ? 'DECIMAL(15,6)' : 'NUMERIC';
-            $meta_query = array(
-                'key'     => $key,
-                'value'   => $min,
-                'compare' => '>=',
-                'type'    => $type
-            );
-            $this->addMetaQueryArray( $meta_query );
+                $type = $this->isDecimal($queried_value['step'], $min) ? 'DECIMAL(15,6)' : 'NUMERIC';
+                $meta_query = array(
+                    'key'     => $key,
+                    'value'   => $min,
+                    'compare' => '>=',
+                    'type'    => $type
+                );
+                $this->addMetaQueryArray($meta_query);
+            }
+
+            if ($max !== false) {
+                $max = apply_filters('wpc_unset_num_shift', $max, $this->getName());
+
+                $type = $this->isDecimal($queried_value['step'], $max) ? 'DECIMAL(15,6)' : 'NUMERIC';
+                $meta_query = array(
+                    'key'     => $key,
+                    'value'   => $max,
+                    'compare' => '<=',
+                    'type'    => $type
+                );
+                $this->addMetaQueryArray($meta_query);
+            }
+
+            $this->addMetaQueryArray($meta_query);
+
+            if (count($this->new_meta_query) > 1) {
+                $this->new_meta_query['relation'] = 'AND';
+            }
         }
 
-        if( $max !== false ){
-            $max  = apply_filters( 'wpc_unset_num_shift', $max, $this->getName()  );
-
-            $type = $this->isDecimal( $queried_value['step'], $max ) ? 'DECIMAL(15,6)' : 'NUMERIC';
-            $meta_query = array(
-                'key'     => $key,
-                'value'   => $max,
-                'compare' => '<=',
-                'type'    => $type
-            );
-            $this->addMetaQueryArray( $meta_query );
-        }
-
-        $this->addMetaQueryArray( $meta_query );
-
-
-        if ( count($this->new_meta_query) > 1 ) {
-            $this->new_meta_query['relation'] = 'AND';
-        }
-
-        $wp_query->set('meta_query', $this->new_meta_query );
+        $wp_query->set('meta_query', $this->new_meta_query);
 
         $this->new_meta_query = [];
 
         return $wp_query;
+    }
+
+    public function wdrAddProductsRangeToFilterQuery($wp_query)
+    {
+        $args = array(
+            'status'    => 'publish',
+            'limit'     => -1,
+            'return'    => 'ids'
+        );
+
+        //Added for work woo_discount_rules and query hash
+        $args['flrt_wdr_pagination'] = true;
+
+        if (isset($wp_query->queried_object->taxonomy) && isset($wp_query->queried_object->taxonomy)) {
+            $args['tax_query'] = array(
+                array(
+                    'taxonomy' => $wp_query->queried_object->taxonomy,
+                    'field'    => 'term_id',
+                    'terms'    => array($wp_query->queried_object->term_id),
+                )
+            );
+        }
+
+        $products = wc_get_products($args);
+        $query_post_in = array_intersect($products, $this->wdr_product_ids);
+        if(isset($wp_query->query_vars['post__in']) && !empty($wp_query->query_vars['post__in'])){
+            $query_post_in = array_intersect($query_post_in, $wp_query->query_vars['post__in']);
+        }
+        if(empty($query_post_in)){
+            return [0];
+        }
+        return $query_post_in;
+    }
+
+    public function getWooDiscountRulesClass(){
+        return flrt_woo_discount_rules_class();
     }
 }

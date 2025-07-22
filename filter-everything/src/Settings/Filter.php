@@ -36,6 +36,7 @@ class Filter
                     'date_type'  => '',
                     'date_format'  => '',
                     'show_term_names' => '',
+                    'selected_and_above' => '',
                     'logic'      => '',
                     'orderby'    => '',
                     'in_path'    => '',

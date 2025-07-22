@@ -151,6 +151,14 @@ class FilterFields
                 'instructions'  => esc_html__(  'Term names for filters with swatches or brand images may be hidden', 'filter-everything' ),
                 'tooltip'       => '',
             ),
+            'selected_and_above' => array(
+                'type'          => 'Checkbox',
+                'label'         => esc_html__( 'Mode «All stars+»', 'filter-everything' ),
+                'class'         => 'wpc-field-show-selected-and-above',
+                'default'       => 'no',
+                'instructions'  => esc_html__(  'E.g. if 3 stars are selected, all products with rating 3+ will be shown', 'filter-everything' ),
+                'tooltip'       => '',
+            ),
             'logic' => array(
                 'type'          => 'Select',
                 'label'         => esc_html__( 'Filter Logic', 'filter-everything' ),
@@ -316,6 +324,10 @@ class FilterFields
             'date'          => esc_html__('Date range', 'filter-everything'),
         );
 
+        if(flrt_is_woocommerce()){
+            $viewOptions['rating'] = esc_html__('Rating', 'filter-everything');
+        }
+
         return $viewOptions;
     }
 
@@ -476,6 +488,11 @@ class FilterFields
                 $short_entity .= ' taxonomy-product-attribute';
             }
 
+            if ( strpos( $filter['e_name'], 'product_visibility') !== false
+                && $filter['view'] === 'rating') {
+                $short_entity .= ' selected-and-above-show ';
+            }
+
             if ( flrt_get_experimental_option('use_color_swatches') === 'on' ) {
                 $taxonomies = flrt_get_experimental_option( 'color_swatches_taxonomies', [] );
 
@@ -488,6 +505,7 @@ class FilterFields
         if ( in_array( $filter['e_name'], flrt_brand_filter_entities() ) ) {
             $short_entity .= ' wpc-filter-has-brands';
         }
+
 
         $short_entity .= isset( $filter['view'] ) ? ' wpc-view-'.$filter['view'] : '';
 
@@ -617,7 +635,7 @@ class FilterFields
                 }
 
                 // Set disabled fields for some situations
-                if( in_array( $filter['entity'], array( 'author_author', 'post_meta_exists' ) ) /* $filter['entity'] === 'author_author'*/ && $fieldKey === 'logic' ){
+                if( in_array( $filter['entity'], array( 'author_author', 'post_meta_exists', 'taxonomy_product_visibility' ) ) /* $filter['entity'] === 'author_author'*/ && $fieldKey === 'logic' ){
                     $fieldData['disabled'] = array('and');
                 }
 
@@ -635,6 +653,7 @@ class FilterFields
                             'date',
                             'colors',
                             'image',
+                            'rating',
                         );
                     } else if ( in_array( $filter['entity'], [ 'post_date' ] ) ) {
                         $fieldData['disabled'] = array(
@@ -645,11 +664,18 @@ class FilterFields
                             'range',
                             'colors',
                             'image',
+                            'rating',
                         );
-                    } else {
+                    } else if ( in_array( $filter['entity'], [ 'taxonomy_product_visibility' ] ) ) {
+                        $fieldData['disabled'] = array(
+                            'date',
+                            'range',
+                        );
+                    }else {
                         $fieldData['disabled'] = array(
                             'range',
                             'date',
+                            'rating',
                         );
                     }
                 }
@@ -1010,7 +1036,7 @@ class FilterFields
             }
 
             // For author and post_meta_exists entities logic can be only OR
-            if( in_array( $filter['entity'], array( 'author_author', 'post_meta_exists' ) )  ){
+            if( in_array( $filter['entity'], array( 'author_author', 'post_meta_exists', 'taxonomy_product_visibility' ) )  ){
                 if( $filter['logic'] !== 'or' ){
                     $this->pushError( 45, $filterID, 'logic' ); // Not acceptable logic.
                     $valid = false;
@@ -1569,7 +1595,7 @@ class FilterFields
             'post_meta',
             'post_meta_num',
             'post_date',
-            ) ) ){
+        ) ) ){
             return true;
         }
 

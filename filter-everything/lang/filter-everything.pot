@@ -1380,9 +1380,6 @@ msgstr ""
 msgid "%s #%s"
 msgstr ""
 
-msgid "No WP Queries matched the post type \"%s\" found on the page"
-msgstr ""
-
 msgid "Search"
 msgstr ""
 
@@ -1412,11 +1409,6 @@ msgstr ""
 msgid ""
 "Do not display opening widgets buttons automatically. I will insert them "
 "myself via shortcodes."
-msgstr ""
-
-msgid ""
-"Note: if you modify the selected WP_Query on the page, please update this "
-"Filter Set"
 msgstr ""
 
 msgid ""
@@ -2364,4 +2356,61 @@ msgid "Rounded swatches"
 msgstr ""
 
 msgid "Make swatches rounded"
+msgstr ""
+
+msgid "Rating"
+msgstr ""
+
+msgid "Mode «All stars+»"
+msgstr ""
+
+msgid "E.g. if 3 stars are selected, all products with rating 3+ will be shown"
+msgstr ""
+
+msgid "The same as on a desktop"
+msgstr ""
+
+msgid "Filters widget on mobile should be"
+msgstr ""
+
+msgid "Collapsed and expanded"
+msgstr ""
+
+msgid "Pop-up filters widget"
+msgstr ""
+
+msgid "Show products rated %d+ stars"
+msgstr ""
+
+msgid "Show products rated %d stars"
+msgstr ""
+
+msgid "Show products with %d star rating"
+msgstr ""
+
+msgid "You do not have sufficient permissions to duplicate the Filter Set."
+msgstr ""
+
+msgid "Post not found or invalid type."
+msgstr ""
+
+msgid "copy"
+msgstr ""
+
+msgid "Duplicate Filter Set"
+msgstr ""
+
+msgid "The post was not found or is not a Filter Set."
+msgstr ""
+
+msgid "Appear as a Pop-up"
+msgstr ""
+
+msgid "No %s lists found on the page"
+msgstr ""
+
+msgid "Posts list"
+msgstr ""
+
+msgid "Note: if you modify the selected Posts list on the page, please update this Filter Set"
 msgstr ""

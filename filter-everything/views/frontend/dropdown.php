@@ -67,6 +67,7 @@ if ( $is_swatch ){
                         $selected          = ( in_array( $term_object->slug, $filter['values'] ) ) ? 1 : 0;
                         $term_hidden_class = '';
                         $data_count        = '';
+                        $data_rating       = '';
 
                         if( isset( $term_object->wp_queried ) && $term_object->wp_queried ){
                             $disabled   = 1;
@@ -108,12 +109,42 @@ if ( $is_swatch ){
                             $data_count        = ' data-count=' . $term_object->cross_count;
                         }
 
+                        $rating = 0;
+                        if( mb_strpos( $term_object->slug, 'rated-' ) !== false){
+                            $pieces = explode("-", $term_object->slug);
+                            $rating = isset( $pieces[1] ) ? $pieces[1] : 0;
+                            $data_rating = ' data-star-rating=' . $rating;
+                        }
+
                         ?>
-                        <option<?php echo esc_html( $data_image ); echo esc_html( $data_color ); echo esc_html( $data_count ); ?> class="wpc-term-count-<?php echo esc_attr( $term_object->cross_count ); ?> wpc-term-id-<?php echo esc_attr($term_object->term_id); echo esc_attr( $term_hidden_class ); ?>" value="<?php echo esc_attr( $term_object->term_id ); ?>" <?php selected( 1, $selected ); ?> <?php disabled( 1, $disabled ); ?> data-wpc-link="<?php echo esc_attr( $url_manager->getTermUrl( $term_object->slug, $filter['e_name'], $filter['entity'] ) ); ?>" id="wpc-option-<?php echo esc_attr( $filter['entity'] ); ?>-<?php echo esc_attr($filter['e_name']); ?>-<?php echo esc_attr( $id ); ?>"><?php
-                            echo esc_html( $term_object->name );
+                        <option<?php echo esc_html( $data_image ); echo esc_html( $data_color ); echo esc_html( $data_count ); echo esc_html( $data_rating );?> class="wpc-term-count-<?php echo esc_attr( $term_object->cross_count ); ?> wpc-term-id-<?php echo esc_attr($term_object->term_id); echo esc_attr( $term_hidden_class ); ?>" value="<?php echo esc_attr( $term_object->term_id ); ?>" <?php selected( 1, $selected ); ?> <?php disabled( 1, $disabled ); ?> data-wpc-link="<?php echo esc_attr( $url_manager->getTermUrl( $term_object->slug, $filter['e_name'], $filter['entity'] ) ); ?>" id="wpc-option-<?php echo esc_attr( $filter['entity'] ); ?>-<?php echo esc_attr($filter['e_name']); ?>-<?php echo esc_attr( $id ); ?>">
+                            <?php
+                            if ($rating > 0){
+                                if($use_select2){
+                                    $rating_html = '';
+                                    $i = 1;
+                                    $label_star = '<span class="flrt-star-label %s">' . flrt_rating_star() . '</span>';
+                                    while($i <=5){
+                                        $star_class = '';
+                                        if($i <= $rating){
+                                            $star_class = 'flrt-star-label-hover';
+                                        }
+                                        $rating_html .= sprintf($label_star, $star_class);
+                                        $i++;
+                                    }
+                                    echo $rating_html;
+                                }else{
+                                    echo sprintf(
+                                        _n('%d star', '%d stars', $rating, 'filter-everything'),
+                                        $rating
+                                    );
+                                }
+                            }else{
+                                echo esc_html( $term_object->name );
+                            }
 
                             if( $set['show_count']['value'] === 'yes' && ! $use_select2 ) {
-                                echo esc_html( ' ('.$term_object->cross_count.')' );
+                               echo esc_html( ' ('.$term_object->cross_count.')' );
                             }
                         ?></option>
                     <?php } ?><!-- end foreach -->

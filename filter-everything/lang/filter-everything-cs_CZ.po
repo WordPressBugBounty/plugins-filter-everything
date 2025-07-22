@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Filter Everything PRO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 21:45+0000\n"
-"PO-Revision-Date: 2025-03-05 09:18+0000\n"
+"PO-Revision-Date: 2025-07-21 13:42+0000\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "Language: cs_CZ\n"
@@ -345,6 +345,9 @@ msgstr "Any stránka %s (pro společný dotaz na všech stránkách %s)"
 msgid "Any Author"
 msgstr "Jakýkoli autor"
 
+msgid "Appear as a Pop-up"
+msgstr "Zobrazení jako vyskakovací okno"
+
 msgid "Appearance"
 msgstr "Vzhled"
 
@@ -517,6 +520,9 @@ msgstr "Sbalit filtry Widget na mobilních zařízeních"
 msgid "Collapse the widget and show the Filters opening button"
 msgstr "Sbalení widgetu a zobrazení tlačítka pro otevření filtrů"
 
+msgid "Collapsed and expanded"
+msgstr "Sbaleno a rozšířeno"
+
 msgid "Color"
 msgstr "Barva"
 
@@ -546,6 +552,9 @@ msgstr "Kompatibilita s jakýmkoli nástrojem pro tvorbu stránek"
 
 msgid "Contains the IDs of ACF fields that are related to the Custom Field"
 msgstr "Obsahuje ID polí ACF přidružených k Vlastnímu Poli tohoto filtru"
+
+msgid "copy"
+msgstr "kopírovat"
 
 msgid "Count, dynamic recount in terms"
 msgstr "Počítání, dynamický přepočet v termínech"
@@ -776,6 +785,9 @@ msgstr "Rozbalovací nabídka"
 msgid "Dropdown Label"
 msgstr "Název rozevíracího seznamu"
 
+msgid "Duplicate Filter Set"
+msgstr "Sada duplicitních filtrů"
+
 #: src/Settings/Tabs/PermalinksTab.php:180
 msgid "Duplicate prefixes. Prefixes should be unique."
 msgstr "Duplicitní předpony. Předpony by měly být jedinečné."
@@ -791,6 +803,11 @@ msgstr "např. 2745, 324"
 
 msgid "e.g. From {value}"
 msgstr "např. Od {hodnota}"
+
+msgid "E.g. if 3 stars are selected, all products with rating 3+ will be shown"
+msgstr ""
+"Např. pokud jsou vybrány 3 hvězdičky, zobrazí se všechny produkty s "
+"hodnocením 3+"
 
 msgid "e.g. Search products, Search posts"
 msgstr "např. Hledat produkty, Hledat příspěvky"
@@ -1287,6 +1304,9 @@ msgstr ""
 msgid "Filters Settings"
 msgstr "Nastavení filtrů"
 
+msgid "Filters widget on mobile should be"
+msgstr "Widget filtrů na mobilu by měl být"
+
 #. Description of the plugin
 #| msgid "Filters Wordpress things."
 msgid "Filters WordPress things."
@@ -1613,6 +1633,9 @@ msgstr "Meta klíč"
 msgid "Mobile devices"
 msgstr "Mobilní zařízení"
 
+msgid "Mode «All stars+»"
+msgstr "Režim «All stars+»"
+
 #: src/Admin/FilterSet.php:223 views/admin/filter-row.php:25
 msgid "More options"
 msgstr "Další možnosti"
@@ -1666,6 +1689,9 @@ msgstr "Nové pravidlo SEO"
 
 msgid "No"
 msgstr "Ne"
+
+msgid "No %s lists found on the page"
+msgstr "Na stránce nebyly nalezeny žádné seznamy %s"
 
 #: pro/Admin/SeoRules.php:568
 msgid "No archive page"
@@ -1726,11 +1752,6 @@ msgstr "Žádné SEO vars"
 msgid "No title"
 msgstr "Bez názvu"
 
-#| msgid "No WP Queries matched to the post type \"%s\" found on the page"
-msgid "No WP Queries matched the post type \"%s\" found on the page"
-msgstr ""
-"Na stránce nebyly nalezeny žádné dotazy WP odpovídající typu příspěvku \"%s\""
-
 #: src/wpc-default-hooks.php:23
 msgid "Not On Sale"
 msgstr "Není v prodeji"
@@ -1747,11 +1768,11 @@ msgid ""
 msgstr "Poznámka: pro metapole ACF používejte názvy bez znaku \"_\" na začátku"
 
 msgid ""
-"Note: if you modify the selected WP_Query on the page, please update this "
+"Note: if you modify the selected Posts list on the page, please update this "
 "Filter Set"
 msgstr ""
-"Poznámka: pokud na stránce upravíte vybraný dotaz WP_Query, aktualizujte "
-"prosím tuto sadu filtrů"
+"Poznámka: pokud změníte seznam vybraných příspěvků na stránce, aktualizujte "
+"tuto sadu filtrů."
 
 #: src/Admin/FilterFields.php:248
 #| msgid "Numeric Range"
@@ -1835,6 +1856,9 @@ msgid ""
 "shortcode."
 msgstr "Zadejte požadovaný widget Třídění přidáním parametru id do zkratky."
 
+msgid "Pop-up filters widget"
+msgstr "Widget vyskakovacích filtrů"
+
 msgid "Pop-up Filters Widget compatibility mode"
 msgstr "Režim kompatibility s vyskakovacími filtry Widget"
 
@@ -1861,6 +1885,9 @@ msgstr "Autor příspěvku"
 msgid "Post Date"
 msgstr "Datum příspěvku"
 
+msgid "Post not found or invalid type."
+msgstr "Příspěvek nenalezen nebo neplatný typ."
+
 #: pro/Admin/SeoRules.php:159 src/Admin/FilterSet.php:30
 #: views/admin/filters-seo-rules.php:22
 msgid "Post Type"
@@ -1883,6 +1910,9 @@ msgstr "Počet příspěvků &laquo;123&raquo;"
 #: src/Admin/FilterFields.php:262
 msgid "Posts count &laquo;321&raquo;"
 msgstr "Počet příspěvků &laquo;321&raquo;"
+
+msgid "Posts list"
+msgstr "Seznam příspěvků"
 
 #: src/Admin/FilterFields.php:87
 msgid "Prefix for URL"
@@ -1933,6 +1963,9 @@ msgstr "Rádiová tlačítka"
 
 msgid "Random"
 msgstr "Náhodný"
+
+msgid "Rating"
+msgstr "Hodnocení"
 
 msgid "Read more"
 msgstr "Přečtěte si více"
@@ -2115,6 +2148,15 @@ msgstr "Zobrazit ve Štítcích"
 
 msgid "Show on mobile"
 msgstr "Zobrazit v mobilu"
+
+msgid "Show products rated %d stars"
+msgstr "Zobrazit produkty ohodnocené %d hvězdičkami"
+
+msgid "Show products rated %d+ stars"
+msgstr "Zobrazit produkty ohodnocené %d+ hvězdičkami"
+
+msgid "Show products with %d star rating"
+msgstr "Zobrazit produkty s %d hvězdiček"
 
 #: src/Admin/Widgets/FiltersWidget.php:189
 msgid "Show selected terms (Chips)"
@@ -2406,10 +2448,16 @@ msgstr "Licence byla úspěšně deaktivována."
 msgid "The order in which terms appear in the widget"
 msgstr "Pořadí, v jakém se výrazy objevují ve widgetu"
 
+msgid "The post was not found or is not a Filter Set."
+msgstr "Příspěvek nebyl nalezen nebo se nejedná o sadu filtrů."
+
 #: src/Settings/Tabs/PermalinksTab.php:164
 #| msgid "Prefix must contain at least one alphabetical character."
 msgid "The Prefix must contain at least one alphabetical character."
 msgstr "Prefix musí obsahovat alespoň jeden abecední znak."
+
+msgid "The same as on a desktop"
+msgstr "Stejně jako na desktop"
 
 msgid "The same page as for filtered posts"
 msgstr "Stejná stránka jako pro filtrované příspěvky"
@@ -2736,6 +2784,9 @@ msgstr "Chybné id widgetu Třídění. Zadejte prosím správný."
 
 msgid "Yes"
 msgstr "Ano"
+
+msgid "You do not have sufficient permissions to duplicate the Filter Set."
+msgstr "Nemáte dostatečná oprávnění k duplikování sady filtrů."
 
 #| msgid ""
 #| "You have been using the plugin for more than two months without license "

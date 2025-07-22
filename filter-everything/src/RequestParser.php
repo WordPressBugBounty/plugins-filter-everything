@@ -428,9 +428,11 @@ class RequestParser
 
     private function checkSlugInSegmentForCleaningNativePath( $segment ){
         $em = Container::instance()->getEntityManager();
+        $permalinks_disabled = (defined( 'FLRT_PERMALINKS_ENABLED' ) && !FLRT_PERMALINKS_ENABLED);
+
         foreach( $em->getConfiguredPathSlugs() as $key => $slug ){
             if( mb_strpos( $segment, $slug . $this->separator ) === 0 ){
-                return $slug;
+                return $permalinks_disabled ? false : $slug;
             }
         }
         return false;

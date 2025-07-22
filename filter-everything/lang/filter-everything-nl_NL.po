@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Filter Everything PRO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-16 14:04+0000\n"
-"PO-Revision-Date: 2025-03-05 09:16+0000\n"
+"PO-Revision-Date: 2025-07-21 13:40+0000\n"
 "Last-Translator: \n"
 "Language-Team: Dutch\n"
 "Language: nl_NL\n"
@@ -307,6 +307,9 @@ msgstr "Elk %s pagina (voor een gemeenschappelijke query op alle %s pagina's)"
 msgid "Any Author"
 msgstr "Elke auteur"
 
+msgid "Appear as a Pop-up"
+msgstr "Verschijnen als pop-up"
+
 msgid "Appearance"
 msgstr "Uiterlijk"
 
@@ -467,6 +470,9 @@ msgstr "Filterwidget samenvouwen op mobiele apparaten"
 msgid "Collapse the widget and show the Filters opening button"
 msgstr "De widget samenvouwen en de knop voor het openen van filters tonen"
 
+msgid "Collapsed and expanded"
+msgstr "Ingevouwen en uitgevouwen"
+
 msgid "Color"
 msgstr "Kleur"
 
@@ -498,6 +504,9 @@ msgid "Contains the IDs of ACF fields that are related to the Custom Field"
 msgstr ""
 "Bevat de ID van de ACF velden die geassocieerd zijn met het aangepaste veld "
 "van dit filter"
+
+msgid "copy"
+msgstr "kopie"
 
 msgid "Count, dynamic recount in terms"
 msgstr "Tellen, dynamisch hertellen in termen"
@@ -721,6 +730,9 @@ msgstr "Dropdown"
 msgid "Dropdown Label"
 msgstr "Naam van de vervolgkeuzelijst"
 
+msgid "Duplicate Filter Set"
+msgstr "Duplicaat filterset"
+
 #: src/Settings/Tabs/PermalinksTab.php:180
 msgid "Duplicate prefixes. Prefixes should be unique."
 msgstr "Dubbele voorvoegsels. Voorvoegsels moeten uniek zijn."
@@ -736,6 +748,11 @@ msgstr "bijv. 2745, 324"
 
 msgid "e.g. From {value}"
 msgstr "bv. Van {waarde}"
+
+msgid "E.g. if 3 stars are selected, all products with rating 3+ will be shown"
+msgstr ""
+"Als u bijvoorbeeld 3 sterren selecteert, worden alle producten met een "
+"waardering van 3+ getoond"
 
 msgid "e.g. Search products, Search posts"
 msgstr "bijv. Zoek producten, Zoek posts"
@@ -1184,6 +1201,9 @@ msgstr ""
 msgid "Filters Settings"
 msgstr "Instellingen filters"
 
+msgid "Filters widget on mobile should be"
+msgstr "De filterwidget op mobiel moet"
+
 #. Description of the plugin
 msgid "Filters WordPress things."
 msgstr "Filtert WordPress-dingen."
@@ -1484,6 +1504,9 @@ msgstr "Meta sleutel"
 msgid "Mobile devices"
 msgstr "Mobiele toestellen"
 
+msgid "Mode «All stars+»"
+msgstr "Modus «Alle sterren+»"
+
 #: src/Admin/FilterSet.php:223 views/admin/filter-row.php:25
 msgid "More options"
 msgstr "Meer opties"
@@ -1532,6 +1555,9 @@ msgstr "Nieuwe SEO regel"
 
 msgid "No"
 msgstr "Geen"
+
+msgid "No %s lists found on the page"
+msgstr "Geen %s-lijsten gevonden op de pagina"
 
 #: pro/Admin/SeoRules.php:568
 msgid "No archive page"
@@ -1590,11 +1616,6 @@ msgstr "Geen SEO vars"
 msgid "No title"
 msgstr "Geen titel"
 
-msgid "No WP Queries matched the post type \"%s\" found on the page"
-msgstr ""
-"Er zijn geen WP-query's gevonden die overeenkomen met het berichttype \"%s\" "
-"op de pagina"
-
 #: src/wpc-default-hooks.php:23
 msgid "Not On Sale"
 msgstr "Niet in de uitverkoop"
@@ -1613,11 +1634,11 @@ msgstr ""
 "begin."
 
 msgid ""
-"Note: if you modify the selected WP_Query on the page, please update this "
+"Note: if you modify the selected Posts list on the page, please update this "
 "Filter Set"
 msgstr ""
-"Opmerking: als u de geselecteerde WP_Query op de pagina wijzigt, moet u deze "
-"filterset bijwerken."
+"Opmerking: als u de lijst met geselecteerde berichten op de pagina wijzigt, "
+"moet u deze filterset bijwerken."
 
 #: src/Admin/FilterFields.php:248
 msgid "Numeric range"
@@ -1699,6 +1720,9 @@ msgstr ""
 "Geef de gewenste sorteerwidget op door de id-parameter aan de shortcode toe "
 "te voegen."
 
+msgid "Pop-up filters widget"
+msgstr "Pop-up filters widget"
+
 msgid "Pop-up Filters Widget compatibility mode"
 msgstr "Pop-upfilters Widget-compatibiliteitsmodus"
 
@@ -1719,6 +1743,9 @@ msgstr "Post Auteur"
 
 msgid "Post Date"
 msgstr "Datum posten"
+
+msgid "Post not found or invalid type."
+msgstr "Bericht niet gevonden of ongeldig type."
 
 #: pro/Admin/SeoRules.php:159 src/Admin/FilterSet.php:30
 #: views/admin/filters-seo-rules.php:22
@@ -1742,6 +1769,9 @@ msgstr "Posts tellen &laquo;123&raquo;"
 #: src/Admin/FilterFields.php:262
 msgid "Posts count &laquo;321&raquo;"
 msgstr "Posts tellen &laquo;321&raquo;"
+
+msgid "Posts list"
+msgstr "Lijst met berichten"
 
 #: src/Admin/FilterFields.php:87
 msgid "Prefix for URL"
@@ -1789,6 +1819,9 @@ msgstr "Radio knoppen"
 
 msgid "Random"
 msgstr "Willekeurig"
+
+msgid "Rating"
+msgstr "Beoordeling"
 
 msgid "Read more"
 msgstr "Lees verder"
@@ -1968,6 +2001,15 @@ msgstr "Toon in chips"
 
 msgid "Show on mobile"
 msgstr "Weergeven op mobiel"
+
+msgid "Show products rated %d stars"
+msgstr "Toon producten met %d sterren"
+
+msgid "Show products rated %d+ stars"
+msgstr "Toon producten met %d+ sterren"
+
+msgid "Show products with %d star rating"
+msgstr "Toon producten met %d sterren"
 
 #: src/Admin/Widgets/FiltersWidget.php:189
 msgid "Show selected terms (Chips)"
@@ -2241,9 +2283,15 @@ msgstr "De licentie is succesvol gedeactiveerd."
 msgid "The order in which terms appear in the widget"
 msgstr "De volgorde waarin termen in de widget verschijnen"
 
+msgid "The post was not found or is not a Filter Set."
+msgstr "De post is niet gevonden of is geen filterset."
+
 #: src/Settings/Tabs/PermalinksTab.php:164
 msgid "The Prefix must contain at least one alphabetical character."
 msgstr "Het Voorvoegsel moet minstens één alfabetisch teken bevatten."
+
+msgid "The same as on a desktop"
+msgstr "Hetzelfde als op een desktop"
 
 msgid "The same page as for filtered posts"
 msgstr "Dezelfde pagina als voor gefilterde posts"
@@ -2542,6 +2590,9 @@ msgstr "Verkeerde Sorteren widget id. Geef de juiste op."
 
 msgid "Yes"
 msgstr "Ja"
+
+msgid "You do not have sufficient permissions to duplicate the Filter Set."
+msgstr "U hebt niet voldoende rechten om de filterset te dupliceren."
 
 msgid ""
 "You have been using the plugin for over two months without a license key, "

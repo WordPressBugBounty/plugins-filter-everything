@@ -26,6 +26,10 @@ class WpManager
             define( 'FLRT_PERMALINKS_ENABLED', $permalinksEnabled );
         }
 
+        if ( ! defined('FLRT_SET_TRANSIENT_ENABLED')){
+            define( 'FLRT_SET_TRANSIENT_ENABLED', true );
+        }
+
         $this->requestParser = new RequestParser( $this->prepareRequest() );
         $this->em = Container::instance()->getEntityManager();
     }
@@ -676,6 +680,12 @@ class WpManager
             global $flrt_queries, $wpcQueryOrder;
             // We must always get post type to compare with selected Post type in Filter Set
 
+            //Added for work woo_discount_rules and query hash
+            if($wp_query->get('flrt_wdr_pagination')){
+                unset( $wp_query->query_vars['flrt_pagination'] );
+                $wp_query->set('flrt_pagination', true);
+            }
+
             $flrt_query_vars = [];
             $query_label     = '';
 
@@ -728,18 +738,25 @@ class WpManager
                     $post_type_array[] = 'post';
                 }
             }
-
+            $query_label .= esc_html__('Posts list', 'filter-everything');
+            $query_label .= ' «';
             if( ! empty( $post_type_array ) ){
                 $copy_post_type_array = $post_type_array;
                 $copy_post_type_array = array_map('flrt_ucfirst', $copy_post_type_array);
+                foreach ($copy_post_type_array as $key => $type){
+                    $post_type = get_post_type_object(strtolower($type));
+
+                    if ( $post_type && isset($post_type->labels->name) ) {
+                        $copy_post_type_array[$key] = $post_type->labels->name;
+                    }
+                }
                 $query_label .= implode(", ", $copy_post_type_array);
 
                 $flrt_query_vars['post_types'] = $post_type_array;
             }
 
             $hash = md5( serialize( $flrt_query_vars ) );
-
-            $query_label .= ' '.esc_html__('query', 'filter-everything');
+            $query_label .= '»';
             if( $wp_query->is_main_query() ){
                 $query_label .= '. '.esc_html__('Main Query.', 'filter-everything');
             }

@@ -1,5 +1,5 @@
 /*!
- * Filter Everything widgets 1.9.0
+ * Filter Everything widgets 1.9.1
  */
 (function($) {
     "use strict";

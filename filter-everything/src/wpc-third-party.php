@@ -33,7 +33,7 @@ if( ! function_exists('flrt_wp') ){
     function flrt_wp(){
         $theme_dependencies = flrt_get_theme_dependencies();
 
-        if( flrt_get_option('show_bottom_widget') === 'on' ) {
+        if( flrt_get_option('mobile_filter_settings') === 'show_bottom_widget' ){
 
             if( flrt_get_experimental_option('disable_buttons') !== 'on' ) {
 
@@ -750,6 +750,33 @@ function flrt_remove_pagination_base( $url ){
     $url = ( ! empty( $rewrite ) ) ? user_trailingslashit( $url ) : rtrim( $url, '/' ) . '/';
 
     return $url;
+}
+
+function flrt_is_woo_discount_rules()
+{
+    if( flrt_is_woocommerce() &&
+        class_exists('Wdr\App\Helpers\Woocommerce') &&
+        class_exists('Wdr\App\Controllers\Base') &&
+        class_exists('Wdr\App\Helpers\Rule') &&
+        class_exists('Wdr\App\Controllers\ManageDiscount') &&
+        class_exists('Wdr\App\Controllers\DiscountCalculator') &&
+        class_exists('Wdr\App\Models\DBTable')
+    )
+    {
+        $tb_table = new Wdr\App\Models\DBTable();
+        $wdr_rules = $tb_table::getRules();
+        if(!empty($wdr_rules)){
+            $discount_types = [];
+            foreach ($wdr_rules as $rule){
+                $discount_types[] = $rule->discount_type;
+            }
+            $allowed_discount_types = ['wdr_simple_discount', 'wdr_bulk_discount', 'wdr_set_discount'];
+            if(!empty(array_intersect($allowed_discount_types, $discount_types))){
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 //@todo check this with PLL support

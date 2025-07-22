@@ -113,6 +113,10 @@ class FilterSet
 
             add_filter( 'page_row_actions', [ $this, 'filterSetRowActions' ], 10, 2 );
 
+            if ( defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO ) {
+                add_filter( 'page_row_actions', [ $this, 'addDuplicateLink' ], 11, 2 );
+            }
+
             add_action( 'restrict_manage_posts', [ $this, 'restrictManagePosts' ], 999 );
 
             $this->hooksRegistered = true;
@@ -132,7 +136,7 @@ class FilterSet
         if( isset( $post->post_type ) && $post->post_type === FLRT_FILTERS_SET_POST_TYPE ){
             $new_actions = [];
             foreach( $actions as $key => $action ){
-                if( in_array( $key, array( 'edit', 'trash', 'untrash', 'delete' ) ) ){
+                if( in_array( $key, array( 'edit', 'trash', 'untrash', 'delete', 'flrt_duplicate' ) ) ){
                     $new_actions[$key] = $action;
                 }
             }
@@ -255,6 +259,7 @@ class FilterSet
                 'postTypesTaxList'   => $this->getPostTypesTaxList(),
                 'swatchesTaxonomies' => flrt_get_experimental_option( 'color_swatches_taxonomies', [] ),
                 'brandEntities'      => flrt_brand_filter_entities(),
+                'ratingTaxonomies'      => array('product_visibility'),
                 'moreOptions'        => esc_html__( 'More options', 'filter-everything' ),
                 'lessOptions'        => esc_html__( 'Less options', 'filter-everything' ),
                 'filtersPro'         => defined( 'FLRT_FILTERS_PRO' ),
@@ -295,12 +300,16 @@ class FilterSet
                 $current_index = isset( $attributes['value'] ) ? $attributes['value'] : '';
                 $options = ! empty( $attributes['options'] ) ? $attributes['options'] : [];
 
+                $data_link = '';
+                $hidden_link_class = ' display-none';
                 if( isset( $options[ $current_index ]['data-link'] ) ){
-                    $link = '<a class="wpc-location-preview" href="'.esc_attr( $options[ $current_index ]['data-link'] ).'" ';
-                    $link .= 'title="'.esc_attr( esc_html__('Preview the selected location in a new tab', 'filter-everything') ).'" ';
-                    $link .= 'target="_blank">';
-                    $link .= '<span class="dashicons dashicons-visibility"></span></a>';
+                    $data_link = esc_attr( $options[ $current_index ]['data-link'] );
+                    $hidden_link_class = '';
                 }
+                $link = '<div class="wpc-location-preview-hidden"><a class="wpc-location-preview ' . $hidden_link_class . '" href="'.$data_link.'" ';
+                $link .= 'title="'.esc_attr( esc_html__('Preview the selected location in a new tab', 'filter-everything') ).'" ';
+                $link .= 'target="_blank">';
+                $link .= '<span class="dashicons dashicons-visibility"></span></a></div>';
                 $html = $spinner . $openContainer . $html . $link . $closeContainer;
             }
 
@@ -318,7 +327,7 @@ class FilterSet
 
                 $spinner        = '<span class="spinner"></span>'."\n";
                 $openContainer  = '<div id="wpc-field-wp-query-container">&nbsp;'."\n";
-                $description    = '<p class="description">'.esc_html__( 'Note: if you modify the selected WP_Query on the page, please update this Filter Set', 'filter-everything' ).'</p>'."\n";
+                $description    = '<p class="description">'.esc_html__( 'Note: if you modify the selected Posts list on the page, please update this Filter Set', 'filter-everything' ).'</p>'."\n";
                 $closeContainer = '<div id="wpc_query_vars"></div></div>'."\n";
 
                 $html = $spinner . $openContainer . $html . $description . $closeContainer;
@@ -1086,5 +1095,30 @@ class FilterSet
     private function verifyNonce( $nonce )
     {
         return wp_verify_nonce( $nonce, self::NONCE_ACTION );
+    }
+
+    public function addDuplicateLink($actions, $post) {
+        if ($post->post_type !== FLRT_FILTERS_SET_POST_TYPE) {
+            return $actions;
+        }
+
+        if (current_user_can('edit_posts')) {
+            $url = wp_nonce_url(
+                admin_url('admin.php?action=flrt_duplicate_filter_set&post=' . $post->ID),
+                'flrt_duplicate_filter_set'
+            );
+
+            $new_actions = [];
+            foreach ($actions as $key => $action) {
+                $new_actions[$key] = $action;
+
+                if ($key === 'edit') {
+                    $new_actions['flrt_duplicate'] = '<a href="' . esc_url($url) . '">' . esc_html__('Duplicate', 'filter-everything') . '</a>';
+                }
+            }
+            return $new_actions;
+        }
+
+        return $actions;
     }
 }

@@ -73,14 +73,12 @@ class UrlManager
                     $queriedValues = $filter['values'];
                     // Add only single filter value for views with single selection
                     if( in_array( $filter['view'], array('dropdown', 'radio') ) ){
-
                         if( in_array( $termSlug, $queriedValues ) ){
                             $position = array_search( $termSlug, $queriedValues );
                             unset( $queriedValues[$position] );
                         }else{
                             $queriedValues = array( $termSlug );
                         }
-
                     } else {
                         // For Post Meta Num values have array index as termslug
                         if ( in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date' ] ) ) {
@@ -88,6 +86,37 @@ class UrlManager
                                 unset( $queriedValues[$termSlug] );
                             } else {
                                 $queriedValues[] = $termSlug;
+                            }
+                        } else if ( in_array( $filter['view'], array('rating') ) ) {
+                            if(isset($filter['selected_and_above']) && $filter['selected_and_above'] === 'yes'){
+                                if(isset($exclude['rating_slug'])){
+                                    foreach ($queriedValues as $key => $value){
+                                        unset( $queriedValues[$key] );
+                                    }
+                                }
+
+                                if(!isset($exclude['rating_slug'])){
+                                    $pieces = explode("-", $termSlug);
+                                    $rating = isset( $pieces[1] ) ? $pieces[1] : 0;
+                                    $i = 5;
+                                    while ($i >= 1) {
+                                        $new_termSlug = 'rated-' . $i;
+                                        if(in_array( $new_termSlug, $queriedValues )){
+                                            $position = array_search( $new_termSlug, $queriedValues );
+                                            unset( $queriedValues[$position] );
+                                        }
+
+                                        if($i >= $rating){
+                                            $queriedValues[] = $new_termSlug;
+                                        }
+                                        $i--;
+                                    }
+                                }
+                            } else if(in_array( $termSlug, $queriedValues ) && isset($filter['selected_and_above']) && $filter['selected_and_above'] === 'no'){
+                                $position = array_search( $termSlug, $queriedValues );
+                                unset( $queriedValues[$position] );
+                            }else{
+                                $queriedValues = array( $termSlug );
                             }
                         } else {
                             if ( in_array( $termSlug, $queriedValues ) ) {
@@ -97,9 +126,7 @@ class UrlManager
                                 $queriedValues[] = $termSlug;
                             }
                         }
-
                     }
-
                     $filter['values']     = $queriedValues;
                 }
 

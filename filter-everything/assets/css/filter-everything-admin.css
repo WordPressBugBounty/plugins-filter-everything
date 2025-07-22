@@ -1,5 +1,5 @@
 /*!
- * Filter Everything admin 1.9.0
+ * Filter Everything admin 1.9.1
  */
 #filters-seo-rules .inside,
 #filters-set-items .inside{
@@ -34,13 +34,11 @@
     top: -16px;
     border-left: 7px solid transparent;
     border-right: 7px solid transparent;
-    /*border-bottom: 25px solid #f0f6fc;*/
     border-bottom: 25px solid #f5f5f5;
     transform: rotate(-24deg);
 }
 .wpc-advice-body{
     line-height: 1.5;
-    /*background: #f0f6fc;*/
     background: #f5f5f5;
     padding: 15px 12px 1px 12px;
     margin-top: 7px;
@@ -142,7 +140,7 @@ li.wpc-filter-slug{
     margin-bottom: 10px;
 }
 .wpc-title-action .wpc-action{
-    padding: 10px;
+    padding: 13px 10px;
     color: #555d66;
     border: 0;
     margin: 0;
@@ -208,9 +206,12 @@ li.wpc-filter-slug{
     line-height: 18px;
 }
 .wpc-filter-item-labels li{
-    padding: 12px;
+    padding: 15px 12px;
     box-sizing: border-box;
     overflow: hidden;
+}
+.wpc-filter-item-search-field .wpc-filter-entity{
+    padding: 9px 12px;
 }
 .wpc-advice-body ol.wpc-display-widgets{
     list-style-type: none;
@@ -225,6 +226,7 @@ li.wpc-filter-slug{
 .wpc-date-type-tr,
 .wpc-date-format-tr,
 .wpc-field-show-term-names-tr,
+.wpc-field-show-selected-and-above-tr,
 .wpc-field-apply-button-text-tr,
 .wpc-field-apply-button-page-type-tr,
 .wpc-field-reset-button-text-tr,
@@ -238,6 +240,7 @@ li.wpc-filter-slug{
 .wpc-filter-post_date .wpc-date-format-tr,
 .wpc-filter-post_date .wpc-date-type-tr,
 .taxonomy-has-swatches .wpc-field-show-term-names-tr,
+.selected-and-above-show .wpc-field-show-selected-and-above-tr,
 .wpc-filter-has-brands .wpc-field-show-term-names-tr,
 .wpc-field-apply-button-text-tr.wpc-opened,
 .wpc-field-reset-button-text-tr.wpc-opened,
@@ -264,6 +267,7 @@ li.wpc-filter-slug{
 #wpc-filter-id-apply-button li.wpc-filter-label{
     width: auto;
     min-height: 42px;
+    padding: 9px 12px;
 }
 input.wpc-text-input-style[type="text"]{
     border-style: dashed;
@@ -472,7 +476,7 @@ label[for="wpc_seo_rules-wp_entity"],
 .wpc-belongs-not input[type="week"],
 .wpc-belongs-not select,
 .wpc-belongs-not textarea{
-     color: #b7b7b7;
+    color: #b7b7b7;
 }
 .wpc-remove-filter-wrapper{
     margin: 0;
@@ -897,14 +901,6 @@ body #tiptip_content a:hover{
 }
 #wpc-filters-list a.wpc-more-options-toggle{
     text-decoration: none;
-    border-bottom-width: 1px;
-    border-bottom-style: dashed;
-}
-.wpc-more-options-toggle.wpc-opened:hover{
-    color: #dc3232;
-}
-.wpc-more-options-toggle.wpc-opened{
-    color: #a00;
 }
 .post-type-filter-seo-rule .inline-edit-status option[value="private"],
 .post-type-filter-seo-rule .inline-edit-status option[value="pending"],
@@ -1019,7 +1015,7 @@ body #tiptip_content a:hover{
 .wpc-tab-divider{
     border-left: 1px solid #ccc;
 }
-.wpc-inactive-settings-field{
+.wpc-inactive-settings-field, .wpc-inactive-settings-field-text{
     color: #b7b7b7;
 }
 .description{
@@ -1108,18 +1104,26 @@ div.wpc_set_fields-post_name-wrap{
 .wpc-warning{
     color: #cc0000;
 }
-a.wpc-location-preview{
+
+.wpc-location-preview-hidden{
+    width: 20px;
+}
+
+a.wpc-location-preview, a.wpc-location-preview-not-pro{
     text-decoration: none;
     display: flex;
+    cursor: pointer;
     align-items: center;
     color: #666666;
+    width: 20px;
+    height: 100%;
     outline: none;
     border: none;
 }
-a.wpc-location-preview:hover{
+a.wpc-location-preview:hover, a.wpc-location-preview-not-pro:hover{
     color: #135e96;
 }
-a.wpc-location-preview span{
+a.wpc-location-preview span, a.wpc-location-preview-not-pro span{
     font-size: 18px;
 }
 .wpc-full-width{
@@ -1468,4 +1472,79 @@ a#wpc-get-license-key:hover::after {
     .form-table.wpc-sortable-table td{
         padding-left: 0;
     }
+}
+.flrt-checkbox-switch-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: sans-serif;
+}
+
+.flrt-checkbox-switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+}
+
+.flrt-checkbox-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.flrt-checkbox-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.flrt-checkbox-slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+input:checked + .flrt-checkbox-slider {
+    background-color: #2271b1;
+}
+
+input:active + .flrt-checkbox-slider:hover, input:focus + .flrt-checkbox-slider:hover {
+    box-shadow: 0px 0px 0px 3px #3371ad2e;
+}
+
+input:checked + .flrt-checkbox-slider:before {
+    left: 0px;
+    transform: translateX(26px);
+}
+label.flrt-checkbox-switch:hover input + span.flrt-checkbox-slide, .flrt-checkbox-slider:hover{
+    background-color: rgb(152, 162, 179);
+    transition: background 0.25s;
+}
+input:checked + .flrt-checkbox-slider:hover {
+    background-color: #004a6d;
+}
+a.wpc-location-preview.display-none, a.wpc-location-preview-not-pro.display-none{
+    display: none;
+}
+.wpc_set_fields-instead_post_name-wrap{
+    display: flex;
+}
+.wpc-field-instead-of-location{
+    margin-right: 5px !important;
+}
+.wpc-view-rating .wpc-field-orderby-tr, .wpc-view-rating .wpc-field-search-tr, .wpc-view-rating .wpc-field-more-less-tr{
+    display: none;
 }

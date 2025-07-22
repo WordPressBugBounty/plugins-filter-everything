@@ -85,7 +85,7 @@ class TaxonomyEntity implements Entity
         // Check if it is already stored
         $transient_key = flrt_get_post_ids_transient_key( $filter['slug'] );
 
-        if ( false === ( $results = get_transient( $transient_key ) ) ) {
+        if ( false === ( $results = flrt_get_transient( $transient_key ) ) ) {
 
             // It wasn't there, so regenerate the data and save the transient
             if( defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO ) {
@@ -117,7 +117,7 @@ class TaxonomyEntity implements Entity
 
             $results = $wpdb->get_results($query, ARRAY_A);
 
-            set_transient( $transient_key, $results, FLRT_TRANSIENT_PERIOD_HOURS * HOUR_IN_SECONDS );
+            flrt_set_transient( $transient_key, $results, FLRT_TRANSIENT_PERIOD_HOURS * HOUR_IN_SECONDS );
         }
 
         $taxonomy_terms = apply_filters( 'wpc_term_taxonomy_terms', $results, $this );

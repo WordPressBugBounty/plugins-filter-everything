@@ -47,6 +47,7 @@ abstract class BaseSettings implements TabInterface{
 
     public function checkBoxCallback($args)
     {
+
         $checkbox = '<label><input type="checkbox" name="%s[%s]" %s id="%s">%s</label>';
         $checkbox = apply_filters( 'wpc_settings_field_checkbox', $checkbox, $args );
         $checked  = $this->getOption($args['label_for']);
@@ -282,7 +283,7 @@ abstract class BaseSettings implements TabInterface{
             $class = '';
 
             if( $field['id'] === 'bottom_widget_compatibility' ){
-                if( flrt_get_option('show_bottom_widget') === 'on' ){
+                if( flrt_get_option('mobile_filter_settings') === 'show_bottom_widget' ){
                     $field['args']['class'] .= ' wpc-opened';
                 }
             }

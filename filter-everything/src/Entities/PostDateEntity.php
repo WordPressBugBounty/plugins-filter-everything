@@ -187,7 +187,7 @@ class PostDateEntity implements Entity
          */
         $transient_key = flrt_get_terms_transient_key($this->getName() . $key_in . $lang);
 
-        if ( false === ( $result = get_transient( $transient_key ) ) ) {
+        if ( false === ( $result = flrt_get_transient( $transient_key ) ) ) {
             // Get all post meta values
             $sql[] = "SELECT {$wpdb->posts}.ID,{$wpdb->posts}.post_date,{$wpdb->posts}.post_type";
             $sql[] = "FROM {$wpdb->posts}";
@@ -231,7 +231,7 @@ class PostDateEntity implements Entity
 
             $result = $wpdb->get_results($sql, ARRAY_A);
 
-            set_transient( $transient_key, $result, FLRT_TRANSIENT_PERIOD_HOURS * HOUR_IN_SECONDS );
+            flrt_set_transient( $transient_key, $result, FLRT_TRANSIENT_PERIOD_HOURS * HOUR_IN_SECONDS );
         }
 
         return $result;

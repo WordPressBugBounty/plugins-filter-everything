@@ -1,12 +1,12 @@
 === Filter Everything&nbsp;— Product Filter & WordPress Filter ===
 Contributors: stepasyuk
 Tags: woocommerce product filter, woocommerce filter, product filter, post filter, ajax filter
-Stable tag: 1.9.0
+Stable tag: 1.9.1
 Requires at least: 4.6
-Tested up to: 6.7.2
+Tested up to: 6.8.2
 Requires PHP: 5.7
-License: Envato split license
-License URI: https://codecanyon.net/licenses
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 The most universal filters plugin for WordPress and WooCommerce products.
 
@@ -166,6 +166,22 @@ Uploading via FTP
 6. URL prefixes settings
 
 == Changelog ==
+
+= 1.9.1 =
+*Release Date - 22 July 2025*
+* Dev   - Added a new View ‘Rating’ for filters that displays rating stars
+* Dev   - Added iOS-style toggle switches instead of regular checkboxes in the plugin settings fields
+* Dev   - Added compatibility for the 'Discount Rules for WooCommerce' plugin to the Price range and the On sale filters
+* Tweak - The “Collapse Filters Widget on Mobile devices” option has been improved
+* Tweak - Added different borders to the fields of the Filter Widget depending on hover, focus, blur events
+* Tweak - Added the FLRT_SET_TRANSIENT_ENABLED constant to disable transients
+* Tweak - Added the preview link to the eye button for the new Filter Set
+* Tweak - Increased a filter item height and added the "More options" button in dashboard
+* Fix   - Fixed a bug with the “+” symbol in filter terms and URLs
+* Fix   - Fixed a bug with the "?" character that remained in the URL after using the Range slider filter
+* Fix   - Fixed a bug with a PHP message that there is no array element with key 'cols_count' in FiltersWidget.php
+* Fix   - Fixed a bug and removed numeric values from the Range slider filter if a term is empty
+* Fix   - Fixed a bug in Query Loop Pagination
 
 = 1.9.0 =
 *Release Date - 21 March 2025*
@@ -327,20 +343,25 @@ Uploading via FTP
 * Tweak - Removed Uncategorized from Category pages list
 * Tweak - Improved filter templates. Overridden templates should be updated
 
-= 1.7.5 =
-*Release Date - 03 February 2023*
-* Tweak - Added columns parameter to the [fe_widget] shortcode
-* Fix   - Fixed notice about Undefined array key "cols_count"
-
 [See changelog for all versions](https://demo.filtereverything.pro/changelog.txt).
 
 == Upgrade Notice ==
 
-= 1.9.0 =
-*Release Date - 21 March 2025*
-* Dev   - Added support for Woo Brands
-* Tweak - Improved and fixed CSS styles for filters widget
-* Tweak - Made floor(); and ceil(); for range values optional via apply_filters(); function
-* Tweak - Added FLRT_DISABLE_CREDENTIALS constant to disable credentials link on filtered pages
-* Fix   - Fixed bug with a Filter Set that contains the only Search field
-* Fix   - Fixed bug with Fatal error /filter-everything/src/Admin/AdminHooks.php:144
+= 1.9.1 =
+*Release Date - 22 July 2025*
+* Dev   - Added a new View ‘Rating’ for filters that displays rating stars
+* Dev   - Added iOS-style toggle switches instead of regular checkboxes in the plugin settings fields
+* Dev   - Added the ability to duplicate the Filter Sets
+* Dev   - Added compatibility for the 'Discount Rules for WooCommerce' plugin to the Price range and the On sale filters
+* Tweak - The “Collapse Filters Widget on Mobile devices” option has been improved
+* Tweak - Added different borders to the fields of the Filter Widget depending on hover, focus, blur events
+* Tweak - Added {raw_archive_title} option to add unformatted Archive title to a SEO Rule
+* Tweak - Added the FLRT_SET_TRANSIENT_ENABLED constant to disable transients
+* Tweak - Added the preview link to the eye button for the new Filter Set
+* Tweak - Increased a filter item height and added the "More options" button in dashboard
+* Fix   - Fixed a bug with the “+” symbol in filter terms and URLs
+* Fix   - Fixed a bug when filtering result pages were open by permalinks even if they are disabled
+* Fix   - Fixed a bug with the "?" character that remained in the URL after using the Range slider filter
+* Fix   - Fixed a bug with a PHP message that there is no array element with key 'cols_count' in FiltersWidget.php
+* Fix   - Fixed a bug and removed numeric values from the Range slider filter if a term is empty
+* Fix   - Fixed a bug in Query Loop Pagination

@@ -1,5 +1,5 @@
 /*!
- * Filter Everything common admin 1.9.0
+ * Filter Everything common admin 1.9.1
  */
 (function($) {
     "use strict";
@@ -13,11 +13,11 @@
         }
 
         // Common JS code
-        $(document).on('click', '#show_bottom_widget', function (e){
-            if ( $(this).is(':checked') ) {
+        $(document).on('change', '#mobile_filter_settings', function (e){
+            if($(this).val() === 'show_bottom_widget'){
                 $('#show_open_close_button').parent('label').addClass('wpc-inactive-settings-field');
                 $('.wpc-bottom-widget-compatibility').addClass('wpc-opened');
-            } else {
+            }else{
                 $('#show_open_close_button').parent('label').removeClass('wpc-inactive-settings-field');
                 $('.wpc-bottom-widget-compatibility').removeClass('wpc-opened');
             }

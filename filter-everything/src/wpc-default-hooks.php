@@ -498,6 +498,7 @@ function flrt_query_loop_block_query_vars( $query, $block ){
         if( isset( $block->parsed_block['blockName'] ) ) {
             if( in_array( $block->parsed_block['blockName'],
                 [
+                    'core/query-pagination-previous',
                     'core/query-pagination-next',
                     'core/query-pagination-numbers',
                 ]
@@ -509,6 +510,99 @@ function flrt_query_loop_block_query_vars( $query, $block ){
 
     return $query;
 }
+
+add_filter( 'wpc_settings_field_checkbox', 'flrt_collapse_widget_checkbox_handler', 10, 2 );
+function flrt_collapse_widget_checkbox_handler( $checkbox, $args )
+{
+    $checkbox  = '<div class="flrt-checkbox-switch-wrapper">';
+    $checkbox .= '<label class="flrt-checkbox-switch"><input type="checkbox" name="%s[%s]" %s id="%s">';
+    $checkbox .= '<span class="flrt-checkbox-slider"></span>';
+    $checkbox .= '</label>';
+    $checkbox .= '<span class="wpc-checkbox-placeholder">%s</span>';
+    $checkbox .= '</div>';
+    return $checkbox;
+}
+
+add_filter( 'wpc_input_type_checkbox', 'flrt_input_checkbox_switcher', 10, 2 );
+function flrt_input_checkbox_switcher( $html, $attributes )
+{
+
+    $html_wrap = '<div class="flrt-checkbox-switch-wrapper">';
+    $html_wrap .= '<label class="flrt-checkbox-switch">';
+    $html_wrap .=  $html;
+    $html_wrap .= '<span class="flrt-checkbox-slider"></span>';
+    $html_wrap .= '</label>';
+    $html_wrap .= '</div>';
+
+    return $html_wrap;
+}
+
+
+
+if(!defined('FLRT_FILTERS_PRO')) {
+
+    add_action('wpc_after_filter_input', 'flrt_location_preview');
+    function flrt_location_preview($attr)
+    {
+        if ($attr['id'] == 'wpc_set_fields-instead_post_name') {
+            $link_html = '<div class="wpc-location-preview-hidden"><a class="wpc-location-preview-not-pro display-none"';
+            $link_html .= ' target="_blank" title="'.esc_attr( esc_html__('Preview the selected location in a new tab', 'filter-everything') ).'" ';
+            $link_html .= '>';
+            $link_html .= '<span class="dashicons dashicons-visibility"></span>';
+            $link_html .= '</a></div>';
+            echo $link_html;
+        }
+    }
+
+    add_filter('flrt_before_render_admin_select_option', 'flrt_add_data_to_option_before_render', 10, 2);
+    function flrt_add_data_to_option_before_render($option_value, $attr)
+    {
+        if ($attr['id'] == 'wpc_set_fields-post_type') {
+            if($option_value == 'page'){
+                $option_value = 'post';
+            }
+
+            $link = '';
+
+            $archive_link = get_post_type_archive_link($option_value);
+            if($archive_link){
+                $link = $archive_link;
+            }
+
+            if(!$archive_link){
+                $taxonomies = get_object_taxonomies($option_value);
+
+                if (!empty($taxonomies)) {
+                    $first_taxonomy = $taxonomies[0];
+                    $taxonomy = get_taxonomy($first_taxonomy);
+                    if (!empty($taxonomy) && !is_wp_error($taxonomy)) {
+                        $terms = get_terms([
+                            'taxonomy' => $taxonomy->name,
+                            'number'   => 1,
+                            'hide_empty' => false,
+                        ]);
+                        if (!empty($terms) && !is_wp_error($terms)) {
+                            $term_link = get_term_link($terms[0]);
+                            $link = esc_url($term_link);
+                        }
+                    }
+                }
+            }
+            return ' data-link="' . $link . '"';
+        }
+    }
+}
+
+add_filter('wpc_set_min_max', function($min_and_max, $filter_name) {
+    global $wp_query;
+
+    if (empty($wp_query->posts)) {
+        $min_and_max = ['min' => 0, 'max' => 0];
+        return $min_and_max;
+    }
+
+    return $min_and_max;
+}, 10, 2);
 
 //add_filter( 'stackable/posts/post_query', 'flrt_stackable_block_query_vars', 10, 3 );
 //function flrt_stackable_block_query_vars( $post_query, $context, $query_string ){

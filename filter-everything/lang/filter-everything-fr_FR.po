@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Filter Everything PRO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-16 14:04+0000\n"
-"PO-Revision-Date: 2025-03-05 09:12+0000\n"
+"PO-Revision-Date: 2025-07-21 13:37+0000\n"
 "Last-Translator: \n"
 "Language-Team: French (France)\n"
 "Language: fr_FR\n"
@@ -321,6 +321,9 @@ msgstr "Toute page %s (pour une requête commune à toutes les pages %s)"
 msgid "Any Author"
 msgstr "Tout auteur"
 
+msgid "Appear as a Pop-up"
+msgstr "Apparaître comme une fenêtre contextuelle"
+
 msgid "Appearance"
 msgstr "Apparence"
 
@@ -483,6 +486,9 @@ msgstr "Réduire le widget Filtres sur les appareils mobiles"
 msgid "Collapse the widget and show the Filters opening button"
 msgstr "Réduisez le widget et affichez le bouton d’ouverture Filtres"
 
+msgid "Collapsed and expanded"
+msgstr "Effondré et élargi"
+
 msgid "Color"
 msgstr "Couleur"
 
@@ -513,6 +519,9 @@ msgstr "Compatibilité avec les constructeurs de pages"
 msgid "Contains the IDs of ACF fields that are related to the Custom Field"
 msgstr ""
 "Contient l'ID des champs ACF associés au champ personnalisé de ce filtre"
+
+msgid "copy"
+msgstr "copie"
 
 msgid "Count, dynamic recount in terms"
 msgstr "Count, recomptage dynamique en termes"
@@ -736,6 +745,9 @@ msgstr "Liste déroulante"
 msgid "Dropdown Label"
 msgstr "Nom de la liste déroulante"
 
+msgid "Duplicate Filter Set"
+msgstr "Jeu de filtres en double"
+
 #: src/Settings/Tabs/PermalinksTab.php:180
 msgid "Duplicate prefixes. Prefixes should be unique."
 msgstr "Préfixes en double. Les préfixes doivent être uniques."
@@ -751,6 +763,11 @@ msgstr "p. ex. 2745, 324"
 
 msgid "e.g. From {value}"
 msgstr "ex. De {valeur}"
+
+msgid "E.g. if 3 stars are selected, all products with rating 3+ will be shown"
+msgstr ""
+"Par exemple, si 3 étoiles sont sélectionnées, tous les produits avec une "
+"note de 3+ seront affichés"
 
 msgid "e.g. Search products, Search posts"
 msgstr "p. ex. Produits de recherche, Publications de recherche"
@@ -1215,6 +1232,9 @@ msgstr ""
 msgid "Filters Settings"
 msgstr "Paramètres des filtres"
 
+msgid "Filters widget on mobile should be"
+msgstr "Le widget des filtres sur mobile devrait être"
+
 #. Description of the plugin
 msgid "Filters WordPress things."
 msgstr "Filtre les choses WordPress."
@@ -1522,6 +1542,9 @@ msgstr "Méta-clé"
 msgid "Mobile devices"
 msgstr "Appareils mobiles"
 
+msgid "Mode «All stars+»"
+msgstr "Mode «Toutes les étoiles+»"
+
 #: src/Admin/FilterSet.php:223 views/admin/filter-row.php:25
 msgid "More options"
 msgstr "Plus d’options"
@@ -1571,6 +1594,9 @@ msgstr "Nouvelle règle SEO"
 
 msgid "No"
 msgstr "Non"
+
+msgid "No %s lists found on the page"
+msgstr "Aucune liste de %s n'a été trouvée sur la page"
 
 #: pro/Admin/SeoRules.php:568
 msgid "No archive page"
@@ -1630,11 +1656,6 @@ msgstr "Pas de vars SEO"
 msgid "No title"
 msgstr "Sans titre"
 
-msgid "No WP Queries matched the post type \"%s\" found on the page"
-msgstr ""
-"Aucune requête WP ne correspondait au type de publication «%s» trouvé sur la "
-"page"
-
 #: src/wpc-default-hooks.php:23
 msgid "Not On Sale"
 msgstr "Non en vente"
@@ -1653,11 +1674,11 @@ msgstr ""
 "caractère \"_\" au début"
 
 msgid ""
-"Note: if you modify the selected WP_Query on the page, please update this "
+"Note: if you modify the selected Posts list on the page, please update this "
 "Filter Set"
 msgstr ""
-"Remarque : si vous modifiez le WP_Query sélectionné sur la page, veuillez "
-"mettre à jour ce jeu de filtres"
+"Note : si vous modifiez la liste des messages sélectionnés sur la page, "
+"veuillez mettre à jour ce jeu de filtres"
 
 #: src/Admin/FilterFields.php:248
 msgid "Numeric range"
@@ -1741,6 +1762,9 @@ msgstr ""
 "Veuillez spécifier le widget Tri souhaité en ajoutant le paramètre id au "
 "shortcode."
 
+msgid "Pop-up filters widget"
+msgstr "Widget de filtres pop-up"
+
 msgid "Pop-up Filters Widget compatibility mode"
 msgstr "Mode de compatibilité des widgets de filtres Pop-up"
 
@@ -1761,6 +1785,9 @@ msgstr "Auteur de publication"
 
 msgid "Post Date"
 msgstr "Date de publication"
+
+msgid "Post not found or invalid type."
+msgstr "Poste introuvable ou type invalide."
 
 #: pro/Admin/SeoRules.php:159 src/Admin/FilterSet.php:30
 #: views/admin/filters-seo-rules.php:22
@@ -1784,6 +1811,9 @@ msgstr "Les publications comptent &laquo;123&raquo;"
 #: src/Admin/FilterFields.php:262
 msgid "Posts count &laquo;321&raquo;"
 msgstr "Les publications comptent &laquo;321&raquo;"
+
+msgid "Posts list"
+msgstr "Liste des postes"
 
 #: src/Admin/FilterFields.php:87
 msgid "Prefix for URL"
@@ -1831,6 +1861,9 @@ msgstr "Boutons radio"
 
 msgid "Random"
 msgstr "Aléatoire"
+
+msgid "Rating"
+msgstr "Evaluation"
 
 msgid "Read more"
 msgstr "Lire la suite"
@@ -2014,6 +2047,15 @@ msgstr "Afficher en jetons"
 
 msgid "Show on mobile"
 msgstr "Afficher sur mobile"
+
+msgid "Show products rated %d stars"
+msgstr "Afficher les produits notés %d étoiles"
+
+msgid "Show products rated %d+ stars"
+msgstr "Afficher les produits notés %d+ étoiles"
+
+msgid "Show products with %d star rating"
+msgstr "Afficher les produits avec %d étoiles"
 
 #: src/Admin/Widgets/FiltersWidget.php:189
 msgid "Show selected terms (Chips)"
@@ -2289,9 +2331,15 @@ msgstr "La licence a été désactivée avec succès."
 msgid "The order in which terms appear in the widget"
 msgstr "L’ordre dans lequel les termes apparaissent dans le widget"
 
+msgid "The post was not found or is not a Filter Set."
+msgstr "Le message n'a pas été trouvé ou n'est pas un jeu de filtres."
+
 #: src/Settings/Tabs/PermalinksTab.php:164
 msgid "The Prefix must contain at least one alphabetical character."
 msgstr "Le préfixe doit contenir au moins un caractère alphabétique."
+
+msgid "The same as on a desktop"
+msgstr "Comme sur un ordinateur de bureau"
 
 msgid "The same page as for filtered posts"
 msgstr "La même page que pour les articles filtrés"
@@ -2599,6 +2647,11 @@ msgstr "ID de widget de tri erroné. S’il vous plaît, spécifiez le correct."
 
 msgid "Yes"
 msgstr "Oui"
+
+msgid "You do not have sufficient permissions to duplicate the Filter Set."
+msgstr ""
+"Vous n'avez pas les autorisations suffisantes pour dupliquer l'ensemble de "
+"filtres."
 
 msgid ""
 "You have been using the plugin for over two months without a license key, "

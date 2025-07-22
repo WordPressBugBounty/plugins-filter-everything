@@ -1,5 +1,5 @@
 /*!
- * Filter Everything set admin 1.9.0
+ * Filter Everything set admin 1.9.1
  */
 (function($) {
     "use strict";
@@ -268,7 +268,6 @@
         currentVal     = wpcShortenEname( currentVal );
 
         let $formTable  = $( "#wpc-filter-id-"+currentFid+" .wpc-form-fields-table" );
-
         if ( wpcSetVars.swatchesTaxonomies.includes( currentVal ) ){
             $formTable.addClass("taxonomy-has-swatches");
         } else {
@@ -279,6 +278,12 @@
             $formTable.addClass("wpc-filter-has-brands");
         } else {
             $formTable.removeClass("wpc-filter-has-brands");
+        }
+
+        if ( wpcSetVars.ratingTaxonomies.includes( currentVal ) ){
+            $formTable.addClass("selected-and-above-show");
+        } else {
+            $formTable.removeClass("selected-and-above-show");
         }
     }
 
@@ -549,7 +554,7 @@
 
             $(".wpc-field-parent-filter option[value='"+fid+"'").each(function (index, element){
                 $(this).text( theTitle + " (" +wpcShortenEname( entity )+ ")" );
-                if( entity === 'post_meta_num' || entity === 'tax_numeric' ){
+                if( entity === 'post_meta_num' || entity === 'tax_numeric' || entity === 'taxonomy_product_visibility' ){
                     $(this).attr('disabled', 'disabled');
                 }else{
                     $(this).removeAttr('disabled');
@@ -580,7 +585,7 @@
                         .trigger('input');
 
                     // Do not load exclude terms for Post Meta Num and Tax Numeric
-                    if( entity !== 'post_meta_num' && entity !== 'tax_numeric' ){
+                    if( entity !== 'post_meta_num' && entity !== 'tax_numeric'){
                         loadExcludeItems(entity, fid, ename);
                     }
 
@@ -656,17 +661,26 @@
             }
 
             let $fieldsTable = $divFilterItem.find('.wpc-form-fields-table');
+            $fieldsTable.removeClass('selected-and-above-show');
             if( optionVal === 'checkboxes' ) {
                 $fieldsTable.addClass('wpc-view-checkboxes');
                 $fieldsTable.removeClass('wpc-view-dropdown');
-            } else if( optionVal === 'dropdown' ){
+                $fieldsTable.removeClass('wpc-view-rating');
+            } else if( optionVal === 'rating' ){
+                $fieldsTable.addClass('selected-and-above-show');
+                $fieldsTable.addClass('wpc-view-rating');
+                $fieldsTable.removeClass('wpc-view-checkboxes');
+                $fieldsTable.removeClass('wpc-view-dropdown');
+            }else if( optionVal === 'dropdown' ){
                 $fieldsTable.addClass('wpc-view-dropdown');
                 $fieldsTable.removeClass('wpc-view-checkboxes');
+                $fieldsTable.removeClass('wpc-view-rating');
             } else {
                 $fieldsTable.removeClass('wpc-view-checkboxes');
                 $fieldsTable.removeClass('wpc-view-dropdown');
+                $fieldsTable.removeClass('wpc-view-rating');
+                $fieldsTable.removeClass('selected-and-above-show');
             }
-
         });
 
         $( '.wpc-filter-set-wrapper .wpc-filters-list' ).sortable({
@@ -762,10 +776,24 @@
         });
 
         // Get set location fields
+        let selected_link = $('#wpc_set_fields-post_type option:selected').data('link');
+        if(selected_link != ''){
+            $('.wpc-location-preview-not-pro').removeClass('display-none');
+        }
+
         $('body').on('change', '#wpc_set_fields-post_type', function (){
 
             let postType = $(this).val();
             $("#wpc-filters-list").attr('data-posttype', postType );
+            let link = $('option:selected', this).data('link');
+            $('.wpc-location-preview-not-pro').attr('href', link);
+
+            if(link != ''){
+                $('.wpc-location-preview-not-pro').removeClass('display-none');
+            }else{
+                $('.wpc-location-preview-not-pro').addClass('display-none');
+            }
+
 
             if( wpcSetVars.filtersPro < 1 ){
                 return true;
@@ -942,10 +970,19 @@
 
         });
 
+
         let filterPagelink = $('option:selected', $('#wpc_set_fields-post_name')).data('link');
+        $('.wpc-location-preview').addClass('display-none');
 
         if( typeof filterPagelink !== 'undefined' && filterPagelink ){
+            $('.wpc-location-preview').removeClass('display-none');
             wpcGetWpQueries( filterPagelink );
+        }
+
+        let notProfilterPagelink = $('option:selected', $('#wpc_set_fields-post_type')).data('link');
+        if( typeof notProfilterPagelink !== 'undefined' && notProfilterPagelink ){
+            $('.wpc-location-preview-not-pro').attr('href', notProfilterPagelink);
+            $('.wpc-location-preview-not-pro').removeClass('display-none');
         }
     });
 
@@ -1259,13 +1296,17 @@
     function syncEntityWithView( entitySelect ){
         let val = entitySelect.val();
         let fid = entitySelect.parents('.wpc-filter-item').data('fid');
-
         if( val === 'post_meta_num' || val === 'tax_numeric' ) {
             $('#wpc_filter_fields-' + fid + '-view option:not([value="range"])').attr('disabled', 'disabled');
             $('#wpc_filter_fields-' + fid + '-view option[value="range"]').removeAttr('disabled')
                 .prop('selected', true);
             $('#wpc_filter_fields-' + fid + '-view').trigger('change');
-        } else if ( val === 'post_date' ) {
+        } else if ( val === 'taxonomy_product_visibility' ) {
+            $('#wpc_filter_fields-' + fid + '-view option[value="rating"]').removeAttr('disabled')
+                .prop('selected', true);
+            $('.wpc-form-fields-table').addClass('wpc-view-rating');
+        }
+        else if ( val === 'post_date' ) {
             $('#wpc_filter_fields-' + fid + '-view option:not([value="date"])').attr('disabled', 'disabled');
             $('#wpc_filter_fields-' + fid + '-view option[value="date"]').removeAttr('disabled')
                 .prop('selected', true);
@@ -1274,6 +1315,7 @@
             $('#wpc_filter_fields-'+fid+'-view option').removeAttr('disabled')
             $('#wpc_filter_fields-'+fid+'-view option:not([disabled]):first').prop('selected', true);
             $('#wpc_filter_fields-'+fid+'-view option[value="range"]').attr('disabled', 'disabled');
+            $('#wpc_filter_fields-'+fid+'-view option[value="rating"]').attr('disabled', 'disabled');
             $('#wpc_filter_fields-'+fid+'-view option[value="date"]').attr('disabled', 'disabled');
             $('#wpc_filter_fields-'+fid+'-view').trigger('change');
         }
@@ -1285,7 +1327,7 @@
         let val = entitySelect.val();
         let fid = entitySelect.parents('.wpc-filter-item').data('fid');
 
-        if ( val === 'author_author' || val === 'post_meta_exists' ) {
+        if ( val === 'author_author' || val === 'post_meta_exists' || val === 'taxonomy_product_visibility' ) {
             $( '#wpc_filter_fields-' + fid + '-logic option[value="and"]' ).attr( 'disabled', 'disabled' );
             $( '#wpc_filter_fields-' + fid + '-logic option[value="or"]' ).prop( 'selected', true );
         } else if ( val === 'post_meta_num' || val === 'tax_numeric' || val === 'post_date' ) {

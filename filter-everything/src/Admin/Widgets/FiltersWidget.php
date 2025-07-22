@@ -255,6 +255,7 @@ class FiltersWidget extends \WP_Widget
         foreach ( $filters_and_fields as $filter_id => $filter ){
             $filters_counter++;
 
+            $is_rating = (isset($filter['view']) && $filter['view'] === 'rating' && $filter['e_name'] === 'product_visibility' ) ? true : false;
             if ( $filter_id > 0 ) {
                 /**
                  * Allows the developer to modify a filter before output.
@@ -264,7 +265,7 @@ class FiltersWidget extends \WP_Widget
                 $terms = flrt_get_filter_terms( $filter, $posType, $em );
 
                 // Collect terms for a parent filter, if exists
-                if ( $filter['parent_filter'] > 0 ) {
+                if ( $filter['parent_filter'] > 0) {
                     // Here we have to calculate all related with the parent filter
                     $parent_filter_id = (int)$filter['parent_filter'];
                     if ( isset( $filters_and_fields[$parent_filter_id] ) ) {
@@ -288,7 +289,11 @@ class FiltersWidget extends \WP_Widget
                                 $actual_filter_terms = [];
                                 $filter_values_flipped = array_flip( $filter['values'] );
                                 foreach ( $terms as $single_term ) {
-                                    if ( isset( $filter_values_flipped[$single_term->slug] ) ) {
+                                    if(!$is_rating) {
+                                        if (isset($filter_values_flipped[$single_term->slug])) {
+                                            $actual_filter_terms[] = $single_term;
+                                        }
+                                    }else{
                                         $actual_filter_terms[] = $single_term;
                                     }
                                 }
@@ -313,12 +318,15 @@ class FiltersWidget extends \WP_Widget
                                         $actual_parent_filter_posts = array_merge($actual_parent_filter_posts, $parent_filter_term->posts);
                                     }
                                 }
-
                                 $actual_filter_terms = [];
                                 // if ! empty( $filter['values'] )
                                 foreach ($terms as $single_term) {
-                                    $current_intersection = array_intersect($actual_parent_filter_posts, $single_term->posts);
-                                    if (!empty($current_intersection)) {
+                                    if(!$is_rating){
+                                        $current_intersection = array_intersect($actual_parent_filter_posts, $single_term->posts);
+                                        if (!empty($current_intersection)) {
+                                            $actual_filter_terms[] = $single_term;
+                                        }
+                                    }else{
                                         $actual_filter_terms[] = $single_term;
                                     }
                                 }
@@ -347,39 +355,41 @@ class FiltersWidget extends \WP_Widget
                     $allWpQueriedPostIds_flipped = array_flip($allWpQueriedPostIds);
                     $checkTerms = $terms;
 
-                    if ( $set['hide_empty']['value'] === 'initial' ) {
-                        foreach ( $checkTerms as $index => $term ) {
-                            if ($filter['hierarchy'] === 'yes') {
+                    if(!$is_rating) {
+                        if ($set['hide_empty']['value'] === 'initial') {
+                            foreach ($checkTerms as $index => $term) {
+                                if ($filter['hierarchy'] === 'yes') {
 
-                                $intersection = false;
-                                foreach ( $term->posts as $post_id ) {
-                                    if ( isset( $allWpQueriedPostIds_flipped[$post_id] ) ) {
-                                        $intersection = true;
-                                        break;
+                                    $intersection = false;
+                                    foreach ($term->posts as $post_id) {
+                                        if (isset($allWpQueriedPostIds_flipped[$post_id])) {
+                                            $intersection = true;
+                                            break;
+                                        }
                                     }
-                                }
 
-                                if ( ! $intersection && !isset( $has_not_empty_children_flipped[$term->term_id] ) ) {
-                                    unset($checkTerms[$index]);
-                                }
-
-                            } else {
-
-                                $intersection = false;
-                                foreach ( $term->posts as $post_id ) {
-                                    if ( isset( $allWpQueriedPostIds_flipped[$post_id] ) ) {
-                                        $intersection = true;
-                                        break;
+                                    if (!$intersection && !isset($has_not_empty_children_flipped[$term->term_id])) {
+                                        unset($checkTerms[$index]);
                                     }
-                                }
 
-                                if ( ! $intersection ) {
-                                    unset( $checkTerms[$index] );
+                                } else {
+
+                                    $intersection = false;
+                                    foreach ($term->posts as $post_id) {
+                                        if (isset($allWpQueriedPostIds_flipped[$post_id])) {
+                                            $intersection = true;
+                                            break;
+                                        }
+                                    }
+
+                                    if (!$intersection) {
+                                        unset($checkTerms[$index]);
+                                    }
                                 }
                             }
+                        } else {
+                            $checkTerms = flrt_remove_empty_terms($terms, $filter, $has_not_empty_children_flipped);
                         }
-                    } else {
-                        $checkTerms = flrt_remove_empty_terms($terms, $filter, $has_not_empty_children_flipped);
                     }
                 }
 
@@ -591,7 +601,7 @@ class FiltersWidget extends \WP_Widget
         $instance['chips']      = ( !empty( $new_instance['chips'] ) ) ? 1 : 0;
         $instance['show_count'] = ( !empty( $new_instance['show_count'] ) ) ? 1 : 0;
         $instance['horizontal'] = ( !empty( $new_instance['horizontal'] ) ) ? 1 : 0;
-        $instance['cols_count'] = ( $new_instance['cols_count'] > 0 ) ? $new_instance['cols_count'] : 3;
+        $instance['cols_count'] = ( isset( $new_instance['cols_count'] ) && $new_instance['cols_count'] > 0 ) ? $new_instance['cols_count'] : 3;
 
         return $instance;
     }

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Filter Everything PRO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-16 14:04+0000\n"
-"PO-Revision-Date: 2025-03-05 09:06+0000\n"
+"PO-Revision-Date: 2025-07-21 13:20+0000\n"
 "Last-Translator: \n"
 "Language-Team: Polish\n"
 "Language: pl_PL\n"
@@ -314,6 +314,9 @@ msgstr "Dowolna %s strona (dla wspólnego zapytania na wszystkich %s stronach)"
 msgid "Any Author"
 msgstr "Dowolny autor"
 
+msgid "Appear as a Pop-up"
+msgstr "Pojawia się jako wyskakujące okienko"
+
 msgid "Appearance"
 msgstr "Wygląd"
 
@@ -474,6 +477,9 @@ msgstr "Zwiń widżet filtrów na urządzeniach mobilnych"
 msgid "Collapse the widget and show the Filters opening button"
 msgstr "Zwiń widżet i pokaż przycisk otwierania filtrów"
 
+msgid "Collapsed and expanded"
+msgstr "Zwinięte i rozwinięte"
+
 msgid "Color"
 msgstr "Kolor"
 
@@ -502,6 +508,9 @@ msgstr "Kompatybilność z kreatorami stron"
 
 msgid "Contains the IDs of ACF fields that are related to the Custom Field"
 msgstr "Zawiera ID pól ACF powiązanych z polem Meta tego filtra"
+
+msgid "copy"
+msgstr "kopia"
 
 msgid "Count, dynamic recount in terms"
 msgstr "Liczenie, dynamiczne przeliczanie w kategoriach"
@@ -722,6 +731,9 @@ msgstr "Lista rozwijana"
 msgid "Dropdown Label"
 msgstr "Nazwa listy"
 
+msgid "Duplicate Filter Set"
+msgstr "Zduplikowany zestaw filtrów"
+
 #: src/Settings/Tabs/PermalinksTab.php:180
 msgid "Duplicate prefixes. Prefixes should be unique."
 msgstr "Zduplikowane prefiksy. Prefiksy powinny być unikalne."
@@ -737,6 +749,11 @@ msgstr "np. 2745, 324"
 
 msgid "e.g. From {value}"
 msgstr "np. Od {value}"
+
+msgid "E.g. if 3 stars are selected, all products with rating 3+ will be shown"
+msgstr ""
+"Np. jeśli wybrano 3 gwiazdki, wyświetlone zostaną wszystkie produkty z oceną "
+"3+"
 
 msgid "e.g. Search products, Search posts"
 msgstr "np. Wyszukaj produkty, Wyszukaj posty"
@@ -1186,6 +1203,9 @@ msgstr ""
 msgid "Filters Settings"
 msgstr "Ustawienia filtrów"
 
+msgid "Filters widget on mobile should be"
+msgstr "Widżet filtrów na urządzeniach mobilnych powinien być"
+
 #. Description of the plugin
 msgid "Filters WordPress things."
 msgstr "Filtruj rzeczy WordPress."
@@ -1486,6 +1506,9 @@ msgstr "Klucz meta"
 msgid "Mobile devices"
 msgstr "Urządzenia mobilne"
 
+msgid "Mode «All stars+»"
+msgstr "Tryb «Wszystkie gwiazdy+»"
+
 #: src/Admin/FilterSet.php:223 views/admin/filter-row.php:25
 msgid "More options"
 msgstr "Więcej opcji"
@@ -1535,6 +1558,9 @@ msgstr "Nowa zasada SEO"
 
 msgid "No"
 msgstr "Nie"
+
+msgid "No %s lists found on the page"
+msgstr "Na stronie nie znaleziono list %s"
 
 #: pro/Admin/SeoRules.php:568
 msgid "No archive page"
@@ -1593,10 +1619,6 @@ msgstr "Brak zmiennych SEO"
 msgid "No title"
 msgstr "Brak tytułu"
 
-msgid "No WP Queries matched the post type \"%s\" found on the page"
-msgstr ""
-"Żadne zapytania WP nie pasowały do typu postu \"%s\" znalezionego na stronie"
-
 #: src/wpc-default-hooks.php:23
 msgid "Not On Sale"
 msgstr "Nie w sprzedaży"
@@ -1615,11 +1637,11 @@ msgstr ""
 "początku."
 
 msgid ""
-"Note: if you modify the selected WP_Query on the page, please update this "
+"Note: if you modify the selected Posts list on the page, please update this "
 "Filter Set"
 msgstr ""
-"Uwaga: jeśli zmodyfikujesz wybrane WP_Query na stronie, zaktualizuj ten "
-"zestaw filtrów."
+"Uwaga: jeśli zmodyfikujesz listę wybranych postów na stronie, zaktualizuj "
+"ten zestaw filtrów"
 
 #: src/Admin/FilterFields.php:248
 msgid "Numeric range"
@@ -1698,6 +1720,9 @@ msgid ""
 msgstr ""
 "Określ żądany widżet sortowania, dodając parametr id do krótkiego kodu."
 
+msgid "Pop-up filters widget"
+msgstr "Wyskakujący widżet filtrów"
+
 msgid "Pop-up Filters Widget compatibility mode"
 msgstr "Tryb zgodności z widżetem filtrów wyskakujących"
 
@@ -1718,6 +1743,9 @@ msgstr "Autor postu"
 
 msgid "Post Date"
 msgstr "Data publikacji"
+
+msgid "Post not found or invalid type."
+msgstr "Nie znaleziono postu lub nieprawidłowy typ."
 
 #: pro/Admin/SeoRules.php:159 src/Admin/FilterSet.php:30
 #: views/admin/filters-seo-rules.php:22
@@ -1741,6 +1769,9 @@ msgstr "Liczba postów &laquo;123&raquo;"
 #: src/Admin/FilterFields.php:262
 msgid "Posts count &laquo;321&raquo;"
 msgstr "Liczba postów &laquo;321&raquo;"
+
+msgid "Posts list"
+msgstr "Lista postów"
 
 #: src/Admin/FilterFields.php:87
 msgid "Prefix for URL"
@@ -1788,6 +1819,9 @@ msgstr "Przyciski radiowe"
 
 msgid "Random"
 msgstr "Losowo"
+
+msgid "Rating"
+msgstr "Ocena"
 
 msgid "Read more"
 msgstr "Czytaj więcej"
@@ -1968,6 +2002,15 @@ msgstr "Pokaż w Chips"
 
 msgid "Show on mobile"
 msgstr "Pokaż na telefonie komórkowym"
+
+msgid "Show products rated %d stars"
+msgstr "Pokaż produkty ocenione na %d gwiazdek"
+
+msgid "Show products rated %d+ stars"
+msgstr "Pokaż produkty ocenione na %d+ gwiazdek"
+
+msgid "Show products with %d star rating"
+msgstr "Pokaż produkty z %d gwiazdkami"
 
 #: src/Admin/Widgets/FiltersWidget.php:189
 msgid "Show selected terms (Chips)"
@@ -2240,9 +2283,15 @@ msgstr "Licencja została pomyślnie dezaktywowana."
 msgid "The order in which terms appear in the widget"
 msgstr "Kolejność, w jakiej określenia pojawiają się w widżecie"
 
+msgid "The post was not found or is not a Filter Set."
+msgstr "Post nie został znaleziony lub nie jest zestawem filtrów."
+
 #: src/Settings/Tabs/PermalinksTab.php:164
 msgid "The Prefix must contain at least one alphabetical character."
 msgstr "Prefiks musi zawierać co najmniej jeden znak alfabetu."
+
+msgid "The same as on a desktop"
+msgstr "Tak samo jak na desktop"
 
 msgid "The same page as for filtered posts"
 msgstr "Ta sama strona, co w przypadku przefiltrowanych postów"
@@ -2539,6 +2588,9 @@ msgstr "Nieprawidłowy id widżetu sortowania. Podaj prawidłowy identyfikator."
 
 msgid "Yes"
 msgstr "Tak"
+
+msgid "You do not have sufficient permissions to duplicate the Filter Set."
+msgstr "Nie masz wystarczających uprawnień, aby powielić zestaw filtrów."
 
 msgid ""
 "You have been using the plugin for over two months without a license key, "

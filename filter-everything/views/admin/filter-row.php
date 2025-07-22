@@ -32,7 +32,7 @@ $rowClass           = ( $filterID === \FilterEverything\Filter\FilterFields::FLR
         </div>
     </div>
     <div class="wpc-filter-body">
-        <div class="wpc-additional-fields-selector"><a href="javascript:void(0);" class="wpc-more-options-toggle"><?php esc_html_e('More options', 'filter-everything'); ?></a></div>
+        <div class="wpc-additional-fields-selector"><a href="javascript:void(0);" class="wpc-more-options-toggle button"><?php esc_html_e('More options', 'filter-everything'); ?></a></div>
         <div class="wpc-filter-main-fields">
             <table class="wpc-form-fields-table wpc-filter-<?php echo esc_attr($short_entity); ?>">
                 <tr class="wpc-filter-tr">
@@ -48,7 +48,7 @@ $rowClass           = ( $filterID === \FilterEverything\Filter\FilterFields::FLR
                 </tr>
                 <?php
 
-                    $first_filters = flrt_extract_vars($filter, array( 'entity', 'instead-entity', 'e_name', 'label', 'slug', 'view', 'date_type', 'show_term_names' ) );
+                    $first_filters = flrt_extract_vars($filter, array( 'entity', 'instead-entity', 'e_name', 'label', 'slug', 'view', 'date_type', 'show_term_names', 'selected_and_above' ) );
 
                     foreach( $first_filters as $field_key => $field_attributes ){
 

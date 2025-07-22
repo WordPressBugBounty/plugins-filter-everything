@@ -32,12 +32,24 @@ class SettingsTab extends BaseSettings
             'mobile_devices' => array(
                 'label'  => esc_html__('Mobile devices', 'filter-everything'),
                 'fields' => array(
-                    'show_open_close_button'  => array(
+                    'mobile_filter_settings' => array(
+                        'type'  => 'select',
+                        'title' => esc_html__('Filters widget on mobile should be', 'filter-everything'),
+                        'options'       => array(
+                            'nothing' => esc_html__('The same as on a desktop', 'filter-everything'),
+                            'show_open_close_button' => esc_html__('Collapsed and expanded', 'filter-everything'),
+                            //'popup' => esc_html__('Appear as a Pop-up', 'filter-everything')
+                        ),
+                        'default' => 'no',
+                        'id'    => 'mobile_filter_settings',
+                        //'description' => esc_html__('', 'filter-everything'),
+                    ),
+                    /*'show_open_close_button'  => array(
                         'type'  => 'checkbox',
                         'title' => esc_html__('Collapse Filters Widget on Mobile devices', 'filter-everything'),
                         'id'    => 'show_open_close_button',
                         'label' => esc_html__('Collapse the widget and show the Filters opening button', 'filter-everything'),
-                    ),
+                    ),*/
                     'try_move_to_top_sidebar' => array(
                         'type'  => 'checkbox',
                         'title' => esc_html__('Sidebar on top', 'filter-everything'),

@@ -262,6 +262,17 @@ class MetaBoxes
              */
             do_action( 'post_submitbox_start', $post );
             ?>
+            <?php
+                if ( defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO ) {
+                    if ($post->post_type === FLRT_FILTERS_SET_POST_TYPE) {
+                    if ( current_user_can( 'delete_post', $post_id ) ) {
+                        $url = wp_nonce_url(admin_url('admin.php?action=flrt_duplicate_filter_set&post=' . $post->ID), 'flrt_duplicate_filter_set'); ?>
+                        <div class="duplicate-filter-set">
+                            <a href="<?php echo esc_url($url); ?>"><?php echo esc_html__('Duplicate Filter Set', 'filter-everything'); ?></a>
+                        </div>
+                    <?php }
+                }
+            }?>
             <div id="delete-action">
                 <?php
                 if ( current_user_can( 'delete_post', $post_id ) ) {

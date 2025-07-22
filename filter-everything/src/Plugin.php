@@ -578,12 +578,33 @@ class Plugin
                 color: '.$contrastColor.';
             }'."\r\n";
 
-
             $css .= '}'."\r\n";
+            $css .= '.flrt-star-label svg{
+                    stroke: '.$color.';
+            }'."\r\n";
+
+            $css .= '.flrt-star-label-hover svg, .wpc-chip-stars svg{
+                    fill: '.$color.';
+            }'."\r\n";
+
+            $css .= '.wpc-filter-label-stars-wrapper{
+                   padding: 4px 5px !important;
+            }'."\r\n";
+
+            $css .= '.wpc-filter-label-stars-wrapper .flrt-star-label svg{
+                    height: 17px;
+                    width: 17px;
+            }'."\r\n";
+
+            $css .= 'body .wpc-filters-main-wrap input.wpc-label-input:checked+label span.wpc-filter-label-stars-wrapper .flrt-star-label svg, 
+            span.wpc-filter-label-stars-wrapper:hover .flrt-star-label svg{
+                        fill: ' . flrt_get_contrast_color($color) . ';
+                }'."\r\n";
         }
         if( $styled_inputs ){
             $styled_color   = $color ? $color : '#0570e2';
             $contrastColor  = $contrastColor ? $contrastColor : flrt_get_contrast_color($styled_color);
+            $hoverColor     = flrt_add_color_opacity($color);
             $no_hex_color   = substr( $color, 1, 6 );
             $css .= '.wpc-filters-main-wrap input[type=checkbox],
                         .wpc-filters-main-wrap input[type=radio]{
@@ -704,16 +725,6 @@ class Plugin
                             border-left: 1px solid #b8bcc8;
                             border-top: 1px solid #b8bcc8;
                         }
-                        .wpc-help-tip:hover::after,
-                        .wpc-filter-layout-dropdown .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b, 
-                        .wpc-sorting-form .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b,
-                        .widget_wpc_sorting_widget .select2-container--default .select2-selection--single:hover .select2-selection__arrow b,
-                        .wpc-filter-layout-dropdown .select2-container--default .select2-selection--single:hover .select2-selection__arrow b,
-                        .wpc-filter-layout-dropdown .select2-container--default .select2-selection--single:hover, 
-                        .select2-container--default.select2-container--open .wpc-filter-everything-dropdown.select2-dropdown,
-                        .widget_wpc_sorting_widget .select2-container--open .select2-selection--single,
-                        .wpc-filter-layout-dropdown .select2-container--open .select2-selection--single, 
-                        .select2-container--default.select2-container--open .wpc-filter-everything-dropdown.select2-dropdown:hover,
                         .wpc-sorting-form .select2-container--default .select2-selection--single:hover,
                         .wpc-filters-widget-content input[type=email]:hover, 
                         .wpc-filters-widget-content input[type=number]:hover, 
@@ -721,7 +732,19 @@ class Plugin
                         .wpc-filters-widget-content input[type=search]:hover, 
                         .wpc-filters-widget-content input[type=tel]:hover, 
                         .wpc-filters-widget-content input[type=text]:hover, 
-                        .wpc-filters-widget-content input[type=url]:hover,
+                        .wpc-filters-widget-content input[type=url]:hover{
+                            border-color: '. $hoverColor.';
+                        }
+                        .wpc-help-tip:hover::after,
+                        .wpc-filter-layout-dropdown .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b, 
+                        .wpc-sorting-form .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b,
+                        .widget_wpc_sorting_widget .select2-container--default .select2-selection--single:hover .select2-selection__arrow b,
+                        .wpc-filter-layout-dropdown .select2-container--default .select2-selection--single:hover .select2-selection__arrow b,
+                        .wpc-filter-layout-dropdown .select2-container--default .select2-selection--single:hover, 
+                        .select2-container--default.select2-container--open .wpc-filter-everything-dropdown.select2-dropdown,
+                        .wpc-sorting-form .select2-container--open .select2-selection--single:hover,
+                        .widget_wpc_sorting_widget .select2-container--open .select2-selection--single,
+                        .wpc-filter-layout-dropdown .select2-container--open .select2-selection--single, 
                         .wpc-filters-widget-content input[type=email]:focus, 
                         .wpc-filters-widget-content input[type=number]:focus, 
                         .wpc-filters-widget-content input[type=password]:focus, 
@@ -729,12 +752,20 @@ class Plugin
                         .wpc-filters-widget-content input[type=tel]:focus, 
                         .wpc-filters-widget-content input[type=text]:focus, 
                         .wpc-filters-widget-content input[type=url]:focus,
+                        .wpc-filters-widget-content input[type=email]:active, 
+                        .wpc-filters-widget-content input[type=number]:active, 
+                        .wpc-filters-widget-content input[type=password]:active, 
+                        .wpc-filters-widget-content input[type=search]:active, 
+                        .wpc-filters-widget-content input[type=tel]:active, 
+                        .wpc-filters-widget-content input[type=text]:active, 
+                        .wpc-filters-widget-content input[type=url]:active,
                         .wpc-filter-collapsible .wpc-filter-title button:hover .wpc-open-icon, 
                         .wpc-filter-collapsible-reverse.wpc-filter-collapsible.wpc-closed .wpc-filter-title button:hover .wpc-open-icon, 
                         .wpc-filter-collapsible.wpc-closed .wpc-filter-title button:hover .wpc-open-icon, 
                         .wpc-filter-has-selected.wpc-closed .wpc-filter-title button:hover .wpc-open-icon{
                             border-color: '.$color.';
                         }
+                       
                         .wpc-filters-main-wrap a.wpc-toggle-a:hover,
                         .wpc-help-tip:hover::after{
                             color: '.$color.';
@@ -925,7 +956,7 @@ class Plugin
 
     public function bodyClass( $classes )
     {
-        if( flrt_get_option('show_open_close_button') === 'on' ){
+        if( flrt_get_option('mobile_filter_settings') === 'show_open_close_button' ){
             $classes[] = 'wpc_show_open_close_button';
         }
 
@@ -955,15 +986,10 @@ class Plugin
             $defaultOptions = array(
                 'primary_color'              => '#0570e2',
                 'container_height'           => '550',
-                'show_open_close_button'     => '',
+                'mobile_filter_settings'     => 'nothing',
                 'show_terms_in_content'      => $default_show_terms_in_content,
                 'widget_debug_messages'      => 'on'
             );
-
-            // PRO default options
-            if( defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO ){
-                $defaultOptions['show_bottom_widget'] = '';
-            }
 
             add_option('wpc_filter_settings', $defaultOptions );
         }
@@ -1245,7 +1271,7 @@ class Plugin
         $queryOnThePageSets = [];
         $filterSetService   = Container::instance()->getFilterSetService();
 
-        if ( flrt_get_option('show_bottom_widget') === 'on' ) {
+        if ( flrt_get_option('mobile_filter_settings') === 'show_bottom_widget' ) {
             $showBottomWidget = 'yes';
         }
 

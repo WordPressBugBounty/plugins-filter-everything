@@ -63,10 +63,14 @@ if ( $is_brand ){
                                 $image_class = ' wpc-term-has-image';
                             }
                         }
+
+                        $is_rating = false;
+                        if( mb_strpos( $term_object->slug, 'rated-' ) !== false) $is_rating = true;
+
                     ?>
                         <li class="wpc-label-item wpc-term-item<?php echo esc_attr( $active_class ); ?><?php echo esc_attr( $disabled_class ); ?><?php echo esc_attr( $image_class ); ?> wpc-term-count-<?php echo esc_attr( $term_object->cross_count ); ?> wpc-term-id-<?php echo esc_attr( $id ); ?>" id="<?php flrt_term_id('term', $filter, $id ); ?>">
                             <div class="wpc-term-item-content-wrapper">
-                                <input class="wpc-label-input" <?php checked( 1, $checked ); disabled( 1, $disabled ); ?> type="checkbox" data-wpc-link="<?php echo esc_url( $link ); ?>" id="<?php flrt_term_id('checkbox', $filter, $id); ?>" /><label for="<?php flrt_term_id('checkbox', $filter, $id); ?>"><span class="wpc-filter-label-wrapper"><?php
+                                <input class="wpc-label-input" <?php checked( 1, $checked ); disabled( 1, $disabled ); ?> type="checkbox" data-wpc-link="<?php echo esc_url( $link ); ?>" id="<?php flrt_term_id('checkbox', $filter, $id); ?>" /><label for="<?php flrt_term_id('checkbox', $filter, $id); ?>"><span class="wpc-filter-label-wrapper<?php echo ($is_rating) ? ' wpc-filter-label-stars-wrapper' : ''; ?>"><?php
                                 /**
                                  * Allow developers to change filter terms html
                                  */

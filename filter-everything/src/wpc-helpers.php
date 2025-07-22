@@ -645,7 +645,7 @@ function flrt_filters_button( $setId = 0, $class = '' )
         }
     }
 
-    if( flrt_get_option('show_bottom_widget') === 'on' ){
+    if( flrt_get_option('mobile_filter_settings') === 'show_bottom_widget' ){
         $classes[] = 'wpc-filters-open-widget';
     }else{
         $classes[] = 'wpc-open-close-filters-button';
@@ -971,8 +971,8 @@ if ( ! function_exists( 'flrt_filter_search_field' ) ) {
         <?php endif;
     }
 }
-function flrt_get_contrast_color($hexColor)
-{
+
+function flrt_get_contrast_ratio($hexColor){
     // hexColor RGB
     $R1 = hexdec(substr($hexColor, 1, 2));
     $G1 = hexdec(substr($hexColor, 3, 2));
@@ -999,9 +999,13 @@ function flrt_get_contrast_color($hexColor)
     } else {
         $contrastRatio = (int)(($L2 + 0.05) / ($L1 + 0.05));
     }
+    return round($contrastRatio);
+}
+function flrt_get_contrast_color($hexColor)
+{
 
+    $contrastRatio = flrt_get_contrast_ratio($hexColor);
     // If contrast is more than 5, return black color
-
     if ($contrastRatio > 10) {
         return '#333333';
     } else {
@@ -1009,6 +1013,26 @@ function flrt_get_contrast_color($hexColor)
         return '#f5f5f5';
     }
 }
+function flrt_hex_to_rgb($hexColor, $opacity = 100) {
+    $hexColor = ltrim($hexColor, '#');
+
+    $r = hexdec(substr($hexColor, 0, 2));
+    $g = hexdec(substr($hexColor, 2, 2));
+    $b = hexdec(substr($hexColor, 4, 2));
+    $opacity = $opacity/100;
+    return "rgb($r $g $b / $opacity)";
+}
+
+function flrt_add_color_opacity($hexColor, $opacity = 50){
+    $contrastRatio = flrt_get_contrast_ratio($hexColor);
+
+    if ($contrastRatio <= 15) {
+        return flrt_hex_to_rgb($hexColor, $opacity);
+    } else {
+        return $hexColor;
+    }
+}
+
 
 function flrt_default_posts_container()
 {
@@ -1716,4 +1740,86 @@ function flrt_string_polyfill( $string ) {
 function flrt_string_polyfill_body( $string ){
     $str = preg_replace('/\x00|<[^>]*>?/', '', $string );
     return str_replace( ["'", '"'], ['&#39;', '&#34;'], $str );
+}
+
+function flrt_rating_star(){
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
+                                            <polygon class="cls-1" points="19.89 24.5 12.48 19.8 5.06 24.48 7.03 15.62 0.5 9.64 9.12 8.87 12.51 0.5 15.88 8.88 24.5 9.68 17.96 15.63 19.89 24.5"/></svg>';
+}
+
+function flrt_check_update_mobile_settings(){
+
+    $settings = get_option('wpc_filter_settings', false);
+    if ($settings !== false){
+        if(!flrt_get_option('mobile_filter_settings')){
+
+            $mobile_filter_settings = 'nothing';
+
+            if ( (flrt_get_option('show_bottom_widget') === 'on' && flrt_get_option('show_open_close_button') === 'on')
+                || (flrt_get_option('show_bottom_widget') === 'on' && !flrt_get_option('show_open_close_button'))){
+                $mobile_filter_settings = 'show_bottom_widget';
+            } elseif (flrt_get_option('show_open_close_button') == 'on' && !flrt_get_option('show_bottom_widget')){
+                $mobile_filter_settings = 'show_open_close_button';
+            }
+
+            $settings = get_option('wpc_filter_settings');
+
+            if (isset($settings['show_bottom_widget']) && $settings['show_bottom_widget']) {
+                unset($settings['show_bottom_widget']);
+            }
+
+            if (isset($settings['show_open_close_button']) && $settings['show_open_close_button']) {
+                unset($settings['show_open_close_button']);
+            }
+
+            $settings['mobile_filter_settings'] = $mobile_filter_settings;
+            update_option('wpc_filter_settings', $settings);
+        }
+    }
+}
+
+if(!function_exists('flrt_set_transient')){
+    function flrt_set_transient($transient, $value, $expiration = 0){
+        if(defined('FLRT_SET_TRANSIENT_ENABLED') && FLRT_SET_TRANSIENT_ENABLED){
+            set_transient( $transient, $value, $expiration);
+        }
+    }
+}
+
+if(!function_exists('flrt_get_transient')){
+    function flrt_get_transient($transient){
+        if(defined('FLRT_SET_TRANSIENT_ENABLED') && FLRT_SET_TRANSIENT_ENABLED){
+            return get_transient( $transient );
+        }
+        return false;
+    }
+}
+
+if(!class_exists('FlrtWooDiscountRules')) {
+    class FlrtWooDiscountRules{
+
+        protected $rules;
+
+        protected $base;
+        protected $rule_helper;
+        protected $discount_calculator;
+        protected $manage_discount;
+
+        //public $filter;
+        public function __construct()
+        {
+            $this->base = new Wdr\App\Controllers\Base();
+            $this->rule_helper = new Wdr\App\Helpers\Rule();
+            $this->manage_discount = new Wdr\App\Controllers\ManageDiscount();
+            $this->rules = $this->manage_discount->getDiscountRules();
+            $this->discount_calculator = new Wdr\App\Controllers\DiscountCalculator($this->rule_helper->getAvailableRules($this->base->getAvailableConditions()));
+        }
+
+        public function getProductPriceToDisplay($product){
+            return $this->discount_calculator->getProductPriceToDisplay($product, 1);
+        }
+    }
+    function flrt_woo_discount_rules_class(){
+        return new FlrtWooDiscountRules();
+    }
 }

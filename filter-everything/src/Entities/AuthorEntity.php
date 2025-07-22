@@ -162,7 +162,7 @@ class AuthorEntity implements Entity
     {
         $transient_key = flrt_get_terms_transient_key( 'author_' . $this->getName() );
 
-        if ( false === ( $result = get_transient( $transient_key ) ) ) {
+        if ( false === ( $result = flrt_get_transient( $transient_key ) ) ) {
 
             global $wpdb;
             $this->postTypes = apply_filters('wpc_filter_author_query_post_types', get_post_types(array('public' => true)));
@@ -222,7 +222,7 @@ class AuthorEntity implements Entity
 
             $result = $this->convertToStandardTerms($result);
 
-            set_transient( $transient_key, $result, FLRT_TRANSIENT_PERIOD_HOURS * HOUR_IN_SECONDS );
+            flrt_set_transient( $transient_key, $result, FLRT_TRANSIENT_PERIOD_HOURS * HOUR_IN_SECONDS );
         }
 
         return $result;

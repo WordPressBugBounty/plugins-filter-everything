@@ -92,6 +92,7 @@ class Chips
                             $termSlug = $key;
                         }
 
+
                         $termId = $entityObj->getTermId( $termSlug );
                         $term = $entityObj->getTerm( $termId );
 
@@ -106,6 +107,25 @@ class Chips
                             'class' => 'wpc-chip-' . $filter['e_name'] . '-' . $termId,
                             'label' => $filter['label']
                         );
+
+                        if ( $filter['e_name'] === 'product_visibility') {
+                            $rating_slugs = array(
+                                'rated-1',
+                                'rated-2',
+                                'rated-3',
+                                'rated-4',
+                                'rated-5'
+                            );
+
+                            if(in_array($termSlug, $rating_slugs)){
+                                $pieces = explode("-", $termSlug);
+                                $rating = isset( $pieces[1] ) ? $pieces[1] : 0;
+                                if ($rating){
+                                    $toAdd['link'] = $urlManager->getTermUrl( $termSlug, $filter['e_name'], $filter['entity'], '', ['rating_slug' => $termSlug]);
+                                    $toAdd['rating'] = $rating;
+                                }
+                            }
+                        }
 
                         if ( ! in_array( $toAdd, $this->chips ) ) {
                             $this->chips[$this->counter] = $toAdd;
