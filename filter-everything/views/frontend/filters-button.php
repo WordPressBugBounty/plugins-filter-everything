@@ -22,7 +22,7 @@ if ( ! defined('ABSPATH') ) {
             ?><span class="wpc-filters-button-text"><?php
 
             if( $wpc_found_posts !== NULL ){
-                esc_html_e( sprintf( __('Filtered %s', 'filter-everything'), '('.$wpc_found_posts.')' ) );
+                printf( esc_html__( 'Filtered %s', 'filter-everything' ), '('.$wpc_found_posts.')' );
             } else {
                 esc_html_e('Filters', 'filter-everything');
             }
