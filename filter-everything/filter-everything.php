@@ -33,7 +33,7 @@ if( ! class_exists( 'FlrtFilter' ) ):
             $this->define( 'FLRT_PLUGIN_SLUG', 'filter-everything-pro' );
             $this->define( 'FLRT_PLUGIN_VER', '1.9.1' );
             $this->define( 'FLRT_PLUGIN_URL', 'https://filtereverything.pro' );
-            $this->define( 'FLRT_PLUGIN_TESTED_TO', '6.8.2' );
+            $this->define( 'FLRT_PLUGIN_TESTED_TO', '6.9' );
             $this->define( 'FLRT_PLUGIN_DEBUG', false );
             $this->define( 'FLRT_TEMPLATES_DIR_NAME', 'filters' );
 

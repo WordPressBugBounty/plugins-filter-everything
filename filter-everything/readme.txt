@@ -3,7 +3,7 @@ Contributors: stepasyuk
 Tags: woocommerce product filter, woocommerce filter, product filter, post filter, ajax filter
 Stable tag: 1.9.1
 Requires at least: 4.6
-Tested up to: 6.8.2
+Tested up to: 6.9
 Requires PHP: 5.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
