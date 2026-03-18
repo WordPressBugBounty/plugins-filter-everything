@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Filter Everything&nbsp;— WooCommerce Product & WordPress Filter
+Plugin Name: Filter Everything&nbsp;— WordPress & WooCommerce Filters
 Plugin URI: https://filtereverything.pro
 Description: Filters everything in WordPress & WooCommerce: Products, any Post types, by Any Criteria. Compatible with WPML, ACF and others popular. Supports AJAX.
-Version: 1.9.1
+Version: 1.9.2
 Author: Andrii Stepasiuk
 Author URI: https://filtereverything.pro/about/
 Text Domain: filter-everything
@@ -31,9 +31,9 @@ if( ! class_exists( 'FlrtFilter' ) ):
             $this->define( 'FLRT_PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );
             $this->define( 'FLRT_PLUGIN_BASENAME', plugin_basename(__FILE__) );
             $this->define( 'FLRT_PLUGIN_SLUG', 'filter-everything-pro' );
-            $this->define( 'FLRT_PLUGIN_VER', '1.9.1' );
+            $this->define( 'FLRT_PLUGIN_VER', '1.9.2' );
             $this->define( 'FLRT_PLUGIN_URL', 'https://filtereverything.pro' );
-            $this->define( 'FLRT_PLUGIN_TESTED_TO', '6.9' );
+            $this->define( 'FLRT_PLUGIN_TESTED_TO', '6.9.4' );
             $this->define( 'FLRT_PLUGIN_DEBUG', false );
             $this->define( 'FLRT_TEMPLATES_DIR_NAME', 'filters' );
 
@@ -54,12 +54,24 @@ if( ! class_exists( 'FlrtFilter' ) ):
             $this->define( 'FLRT_RELEASER', 'stepasiuk' );
             $this->define( 'FLRT_APPROVED', 'victor' );
             $this->define( 'FLRT_ITERATION', 'first' );
+            $this->define( 'FLRT_PRO_PRICE', '$49' );
+
+            if ( ! defined('FLRT_XML_PATH')){
+                $wp_upload_dir = wp_upload_dir();
+                $upload_dir_basepath = $wp_upload_dir['basedir'];
+
+                $path = $upload_dir_basepath . '/filter-everything/xml/';
+                define( 'FLRT_XML_PATH', $path );
+            }
 
             require_once FLRT_PLUGIN_DIR_PATH . 'src/wpc-helpers.php';
 
+            flrt_include('src/wp_query_source_detector.php');
             flrt_include('src/wpc-compat.php');
+            flrt_include('src/wpc-utility-functions.php');
             flrt_include('src/wpc-default-hooks.php');
             flrt_include('src/wpc-third-party.php');
+            flrt_include('src/PluginHelpers.php');
 
             flrt_include('src/Plugin.php');
             flrt_include('src/PostTypes.php');
@@ -69,24 +81,28 @@ if( ! class_exists( 'FlrtFilter' ) ):
             flrt_include('src/Settings/Container.php');
 
             flrt_include('src/Entities/Entity.php');
+            flrt_include('src/Entities/PostMetaTrait.php');
 
             flrt_include('src/Entities/TaxonomyEntity.php');
             flrt_include('src/Entities/PostMetaEntity.php');
             flrt_include('src/Entities/PostMetaNumEntity.php');
             flrt_include('src/Entities/AuthorEntity.php');
             flrt_include('src/Entities/PostDateEntity.php');
+            flrt_include('src/Entities/PostMetaDateEntity.php');
+            flrt_include('src/Settings/Tabs/SeoTabTrait.php');
 
             // Include PRO
-//            flrt_include('pro/filters-pro.php');
+            flrt_include('pro/filters-pro.php');
 
             flrt_include('src/Entities/DefaultEntity.php');
             flrt_include('src/Entities/EntityManager.php');
 
+            flrt_include('src/Settings/DefaultSettings.php');
             flrt_include('src/Settings/Tabs/SettingsTab.php');
             flrt_include('src/Settings/Tabs/PermalinksTab.php');
+            flrt_include('src/Settings/Tabs/ImportExportTabFree.php');
             flrt_include('src/Settings/Tabs/ExperimentalTab.php');
             flrt_include('src/Settings/Tabs/AboutProTab.php');
-            flrt_include('src/Settings/Tabs/HelpMeTab.php');
 
             flrt_include('src/Settings/Filter.php');
 
@@ -102,6 +118,7 @@ if( ! class_exists( 'FlrtFilter' ) ):
             flrt_include('src/WpManager.php');
 
             flrt_include('src/Admin/FilterSet.php');
+            flrt_include('src/Admin/AutoFilterSet.php');
             flrt_include('src/Admin/FilterFields.php');
             flrt_include('src/Admin/Admin.php');
             flrt_include('src/Admin/AdminHooks.php');

@@ -26,12 +26,21 @@ class MetaBoxes
         );
 
         add_meta_box(
+                'filters-set-location',
+                esc_html__( "Location", 'filter-everything' ),
+                array( $this, 'locationMetabox' ),
+                FLRT_FILTERS_SET_POST_TYPE,
+                'normal',
+                'low'
+        );
+
+        add_meta_box(
             'filters-set-settings',
             esc_html__( "Settings", 'filter-everything' ),
             array( $this, 'settingsMetabox' ),
             FLRT_FILTERS_SET_POST_TYPE,
             'normal',
-            'high'
+            'low'
         );
 
         remove_meta_box(
@@ -78,6 +87,15 @@ class MetaBoxes
         flrt_include_admin_view('filters-set-settings', $args );
     }
 
+    public static function locationMetabox( $post, $meta ){
+        $args = array(
+                'post'  => $post,
+                'meta'  => $meta
+        );
+
+        flrt_include_admin_view('filters-set-location', $args );
+    }
+
     public static function adviceMetabox( $post, $meta ){
         $args = array(
             'post'  => $post,
@@ -94,6 +112,8 @@ class MetaBoxes
         $post_type        = $post->post_type;
         $post_type_object = get_post_type_object( $post_type );
         $can_publish      = current_user_can( $post_type_object->cap->publish_posts );
+        $filterSet  = \FilterEverything\Filter\Container::instance()->getFilterSetService();
+        $under_limit_filter_set = $filterSet->under_limit_filter_set($post_id);
         ?>
     <div class="submitbox" id="submitpost">
 
@@ -262,17 +282,32 @@ class MetaBoxes
              */
             do_action( 'post_submitbox_start', $post );
             ?>
-            <?php
-                if ( defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO ) {
-                    if ($post->post_type === FLRT_FILTERS_SET_POST_TYPE) {
-                    if ( current_user_can( 'delete_post', $post_id ) ) {
-                        $url = wp_nonce_url(admin_url('admin.php?action=flrt_duplicate_filter_set&post=' . $post->ID), 'flrt_duplicate_filter_set'); ?>
-                        <div class="duplicate-filter-set">
-                            <a href="<?php echo esc_url($url); ?>"><?php echo esc_html__('Duplicate Filter Set', 'filter-everything'); ?></a>
-                        </div>
-                    <?php }
-                }
-            }?>
+            <div class="duplicate-filter-set">
+                <?php
+                $is_filter_set_post = ($post->post_type === FLRT_FILTERS_SET_POST_TYPE);
+                $can_duplicate      = current_user_can('delete_post', $post->ID);
+                $is_pro_version     = defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO;
+
+                if ($is_filter_set_post && $can_duplicate) :
+                    $label = esc_html__('Duplicate Filter Set', 'filter-everything');
+
+                    if ($is_pro_version) :
+                        $query_args = ['action' => 'flrt_duplicate_filter_set', 'post' => $post->ID];
+                        $base_url   = add_query_arg($query_args, admin_url('admin.php'));
+                        $url        = wp_nonce_url($base_url, 'flrt_duplicate_filter_set');
+                        ?>
+                        <a href="<?php echo esc_url($url); ?>">
+                            <span class="flrt-duplicate-filter-set">+</span> <?php echo $label; ?>
+                        </a>
+                    <?php else : ?>
+                        <a href="<?php echo esc_url(flrt_vailable_in_pro_attr_link());?>" class="wpc-vailable-in-pro-link">
+                            <span class="flrt-duplicate-filter-set">+</span>
+                            <?php echo $label; ?>
+                            <?php echo '(' . esc_html__('PRO', 'filter-everything') . ')'; ?>
+                        </a>
+                    <?php endif;
+                endif; ?>
+            </div>
             <div id="delete-action">
                 <?php
                 if ( current_user_can( 'delete_post', $post_id ) ) {
@@ -288,35 +323,50 @@ class MetaBoxes
                 ?>
             </div>
 
-            <div id="publishing-action">
+            <div id="publishing-action"<?php echo ($under_limit_filter_set) ? ' class="wpc_under_limit_filter_set_publish"' : ''; ?>>
                 <span class="spinner"></span>
                 <?php
+                $button_text = '';
                 if ( ! in_array( $post->post_status, array( 'publish', 'future', 'private' ), true ) || 0 === $post_id ) {
                     if ( $can_publish ) :
                         if ( ! empty( $post->post_date_gmt ) && time() < strtotime( $post->post_date_gmt . ' +0000' ) ) :
                             ?>
                             <input name="original_publish" type="hidden" id="original_publish" value="<?php echo esc_attr_x( 'Schedule', 'post action/button label' ); ?>" />
-                            <?php submit_button( _x( 'Schedule', 'post action/button label' ), 'primary large', 'publish', false ); ?>
+                            <?php
+                            $button_text = _x( 'Schedule', 'post action/button label' );
+                            submit_button( $button_text, 'primary large', 'publish', false ); ?>
                         <?php
                         else :
                             ?>
                             <input name="original_publish" type="hidden" id="original_publish" value="<?php esc_attr_e( 'Publish' ); ?>" />
-                            <?php submit_button( esc_html__( 'Publish' ), 'primary large', 'publish', false ); ?>
+                            <?php
+                            $button_text = esc_html__( 'Publish' );
+                            submit_button( esc_html__( 'Publish' ), 'primary large', 'publish', false ); ?>
                         <?php
                         endif;
                     else :
                         ?>
                         <input name="original_publish" type="hidden" id="original_publish" value="<?php esc_attr_e( 'Submit for Review' ); ?>" />
-                        <?php submit_button( esc_html__( 'Submit for Review' ), 'primary large', 'publish', false ); ?>
+                        <?php
+                        $button_text = esc_html__( 'Submit for Review' );
+                        submit_button( esc_html__( 'Submit for Review' ), 'primary large', 'publish', false ); ?>
                     <?php
                     endif;
                 } else {
                     ?>
                     <input name="original_publish" type="hidden" id="original_publish" value="<?php esc_attr_e( 'Update' ); ?>" />
-                    <?php submit_button( esc_html__( 'Update' ), 'primary large', 'save', false, array( 'id' => 'publish' ) ); ?>
+                    <?php
+                    $button_text = esc_html__( 'Update' );
+                    submit_button( esc_html__( 'Update' ), 'primary large', 'save', false, array( 'id' => 'publish' ) ); ?>
                     <?php
                 }
                 ?>
+                <?php
+                if(!defined('FLRT_FILTERS_PRO')){
+                    if ( $under_limit_filter_set ) {
+                        echo flrt_unlock_in_pro($button_text);
+                    }
+                } ?>
             </div>
             <div class="clear"></div>
         </div>

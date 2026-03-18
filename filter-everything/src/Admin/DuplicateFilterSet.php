@@ -35,10 +35,12 @@ final class DuplicateFilterSet
             $post_content = maybe_serialize($post_content);
         }
 
+        $copy_text = esc_html__('copy', 'filter-everything');
+
         $this->new_post_id = wp_insert_post(
             $this->preparePost($post,
                 [
-                    'post_title'   => $this->generate_unique_copy_title($post->post_title),
+                    'post_title'   => flrt_generate_unique_copy_title($post->post_title, FLRT_FILTERS_SET_POST_TYPE, $copy_text),
                     'post_content' => $post_content,
                     'post_status'  => 'draft'
                 ]
@@ -144,45 +146,5 @@ final class DuplicateFilterSet
                 add_post_meta($new_post_id, $key, maybe_unserialize($value));
             }
         }
-    }
-
-    private function generate_unique_copy_title($original_title, $post_type = 'filter-set')
-    {
-        global $wpdb;
-
-        $copy_text = esc_html__('copy', 'filter-everything');
-
-        if (preg_match('/^(.*) – ' . $copy_text . ' \d+$/', $original_title, $matches)) {
-            $base_title = $matches[1];
-        } else {
-            $base_title = $original_title;
-        }
-
-        $copy_pattern = $wpdb->esc_like($base_title) . ' – ' . $copy_text . '%';
-
-        $titles = $wpdb->get_col(
-            $wpdb->prepare(
-                "SELECT post_title FROM $wpdb->posts
-             WHERE (post_title = %s OR post_title LIKE %s)
-             AND post_type = %s",
-                $base_title,
-                $copy_pattern,
-                $post_type
-            )
-        );
-
-        $max_copy_number = 0;
-
-        foreach ($titles as $title) {
-            if (preg_match('/^' . preg_quote($base_title, '/') . ' – ' . $copy_text . ' (\d+)$/', $title, $m)) {
-                $num = intval($m[1]);
-                if ($num > $max_copy_number) {
-                    $max_copy_number = $num;
-                }
-            }
-        }
-
-        $new_number = $max_copy_number + 1;
-        return $base_title . ' – ' . $copy_text . ' ' . $new_number;
     }
 }

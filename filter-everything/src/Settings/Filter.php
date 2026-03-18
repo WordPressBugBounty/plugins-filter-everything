@@ -83,7 +83,7 @@ class Filter
 
     public function getEntityCanonicalName( $entity )
     {
-        if( mb_strpos( $entity, 'post_meta' ) !== false || mb_strpos( $entity, 'tax_numeric' ) !== false || mb_strpos( $entity, 'post_date' ) !== false ){
+        if( mb_strpos( $entity, 'post_meta' ) !== false || mb_strpos( $entity, 'tax_numeric' ) !== false || mb_strpos( $entity, 'post_date' ) !== false || mb_strpos( $entity, 'post_meta_date' ) !== false ){
             $canonical = explode( $this->sep, $entity, 2 );
             return $canonical[0];
         } else {
@@ -125,7 +125,7 @@ class Filter
             &&
             mb_strpos( $filter['entity'], 'author' ) === false
             &&
-            ! in_array( $filter['entity'], [ 'tax_numeric' , 'post_date' ] ) ){
+            ! in_array( $filter['entity'], [ 'tax_numeric' , 'post_date', 'post_meta_date' ] ) ){
             return false;
         }
         return true;

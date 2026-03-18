@@ -9,6 +9,7 @@ if ( ! defined('ABSPATH') ) {
 
     $filterSet  = \FilterEverything\Filter\Container::instance()->getFilterSetService();
     $the_set    = $filterSet->getSet( $set_id );
+    $under_limit_filter_set = $filterSet->under_limit_filter_set($set_id);
 
     $order = 1;
 
@@ -128,8 +129,14 @@ if ( ! defined('ABSPATH') ) {
     </div>
 
     <div class="wpc-add-filter-wrapper">
-        <div class="wpc-add-filter-div">
-            <a href="javascript:void(0);" class="button button-primary button-large wpc-add-filter"><?php esc_html_e('Add Filter','filter-everything' ); ?></a>
+        <?php $button_text = esc_html__('Add Filter','filter-everything' );?>
+        <div class="wpc-add-filter-div<?php echo ($under_limit_filter_set) ? ' wpc_under_limit_filter_set' : ''; ?>">
+            <a href="javascript:void(0);" class="button button-primary button-large wpc-add-filter"><?php echo $button_text; ?></a>
+            <?php
+             if(!defined('FLRT_FILTERS_PRO')){
+                 echo flrt_unlock_in_pro($button_text);
+             }
+             ?>
         </div>
     </div>
 
@@ -138,4 +145,17 @@ if ( ! defined('ABSPATH') ) {
             flrt_include_admin_view( 'filter-row', array( 'filter' => flrt_get_empty_filter( $set_id ) ) );
         ?>
     </script>
+    <div id="wpc-filter-set-pro-dialog" style="display:none;">
+        <p><?php echo wp_kses(
+                    sprintf(
+                            __('The free version allows up to 3 filter sets per post type. Upgrade to <a href=\'%1$s\' target=\'_blank\'>PRO</a> for unlimited filter sets.', 'filter-everything' ),
+                            esc_url(FLRT_PLUGIN_URL .'/?get_pro=true') ),
+                    array(
+                            'a' => array(
+                                    'href'=> true,
+                                    'target' => true
+                            )
+                    )
+            ) ?></p>
+    </div>
 </div>

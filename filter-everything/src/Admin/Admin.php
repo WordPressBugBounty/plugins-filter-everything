@@ -10,6 +10,7 @@ if ( ! defined('ABSPATH') ) {
 class Admin
 {
     public $tabRenderer;
+    public $parentSlug;
 
     public function __construct()
     {
@@ -25,6 +26,10 @@ class Admin
         add_action( 'admin_init', array( $this, 'init' ) );
 
         add_filter( 'wpc_general_filters_settings', [$this, 'generalFilterSettings'] );
+
+        add_action( 'admin_head', array( $this, 'menuHighlight' ) );
+        add_action('admin_head', array($this, 'addAdminStyles'));
+
     }
 
     public function init()
@@ -41,18 +46,35 @@ class Admin
 
     public function adminMenu()
     {
+        global $submenu;
         $page = 'edit.php?post_type=' . FLRT_FILTERS_SET_POST_TYPE;
 
-        add_menu_page( esc_html__('Filters', 'filter-everything'), esc_html__('Filters', 'filter-everything'), 'manage_options', $page, false,  $this->get_icon_svg(), '85');
+        add_menu_page( esc_html__('Filters', 'filter-everything'), esc_html__('Filters', 'filter-everything'), 'manage_options', $page, false,  'none', '85');
 
         add_submenu_page( $page, esc_html__('Filter Sets', 'filter-everything'), esc_html__('Filter Sets', 'filter-everything'), 'manage_options', $page);
         add_submenu_page( $page, esc_html__('Add New', 'filter-everything'), esc_html__('Add New', 'filter-everything'), 'manage_options', 'post-new.php?post_type=' . FLRT_FILTERS_SET_POST_TYPE);
+
+        if (!defined('FLRT_FILTERS_PRO')) {
+            $settings = flrt_vailable_in_pro_attr_link();
+
+            add_submenu_page($page, esc_html__('SEO Rules', 'filter-everything'), esc_html__('SEO Rules', 'filter-everything'), 'manage_options', $settings);
+            add_submenu_page($page, esc_html__('Import/Export', 'filter-everything'), esc_html__('Import/Export', 'filter-everything'), 'manage_options', $settings);
+
+            if (isset($submenu[$page])) {
+                foreach ($submenu[$page] as $key => $details) {
+                    if ($details[2] === $settings) {
+                        $submenu[$page][$key][0] .= flrt_pro_promo_label(true);
+                    }
+                }
+            }
+        }
 
         do_action('wpc_add_submenu_pages');
 
         add_submenu_page( $page, esc_html__('Settings', 'filter-everything'), esc_html__('Settings', 'filter-everything'), 'manage_options', 'filters-settings', array($this, 'filterSettingsPage'));
 
         do_action('wpc_after_add_submenu_pages');
+        
     }
 
     public function filterSettingsPage()
@@ -72,10 +94,6 @@ class Admin
         if( ! defined('FLRT_FILTERS_PRO') ) {
             $this->tabRenderer->register( new AboutProTab() );
 
-            if ( flrt_ask_for_help() ) {
-                $this->tabRenderer->register( new HelpMeTab() );
-            }
-
         }else{
             $show_license_tab = false;
 
@@ -94,6 +112,48 @@ class Admin
 
         $this->tabRenderer->init();
     }
+
+    public function menuHighlight()
+    {
+        if ( ! is_admin() ) {
+            return;
+        }
+
+        $is_filters_settings = isset($_GET['page']) && $_GET['page'] === 'filters-settings';
+        $is_import_export_tab = isset($_GET['tab']) && $_GET['tab'] === 'import_export';
+
+        if ( $is_filters_settings && $is_import_export_tab ) {
+            global $parent_file, $submenu_file;
+
+            $parent_file = $this->parentSlug ? $this->parentSlug : ('edit.php?post_type=' . FLRT_FILTERS_SET_POST_TYPE);
+            $submenu_file = $parent_file . '&page=filters-settings&tab=import_export';
+        }
+    }
+
+    public function addAdminStyles()
+    {
+        if(defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO) {
+            return;
+        }
+
+        if (!is_admin()) {
+            return;
+        }
+        ?>
+        <style type="text/css">
+            .wpc-pro-badge {
+                background: #7A1FA2;
+                color: #fff;
+                padding: 2px 6px;
+                border-radius: 14px;
+                margin-left: 6px;
+                font-size: 10px;
+                border: 1px solid #7A1FA2;
+            }
+        </style>
+        <?php
+    }
+
 
     public function get_icon_svg()
     {

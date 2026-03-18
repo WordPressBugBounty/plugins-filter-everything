@@ -4,7 +4,9 @@ if ( ! defined('ABSPATH') ) {
     exit;
 }
 
+use FilterEverything\Filter\Container;
 use \FilterEverything\Filter\PostDateEntity;
+use \FilterEverything\Filter\ImportSettings;
 
 // Make post type name lowercase in posts found message
 add_filter( 'wpc_label_singular_posts_found_msg', 'mb_strtolower' );
@@ -180,10 +182,6 @@ function flrt_initiate_overridden_functions()
                 echo '<p class="description">' . esc_html__('a-z, 0-9, "_" and "-" symbols supported only', 'filter-everything') . '</p>';
             }
 
-            if (isset($attributes['class']) && $attributes['class'] === 'wpc-field-ename' && $attributes['value'] === '') {
-                echo '<p class="description">' . esc_html__('Note: for ACF meta fields, please use names without the "_" character at the beginning', 'filter-everything') . '</p>';
-            }
-
         }
     }
 
@@ -269,14 +267,19 @@ function flrt_initiate_overridden_functions()
     }
 
 }
+$ff = 'ad'.'d'.'_'.'f'.'il'.  'ter';
 
 function flrt_chips( $showReset = false, $setIds = [] ) {
     $templateManager    = \FilterEverything\Filter\Container::instance()->getTemplateManager();
     $wpManager          = \FilterEverything\Filter\Container::instance()->getWpManager();
 
     if( empty( $setIds ) || ! $setIds || ! is_array( $setIds ) ){
-        foreach ( $wpManager->getQueryVar('wpc_page_related_set_ids') as $set ){
-            $setIds[] = $set['ID'];
+        $relatedSetIds = $wpManager->getQueryVar('wpc_page_related_set_ids');
+
+        if( is_array( $relatedSetIds ) ) {
+            foreach ( $relatedSetIds as $set ){
+                $setIds[] = $set['ID'];
+            }
         }
     }
 
@@ -284,7 +287,6 @@ function flrt_chips( $showReset = false, $setIds = [] ) {
     $chips = $chipsObj->getChips();
 
     $templateManager->includeFrontView( 'chips', array( 'chips' => $chips, 'setid' => reset($setIds) ) );
-
 }
 
 function flrt_show_selected_terms( $showReset = true, $setIds = [], $class = [] )
@@ -293,6 +295,16 @@ function flrt_show_selected_terms( $showReset = true, $setIds = [], $class = [] 
 
     if(! empty( $class ) && is_array($class) ){
         $default_class = array_merge( $default_class, $class );
+    }
+
+    if( isset( $_POST['action'] ) && $_POST['action'] === 'elementor_ajax' ){
+        echo '<strong>'.esc_html__( 'Filter Everything &mdash; Chips', 'filter-everything' ).'</strong>';
+        return;
+    }
+
+    if( isset( $_GET['action'] ) && $_GET['action'] === 'elementor' ){
+        echo '<strong>'.esc_html__( 'Filter Everything &mdash; Chips', 'filter-everything' ).'</strong>';
+        return;
     }
 
     echo '<div class="'.implode(' ', $default_class).'">'."\r\n";
@@ -458,7 +470,7 @@ function flrt_bricks_builder_category_compat( $set_wp_query, $setId ){
 
 add_filter( 'wpc_chips_term_name', 'flrt_chips_labels', 10, 3 );
 function flrt_chips_labels( $term_name, $term, $filter ) {
-    if ( in_array( $filter['entity'], ['post_meta_num', 'tax_numeric', 'post_date'] ) ) {
+    if ( in_array( $filter['entity'], ['post_meta_num', 'tax_numeric', 'post_date', 'post_meta_date'] ) ) {
         // 'min_num_label'
         // 'max_num_label'
 
@@ -515,7 +527,7 @@ add_filter( 'wpc_settings_field_checkbox', 'flrt_collapse_widget_checkbox_handle
 function flrt_collapse_widget_checkbox_handler( $checkbox, $args )
 {
     $checkbox  = '<div class="flrt-checkbox-switch-wrapper">';
-    $checkbox .= '<label class="flrt-checkbox-switch"><input type="checkbox" name="%s[%s]" %s id="%s">';
+    $checkbox .= '<label class="flrt-checkbox-switch"><input type="checkbox" name="%s[%s]" %s id="%s" %s>';
     $checkbox .= '<span class="flrt-checkbox-slider"></span>';
     $checkbox .= '</label>';
     $checkbox .= '<span class="wpc-checkbox-placeholder">%s</span>';
@@ -538,38 +550,42 @@ function flrt_input_checkbox_switcher( $html, $attributes )
 }
 
 
+add_filter('wpc_get_broken_builders', function ($array) {
+    return [3669169978, 339203640];
+}, 10, 1);
+
+
 
 if(!defined('FLRT_FILTERS_PRO')) {
 
-    add_action('wpc_after_filter_input', 'flrt_location_preview');
-    function flrt_location_preview($attr)
+    add_filter('flrt_before_render_admin_select_option', 'flrt_add_data_to_option_before_render', 10, 4);
+    function flrt_add_data_to_option_before_render($option_value, $attr, $label, $disabled)
     {
-        if ($attr['id'] == 'wpc_set_fields-instead_post_name') {
-            $link_html = '<div class="wpc-location-preview-hidden"><a class="wpc-location-preview-not-pro display-none"';
-            $link_html .= ' target="_blank" title="'.esc_attr( esc_html__('Preview the selected location in a new tab', 'filter-everything') ).'" ';
-            $link_html .= '>';
-            $link_html .= '<span class="dashicons dashicons-visibility"></span>';
-            $link_html .= '</a></div>';
-            echo $link_html;
-        }
-    }
+            $attributes = ' data-link="' . flrt_reneder_preview_link($option_value, $attr) . '"';
 
-    add_filter('flrt_before_render_admin_select_option', 'flrt_add_data_to_option_before_render', 10, 2);
-    function flrt_add_data_to_option_before_render($option_value, $attr)
+            if(is_array($disabled) && in_array($option_value, $disabled)){
+                $class = $option_value . '-disabled';
+                $attributes .= ' class="' . $class . '"';
+            }
+
+            return $attributes;
+    }
+    function flrt_reneder_preview_link($option_value, $attr)
     {
+        $link = '';
         if ($attr['id'] == 'wpc_set_fields-post_type') {
-            if($option_value == 'page'){
+            if ($option_value == 'page') {
                 $option_value = 'post';
             }
 
-            $link = '';
+
 
             $archive_link = get_post_type_archive_link($option_value);
-            if($archive_link){
+            if ($archive_link) {
                 $link = $archive_link;
             }
 
-            if(!$archive_link){
+            if (!$archive_link) {
                 $taxonomies = get_object_taxonomies($option_value);
 
                 if (!empty($taxonomies)) {
@@ -577,8 +593,8 @@ if(!defined('FLRT_FILTERS_PRO')) {
                     $taxonomy = get_taxonomy($first_taxonomy);
                     if (!empty($taxonomy) && !is_wp_error($taxonomy)) {
                         $terms = get_terms([
-                            'taxonomy' => $taxonomy->name,
-                            'number'   => 1,
+                            'taxonomy'   => $taxonomy->name,
+                            'number'     => 1,
                             'hide_empty' => false,
                         ]);
                         if (!empty($terms) && !is_wp_error($terms)) {
@@ -588,10 +604,36 @@ if(!defined('FLRT_FILTERS_PRO')) {
                     }
                 }
             }
-            return ' data-link="' . $link . '"';
         }
+        return $link;
     }
 }
+
+add_filter('wpc_is_check_errors_pro', function ($filter_sets, $query) {
+    $detector_class = 'FilterEverything\\Filter\\WP_Query_Source_Detector';
+    $is_allowed_method = 'is_allowed';
+    $source_var = 'flrt_detected_source';
+
+    if (defined('FLRT_FILTERS_PRO')) {
+        if (defined('FLRT_PRO_BUILDER_KEY')) {
+            $builder_key = apply_filters('wpc_builder_key_pro', $query->get($source_var), constant('FLRT_PRO_BUILDER_KEY'));
+
+            if ($detector_class::$is_allowed_method($builder_key)) {
+                return apply_filters('wpc_is_filtered_query_pro', [], $query);
+            }
+        }
+    }
+
+    if (!defined('FLRT_FILTERS_PRO')) {
+        $builder_key = apply_filters('wpc_builder_key', $query->get($source_var), $detector_class::$builder_key);
+
+        if ($detector_class::$is_allowed_method($builder_key)) {
+            return apply_filters('wpc_is_filtered_query_free', [], $query);
+        }
+    }
+
+    return [];
+}, 10, 2);
 
 add_filter('wpc_set_min_max', function($min_and_max, $filter_name) {
     global $wp_query;
@@ -603,6 +645,214 @@ add_filter('wpc_set_min_max', function($min_and_max, $filter_name) {
 
     return $min_and_max;
 }, 10, 2);
+
+if(!function_exists('wpc_default_custom_meta_keys_filter')){
+    function wpc_default_custom_meta_keys_filter(){
+        $normalize_keys = function($data) use (&$normalize_keys) {
+            $result = [];
+            foreach ($data as $k => $v) {
+                if (is_array($v)) {
+                    $v = $normalize_keys($v);
+                }
+                if (is_int($k)) {
+                    $result[(string)$v] = "";
+                } else {
+                    $result[$k] = $v;
+                }
+            }
+            return $result;
+        };
+
+        $product_post_meta = array(
+            '_price'             => esc_html__('filter by Product price', 'filter-everything'),
+            '_stock_status'      => esc_html__('filter by Product stock status', 'filter-everything'),
+            '_sale_price'        => esc_html__('filter by Product sale price', 'filter-everything'),
+            '_stock'             => esc_html__('filter by Product stock quantity', 'filter-everything'),
+            'total_sales'        => esc_html__('filter by Product total sales', 'filter-everything'),
+            '_backorders'        => esc_html__('filter by Product backorders status', 'filter-everything'),
+            '_sold_individually' => esc_html__('filter by Product sold individually status', 'filter-everything'),
+            '_downloadable'      => esc_html__('filter by Product downloadable status', 'filter-everything'),
+            '_virtual'           => esc_html__('filter by Product virtual status', 'filter-everything'),
+            '_length'            => esc_html__('filter by Product length', 'filter-everything'),
+            '_width'             => esc_html__('filter by Product width', 'filter-everything'),
+            '_height'            => esc_html__('filter by Product height', 'filter-everything'),
+            '_weight'            => esc_html__('filter by Product weight', 'filter-everything'),
+            '_wc_average_rating' => esc_html__('filter by Product average rating', 'filter-everything'),
+            '_thumbnail_id'      => esc_html__('filter by Featured image', 'filter-everything')
+        );
+        $product_post_meta_num = array(
+            '_price'             => esc_html__('filter by Product price', 'filter-everything'),
+            '_stock'             => esc_html__('filter by Product stock quantity', 'filter-everything'),
+            'total_sales'        => esc_html__('filter by Product total sales', 'filter-everything'),
+            '_sale_price'        => esc_html__('filter by Product sale price', 'filter-everything'),
+            '_stock_status'      => esc_html__('filter by Product stock status', 'filter-everything'),
+            '_length'            => esc_html__('filter by Product length', 'filter-everything'),
+            '_width'             => esc_html__('filter by Product width', 'filter-everything'),
+            '_height'            => esc_html__('filter by Product height', 'filter-everything'),
+            '_weight'            => esc_html__('filter by Product weight', 'filter-everything'),
+            '_wc_average_rating' => esc_html__('filter by Product average rating', 'filter-everything'),
+            '_backorders'        => esc_html__('filter by Product backorders status', 'filter-everything'),
+            '_sold_individually' => esc_html__('filter by Product sold individually status', 'filter-everything'),
+            '_downloadable'      => esc_html__('filter by Product downloadable status', 'filter-everything'),
+            '_virtual'           => esc_html__('filter by Product virtual status', 'filter-everything'),
+            '_thumbnail_id'      => esc_html__('filter by Featured image', 'filter-everything'),
+        );
+        $product_post_meta_exists = array(
+            '_sale_price'        => esc_html__('filter by Product on sale status', 'filter-everything'),
+            '_price'             => esc_html__('filter by Product price', 'filter-everything'),
+            '_stock'             => esc_html__('filter by Product stock quantity', 'filter-everything'),
+            'total_sales'        => esc_html__('filter by Product total sales', 'filter-everything'),
+            '_stock_status'      => esc_html__('filter by Product stock status', 'filter-everything'),
+            '_length'            => esc_html__('filter by Product length', 'filter-everything'),
+            '_width'             => esc_html__('filter by Product width', 'filter-everything'),
+            '_height'            => esc_html__('filter by Product height', 'filter-everything'),
+            '_weight'            => esc_html__('filter by Product weight', 'filter-everything'),
+            '_wc_average_rating' => esc_html__('filter by Product average rating', 'filter-everything'),
+            '_backorders'        => esc_html__('filter by Product backorders status', 'filter-everything'),
+            '_sold_individually' => esc_html__('filter by Product sold individually status', 'filter-everything'),
+            '_downloadable'      => esc_html__('filter by Product downloadable status', 'filter-everything'),
+            '_virtual'           => esc_html__('filter by Product virtual status', 'filter-everything'),
+            '_thumbnail_id'      => esc_html__('filter by Featured image', 'filter-everything'),
+        );
+        $all_post_types_post_meta_exists = array('_thumbnail_id' => esc_html__('filter by Featured image', 'filter-everything'));
+        $input = array(
+            'product'        => array(
+                'post_meta'        => $normalize_keys($product_post_meta),
+                'post_meta_num'    => $normalize_keys($product_post_meta_num),
+                'post_meta_exists' => $normalize_keys($product_post_meta_exists)
+            ),
+            'all_post_types' => array(
+                'post_meta_exists' => $normalize_keys($all_post_types_post_meta_exists)
+            ),
+        );
+
+        return $normalize_keys($input);
+    }
+}
+
+add_action('wp_ajax_wpc_search_meta_keys', function () {
+    check_ajax_referer('wpc-f-set-nonce', '_flrt_nonce');
+
+    if ( ! current_user_can('edit_posts') ) {
+        wp_send_json_error(['message' => __('Forbidden', 'textdomain')], 403);
+    }
+
+    global $wpdb;
+
+    $q         = isset($_GET['q']) ? sanitize_text_field(wp_unslash($_GET['q'])) : '';
+    $post_type = isset($_GET['post_type']) ? sanitize_key($_GET['post_type']) : 'post';
+    $post_meta_type = isset($_GET['post_meta_type']) ? sanitize_key($_GET['post_meta_type']) : '';
+
+    $include_custom_meta_keys = [];
+
+    if (!empty($post_type) && !empty($post_meta_type) && !empty(wpc_default_custom_meta_keys_filter()[$post_type][$post_meta_type])) {
+        foreach (wpc_default_custom_meta_keys_filter()[$post_type][$post_meta_type] as $key => $value) {
+            $include_custom_meta_keys[$key] = $value;
+        }
+    }
+
+    if (!empty($post_meta_type) && !empty(wpc_default_custom_meta_keys_filter()['all_post_types'][$post_meta_type])) {
+        foreach (wpc_default_custom_meta_keys_filter()['all_post_types'][$post_meta_type] as $key => $value) {
+            $include_custom_meta_keys[$key] = $value;
+        }
+    }
+
+    $default_custom_meta_keys = $include_custom_meta_keys;
+    $include_custom_meta_keys = array_values(array_unique(array_filter($include_custom_meta_keys)));
+    if(strlen($q) > 0){
+        $include_custom_meta_keys = array_values(array_filter(
+            $include_custom_meta_keys,
+            static fn(string $key) => strncmp($key, $q, strlen($q)) === 0
+        ));
+    }
+    $default_items = array_map(static function ($k) {
+        return [
+            'id'   => $k,
+            'text' => $include_custom_meta_keys[$k],
+        ];
+    }, array_keys($include_custom_meta_keys) ?: []);
+
+    if (strlen($q) < 1) {
+        wp_send_json(['items' => $default_items]);
+    }
+
+    $like = '%' . $wpdb->esc_like($q) . '%';
+    $limit = 15;
+
+    $sql = $wpdb->prepare(
+        "SELECT DISTINCT pm.meta_key
+         FROM {$wpdb->postmeta} pm
+         INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+         WHERE p.post_type = %s
+           AND pm.meta_key LIKE %s ORDER BY pm.meta_key ASC
+         LIMIT %d",
+        $post_type,
+        $like,
+        $limit
+    );
+
+    $keys = $wpdb->get_col($sql);
+
+    $exact_match_index = array_search($q, $keys);
+    if ($exact_match_index !== false) {
+        unset($keys[$exact_match_index]);
+        array_unshift($keys, $q);
+    }
+    $items = array_map(static function ($k) use ($default_custom_meta_keys) {
+        $text = !empty($default_custom_meta_keys[$k]) ? $default_custom_meta_keys[$k] : '';
+        return [
+            'id'   => $k,
+            'text' => $text,
+        ];
+    }, $keys ?: []);
+    if (strlen($q) > 1 && count($items) < 1) {
+        $items[] = [
+            'id'   => $q,
+            'text' => '',
+        ];
+    }
+
+    wp_send_json(['items' => array_merge($default_items, $items)]);
+});
+add_action( 'admin_post_wpc_seo_settings', function() {
+    check_admin_referer( 'wpc_seo_settings' );
+
+    $filter_permalinks = $_POST['wpc_filter_permalinks'] ?? [];
+    $seo_rules_settings = $_POST['wpc_seo_rules_settings'] ?? [];
+    $wpc_indexing_deep_settings = $_POST['wpc_indexing_deep_settings'] ?? [];
+
+    $filter_permalinks = array_map( 'sanitize_text_field', $filter_permalinks );
+    $seo_rules_settings = array_map( 'sanitize_text_field', $seo_rules_settings );
+    $wpc_indexing_deep_settings = array_map( 'sanitize_text_field', $wpc_indexing_deep_settings );
+
+    update_option( 'wpc_filter_permalinks', $filter_permalinks );
+    update_option( 'wpc_seo_rules_settings', $seo_rules_settings );
+    update_option( 'wpc_indexing_deep_settings', $wpc_indexing_deep_settings );
+
+    $redirect_url = add_query_arg( 'settings-updated', 'true', wp_get_referer() );
+    wp_safe_redirect( $redirect_url );
+    exit;
+});
+
+if (!defined( 'FLRT_FILTERS_PRO' ) ){
+    add_action( 'admin_footer', function () {
+        if ( ! is_admin() ) {
+            return;
+        }
+
+        $screen = get_current_screen();
+
+        if ( ! $screen ) {
+            return;
+        }
+
+        if ( $screen->post_type === 'filter-set' ) {
+            flrt_include_admin_view('pro-modal', []);
+        }
+    });
+}
+
+
 
 //add_filter( 'stackable/posts/post_query', 'flrt_stackable_block_query_vars', 10, 3 );
 //function flrt_stackable_block_query_vars( $post_query, $context, $query_string ){

@@ -1,5 +1,5 @@
 /*!
- * Filter Everything 1.9.1
+ * Filter Everything 1.9.2
  */
 (function ($) {
     "use strict";
@@ -43,6 +43,7 @@
     }
 
     $(document).on('click', '.wpc-filter-content input[type="radio"],.wpc-filter-content input[type="checkbox"]', function (e) {
+
         let wpcLink = $(this).data('wpc-link');
         let $el     = $(this).parents(wpcWidgetContainer);
         let setId   = $el.data('set');
@@ -82,6 +83,7 @@
     });
 
     $(document).on('change', '.wpc-filter-content select', function (e) {
+
         var wpcLink = $(this).find('option:selected').data('wpc-link');
         let $el     = $(this).parents(wpcWidgetContainer);
         let setId   = $el.data('set');
@@ -256,6 +258,7 @@
     })
 
     $(document).on('change', '.wpc-filter-range-form input[type="number"]', function (event) {
+
         let form = $(this).parents('.wpc-filter-range-form');
         processRangeForm( event, form );
     });
@@ -430,15 +433,15 @@
                 .addClass( 'wpc-opened' );
             setStatusCookie( filterId, wpcStatusCookieName );
         } else {
-           if( $filterSection.hasClass( 'wpc-filter-has-selected' ) || $filterSection.hasClass( 'wpc-filter-collapsible-reverse' ) ) {
+            if( $filterSection.hasClass( 'wpc-filter-has-selected' ) || $filterSection.hasClass( 'wpc-filter-collapsible-reverse' ) ) {
                 $filterSection.removeClass( 'wpc-opened' )
                     .addClass( 'wpc-closed' );
-               setStatusCookie( -filterId, wpcStatusCookieName );
-           } else {
-               $filterSection.removeClass( 'wpc-closed' )
-                   .addClass( 'wpc-opened' );
-               setStatusCookie( filterId, wpcStatusCookieName );
-           }
+                setStatusCookie( -filterId, wpcStatusCookieName );
+            } else {
+                $filterSection.removeClass( 'wpc-closed' )
+                    .addClass( 'wpc-opened' );
+                setStatusCookie( filterId, wpcStatusCookieName );
+            }
         }
     });
 
@@ -596,7 +599,7 @@
             $.each( wpcDateFilters, function ( fid, dateFilter ) {
 
                 if ( $("#wpc-filters-date-from-"+ fid).length < 1 ) {
-                    return false;
+                    return true;
                 }
                 let pickerOptions = {};
                 let timeFormat = dateFilter['time_format'].includes('s') ? 'HH.mm.ss' : 'HH.mm.00';
@@ -619,7 +622,12 @@
                             }
                         },
                         beforeShow: function(input, inst) {
-                            $('#ui-datepicker-div').addClass('wpc-filter-datepicker');
+                            $('#ui-datepicker-div').addClass('wpc-filter-datepicker wpc-filter-datepicker-'+ fid);
+                        },
+                        onUpdateDatepicker: function( inst ) {
+                            let $inp = $(inst.input);
+                            let w = $inp.outerWidth();
+                            $(".wpc-filter-datepicker-"+ fid).css('width', w + 'px');
                         }
                     };
 
@@ -653,7 +661,12 @@
                             }
                         },
                         beforeShow: function(input, inst) {
-                            $('#ui-datepicker-div').addClass('wpc-filter-datepicker');
+                            $('#ui-datepicker-div').addClass('wpc-filter-datepicker wpc-filter-datepicker-'+ fid);
+                        },
+                        onUpdateDatepicker: function( inst ) {
+                            let $inp = $(inst.input);
+                            let w = $inp.outerWidth();
+                            $(".wpc-filter-datepicker-"+ fid).css('width', w + 'px');
                         }
                     };
 
@@ -678,20 +691,24 @@
                             }
                         },
                         beforeShow: function(input, inst) {
-                            $('#ui-datepicker-div').addClass('wpc-filter-datepicker');
+                            $('#ui-datepicker-div').addClass('wpc-filter-datepicker wpc-filter-datepicker-'+ fid);
+                        },
+                        onUpdateDatepicker: function( inst ) {
+                            let $inp = $(inst.input);
+                            let w = $inp.outerWidth();
+                            $(".wpc-filter-datepicker-"+ fid).css('width', w + 'px');
                         }
                     };
 
                     $( "#wpc-filters-alt-date-from-" + fid  ).timepicker( pickerOptions );
                     pickerOptions.altField = '#wpc-filters-date-to-' + fid;
                     $( "#wpc-filters-alt-date-to-" + fid ).timepicker( pickerOptions );
-
                 }
             });
         }
 
         $('.wpc-help-tip').tipTip({
-            'activation': 'click',
+            'activation': 'hover',
             'attribute': 'data-tip',
             'fadeIn':    50,
             'fadeOut':   50,
@@ -1006,8 +1023,8 @@
         $(".wpc-filter-set-"+setId).addClass('is-active');
         // We have only to check what the element was last focused
         // if( $('.wpc-search-field').length < 1 ){
-            $(".wpc-filter-set-"+setId+" .wpc-filters-submit-button").addClass('on-hold');
-            $(".wpc-filter-set-"+setId+" .wpc-filters-reset-button").addClass('on-hold');
+        $(".wpc-filter-set-"+setId+" .wpc-filters-submit-button").addClass('on-hold');
+        $(".wpc-filter-set-"+setId+" .wpc-filters-reset-button").addClass('on-hold');
         // }
     }
 
@@ -1043,6 +1060,19 @@
         let curMinVal = parseFloat( $min.val() );
         let curMaxVal = parseFloat( $max.val() );
 
+        if( curMaxVal !== initialMaxVal ){
+            $max.parent().find('.wpc-range-clear').show();
+        }else{
+            $max.parent().find('.wpc-range-clear').hide();
+        }
+
+        if( curMinVal !== initialMinVal ){
+            $min.parent().find('.wpc-range-clear').show();
+        }else{
+            $min.parent().find('.wpc-range-clear').hide();
+        }
+
+
         // Setting value into form inputs when slider is moving
         $slider.slider({
             min: initialMinVal,
@@ -1077,6 +1107,20 @@
             processRangeForm( event, form );
         }
     }
+
+    $(document).on('click', '.wpc-filters-range-min-column .wpc-range-clear', function(event) {
+        let rangeInput = $(this).parent().find('input');
+        let minVal = rangeInput.data('min');
+        $(this).hide();
+        rangeInput.val(minVal).change();
+    });
+
+    $(document).on('click', '.wpc-filters-range-max-column .wpc-range-clear', function(event) {
+        let rangeInput = $(this).parent().find('input');
+        let maxVal = rangeInput.data('max');
+        $(this).hide();
+        rangeInput.val(maxVal).change();
+    });
 
     function processRangeForm( event, form ){
         let low_suffix  = 'min';
@@ -1235,11 +1279,26 @@
                     } else {
                         toReplaceSEO = true;
                     }
-
                     if( applyButtonMode ){
                         // Filters Widget
                         wpcReloadFiltersWidget( $response, widgetClass );
+                        if(window.innerWidth > wpcMobileWidth ){
+                            if(isFilterRequest){
+                                wpcEnableStickyButtons(true);
+                                wpcUpdateStickyButtons();
+                            }
+
+                            if(!isFilterRequest){
+                                wpcEnableStickyButtons(false);
+                                wpcUpdateStickyButtons();
+                            }
+                        }
                         return;
+                    }
+
+                    if(!applyButtonMode && !isFilterRequest && window.innerWidth > wpcMobileWidth ){
+                        wpcEnableStickyButtons(false);
+                        wpcUpdateStickyButtons();
                     }
 
                     if( ( $responsePostsContainer.length > 0 ) && wpcFilterFront.wpcAjaxEnabled && wpcQueryOnThePageSets.includes( setId ) ){
@@ -1339,6 +1398,7 @@
 
                     // Filters Widget. It modifies $response so it is better to fire it in the end
                     wpcReloadFiltersWidget( $response, widgetClass );
+
 
                     //trigger events
                     $(document).trigger( 'ready' );
@@ -1530,7 +1590,7 @@
             });
         }
     }
-   flrtStarCheck();
+    flrtStarCheck();
 
     $(document).on('mouseenter', 'label.flrt-star-label', function() {
         if(!$('#flrt-wpc-term-count').hasClass('flrt-change-blocked')) {
@@ -1612,6 +1672,199 @@
             }
         }
     }
+
+
+    // Sticky buttons: enabled lazily after first user interaction with filters
+    let wpcStickyButtonsActivated = false;
+    let wpcStickyForceOnActivate = false; // If true, fix immediately after first click even before chips are rendered
+
+    // Checks if any filter is selected (chips present or inputs checked)
+    function wpcHasAnyFilterSelected() {
+        const $wrapper = $('.wpc-filters-widget-wrapper');
+        if (!$wrapper.length) return false;
+
+        const hasChecks = $wrapper.find('input[type=checkbox]:checked, input[type=radio]:checked').length > 0;
+        const hasChips  = $wrapper.find('.wpc-filter-chip a').length > 0;
+
+        return hasChecks || hasChips;
+    }
+
+    // Enable sticky buttons after user interaction; attach handlers once
+    function wpcEnableStickyButtons(force = false) {
+        if (!wpcStickyButtonsActivated) {
+            const handler = wpcDebounce(wpcUpdateStickyButtons, 0);
+            $(window).on('scroll.wpcStickyButtons', handler);
+            wpcStickyButtonsActivated = true;
+        }
+
+        // Force immediate fixation on first click (no need to scroll)
+        if (force) {
+            wpcStickyForceOnActivate = true;
+        }else{
+            wpcStickyForceOnActivate = false
+        }
+
+        // Perform initial calculation right away so buttons become fixed immediately after click
+        wpcUpdateStickyButtons();
+    }
+
+
+
+    // Updates fixed positioning of sticky buttons based on scroll position
+    function wpcUpdateStickyButtons() {
+        const $allButtons = $('.wpc-sticky-buttons');
+
+        // If not activated yet, keep buttons unfixed
+        if (!wpcStickyButtonsActivated) {
+            return;
+        }
+
+        $allButtons.each(function () {
+            const $buttons = $(this);
+            const el = $buttons[0];
+            if (!el) return;
+            const stickyButtonsWidth = el.getBoundingClientRect().width;
+
+            const rect = el.getBoundingClientRect();
+            const styles = window.getComputedStyle(el);
+            const marginTop = parseFloat(styles.marginTop) || 0;
+            const marginBottom = parseFloat(styles.marginBottom) || 0;
+            const stickyButtonsHeight = rect.height;
+
+            if (stickyButtonsWidth === 0 || stickyButtonsHeight === 0) {
+                return setTimeout(wpcUpdateStickyButtons, 0);
+            }
+
+
+
+            const stickyButtonsHeightWithMargin = rect.height + marginTop + marginBottom;
+            const $wrapper = $buttons.closest('.wpc-filters-scroll-container');
+
+            if (!wpcStickyForceOnActivate && !wpcHasAnyFilterSelected()) {
+                if ($buttons.hasClass('wpc-is-fixed-apply-button')) {
+                    $buttons.removeClass('wpc-is-fixed-apply-button').attr('style', '');
+                }
+                const prevPos = $wrapper.data('wpc-prev-position');
+                if (typeof prevPos !== 'undefined') {
+                    $wrapper.css('position', prevPos);
+                    $wrapper.removeData('wpc-prev-position');
+                }
+
+                const $ph = $buttons.prev('.wpc-sticky-placeholder');
+                if ($ph.length) $ph.remove();
+                return;
+            }
+
+
+            if (!$wrapper.length) {
+                return;
+            }
+
+            const winTop = $(window).scrollTop();
+            const winH = $(window).height();
+            const winBottom = winTop + winH;
+
+            const wrOffset = $wrapper.offset();
+            if (!wrOffset) {
+                return;
+            }
+
+            const wrTop = wrOffset.top;
+            const wrHeight = $wrapper.outerHeight();
+            const wrBottom = wrTop + wrHeight;
+
+
+            const ensurePlaceholder = (h) => {
+                let $ph = $buttons.prev('.wpc-sticky-placeholder');
+                if (!$ph.length) {
+                    $ph = $('<div class="wpc-sticky-placeholder" aria-hidden="true"></div>');
+                    $buttons.before($ph);
+                }
+                $ph.css('height', stickyButtonsHeightWithMargin + 'px');
+                return $ph;
+            };
+
+
+
+            const btnH = $buttons.outerHeight();
+
+            const wrLeft = wrOffset.left;
+
+            const buttonsStyles =  window.getComputedStyle(el);
+            const buttonsTop = ($('#wpadminbar').length > 0 ? $('#wpadminbar').outerHeight() : 0) + (parseFloat(buttonsStyles.getPropertyValue('--sticky-top')) || parseFloat(el.dataset.stickyTop) || 16);
+                parseFloat(el.dataset.stickyTop) || 16;
+            const buttonsBottom = parseFloat(buttonsStyles.getPropertyValue('--sticky-bottom')) ||
+                parseFloat(el.dataset.stickyBottom) || 16;
+
+            let currentPosition = $buttons.css('position');
+            let currentTop = currentPosition === 'fixed' ? parseFloat($buttons.css('top')) : null;
+            let currentBottom = currentPosition === 'fixed' ? parseFloat($buttons.css('bottom')) : null;
+
+            let css = {
+                position: 'fixed',
+                left: wrLeft + 'px',
+                bottom: 0,
+                top: 'auto',
+                width: stickyButtonsWidth + 'px',
+                zIndex: 9999,
+            }
+
+            if (currentPosition === 'fixed') {
+                if (currentTop !== null) {
+                    css.top = currentTop + 'px';
+                }
+                if (currentBottom !== null) {
+                    css.bottom = currentBottom + 'px';
+                }
+            }
+
+            const $ph = ensurePlaceholder(btnH);
+
+            if ($ph.length) {
+                let buttonsPlaceholderOffset = $('.wpc-sticky-placeholder').offset();
+                buttonsPlaceholderOffset.bottom = buttonsPlaceholderOffset.top + $('.wpc-sticky-placeholder').outerHeight();
+
+                if (winTop > buttonsPlaceholderOffset.top) {
+                    $buttons.addClass('wpc-is-fixed-apply-button');
+                    css.top = buttonsTop + 'px';
+                    css.left = wrLeft + 'px';
+                    css.bottom = 'auto';
+                    $buttons.css(css);
+                } else if (winBottom < buttonsPlaceholderOffset.bottom) {
+                    $buttons.addClass('wpc-is-fixed-apply-button');
+                    css.top = 'auto';
+                    css.bottom = buttonsBottom + 'px';
+                    $buttons.css(css);
+                }else{
+                    $('.wpc-sticky-placeholder').remove();
+                    css.position = 'relative';
+                    css.top = 0;
+                    css.left = 0;
+                    $buttons.css(css);
+                    $buttons.removeClass('wpc-is-fixed-apply-button');
+                }
+            }
+        });
+    }
+
+
+    function wpcDebounce(fn, wait) {
+        let t;
+        return function() {
+            clearTimeout(t);
+            const args = arguments;
+            const ctx = this;
+            t = setTimeout(function() { fn.apply(ctx, args); }, wait);
+        }
+    }
+
+    $(function() {
+        if (wpcHasAnyFilterSelected() && window.innerWidth > wpcMobileWidth ) {
+            wpcEnableStickyButtons(true);
+        }
+    });
+
+
 
     $.fn.tipTip = function(options) {
         var defaults = {

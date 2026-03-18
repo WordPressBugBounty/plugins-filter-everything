@@ -130,7 +130,14 @@ class RequestParser
 
     private function urlEncodeGetValues( $values )
     {
-        $queriedValues  = explode( FLRT_QUERY_TERMS_SEPARATOR, $values );
+        if ( is_array( $values ) ) {
+            $queriedValues = $values;
+        } elseif ( is_string( $values ) ) {
+            $queriedValues = explode( FLRT_QUERY_TERMS_SEPARATOR, $values );
+        } else {
+            $queriedValues = [];
+        }
+
         $queriedValues  = array_map( 'urlencode', $queriedValues );
         $queriedValues  = array_map( 'mb_strtolower', $queriedValues );
 
@@ -175,7 +182,7 @@ class RequestParser
         /**
          * Date filters
          */
-        if ( in_array( $filter['entity'], [ 'post_date' ] ) ) {
+        if ( in_array( $filter['entity'], [ 'post_date', 'post_meta_date' ] ) ) {
             // We accept only values that are YYYY-MM-DD or hh.mm.ss or both YYYY-MM-DDthh.mm.ss
             // We do not accept values YYYY-MM, YYYY, hh.mm, mm.ss etc
             if ( $this->extractQueryStringTheParamValues( $slug . '_from' ) !== false ) {
@@ -221,7 +228,7 @@ class RequestParser
          * All slugs located in the Query String URL part
          */
         if ( ( $this->extractQueryStringTheParamValues( $slug ) !== false ) ) {
-            if ( ! in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date' ] ) ) {
+            if ( ! in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date', 'post_meta_date' ] ) ) {
                 /**
                  * If it is Free version with all filter values in the Query String
                  * we also have to check if terms exists on our site.

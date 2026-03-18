@@ -48,7 +48,7 @@ class DefaultSettings
 
         // PRO default options
         if( defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO ){
-            $defaultOptions['show_bottom_widget'] = '';
+            $defaultOptions['mobile_filter_settings'] = 'show_bottom_widget';
         }
         return $defaultOptions;
     }

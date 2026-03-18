@@ -423,11 +423,6 @@ msgstr ""
 msgid "Meta Key"
 msgstr ""
 
-#: src/Admin/FilterFields.php:83
-msgid ""
-"Name of the Custom Field. Please, see the Popular Meta keys at the bottom"
-msgstr ""
-
 #: src/Admin/FilterFields.php:87
 msgid "Prefix for URL"
 msgstr ""
@@ -1252,44 +1247,7 @@ msgstr ""
 msgid "WooCommerce"
 msgstr ""
 
-msgid "filter by Product price (Custom Field Numeric)"
-msgstr ""
-
 msgid "filter by Product Stock status (Custom Field)"
-msgstr ""
-
-msgid ""
-"by Sale Price (Custom Field Numeric) or on Sale Status (Custom Field Exists)"
-msgstr ""
-
-msgid "by Sales Count"
-msgstr ""
-
-msgid "by Backorders Status (Custom Field)"
-msgstr ""
-
-msgid "by Downloadable Status (Custom Field)"
-msgstr ""
-
-msgid "by Sold Individually status (Custom Field)"
-msgstr ""
-
-msgid "by Stock Quantity (Custom Field Numeric)"
-msgstr ""
-
-msgid "by Product Virtual status (Custom Field)"
-msgstr ""
-
-msgid "by product Length"
-msgstr ""
-
-msgid "by product Width"
-msgstr ""
-
-msgid "by product Height"
-msgstr ""
-
-msgid "by product Weight"
 msgstr ""
 
 msgid ""
@@ -1383,9 +1341,6 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-msgid "And what to filter?"
-msgstr ""
-
 msgid "query"
 msgstr ""
 
@@ -1425,9 +1380,6 @@ msgstr ""
 msgid ""
 "Display the term hierarchy in the filter widget. Child terms will be "
 "collapsed by default"
-msgstr ""
-
-msgid "filter by Featured Image (Custom Field Exists)"
 msgstr ""
 
 msgid "Improved dropdowns"
@@ -1552,11 +1504,6 @@ msgid "Title"
 msgstr ""
 
 msgid "Order"
-msgstr ""
-
-msgid ""
-"Note: for ACF meta fields, please use names without the \"_\" character at "
-"the beginning"
 msgstr ""
 
 msgid "Preview the selected location in a new tab"
@@ -1756,8 +1703,7 @@ msgstr ""
 msgid "Will appear next to the Filter Title"
 msgstr ""
 
-msgid ""
-"Entities whose terms should display in SEO data without forcing lowercasing"
+msgid "Entities whose terms should display in SEO data without forcing lowercasing"
 msgstr ""
 
 msgid ""
@@ -1909,10 +1855,6 @@ msgid "Widget shortcode:"
 msgstr ""
 
 msgid ""
-"Note: filters will only show if there is Filter Set registered for a page(s)"
-msgstr ""
-
-msgid ""
 "Unlike most widgets, the Filters widget does not always show filters. It is "
 "rather a canvas where filters can be displayed if there is a Filter Set "
 "registered for the page. You can specify this page or pages in the \"Where "
@@ -2042,7 +1984,7 @@ msgstr ""
 msgid "Taxonomy Numeric"
 msgstr ""
 
-msgid "Taxonomy Numeric - Available in Pro"
+msgid "Taxonomy Numeric - Available in PRO"
 msgstr ""
 
 msgid "Taxonomy"
@@ -2108,13 +2050,7 @@ msgstr ""
 msgid "Upload image"
 msgstr ""
 
-msgid "Horizontal layout"
-msgstr ""
-
 msgid "Columns"
-msgstr ""
-
-msgid "Need Your Help"
 msgstr ""
 
 msgid "I'm Andrii Stepasiuk, the author of this plugin."
@@ -2406,11 +2342,903 @@ msgstr ""
 msgid "Appear as a Pop-up"
 msgstr ""
 
-msgid "No %s lists found on the page"
-msgstr ""
-
 msgid "Posts list"
 msgstr ""
 
 msgid "Note: if you modify the selected Posts list on the page, please update this Filter Set"
+msgstr ""
+msgid "Regenerate XML Sitemap"
+msgstr ""
+
+msgid "Failed to generate XML"
+msgstr ""
+
+msgid "Please regenerate the XML sitemap"
+msgstr ""
+
+msgid "Generate XML Sitemap"
+msgstr ""
+
+msgid "Insufficient rights to create XML."
+msgstr ""
+
+msgid "Generates an XML sitemap of URLs available for indexing to help search engines crawl your site faster. You need to submit this sitemap to search engines for proper indexing."
+msgstr ""
+
+msgid "Error: Unable to create a folder for the XML sitemap file. Please check your server's write permissions or try again later."
+msgstr ""
+
+msgid "Error: Unable to delete the existing XML sitemap file. Please check file permissions and try generating it again."
+msgstr ""
+
+msgid "Error: Unable to write data to the XML sitemap file. Please verify write permissions and available disk space."
+msgstr ""
+
+msgid "Error: No Filter Sets found. Please create at least one Filter Set and SEO Rule, then try generating the XML sitemap again."
+msgstr ""
+
+msgid "Error: No SEO rules found. Please create at least one SEO rule and then try generating the XML sitemap again."
+msgstr ""
+
+msgid "Error: No URL prefixes have been configured. Please add at least one URL prefix in the URL Prefixes section and then try generating the XML sitemap again."
+msgstr ""
+
+msgid "Error: No URLs were found for the XML sitemap. Please create filter sets and SEO rules before generating the XML sitemap again."
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "Filters and filter sets"
+msgstr ""
+
+msgid "Select the settings file to import"
+msgstr ""
+
+msgid "Select File"
+msgstr ""
+
+msgid "Import/Export"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Error: No export options selected. Please choose at least one option before exporting data."
+msgstr ""
+
+msgid "Error: No settings have been modified yet. There is nothing to export."
+msgstr ""
+
+msgid "Error: No import options selected. Please choose at least one item to import."
+msgstr ""
+
+msgid "Error: No file selected for import. Please choose a JSON file and try again."
+msgstr ""
+
+msgid "Error: Import file upload failed. Please try again or check your server's file upload settings."
+msgstr ""
+
+msgid "Error: Unable to import data. The selected file is not a valid JSON export from this plugin."
+msgstr ""
+
+msgid "Error: Insufficient permissions to perform this action. Please check your user role or contact the site administrator."
+msgstr ""
+
+msgid "Error: The file must have the .json extension. Please select a valid JSON file and try again."
+msgstr ""
+
+msgid "Error: The file contains invalid JSON. Please check the file contents or export it again."
+msgstr ""
+
+msgid "Error: The import file doesn't contain any filter sets data or options. Please make sure you selected a valid export file that includes this data."
+msgstr ""
+
+msgid "Error: The import file doesn't contain any settings data. Please make sure you selected a valid export file that includes plugin settings."
+msgstr ""
+
+msgid "Error: The import file doesn't contain any SEO rules data or options. Please make sure you selected a valid export file that includes SEO rules."
+msgstr ""
+
+msgid "Before importing, make a backup of your database to avoid data loss."
+msgstr ""
+
+msgid "Error: An unexpected error occurred. Please try again or contact support if the problem persists."
+msgstr ""
+
+msgid "Error: No SEO rules have been created yet. There is nothing to export."
+msgstr ""
+
+msgid "Error: No filter sets have been created yet. There is nothing to export."
+msgstr ""
+
+msgid "Error: The import process took too long and was stopped by the server. Please increase the PHP max_execution_time value or contact your hosting support."
+msgstr ""
+
+msgid "Error: No filters selected for indexing. Please select at least one filter for indexing in the %sIndexed Filters%s section and then try generating the XML sitemap again."
+msgstr ""
+
+msgid "Error: No indexing depth settings have been configured. Please check your SEO settings and set the %sIndexing Depth%s before generating the sitemap."
+msgstr ""
+
+msgid "Indexing for your SEO rule will not work because you need to increase the filter's indexing depth setting"
+msgstr ""
+
+msgid "Filter sets"
+msgstr ""
+
+msgid "Create Filters Automatically"
+msgstr ""
+
+msgid "Create Filters Manually"
+msgstr ""
+
+msgid "filters"
+msgstr ""
+
+msgid "(auto-generated)"
+msgstr ""
+
+msgid "Price"
+msgstr ""
+
+msgid "Error: No post types found. Please add your first post and try again, or create a Filter Set manually."
+msgstr ""
+
+msgid "Error: Automatic filters were not created. Please try again, or set them up manually."
+msgstr ""
+
+msgid "Error: No taxonomies found. Please create your first taxonomy and then try again."
+msgstr ""
+
+msgid "Custom Field Date"
+msgstr ""
+
+msgid "Success: XML sitemap generated successfully."
+msgstr ""
+
+
+msgid "Error: The XML sitemap generation took too long and was stopped by the server. Please increase the PHP max_execution_time value or contact your hosting support."
+msgstr ""
+
+msgid "Please keep this tab open until the process is complete."
+msgstr ""
+
+msgid "How many columns to use in horizontal mode"
+msgstr ""
+
+msgid "Error: invalid Horizontal layout field."
+msgstr ""
+
+msgid "Type to search for a custom field key"
+msgstr ""
+
+msgid "Searching"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "%sTo display filters, add the %sFilter Everything — Filters%s widget to a widget area or sidebar,%sor use the %s[fe_widget]%s shortcode to place them anywhere on your site.%s"
+msgstr ""
+
+msgid "What to filter?"
+msgstr ""
+
+msgid "filter by Product Stock status (Custom Field)"
+msgstr ""
+
+msgid "filter by Product price (Custom Field Numeric)"
+msgstr ""
+
+msgid "%sCreate Filters Automatically%s — instantly generate filters from your site’s categories and fields. You can always edit them later."
+msgstr ""
+
+msgid "%sCreate Filters Manually%s — full control — add filters exactly as you want."
+msgstr ""
+
+msgid "SEO"
+msgstr ""
+
+msgid "SEO settings saved successfully."
+msgstr ""
+
+msgid "This setting has moved to the Filter Set"
+msgstr ""
+
+msgid "Name of the Custom Field"
+msgstr ""
+
+msgid "filter by Product price"
+msgstr ""
+
+msgid "filter by Product stock status"
+msgstr ""
+
+msgid "filter by Product sale price"
+msgstr ""
+
+msgid "filter by Product on sale status"
+msgstr ""
+
+msgid "filter by Product stock quantity"
+msgstr ""
+
+msgid "filter by Product total sales"
+msgstr ""
+
+msgid "filter by Product backorders status"
+msgstr ""
+
+msgid "filter by Product sold individually status"
+msgstr ""
+
+msgid "filter by Product downloadable status"
+msgstr ""
+
+msgid "filter by Product virtual status"
+msgstr ""
+
+msgid "filter by Product length"
+msgstr ""
+
+msgid "filter by Product width"
+msgstr ""
+
+msgid "filter by Product height"
+msgstr ""
+
+msgid "filter by Product weight"
+msgstr ""
+
+msgid "filter by Product average rating"
+msgstr ""
+
+msgid "filter by Featured image"
+msgstr ""
+
+msgid "Export plugin data to a JSON file that you can import later."
+msgstr ""
+
+msgid "Import plugin data from a previously exported JSON file."
+msgstr ""
+
+msgid "Export data"
+msgstr ""
+
+msgid "Import data"
+msgstr ""
+
+msgid "SEO rules"
+msgstr ""
+
+msgid "Error: XML sitemap generation failed due to a server error. Please check your web server's error log or contact support."
+msgstr ""
+
+msgid "Error: Service unavailable (503). Please try again later or contact support."
+msgstr ""
+
+msgid "Error: Unable to connect to the server. Please check your network connection or try again later."
+msgstr ""
+
+msgid "Error: Requested resource not found (404). Please try again or contact support."
+msgstr ""
+
+msgid "were imported"
+msgstr ""
+
+msgid "Sorting is unavailable on this page. It works only with content filtered by Filter Everything. To enable sorting, assign a Filter Set to this page."
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Choose what to export"
+msgstr ""
+
+msgid "Open XML sitemap"
+msgstr ""
+
+msgid "PRO benefits"
+msgstr ""
+
+msgid "Duplicate"
+msgstr ""
+
+msgid "No %s enabled lists found on the page"
+msgstr ""
+
+msgid "The free version allows up to 3 filter sets per post type. Upgrade to <a href='%1$s' target='_blank'>PRO</a> for unlimited filter sets."
+msgstr ""
+
+msgid "Unlock with PRO"
+msgstr ""
+
+msgid "Upgrade to PRO"
+msgstr ""
+
+msgid "Chips"
+msgstr ""
+
+msgid "Sorting"
+msgstr ""
+
+msgid "This Filter Set is inactive.<br>The Free version allows up to 3 Filter Sets per post type.<br>Upgrade to PRO to activate unlimited Filter Sets."
+msgstr ""
+
+msgid ""
+"The free version allows up to 3 filter sets per post type. "
+"Upgrade to <a href=\"%s\">PRO</a> to display more filter sets."
+msgstr ""
+
+msgid "Free"
+msgstr ""
+
+msgid "Filter any post list —"
+msgstr ""
+
+msgid "page builders & custom queries"
+msgstr ""
+
+msgid "∞ Create unlimited filter sets"
+msgstr ""
+
+msgid "Built-in mobile filter widget"
+msgstr ""
+
+msgid "Hide empty filters"
+msgstr ""
+
+msgid "Filter by WooCommerce variations"
+msgstr ""
+
+msgid "View all PRO features"
+msgstr ""
+
+msgid "Unlock all PRO features and capabilities"
+msgstr ""
+
+msgid "Upgrade to"
+msgstr ""
+
+msgid "Pay once"
+msgstr ""
+
+msgid "Lifetime updates"
+msgstr ""
+
+msgid "6 month of support included"
+msgstr ""
+
+msgid "Unlock PRO"
+msgstr ""
+
+msgid "Plugin settings"
+msgstr ""
+
+msgid "Import completed successfully."
+msgstr ""
+
+msgid "Failed to generate the XML sitemap. Please try again or contact support if the issue persists."
+msgstr ""
+
+msgid "Failed to fill temporary table"
+msgstr ""
+
+msgid "Unable to determine the server execution time limit (max_execution_time)."
+msgstr ""
+
+msgid "The XML sitemap generation exceeded the allowed execution time (%d seconds). Your server may apply stricter limits. Please increase the time limit or contact your hosting provider."
+msgstr ""
+
+msgid "Error: invalid Taxonomy"
+msgstr ""
+
+msgid "No taxonomies are associated with the selected post type."
+msgstr ""
+
+msgid "You do not have sufficient permissions to perform this action."
+msgstr ""
+
+msgid "The request could not be verified. Please try again."
+msgstr ""
+
+msgid "How to?"
+msgstr ""
+
+msgid "Enter filters title"
+msgstr ""
+
+msgid "Enter chips title"
+msgstr ""
+
+msgid "Enter sorting label"
+msgstr ""
+
+msgid "Chips widget"
+msgstr ""
+
+msgid "Horizontal priority"
+msgstr ""
+
+msgid "(Elementor Library)"
+msgstr ""
+
+msgid "Please, do not fire this function, until the \"pre_get_posts\" hook has been called"
+msgstr ""
+
+msgid "Please, do not fire this function, until the \"pre_get_posts\" hook has been called"
+msgstr ""
+
+msgid "Please, do not fire this function, until the \"pre_get_posts\" hook has been called"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "%d star"
+msgid_plural "%d stars"
+msgstr[0] ""
+msgstr[1] ""
+
+#. PRO BENEFITS PAGE START
+msgctxt "benefits-landing"
+msgid "PRO"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Full control"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO-ready"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Trusted by over"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Upgrade to <b>Filter Everything PRO</b> to unlock advanced filter<br>capabilities, SEO features, and full control over the filtering process."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Trusted by over"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "160,000+"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "users worldwide"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "4.91/5"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "average rating"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "from real customers"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Filter any WP_Query, get SEO Rules, obtain clean URLs, and unlock many convenient time-saving options — all available in the PRO version."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Filter any WP_Query"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Apply SEO Rules"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Get clean URLs"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Why Upgrade to<br>Filter Everything PRO?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "∞ Unlimited number of Filter Sets"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Create individual filters for each section of your website."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO capabilities + clean URLs"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Unlimited Filter Sets"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO Capabilities"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Mobile Devices"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Take full control of SEO for filtered results pages and attract additional free traffic from search engines or AI services."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Maximum convenience for Mobile<br>devices"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Built-in, user-friendly filter widget for mobile devices."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Works and is trusted<br>worldwide"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "160 000+"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "websites / users worldwide"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "15 000+"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "customers on CodeCanyon"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "rating based on real reviews"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "What does Filter Everything PRO<br>unlock?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "With PRO, you can go far beyond basic filtering and build scalable solutions<br>for real projects"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Filter custom posts and complex<br>WP_Query"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "on any wordpress page"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Create unlimited<br>Filter Sets"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "and customize them individually to match the needs of any section or page"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Generate SEO-optimized<br>results pages"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "bringing traffic to your website"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Duplicate, export, import"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Filters, Filter Sets, and plugin settings (within one or multiple sites)"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Unlock extra options"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "filtering by variations, hiding empty filters, hiding “out of stock” products, and more"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Control & flexibility"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Filtering for custom queries & page builders"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced filter types"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "User experience"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO & promotion"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Dedicated mobile filters widget"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "One-click import & export for Filters, Filter Sets, and settings"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Duplicate Filter Sets in one click"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO rules for filtered pages"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO-friendly filter URLs"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "XML sitemap for filter pages"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Choose the right version<br>for you"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Features"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Current version"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced Filtering & Core Value"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Any WP_Query Filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO Rules for Filter Pages"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Variation-Based Product Filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO-Friendly Filter URLs"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO & Traffic Growth"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "XML Sitemap for Filter Pages"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Full URL Structure Control"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "No Empty Pages or 404s"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Mobile & UX for E-commerce"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Mobile Filters Widget"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Hide Out-of-Stock Products"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Any Post Type Filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Filter by Any Criteria"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Auto-Generated Filters"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "AJAX Filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Step-by-Step Filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Sorting Widget"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Multilingual Support"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Responsive Design"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced Workflow & Flexibility"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Import & Export Settings"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced AJAX Containers"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Auto-Hide Empty Filters"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced Filter Field Types"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Duplicate Filter Sets"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Support"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Standard Support"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Priority Support"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Buy PRO"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Unlock all PRO features"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "One-time payment"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Lifetime updates"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "6 months of support included"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Ready to unlock the full power of Filter Everything?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Upgrade to PRO and take full control over filtering, SEO, and scalability."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Frequently Asked Questions"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Will my existing filters disappear after upgrading to PRO?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "No, your existing filters will not disappear after upgrading to PRO. All created Filter Sets, filters, and settings are preserved. We recommend installing and activating the PRO version first, and only then deactivating the Free version — this way all your data will remain intact."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Will I need to rebuild my site after upgrading to PRO?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "No, you will not need to rebuild your site after upgrading to PRO. All existing page structure, content, and filter settings will remain unchanged. The PRO version simply extends the plugin’s capabilities and adds new features without affecting your current filtering logic."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Will the PRO version slow down my site?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"No, the PRO version will not slow down your site. The plugin itself is optimized for fast performance and does not add unnecessary load on its own."
+"<br><br>"
+"However, keep in mind that the speed of filtering depends on the number of posts, attributes, and your hosting resources. With large datasets, performance is primarily determined by server capacity rather than the plugin version."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Is the PRO version compatible with my theme or page builder?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"Yes, the PRO version is compatible with most WordPress themes and popular page builders. The plugin relies on the standard WP_Query mechanism, which allows it to integrate correctly with Gutenberg, Elementor, WPBakery, Divi, Avada, and other page builders."
+"<br><br>"
+"In most cases, no additional configuration is required — filters will work with your theme out of the box. For highly customized or non-standard templates, flexible integration options are also available."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "How many sites does my license cover?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Is support included with the PRO upgrade?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "What is the refund policy?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "The license covers two sites — your main production website and its development copy (DEV / staging). This means you can use the plugin on the live site and simultaneously on its test copy for development, updates, and verification before applying changes to the production environment."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Yes, support is included with the PRO purchase. You receive 6 months of support with the option to extend it at any time, along with lifetime plugin updates that include all new features and bug fixes at no additional cost."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "We always do our best to help resolve any issues with the plugin and provide the necessary support. If this is not possible, you can use the refund policy and get your money back in accordance with the rules of the website where you purchased the plugin."
+msgstr ""
+#. PRO BENEFITS PAGE END
+
+msgid "Horizontal filters"
+msgstr ""
+
+msgid "Display filters side by side instead of one per row"
+msgstr ""
+
+msgid "Number of columns"
+msgstr ""
+
+msgid "No list of %s found on this page"
+msgstr ""
+
+msgid "This function should not be called before the pre_get_posts hook has fired."
 msgstr ""

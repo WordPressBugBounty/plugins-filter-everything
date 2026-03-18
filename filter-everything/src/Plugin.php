@@ -9,9 +9,12 @@ if ( ! defined('ABSPATH') ) {
 use FilterEverything\Filter\Pro\Api\ApiRequests;
 use FilterEverything\Filter\Shortcodes;
 use FilterEverything\Filter\Pro\PluginPro;
+use FilterEverything\Filter\DefaultSettings;
+use FilterEverything\Filter\PluginHelpers;
 
 class Plugin
 {
+    use PluginHelpers;
     private $wpManager;
 
     public function __construct()
@@ -109,6 +112,27 @@ class Plugin
 
         add_action( 'wpc_cycle_filter_fields', [$this, 'showCombinedFields'], 10, 2 );
 
+        add_action( 'pre_get_posts', [$this, 'burpOutAllWpQueries'], 9999 );
+
+        add_action('wp_ajax_wpc-get-set-location-terms', [$this, 'sendSetLocationTerms']);
+
+        add_filter('wpc_relevant_set_ids', [$this, 'findRelevantSets'], 10, 2);
+        add_filter('wpc_is_filtered_query_free', [$this, 'isFilteredQuery'], 10, 2);
+
+
+        add_filter('wpc_prepare_filter_set_parameters', [$this, 'prepareSetParameters'], 10, 2);
+
+        add_filter('wpc_filter_before_make_default_set_values', [$this, 'legacyPrepareWpPageTypeValue'] );
+
+        add_filter('wpc_validation_wp_page_type_entities', [$this, 'validationWpPageTypeEntities'] );
+
+        add_filter('wpc_validation_location_entities', [$this, 'validationLocationEntities'], 10, 2);
+
+        add_action( 'wpc_before_filter_set_settings_location_fields', [$this, 'showLocationFields'] );
+
+        add_filter('manage_edit-' . FLRT_FILTERS_SET_POST_TYPE . '_columns', array($this, 'filterSetPostTypeCol'));
+        add_action('manage_' . FLRT_FILTERS_SET_POST_TYPE . '_posts_custom_column', array($this, 'filterSetPostTypeColContent'), 10, 2);
+
         $woo_shortcodes = array(
             'products',
             'featured_products',
@@ -160,9 +184,18 @@ class Plugin
                     }
                 }
 
-                if ( in_array( $type, [ 'post_date', 'post_meta_date' ] ) ) {
+                if ( in_array( $type, [ 'post_date' ] ) ) {
                     global $wpdb;
                     $key = 'wpc_terms_post_date_';
+                    $result = $wpdb->get_results( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE '%{$key}%'", ARRAY_A );
+                    if ( isset( $result[0]['option_name'] ) ) {
+                        $terms_transient_key = str_replace( '_transient_', '', str_replace( '_transient_timeout_', '', $result[0]['option_name'] ) );
+                    }
+                }
+
+                if ( in_array( $type, [ 'post_meta_date' ] ) ) {
+                    global $wpdb;
+                    $key = 'wpc_terms_post_meta_date_';
                     $result = $wpdb->get_results( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE '%{$key}%'", ARRAY_A );
                     if ( isset( $result[0]['option_name'] ) ) {
                         $terms_transient_key = str_replace( '_transient_', '', str_replace( '_transient_timeout_', '', $result[0]['option_name'] ) );
@@ -216,55 +249,31 @@ class Plugin
             // Always insert regular 'old' field
             $new_fields[$key] = $attributes;
 
-            if( $key === 'post_name' ){
+            if( $key === 'show_count' ){
 
-                $new_fields['instead_post_name'] = array(
-                    'type'          => 'Text',
-                    'label'         => esc_html__('Where to filter?', 'filter-everything'),
-                    'name'          => $filterSet->generateFieldName('instead_post_name'),
-                    'id'            => $filterSet->generateFieldId('instead_post_name'),
-                    'class'         => 'wpc-field-instead-of-location',
+                $new_fields['instead_custom_posts_container'] = array(
+                    'type'          => 'inProButton',
+                    'label'         => esc_html__('HTML id or class of the Posts Container', 'filter-everything'),
+                    'pro_label'     => flrt_pro_promo_label(),
+                    'name'          => $filterSet->generateFieldName('instead_custom_posts_container'),
+                    'id'            => $filterSet->generateFieldId('instead_custom_posts_container'),
                     'default'       => '',
-                    'readonly'      => 'readonly',
                     'placeholder'   => esc_html__('Available in PRO', 'filter-everything'),
-                    'instructions'  => esc_html__('Specify page(s) where the Posts list should be filtered is located', 'filter-everything'),
                     'settings'      => true
-                );
-
-                $new_fields['instead_wp_filter_query'] = array(
-                    'type'          => 'Text',
-                    'label'         => esc_html__('And what to filter?', 'filter-everything'),
-                    'name'          => $filterSet->generateFieldName('instead_wp_filter_query'),
-                    'id'            => $filterSet->generateFieldId('instead_wp_filter_query'),
-                    'class'         => 'wpc-field-instead-wp-filter-query',
-                    'default'       => '',
-                    'readonly'      => 'readonly',
-                    'placeholder'   => esc_html__('Available in PRO', 'filter-everything'),
-                    'instructions'  => esc_html__('Determines what exactly the Posts list (WP_Query) on a page should be filtered', 'filter-everything'),
-                    'tooltip'       => wp_kses ( __( 'Every Posts list, like "Popular products" or "Recent posts" on a page, is related to some WP_Query. This field allows you to set desired Posts list by choosing its WP_Query.<br /><br />If the filtering process does not change the Posts you need, it means you selected the wrong WP_Query. Please, try to experiment with different ones until it starts to filter.', 'filter-everything' )
-                        ,
-                        array(
-                            'br' => array()
-                        )
-                    ),
-                    'settings' => true
                 );
 
             }
 
-            if( $key === 'show_count' ){
-
-                $new_fields['instead_custom_posts_container'] = array(
-                    'type'          => 'Text',
-                    'label'         => esc_html__('HTML id or class of the Posts Container', 'filter-everything'),
-                    'name'          => $filterSet->generateFieldName('instead_custom_posts_container'),
-                    'id'            => $filterSet->generateFieldId('instead_custom_posts_container'),
-                    'class'         => 'wpc-field-instead-custom-posts-container',
-                    'default'       => '',
-                    'readonly'      => 'readonly',
-                    'placeholder'   => esc_html__('Available in PRO', 'filter-everything'),
-                    'instructions'  => esc_html__('Specify individual HTML selector of Posts Container for AJAX', 'filter-everything'),
-                    'settings'      => true
+            if( $key === 'hide_empty' ){
+                $new_fields['instead_hide_empty_filter_container'] = array(
+                        'type'          => 'inProButton',
+                        'label'         => esc_html__('Hide empty Filters', 'filter-everything'),
+                        'pro_label'     => flrt_pro_promo_label(),
+                        'name'          => $filterSet->generateFieldName('instead_custom_posts_container'),
+                        'id'            => $filterSet->generateFieldId('instead_custom_posts_container'),
+                        'default'       => '',
+                        'instructions'  => esc_html__('Hide the Entire Filter if no one term contains posts', 'filter-everything'),
+                        'settings'      => true
                 );
 
             }
@@ -368,6 +377,45 @@ class Plugin
                     'default'       => esc_html__('Reset', 'filter-everything'),
                     'settings'      => true
                 );
+
+                $new_fields['horizontal_view'] = array(
+                        'type'          => 'Checkbox',
+                        'label'         => esc_html__('Horizontal filters', 'filter-everything'),
+                        'name'          => $filterSet->generateFieldName('horizontal_view'),
+                        'id'            => $filterSet->generateFieldId('horizontal_view'),
+                        'class'         => 'wpc-field-horizontal-view-text',
+                        'default'       => 'no',
+                        'instructions'  => esc_html__('Display filters side by side instead of one per row', 'filter-everything'),
+                        'settings'      => true
+                );
+                $columns_options = [];
+                for ( $i = 2; $i <= 5; $i++ ){
+                    $columns_options[(string)$i] = (string)$i;
+                }
+                $new_fields['horizontal_view_column'] = array(
+                        'type'          => 'Select',
+                        'label'         => esc_html__('Number of columns', 'filter-everything'),
+                        'class'         => 'wpc-field-horizontal-view-column',
+                        'id'            => $filterSet->generateFieldId('horizontal_view_column'),
+                        'name'          => $filterSet->generateFieldName('horizontal_view_column'),
+                        'options'       => $columns_options,
+                        'default'       => '3',
+                        'instructions'  => esc_html__('How many columns to use in horizontal mode', 'filter-everything'),
+                        'settings'      => true
+                );
+
+                $screen = function_exists('get_current_screen') ? get_current_screen() : null;
+                $new_fields['horizontal_view_priority'] = array(
+                        'type'          => 'Select',
+                        'label'         => esc_html__('Horizontal priority', 'filter-everything'),
+                        'class'         => 'wpc-field-horizontal-view-priority',
+                        'id'            => $filterSet->generateFieldId('horizontal_view_priority'),
+                        'name'          => $filterSet->generateFieldName('horizontal_view_priority'),
+                        'options'       => ['widget' => 'widget', 'filter_set' => 'filter_set'],
+                        'default'       => ($screen && $screen->base === 'post' && $screen->action === 'add') ? 'filter_set' : 'widget',
+                        'instructions'  => esc_html__('How many columns to use in horizontal mode', 'filter-everything'),
+                        'settings'      => true,
+                );
             }
         }
 
@@ -419,9 +467,9 @@ class Plugin
         $rounded_swatch = flrt_get_experimental_option('rounded_swatches');
         $contrastColor  = false;
 
-        $swatches_measurements = [ 'width' => 24, 'height' => 24 ];
+        $swatches_measurements = [ 'width' => 32, 'height' => 32 ];
         if( $rounded_swatch ) {
-            $swatches_measurements = [ 'width' => 31, 'height' => 31 ];
+            $swatches_measurements = [ 'width' => 32, 'height' => 32 ];
         }
 
         $swatches       = apply_filters( 'wpc_swatches_width_height', $swatches_measurements );
@@ -540,7 +588,7 @@ class Plugin
                     background-color: '.$contrastColor.';
                 }'."\r\n";
 
-            $css .= '@media screen and (min-width: '.$wpc_mobile_width.'px) {'."\r\n";
+            //$css .= '@media screen and (min-width: '.$wpc_mobile_width.'px) {'."\r\n";
             $css .= 'body .wpc-filters-main-wrap input.wpc-label-input+label:hover span.wpc-filter-label-wrapper{
                         color: '.$contrastColor.';
                         background-color: '.$color.';
@@ -578,7 +626,7 @@ class Plugin
                 color: '.$contrastColor.';
             }'."\r\n";
 
-            $css .= '}'."\r\n";
+            //$css .= '}'."\r\n";
             $css .= '.flrt-star-label svg{
                     stroke: '.$color.';
             }'."\r\n";
@@ -644,29 +692,28 @@ class Plugin
                             padding: 8px 16px;
                         }
                         .wpc-filters-main-wrap input[type=checkbox]:after {
-                            content: "";
-                            opacity: 0;
-                            display: block;
-                            left: 6px;
-                            top: 3px;
-                            position: absolute;
-                            width: 4px;
-                            height: 8px;
-                            border: 2px solid '.$styled_color.';
-                            border-top: 0;
-                            border-left: 0;
-                            transform: rotate(45deg);
-                            box-sizing: content-box;
+							content: "";
+							opacity: 0;
+							display: block;
+							left: 3px;
+							top: 3px;
+							position: absolute;
+							width: 12px;
+							height: 12px;
+							border: navajowhite;
+							box-sizing: content-box;
+							background-color:  '.$styled_color.';
+							border-radius: 2px;
                         }
                         .wpc-filters-main-wrap input[type=radio]:after {
                             content: "";
                             opacity: 0;
                             display: block;
-                            left: 5px;
-                            top: 5px;
+                            left: 3px;
+                            top: 3px;
                             position: absolute;
-                            width: 8px;
-                            height: 8px;
+                            width: 12px;
+                            height: 12px;
                             border-radius: 50%;
                             background: '.$styled_color.';
                             box-sizing: content-box;
@@ -680,9 +727,14 @@ class Plugin
                         .wpc-filters-main-wrap .wpc-checkbox-item.wpc-term-disabled > div > input[type=checkbox]:after,
                         .wpc-filters-main-wrap .wpc-term-count-0:not(.wpc-has-not-empty-children) input[type=checkbox]:after,
                         .wpc-filters-main-wrap .wpc-term-count-0:not(.wpc-has-not-empty-children) input[type=checkbox],
-                        .wpc-filters-main-wrap .wpc-term-count-0:not(.wpc-has-not-empty-children) input[type=radio]{
+                        .wpc-filters-main-wrap .wpc-term-count-0:not(.wpc-has-not-empty-children) input[type=radio],
+                        .wpc-term-swatch-no-image{
                             border-color: #d8d8d8;
                         }
+						.wpc-filters-main-wrap .wpc-term-count-0:not(.wpc-has-not-empty-children) input[type=checkbox]:after,
+						.wpc-filters-main-wrap .wpc-checkbox-item.wpc-term-disabled > div > input[type=checkbox]:after {
+							background-color: #d8d8d8;
+						}
                         .wpc-filters-main-wrap .wpc-radio-item.wpc-term-disabled input[type=radio]:after,
                         .wpc-filters-main-wrap .wpc-term-count-0:not(.wpc-has-not-empty-children) input[type=radio]:after{
                             background-color: #d8d8d8;
@@ -694,19 +746,19 @@ class Plugin
                         .wpc-filters-main-wrap input[type=radio] {
                             border-radius: 50%;
                         }
+                        .wpc-filters-widget-content .wpc-filters-section .wpc-filter-search-wrapper .wpc-filter-search-field {
+                            padding: 8px 16px 8px 48px;
+                        }
                         .wpc-filters-widget-content .wpc-filters-date-range-wrapper input[type="text"]{
                             padding-right: 48px;
-                            background-image: url("data:image/svg+xml,%3Csvg width=\'16\' height=\'16\' viewBox=\'0 0 16 16\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect x=\'2\' y=\'4\' width=\'12\' height=\'10\' rx=\'1.33333\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\'/%3E%3Cpath d=\'M2.66699 7.3335H13.3337\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M6 10.6667H10\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M5.33301 2L5.33301 4.66667\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M10.667 2L10.667 4.66667\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3C/svg%3E%0A");
+                            background-image: url("data:image/svg+xml,%3Csvg width=\'24\' height=\'24\' viewBox=\'0 0 16 16\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect x=\'2\' y=\'4\' width=\'12\' height=\'10\' rx=\'1.33333\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\'/%3E%3Cpath d=\'M2.66699 7.3335H13.3337\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M6 10.6667H10\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M5.33301 2L5.33301 4.66667\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M10.667 2L10.667 4.66667\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3C/svg%3E%0A");
                             background-repeat: no-repeat;
                             background-position: right 16px bottom 50%;
-                        }    
+                            background-size: 16px;
+                        }     
                         .wpc-filters-widget-content .wpc-filters-date-range-wrapper input[type="text"]:focus,
                         .wpc-filters-widget-content .wpc-filters-date-range-wrapper input[type="text"]:hover{
-                            background-image: url("data:image/svg+xml,%3Csvg width=\'16\' height=\'16\' viewBox=\'0 0 16 16\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect x=\'2\' y=\'4\' width=\'12\' height=\'10\' rx=\'1.33333\' stroke=\'%23'.$no_hex_color.'\' stroke-width=\'1.33333\'/%3E%3Cpath d=\'M2.66699 7.3335H13.3337\' stroke=\'%23'.$no_hex_color.'\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M6 10.6667H10\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M5.33301 2L5.33301 4.66667\' stroke=\'%23'.$no_hex_color.'\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M10.667 2L10.667 4.66667\' stroke=\'%23'.$no_hex_color.'\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3C/svg%3E%0A");
-                        }
-                        .wpc-help-tip::after{
-                            color: #b8bcc8;
-                            border: 1px solid #b8bcc8; 
+                            background-image: url("data:image/svg+xml,%3Csvg width=\'24\' height=\'24\' viewBox=\'0 0 16 16\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Crect x=\'2\' y=\'4\' width=\'12\' height=\'10\' rx=\'1.33333\' stroke=\'%23'.$no_hex_color.'\' stroke-width=\'1.33333\'/%3E%3Cpath d=\'M2.66699 7.3335H13.3337\' stroke=\'%23'.$no_hex_color.'\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M6 10.6667H10\' stroke=\'%23b8bcc8\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M5.33301 2L5.33301 4.66667\' stroke=\'%23'.$no_hex_color.'\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M10.667 2L10.667 4.66667\' stroke=\'%23'.$no_hex_color.'\' stroke-width=\'1.33333\' stroke-linecap=\'round\'/%3E%3C/svg%3E%0A");
                         }
                         .wpc-filter-layout-dropdown .select2-container--default .select2-selection--single .select2-selection__arrow b, 
                         .wpc-sorting-form .select2-container--default .select2-selection--single .select2-selection__arrow b{
@@ -735,7 +787,6 @@ class Plugin
                         .wpc-filters-widget-content input[type=url]:hover{
                             border-color: '. $hoverColor.';
                         }
-                        .wpc-help-tip:hover::after,
                         .wpc-filter-layout-dropdown .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b, 
                         .wpc-sorting-form .select2-container--default.select2-container--open .select2-selection--single .select2-selection__arrow b,
                         .widget_wpc_sorting_widget .select2-container--default .select2-selection--single:hover .select2-selection__arrow b,
@@ -766,8 +817,7 @@ class Plugin
                             border-color: '.$color.';
                         }
                        
-                        .wpc-filters-main-wrap a.wpc-toggle-a:hover,
-                        .wpc-help-tip:hover::after{
+                        .wpc-filters-main-wrap a.wpc-toggle-a:hover {
                             color: '.$color.';
                         }
                         .wpc-sorting-form .select2-container--default.select2-container--open.select2-container--above .select2-selection--multiple, 
@@ -778,7 +828,7 @@ class Plugin
                         }
                         .wpc-search-field-wrapper .wpc-search-clear-icon-wrapper, 
                         .wpc-filter-search-wrapper button.wpc-search-clear{
-                            color: #b8bcc8;
+                            color: #b5bed2;
                         }
                         .wpc-filters-main-wrap .wpc-filters-labels li.wpc-term-item label {
                             border-color: #ccd0dc;
@@ -795,6 +845,7 @@ class Plugin
                             .wpc-filters-main-wrap input[type=checkbox]:hover{
                                 border-color: '.$styled_color.';
                             }
+                            .wpc-filter-label-wrapper .wpc-term-swatch-no-image:hover,
                             .wpc-filters-main-wrap .wpc-term-count-0:not(.wpc-has-not-empty-children) input[type=radio]:hover,
                             .wpc-filters-main-wrap .wpc-term-count-0:not(.wpc-has-not-empty-children) input[type=checkbox]:hover{
                                 border-color: #c3c3c3;
@@ -814,6 +865,27 @@ class Plugin
                             color: inherit;
                             -webkit-appearance: none;
                         }
+						.select2-container--default .wpc-filter-everything-dropdown .select2-results__option--highlighted::after,
+						.select2-container--default .wpc-filter-everything-dropdown .select2-results__option[aria-selected="true"]::after,
+						.select2-container--default .wpc-filter-everything-dropdown .select2-results__option[data-selected="true"]::after {
+							border: 2px solid '.$color.';
+							content: "";
+							position: absolute !important;
+							right: 13px !important;
+							width: 18px;
+							height: 10px;
+							top: 30% !important;
+							font-size: 16px !important;
+							color: #000 !important;
+							transform: rotate(137deg) !important;
+							border-bottom: none;
+							border-left: none;
+                            box-sizing: border-box;
+						}
+						.select2-container--default .wpc-filter-everything-dropdown .select2-results__option--highlighted::after {
+							border-top: 2px solid #C7D1E2;
+							border-right: 2px solid #C7D1E2;
+						}
                         .select2-container--default .wpc-filter-everything-dropdown .select2-results__option--highlighted[aria-selected],
                         .select2-container--default .wpc-filter-everything-dropdown .select2-results__option--highlighted[data-selected]{
                             background-color: rgba(0,0,0,0.05); 
@@ -969,43 +1041,13 @@ class Plugin
 
     public static function activate()
     {
+        $defaultSettings = new DefaultSettings();
         if ( ! get_option('wpc_filter_settings') ) {
-            $default_show_terms_in_content  = [];
-            $theme_dependencies             = flrt_get_theme_dependencies();
-
-            if( flrt_is_woocommerce() ){
-                $default_show_terms_in_content = ['woocommerce_no_products_found', 'woocommerce_archive_description'];
-            }
-
-            if ( isset( $theme_dependencies['chips_hook'] ) && is_array( $theme_dependencies['chips_hook'] ) ) {
-                foreach ( $theme_dependencies['chips_hook'] as $compat_chips_hook ) {
-                    $default_show_terms_in_content[] = $compat_chips_hook;
-                }
-            }
-
-            $defaultOptions = array(
-                'primary_color'              => '#0570e2',
-                'container_height'           => '550',
-                'mobile_filter_settings'     => 'nothing',
-                'show_terms_in_content'      => $default_show_terms_in_content,
-                'widget_debug_messages'      => 'on'
-            );
-
-            add_option('wpc_filter_settings', $defaultOptions );
+            add_option('wpc_filter_settings', $defaultSettings->wpc_filter_settings() );
         }
 
         if( ! get_option( 'wpc_filter_experimental' ) ){
-
-            $defaultExperimentalOptions = array(
-                'use_loader'        => 'on',
-                'use_wait_cursor'   => 'on',
-                'dark_overlay'      => 'on',
-                'auto_scroll'       => '',
-                'styled_inputs'     => '',
-                'select2_dropdowns' => '',
-            );
-
-            add_option('wpc_filter_experimental', $defaultExperimentalOptions );
+            add_option('wpc_filter_experimental', $defaultSettings->wpc_filter_experimental() );
         }
     }
 
@@ -1054,6 +1096,7 @@ class Plugin
                 'wpc_indexing_deep_settings',
                 'wpc_filter_permalinks',
                 'wpc_seo_rules_settings',
+                'wpc_xml_write_date',
                 'wpc_filter_experimental',
                 'widget_wpc_filters_widget',
                 'widget_wpc_sorting_widget',
@@ -1066,6 +1109,9 @@ class Plugin
 
             // Deactivate and erase license if exists
             if ( defined( 'FLRT_FILTERS_PRO' ) && FLRT_FILTERS_PRO ) {
+
+                wpc_clear_folder(FLRT_XML_PATH);
+
                 $to_send             = false;
                 $saved_value         = get_option( FLRT_LICENSE_KEY );
 
@@ -1119,6 +1165,23 @@ class Plugin
                 }
             }
 
+            $filterTrashPosts = new \WP_Query(
+                array(
+                    'posts_per_page' => -1,
+                    'post_status' => array('trash'),
+                    'post_type' => $postTypes,
+                    'fields' => 'ids',
+                    'suppress_filters' => true
+                )
+            );
+
+            $filterTrashPostsIds = $filterTrashPosts->get_posts();
+
+            if( ! empty( $filterTrashPostsIds ) ){
+                foreach ($filterTrashPostsIds as $post_id) {
+                    wp_delete_post( $post_id, true );
+                }
+            }
         }
     }
 
@@ -1133,9 +1196,13 @@ class Plugin
         if ( ! is_null( $screen ) && property_exists( $screen, 'base' ) ) {
             $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
             $ver    = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? rand(0, 1000) : FLRT_PLUGIN_VER;
+            $is_about_pro_tab = isset($_GET['tab']) && $_GET['tab'] === 'aboutpro';
 
             if ( in_array( $screen->base, [ 'edit', 'post', 'edit-tags', 'term' ] ) || ( strpos( $screen->base, 'filters-settings' ) !== false ) ) {
                 wp_enqueue_style( 'wpc-filter-everything-admin', FLRT_PLUGIN_DIR_URL . 'assets/css/filter-everything-admin'.$suffix.'.css', ['wp-color-picker'], $ver );
+                if($is_about_pro_tab){
+                    wp_enqueue_style( 'wpc-filter-everything-pro-benefits', FLRT_PLUGIN_DIR_URL . 'assets/css/pro-benefits-page'.$suffix.'.css', ['wpc-filter-everything-admin'], $ver );
+                }
             }
 
             if ( $screen->base === 'widgets' ) {
@@ -1153,8 +1220,7 @@ class Plugin
 
         wp_register_script( 'jquery-tiptip', FLRT_PLUGIN_DIR_URL . 'assets/js/jquery-tiptip/jquery.tipTip' . $suffix . '.js', array( 'jquery' ), $ver, true );
         wp_enqueue_script('jquery-tiptip');
-
-        wp_enqueue_script('wpc-filters-admin', FLRT_PLUGIN_DIR_URL . 'assets/js/wpc-filters-common-admin' . $suffix . '.js', array( 'jquery', 'jquery-ui-sortable', 'wp-color-picker', 'select2' ), $ver, true );
+        wp_enqueue_script('wpc-filters-admin', FLRT_PLUGIN_DIR_URL . 'assets/js/wpc-filters-common-admin' . $suffix . '.js', array( 'jquery', 'jquery-ui-sortable', 'wp-color-picker', 'select2'), $ver, true );
 
         $l10n = array(
             'prefixesOrderAvailableInPro' => esc_html__( 'Editing the order of URL prefixes is available in the PRO version', 'filter-everything' ),
@@ -1424,6 +1490,10 @@ class Plugin
         if ( isset( $filterSetFields['use_search_field']['value'] ) && $filterSetFields['use_search_field']['value'] === 'yes' ) {
             $filterSetFields['search_field_placeholder']['additional_class'] = 'wpc-opened';
             $filterSetFields['search_field_label']['additional_class']       = 'wpc-opened';
+        }
+
+        if (isset( $filterSetFields['horizontal_view']['value'] ) && $filterSetFields['horizontal_view']['value'] === 'yes'){
+            $filterSetFields['horizontal_view_column']['additional_class'] = 'wpc-opened';
         }
 
         return $filterSetFields;

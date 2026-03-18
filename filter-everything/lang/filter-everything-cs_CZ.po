@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Filter Everything PRO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-02-23 21:45+0000\n"
-"PO-Revision-Date: 2025-07-21 13:42+0000\n"
+"PO-Revision-Date: 2026-03-18 10:56+0000\n"
 "Last-Translator: \n"
 "Language-Team: Czech\n"
 "Language: cs_CZ\n"
@@ -13,8 +13,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.7.1; wp-6.7.2\n"
+"X-Loco-Version: 2.8.0; wp-6.9.4; php-8.3.16\n"
 "X-Domain: filter-everything"
+
+msgid "%d star"
+msgid_plural "%d stars"
+msgstr[0] "%d hvězdiček"
+msgstr[1] "%d hvězdičky"
+msgstr[2] "%d hvězdiček"
 
 msgid "%s #%s"
 msgstr "%s #%s"
@@ -131,6 +137,34 @@ msgstr[2] "%s Pravidla SEO nejsou aktualizována, někdo je upravuje."
 msgid "%s: %d &mdash; %d"
 msgstr "%s: %d &mdash; %d"
 
+msgid ""
+"%sCreate Filters Automatically%s — instantly generate filters from your "
+"site’s categories and fields. You can always edit them later."
+msgstr ""
+"%sVytvořit filtry automaticky%s — okamžitě vygenerujte filtry z kategorií a "
+"polí vašeho webu. Později je můžete kdykoli upravit."
+
+msgid ""
+"%sCreate Filters Manually%s — full control — add filters exactly as you want."
+msgstr ""
+"%sVytvořit filtry ručně%s — plná kontrola — přidávejte filtry přesně podle "
+"svých představ."
+
+msgid ""
+"%sTo display filters, add the %sFilter Everything — Filters%s widget to a "
+"widget area or sidebar,%sor use the %s[fe_widget]%s shortcode to place them "
+"anywhere on your site.%s"
+msgstr ""
+"%sChcete-li zobrazit filtry, přidejte widget %sFilter Everything — Filtry%s "
+"do oblasti widgetů nebo postranního panelu,%snebo použijte shortcode "
+"%s[fe_widget]%s pro umístění kamkoli na vašem webu.%s"
+
+msgid "(auto-generated)"
+msgstr "(automaticky-generováno)"
+
+msgid "(Elementor Library)"
+msgstr "(Elementor Knihovna)"
+
 msgid "+ Add sorting option"
 msgstr "+ Přidat možnost třídění"
 
@@ -144,6 +178,9 @@ msgstr "1 sada filtrů není aktualizována, někdo ji upravuje."
 #: pro/Admin/SeoRules.php:132
 msgid "1 The SEO rule has not been updated. Someone is editing it."
 msgstr "1 Pravidlo SEO není aktualizováno, někdo ho upravuje."
+
+msgid "6 month of support included"
+msgstr "6 měsíců podpory v ceně"
 
 #| msgid ""
 #| "<a href=\"%s\" target=\"_blank\">Documentation</a>. Common information "
@@ -260,6 +297,9 @@ msgstr "AJAX pro filtry"
 msgid "AJAX loading icon (on desktop only)"
 msgstr "Ikona načítání AJAX (pouze na počítači)"
 
+msgid "All"
+msgstr "Vše"
+
 #: pro/PluginPro.php:289
 msgid "All archive pages for this Post Type"
 msgstr "Všechny archivní stránky tohoto typu příspěvku"
@@ -317,9 +357,6 @@ msgstr "Došlo k chybě. Nemáte oprávnění k úpravám."
 
 msgid "AND"
 msgstr "A"
-
-msgid "And what to filter?"
-msgstr "A co filtrovat?"
 
 #. Author of the plugin
 msgid "Andrii Stepasiuk"
@@ -397,14 +434,495 @@ msgstr "K dispozici na"
 msgid "Before"
 msgstr "Před"
 
+msgid "Before importing, make a backup of your database to avoid data loss."
+msgstr "Před importem si vytvořte zálohu databáze, abyste předešli ztrátě dat."
+
+msgctxt "benefits-landing"
+msgid "15 000+"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "160 000+"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "160,000+"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "4.91/5"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "6 months of support included"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced AJAX Containers"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced Filter Field Types"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced filter types"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced Filtering & Core Value"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced Workflow & Flexibility"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "AJAX Filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"and customize them individually to match the needs of any section or page"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Any Post Type Filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Any WP_Query Filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Apply SEO Rules"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Auto-Generated Filters"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Auto-Hide Empty Filters"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "average rating"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "bringing traffic to your website"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Built-in, user-friendly filter widget for mobile devices."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Buy PRO"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Choose the right version<br>for you"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Control & flexibility"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Create individual filters for each section of your website."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Create unlimited<br>Filter Sets"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Current version"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "customers on CodeCanyon"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Dedicated mobile filters widget"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Duplicate Filter Sets"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Duplicate Filter Sets in one click"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Duplicate, export, import"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Features"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Filter any WP_Query"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"Filter any WP_Query, get SEO Rules, obtain clean URLs, and unlock many "
+"convenient time-saving options — all available in the PRO version."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Filter by Any Criteria"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Filter custom posts and complex<br>WP_Query"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"filtering by variations, hiding empty filters, hiding “out of stock” "
+"products, and more"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Filtering for custom queries & page builders"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"Filters, Filter Sets, and plugin settings (within one or multiple sites)"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Frequently Asked Questions"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "from real customers"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Full control"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Full URL Structure Control"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Generate SEO-optimized<br>results pages"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Get clean URLs"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Hide Out-of-Stock Products"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "How many sites does my license cover?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Import & Export Settings"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Is support included with the PRO upgrade?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Is the PRO version compatible with my theme or page builder?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Lifetime updates"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Maximum convenience for Mobile<br>devices"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Mobile & UX for E-commerce"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Mobile Devices"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Mobile Filters Widget"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Multilingual Support"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "No Empty Pages or 404s"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"No, the PRO version will not slow down your site. The plugin itself is "
+"optimized for fast performance and does not add unnecessary load on its own."
+"<br><br>However, keep in mind that the speed of filtering depends on the "
+"number of posts, attributes, and your hosting resources. With large datasets,"
+" performance is primarily determined by server capacity rather than the "
+"plugin version."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"No, you will not need to rebuild your site after upgrading to PRO. All "
+"existing page structure, content, and filter settings will remain unchanged. "
+"The PRO version simply extends the plugin’s capabilities and adds new "
+"features without affecting your current filtering logic."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"No, your existing filters will not disappear after upgrading to PRO. All "
+"created Filter Sets, filters, and settings are preserved. We recommend "
+"installing and activating the PRO version first, and only then deactivating "
+"the Free version — this way all your data will remain intact."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "on any wordpress page"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "One-click import & export for Filters, Filter Sets, and settings"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "One-time payment"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Priority Support"
+msgstr ""
+
+#. PRO BENEFITS PAGE START
+msgctxt "benefits-landing"
+msgid "PRO"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "rating based on real reviews"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Ready to unlock the full power of Filter Everything?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Responsive Design"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO & promotion"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO & Traffic Growth"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO Capabilities"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO capabilities + clean URLs"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO Rules for Filter Pages"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO rules for filtered pages"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO-Friendly Filter URLs"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO-friendly filter URLs"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO-ready"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Sorting Widget"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Standard Support"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Step-by-Step Filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Support"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"Take full control of SEO for filtered results pages and attract additional "
+"free traffic from search engines or AI services."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"The license covers two sites — your main production website and its "
+"development copy (DEV / staging). This means you can use the plugin on the "
+"live site and simultaneously on its test copy for development, updates, and "
+"verification before applying changes to the production environment."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Trusted by over"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Unlimited Filter Sets"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Unlock all PRO features"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Unlock extra options"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"Upgrade to <b>Filter Everything PRO</b> to unlock advanced filter<br>"
+"capabilities, SEO features, and full control over the filtering process."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"Upgrade to PRO and take full control over filtering, SEO, and scalability."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "User experience"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "users worldwide"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Variation-Based Product Filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"We always do our best to help resolve any issues with the plugin and provide "
+"the necessary support. If this is not possible, you can use the refund "
+"policy and get your money back in accordance with the rules of the website "
+"where you purchased the plugin."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "websites / users worldwide"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "What does Filter Everything PRO<br>unlock?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "What is the refund policy?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Why Upgrade to<br>Filter Everything PRO?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Will I need to rebuild my site after upgrading to PRO?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Will my existing filters disappear after upgrading to PRO?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Will the PRO version slow down my site?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"With PRO, you can go far beyond basic filtering and build scalable "
+"solutions<br>for real projects"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Works and is trusted<br>worldwide"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "XML Sitemap for Filter Pages"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "XML sitemap for filter pages"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"Yes, support is included with the PRO purchase. You receive 6 months of "
+"support with the option to extend it at any time, along with lifetime plugin "
+"updates that include all new features and bug fixes at no additional cost."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"Yes, the PRO version is compatible with most WordPress themes and popular "
+"page builders. The plugin relies on the standard WP_Query mechanism, which "
+"allows it to integrate correctly with Gutenberg, Elementor, WPBakery, Divi, "
+"Avada, and other page builders.<br><br>In most cases, no additional "
+"configuration is required — filters will work with your theme out of the box."
+" For highly customized or non-standard templates, flexible integration "
+"options are also available."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "∞ Unlimited number of Filter Sets"
+msgstr ""
+
 msgid "Blog page"
 msgstr "Stránka blogu"
 
+msgid "Built-in mobile filter widget"
+msgstr "Vestavěný filtr widget pro mobilní zařízení"
+
 msgid "Buttons for opening widgets"
 msgstr "Tlačítka pro otevírání widgetů"
-
-msgid "by Backorders Status (Custom Field)"
-msgstr "podle stavu zpětných objednávek (vlastní pole)"
 
 msgid "By date: newest first"
 msgstr "Podle data: nejnovější jako první"
@@ -439,41 +957,8 @@ msgstr ""
 "malými písmeny. Pokud je potřebujete zobrazit přesně jako názvy termínů, "
 "zadejte je do tohoto pole."
 
-msgid "by Downloadable Status (Custom Field)"
-msgstr "podle stavu ke stažení (vlastní pole)"
-
 msgid "By ID"
 msgstr "Podle ID"
-
-msgid "by product Height"
-msgstr "podle produktu Výška"
-
-msgid "by product Length"
-msgstr "podle produktu Délka"
-
-msgid "by Product Virtual status (Custom Field)"
-msgstr "podle virtuálního stavu produktu (vlastní pole)"
-
-msgid "by product Weight"
-msgstr "podle produktu Hmotnost"
-
-msgid "by product Width"
-msgstr "podle produktu Šířka"
-
-msgid ""
-"by Sale Price (Custom Field Numeric) or on Sale Status (Custom Field Exists)"
-msgstr ""
-"podle prodejní ceny (vlastní pole Num) nebo podle stavu prodeje (vlastní "
-"pole Existuje)"
-
-msgid "by Sales Count"
-msgstr "podle počtu prodejů"
-
-msgid "by Sold Individually status (Custom Field)"
-msgstr "podle stavu Prodáno jednotlivě (vlastní pole)"
-
-msgid "by Stock Quantity (Custom Field Numeric)"
-msgstr "podle skladového množství (vlastní pole Num)"
 
 msgid "By title: alphabetical"
 msgstr "Podle názvu: abecedně"
@@ -497,6 +982,15 @@ msgstr ""
 #: src/Admin/FilterFields.php:244
 msgid "Checkboxes"
 msgstr "Zaškrtávací políčka"
+
+msgid "Chips"
+msgstr "Čipy"
+
+msgid "Chips widget"
+msgstr "Widget čipů"
+
+msgid "Choose what to export"
+msgstr "Vyberte, co chcete exportovat"
 
 msgid "Clean URLs and Permalinks"
 msgstr "Čisté adresy URL a trvalé odkazy"
@@ -554,10 +1048,17 @@ msgid "Contains the IDs of ACF fields that are related to the Custom Field"
 msgstr "Obsahuje ID polí ACF přidružených k Vlastnímu Poli tohoto filtru"
 
 msgid "copy"
-msgstr "kopírovat"
+msgstr "kopie"
 
 msgid "Count, dynamic recount in terms"
 msgstr "Počítání, dynamický přepočet v termínech"
+
+msgid "Create Filters Automatically"
+msgstr "Vytvořit filtry automaticky"
+
+msgid "Create Filters Manually"
+msgstr ""
+"Vytvořit filtry ručně\n"
 
 msgid "Current<br />version"
 msgstr "Aktuální<br />verze"
@@ -570,12 +1071,15 @@ msgstr "Vlastní CSS"
 msgid "Custom Field"
 msgstr "Vlastní pole"
 
+msgid "Custom Field Date"
+msgstr "Vlastní pole: Datum"
+
 #: src/Entities/EntityManager.php:120
 msgid "Custom Field Exists"
-msgstr "Vlastní pole existuje"
+msgstr "Vlastní pole: Existuje"
 
 msgid "Custom Field Exists - Available in PRO"
-msgstr "Vlastní pole existuje - k dispozici v PRO"
+msgstr "Vlastní pole: Existuje - K dispozici v PRO"
 
 #: src/Entities/EntityManager.php:116
 msgid "Custom Field Filters"
@@ -583,7 +1087,7 @@ msgstr "Vlastní filtry polí"
 
 #: src/Entities/EntityManager.php:119
 msgid "Custom Field Numeric"
-msgstr "Vlastní pole Num"
+msgstr "Vlastní pole: Číselné"
 
 msgid "Custom URL prefixes for filters"
 msgstr "Vlastní předpony URL pro filtry"
@@ -736,6 +1240,9 @@ msgstr ""
 msgid "Dismiss this notice."
 msgstr "Toto oznámení zamítněte."
 
+msgid "Display filters side by side instead of one per row"
+msgstr "Zobrazit filtry vedle sebe namísto jednoho v každém řádku"
+
 msgid ""
 "Display the term hierarchy in the filter widget. Child terms will be "
 "collapsed by default"
@@ -784,6 +1291,9 @@ msgstr "Rozbalovací nabídka"
 
 msgid "Dropdown Label"
 msgstr "Název rozevíracího seznamu"
+
+msgid "Duplicate"
+msgstr "Duplikát"
 
 msgid "Duplicate Filter Set"
 msgstr "Sada duplicitních filtrů"
@@ -871,6 +1381,15 @@ msgstr "Povolení widgetu Pop-up filtr"
 msgid "Enables filtering by clicking the Apply button"
 msgstr "Povolí filtrování kliknutím na tlačítko Použít"
 
+msgid "Enter chips title"
+msgstr "Zadejte název čipů"
+
+msgid "Enter filters title"
+msgstr "Zadejte název filtrů"
+
+msgid "Enter sorting label"
+msgstr "Zadejte třídicí štítek"
+
 #| msgid ""
 #| "Entities, whose terms should display in SEO data without force lowercasing"
 msgid ""
@@ -878,6 +1397,9 @@ msgid ""
 msgstr ""
 "Subjekty, jejichž výrazy by se měly v datech SEO zobrazovat bez vynuceného "
 "malého písmene"
+
+msgid "Error"
+msgstr "Chyba"
 
 #: src/Admin/AdminHooks.php:154
 #, php-format
@@ -906,6 +1428,20 @@ msgstr[2] ""
 msgid "Error: all SEO data fields could not be empty."
 msgstr "Chyba: všechna datová pole SEO nemohla být prázdná."
 
+msgid ""
+"Error: An unexpected error occurred. Please try again or contact support if "
+"the problem persists."
+msgstr ""
+"Chyba: Došlo k neočekávané chybě. Zkuste to prosím znovu, nebo kontaktujte "
+"podporu, pokud problém přetrvává."
+
+msgid ""
+"Error: Automatic filters were not created. Please try again, or set them up "
+"manually."
+msgstr ""
+"Chyba: Automatické filtry nebyly vytvořeny. Zkuste to prosím znovu, nebo je "
+"nastavte ručně."
+
 #: src/Admin/FilterFields.php:1261
 msgid "Error: filter prefix is already used for another entity."
 msgstr "Chyba: předpona filtru je již použita pro jinou entitu."
@@ -922,6 +1458,20 @@ msgstr "Chyba: prefix filtru by neměl být prázdný."
 #: src/Admin/FilterFields.php:1272
 msgid "Error: for filter Post Author logic OR is acceptable only."
 msgstr "Chyba: pro filtr Autor příspěvku je přípustná pouze logika OR."
+
+msgid ""
+"Error: Import file upload failed. Please try again or check your server's "
+"file upload settings."
+msgstr ""
+"Chyba: Nahrání importního souboru selhalo. Zkuste to prosím znovu nebo "
+"zkontrolujte nastavení nahrávání souborů na serveru."
+
+msgid ""
+"Error: Insufficient permissions to perform this action. Please check your "
+"user role or contact the site administrator."
+msgstr ""
+"Chyba: Nedostatečná oprávnění pro provedení této akce. Zkontrolujte svou "
+"uživatelskou roli nebo kontaktujte administrátora webu."
 
 msgid "Error: Invalid date format."
 msgstr "Chyba: Nesprávný formát data."
@@ -951,6 +1501,9 @@ msgstr "Chyba: neplatné ID filtru."
 #: src/Admin/FilterFields.php:1253
 msgid "Error: invalid Hide empty field."
 msgstr "Chyba: neplatné Skrýt prázdné pole."
+
+msgid "Error: invalid Horizontal layout field."
+msgstr "Chyba: neplatné pole pro horizontální rozvržení."
 
 #: src/Admin/FilterFields.php:1271
 msgid "Error: invalid include checkbox value"
@@ -987,6 +1540,9 @@ msgstr "Chyba: neplatné ID sady."
 msgid "Error: invalid Show count field."
 msgstr "Chyba: neplatné pole Show count."
 
+msgid "Error: invalid Taxonomy"
+msgstr "Chyba: neplatná taxonomie"
+
 #: src/Admin/FilterFields.php:1270
 #| msgid "Error: invalid Orderby parameter"
 msgid "Error: invalid the Sort Terms by parameter"
@@ -1009,6 +1565,95 @@ msgstr "Chyba: neplatný typ stránky."
 msgid "Error: invalid «Apply Button» mode field."
 msgstr "Chyba: neplatné pole režimu tlačítka \"Použít\"."
 
+msgid ""
+"Error: No export options selected. Please choose at least one option before "
+"exporting data."
+msgstr ""
+"Chyba: Nebyly vybrány žádné možnosti exportu. Před exportem dat vyberte "
+"alespoň jednu možnost."
+
+msgid ""
+"Error: No file selected for import. Please choose a JSON file and try again."
+msgstr ""
+"Chyba: Nebyl vybrán žádný soubor pro import. Vyberte prosím soubor JSON a "
+"zkuste to znovu."
+
+msgid ""
+"Error: No Filter Sets found. Please create at least one Filter Set and SEO "
+"Rule, then try generating the XML sitemap again."
+msgstr ""
+"Chyba: Nebyly nalezeny žádné sady filtrů. Vytvořte prosím alespoň jednu sadu "
+"filtrů a SEO pravidlo, a poté zkuste znovu vygenerovat XML sitemapu."
+
+msgid ""
+"Error: No filter sets have been created yet. There is nothing to export."
+msgstr "Chyba: Ještě nebyly vytvořeny žádné sady filtrů. Není co exportovat."
+
+msgid ""
+"Error: No filters selected for indexing. Please select at least one filter "
+"for indexing in the %sIndexed Filters%s section and then try generating the "
+"XML sitemap again."
+msgstr ""
+"Chyba: Nebyly vybrány žádné filtry pro indexování. Vyberte prosím alespoň "
+"jeden filtr pro indexování v sekci %sIndexed Filters%s a poté zkuste znovu "
+"vygenerovat XML sitemapu."
+
+msgid ""
+"Error: No import options selected. Please choose at least one item to import."
+msgstr ""
+"Chyba: Nebyly vybrány žádné možnosti importu. Vyberte prosím alespoň jednu "
+"položku k importu."
+
+msgid ""
+"Error: No indexing depth settings have been configured. Please check your "
+"SEO settings and set the %sIndexing Depth%s before generating the sitemap."
+msgstr ""
+"Chyba: Nebyla nastavena žádná hloubka indexování. Zkontrolujte prosím svá "
+"SEO nastavení a nastavte %sHloubku indexování%s před generováním sitemap."
+
+msgid ""
+"Error: No post types found. Please add your first post and try again, or "
+"create a Filter Set manually."
+msgstr ""
+"Chyba: Nebyly nalezeny žádné typy příspěvků. Přidejte prosím svůj první "
+"příspěvek a zkuste to znovu, nebo vytvořte Filtrační sadu ručně."
+
+msgid ""
+"Error: No SEO rules found. Please create at least one SEO rule and then try "
+"generating the XML sitemap again."
+msgstr ""
+"Chyba: Nebyly nalezeny žádné SEO pravidla. Vytvořte prosím alespoň jedno SEO "
+"pravidlo a poté znovu zkuste generovat XML sitemapu."
+
+msgid "Error: No SEO rules have been created yet. There is nothing to export."
+msgstr ""
+"Chyba: Dosud nebyla vytvořena žádná SEO pravidla. Není zde nic k exportu."
+
+msgid "Error: No settings have been modified yet. There is nothing to export."
+msgstr "Chyba: Dosud nebyla upravena žádná nastavení. Není zde nic k exportu."
+
+msgid ""
+"Error: No taxonomies found. Please create your first taxonomy and then try "
+"again."
+msgstr ""
+"Chyba: Nebyly nalezeny žádné taxonomie. Vytvořte prosím svou první taxonomii "
+"a poté zkuste znovu."
+
+msgid ""
+"Error: No URL prefixes have been configured. Please add at least one URL "
+"prefix in the URL Prefixes section and then try generating the XML sitemap "
+"again."
+msgstr ""
+"Chyba: Nebyly nastaveny žádné předpony URL. Přidejte prosím alespoň jednu "
+"předponu URL v sekci Předpony URL a poté znovu zkuste generovat XML sitemapu."
+
+msgid ""
+"Error: No URLs were found for the XML sitemap. Please create filter sets and "
+"SEO rules before generating the XML sitemap again."
+msgstr ""
+"Chyba: Nebyly nalezeny žádné URL pro XML sitemapu. Vytvořte prosím filtrační "
+"sady a SEO pravidla a poté znovu zkuste generovat XML sitemapu."
+
 #: src/Admin/FilterFields.php:1273
 #| msgid "Error: numeric filter can not be in URL path."
 msgid "Error: numeric filter can not be in the URL path."
@@ -1030,6 +1675,13 @@ msgstr ""
 msgid "Error: Range slider is acceptable for Post Meta Num filters only."
 msgstr "Chyba: Posuvník rozsahu je přijatelný pouze pro filtry Post Meta Num."
 
+msgid ""
+"Error: Requested resource not found (404). Please try again or contact "
+"support."
+msgstr ""
+"Chyba: Požadovaný zdroj nebyl nalezen (404). Zkuste to prosím znovu nebo "
+"kontaktujte podporu."
+
 #: src/Admin/FilterFields.php:1277
 msgid "Error: SEO Rule must contain at least one filter."
 msgstr "Chyba: Pravidlo SEO musí obsahovat alespoň jeden filtr."
@@ -1040,6 +1692,68 @@ msgstr "Chyba: Pravidlo SEO musí mít zadaný typ příspěvku."
 
 msgid "Error: SEO rule with selected Filters Combination already exists."
 msgstr "Chyba: pravidlo SEO s vybranou kombinací filtrů již existuje."
+
+msgid ""
+"Error: Service unavailable (503). Please try again later or contact support."
+msgstr ""
+"Chyba: Služba je momentálně nedostupná (503). Zkuste to prosím později nebo "
+"kontaktujte podporu."
+
+msgid ""
+"Error: The file contains invalid JSON. Please check the file contents or "
+"export it again."
+msgstr ""
+"Chyba: Soubor obsahuje neplatný JSON. Zkontrolujte prosím obsah souboru nebo "
+"jej exportujte znovu."
+
+msgid ""
+"Error: The file must have the .json extension. Please select a valid JSON "
+"file and try again."
+msgstr ""
+"Chyba: Soubor musí mít příponu .json. Vyberte prosím platný JSON soubor a "
+"zkuste to znovu."
+
+msgid ""
+"Error: The import file doesn't contain any filter sets data or options. "
+"Please make sure you selected a valid export file that includes this data."
+msgstr ""
+"Chyba: Importovaný soubor neobsahuje žádná data nebo možnosti filtračních "
+"sad. Ujistěte se prosím, že jste vybrali platný exportní soubor, který tato "
+"data obsahuje."
+
+msgid ""
+"Error: The import file doesn't contain any SEO rules data or options. Please "
+"make sure you selected a valid export file that includes SEO rules."
+msgstr ""
+"Chyba: Importovaný soubor neobsahuje žádná data nebo možnosti SEO pravidel. "
+"Ujistěte se prosím, že jste vybrali platný exportní soubor, který SEO "
+"pravidla obsahuje."
+
+msgid ""
+"Error: The import file doesn't contain any settings data. Please make sure "
+"you selected a valid export file that includes plugin settings."
+msgstr ""
+"Chyba: Importovaný soubor neobsahuje žádná data nastavení. Ujistěte se "
+"prosím, že jste vybrali platný exportní soubor, který obsahuje nastavení "
+"pluginu."
+
+msgid ""
+"Error: The import process took too long and was stopped by the server. "
+"Please increase the PHP max_execution_time value or contact your hosting "
+"support."
+msgstr ""
+"Chyba: Proces importu trval příliš dlouho a byl zastaven serverem. Zvyšte "
+"prosím hodnotu PHP `max_execution_time` nebo kontaktujte podporu vašeho "
+"hostingu."
+
+msgid ""
+"Error: The XML sitemap generation took too long and was stopped by the "
+"server. Please increase the PHP max_execution_time value or contact your "
+"hosting support."
+msgstr ""
+"Chyba: Generování XML sitemapy trvalo příliš dlouho a bylo zastaveno "
+"serverem. Zvyšte prosím hodnotu PHP `max_execution_time` nebo kontaktujte "
+"podporu vašeho hostingu."
 
 #: src/Admin/FilterFields.php:1265
 #| msgid ""
@@ -1061,6 +1775,41 @@ msgstr ""
 "Chyba: ve stejné sadě jsou zakázány dva nebo více filtrů se stejnými "
 "hodnotami klíčů Filter By a Meta. Odstraňte nebo změňte stejné filtry."
 
+msgid ""
+"Error: Unable to connect to the server. Please check your network connection "
+"or try again later."
+msgstr ""
+"Chyba: Nelze se připojit k serveru. Zkontrolujte prosím své síťové připojení "
+"nebo to zkuste později."
+
+msgid ""
+"Error: Unable to create a folder for the XML sitemap file. Please check your "
+"server's write permissions or try again later."
+msgstr ""
+"Chyba: Nelze vytvořit složku pro soubor XML sitemapy. Zkontrolujte prosím "
+"oprávnění k zápisu na serveru nebo to zkuste později."
+
+msgid ""
+"Error: Unable to delete the existing XML sitemap file. Please check file "
+"permissions and try generating it again."
+msgstr ""
+"Chyba: Nelze smazat existující soubor XML sitemapy. Zkontrolujte prosím "
+"oprávnění k souboru a zkuste jej znovu vygenerovat."
+
+msgid ""
+"Error: Unable to import data. The selected file is not a valid JSON export "
+"from this plugin."
+msgstr ""
+"Chyba: Nelze importovat data. Vybraný soubor není platný JSON export z "
+"tohoto pluginu."
+
+msgid ""
+"Error: Unable to write data to the XML sitemap file. Please verify write "
+"permissions and available disk space."
+msgstr ""
+"Chyba: Nelze zapsat data do souboru XML sitemapy. Zkontrolujte prosím "
+"oprávnění k zápisu a dostupné místo na disku."
+
 #| msgid ""
 #| "Error: var name is not allowed because it matches a taxonomy or term name "
 #| "already in use on your site."
@@ -1070,6 +1819,13 @@ msgid ""
 msgstr ""
 "Chyba: název var není povolen, protože se shoduje s názvem taxonomie nebo "
 "termínu, který se již na vašem webu používá."
+
+msgid ""
+"Error: XML sitemap generation failed due to a server error. Please check "
+"your web server's error log or contact support."
+msgstr ""
+"Chyba: Generování XML sitemapy selhalo kvůli chybě serveru. Zkontrolujte "
+"prosím chybový protokol vašeho webového serveru nebo kontaktujte podporu."
 
 #| msgid ""
 #| "Error: you can not update settings because Filter Everything Pro plugin "
@@ -1132,23 +1888,97 @@ msgstr "vyloučit"
 msgid "Experimental"
 msgstr "Experimentální"
 
+msgid "Export"
+msgstr "Export"
+
+msgid "Export data"
+msgstr "Export dat"
+
+msgid "Export plugin data to a JSON file that you can import later."
+msgstr ""
+"Exportovat data pluginu do souboru JSON, který můžete později importovat."
+
+msgid "Failed to fill temporary table"
+msgstr "Nepodařilo se vyplnit dočasnou tabulku"
+
+msgid ""
+"Failed to generate the XML sitemap. Please try again or contact support if "
+"the issue persists."
+msgstr ""
+"Nepodařilo se vygenerovat XML sitemap. Zkuste to znovu nebo se obraťte na "
+"podporu, pokud problém přetrvává."
+
+msgid "Failed to generate XML"
+msgstr "Generování XML selhalo"
+
 #: src/PostTypes.php:45
 msgid "Filter"
 msgstr "Filtr"
+
+msgid "Filter any post list —"
+msgstr "Filtrování jakéhokoli seznamu příspěvků —"
 
 #: src/Admin/FilterFields.php:72 src/Admin/FilterFields.php:1086
 #: views/admin/filters-set.php:31
 msgid "Filter by"
 msgstr "Filtrovat podle"
 
-msgid "filter by Featured Image (Custom Field Exists)"
-msgstr "filtrovat podle doporučeného obrázku (vlastní pole existuje)"
+msgid "filter by Featured image"
+msgstr "Filtrovat podle: Hlavní obrázek"
+
+msgid "filter by Product average rating"
+msgstr "Filtrovat podle: Průměrné hodnocení produktu"
+
+msgid "filter by Product backorders status"
+msgstr "Filtrovat podle: Stav zpětných objednávek produktu"
+
+msgid "filter by Product downloadable status"
+msgstr "Filtrovat podle: Stav ke stažení produktu"
+
+msgid "filter by Product height"
+msgstr "Filtrovat podle: Výška produktu"
+
+msgid "filter by Product length"
+msgstr "Filtrovat podle: Délka produktu"
+
+msgid "filter by Product on sale status"
+msgstr "Filtrovat podle: Stav produktu ve slevě"
+
+msgid "filter by Product price"
+msgstr "Filtrovat podle: Cena produktu"
 
 msgid "filter by Product price (Custom Field Numeric)"
-msgstr "filtrovat podle ceny produktu (Vlastní pole Num)"
+msgstr "Filtrovat podle: Cena produktu (vlastní číselné pole)"
+
+msgid "filter by Product sale price"
+msgstr "Filtrovat podle: Prodejní cena produktu"
+
+msgid "filter by Product sold individually status"
+msgstr "Filtrovat podle: stavu Produkt prodávaný jednotlivě"
+
+msgid "filter by Product stock quantity"
+msgstr "Filtrovat podle: Množství zásob produktu"
+
+msgid "filter by Product stock status"
+msgstr "Filtrovat podle: Stav zásob produktu"
 
 msgid "filter by Product Stock status (Custom Field)"
-msgstr "filtrovat podle stavu zásob produktu (vlastní pole)"
+msgstr "Filtrovat podle: Stav zásob produktu (vlastní pole)"
+
+msgid "filter by Product total sales"
+msgstr "Filtrovat podle: Celkový počet prodejů produktu"
+
+msgid "filter by Product virtual status"
+msgstr "Filtrovat podle: Stav virtuálního produktu"
+
+msgid "filter by Product weight"
+msgstr "Filtrovat podle: Hmotnost produktu"
+
+msgid "filter by Product width"
+msgstr "Filtrovat podle: Šířka produktu"
+
+msgid "Filter by WooCommerce variations"
+msgstr "Filtrování podle variant produktů WooCommerce"
 
 #: src/Settings/Tabs/SettingsTab.php:73
 msgid "Filter Container max height, px"
@@ -1244,6 +2074,9 @@ msgstr ""
 msgid "Filter Sets"
 msgstr "Sady filtrů"
 
+msgid "Filter sets"
+msgstr "Filtrační sady"
+
 #: src/PostTypes.php:27
 msgid "Filter Sets are Filters grouped together. Create your first Filter Set."
 msgstr ""
@@ -1278,6 +2111,13 @@ msgstr ""
 #: views/frontend/filters-button.php:7
 msgid "Filters"
 msgstr "Filtry"
+
+#| msgid " filters"
+msgid "filters"
+msgstr "filtry"
+
+msgid "Filters and filter sets"
+msgstr "Filtry a filtrační sady"
 
 #| msgid "Filters any Post Type (posts, products etc)"
 msgid "Filters any Post Type (posts, products, etc.)"
@@ -1382,9 +2222,24 @@ msgstr ""
 "Barvu a Velikost, zvolte prosím konkrétní hodnoty, například \"Modrá\" a "
 "\"Velká\"."
 
+msgid "Free"
+msgstr "Zdarma"
+
 #: src/Settings/Tabs/SettingsTab.php:94
 msgid "General"
 msgstr "Obecné"
+
+msgid "Generate XML Sitemap"
+msgstr "Vygenerovat XML sitemapu"
+
+msgid ""
+"Generates an XML sitemap of URLs available for indexing to help search "
+"engines crawl your site faster. You need to submit this sitemap to search "
+"engines for proper indexing."
+msgstr ""
+"Vytvoří XML sitemapu URL dostupných pro indexování, aby vyhledávače mohly "
+"váš web procházet rychleji. Pro správné indexování je třeba tuto sitemapu "
+"odeslat do vyhledávačů."
 
 msgid "Get PRO"
 msgstr "Získat PRO"
@@ -1410,6 +2265,9 @@ msgstr "Nápověda a podpora"
 #: pro/PluginPro.php:263
 msgid "Hide empty Filters"
 msgstr "Skrýt prázdné filtry"
+
+msgid "Hide empty filters"
+msgstr "Automatické skrytí úplně prázdných filtrů"
 
 msgid "Hide filter if all terms are empty"
 msgstr "Skrýt filtr, pokud jsou všechny výrazy prázdné"
@@ -1438,11 +2296,21 @@ msgstr "Skrýt, dokud není vybrán rodič"
 msgid "Hide Woocommerce default sorting dropdown"
 msgstr "Skrytí výchozího rozbalovacího seznamu pro třídění Woocommerce"
 
-msgid "Horizontal layout"
-msgstr "Horizontální rozložení"
+#. PRO BENEFITS PAGE END
+msgid "Horizontal filters"
+msgstr "Horizontální filtry"
+
+msgid "Horizontal priority"
+msgstr "Horizontální priorita"
+
+msgid "How many columns to use in horizontal mode"
+msgstr "Kolik sloupců použít v horizontálním režimu"
 
 msgid "How the date will be displayed in the Filters widget"
 msgstr "Jak bude datum zobrazeno ve widgetu Filtry"
+
+msgid "How to?"
+msgstr "Jak na to?"
 
 #: src/Settings/Tabs/SettingsTab.php:55
 msgid "HTML id or class of the Posts Container"
@@ -1485,6 +2353,21 @@ msgstr ""
 msgid "Image"
 msgstr "Obraz"
 
+msgid "Import"
+msgstr "Import"
+
+msgid "Import completed successfully."
+msgstr "Import byl úspěšně dokončen."
+
+msgid "Import data"
+msgstr "Import dat"
+
+msgid "Import plugin data from a previously exported JSON file."
+msgstr "Importovat data pluginu z dříve exportovaného souboru JSON."
+
+msgid "Import/Export"
+msgstr "Import/Export"
+
 msgid "Improved dropdowns"
 msgstr "Vylepšené rozbalovací nabídky"
 
@@ -1518,6 +2401,13 @@ msgstr "Indexované filtry"
 msgid "Indexing Depth"
 msgstr "Hloubka indexování"
 
+msgid ""
+"Indexing for your SEO rule will not work because you need to increase the "
+"filter's indexing depth setting"
+msgstr ""
+"Indexování pro vaše SEO pravidlo nebude fungovat, protože je třeba zvýšit "
+"nastavení hloubky indexování filtru."
+
 msgid "Individual AJAX containers for Filter Sets"
 msgstr "Jednotlivé kontejnery AJAX pro sady filtrů"
 
@@ -1530,6 +2420,9 @@ msgstr "Informace"
 #: views/admin/seo-vars.php:3
 msgid "Insert variable"
 msgstr "Vložení proměnné"
+
+msgid "Insufficient rights to create XML."
+msgstr "Nedostatečná oprávnění pro vytvoření XML."
 
 msgid ""
 "It also hides variable products if their variations are out of stock. Please "
@@ -1590,6 +2483,12 @@ msgstr "Licenční informace"
 
 msgid "License Key"
 msgstr "Licenční klíč"
+
+msgid "Lifetime updates"
+msgstr "Doživotní aktualizace"
+
+msgid "Location"
+msgstr "Umístění"
 
 msgid "Locked"
 msgstr "Zamčeno"
@@ -1660,17 +2559,8 @@ msgstr "Název (post slug)"
 msgid "Name of a part of the URL responsible for this filter"
 msgstr "Název části adresy URL odpovědné za tento filtr"
 
-#: src/Admin/FilterFields.php:83
-#| msgid ""
-#| "Name of the Custom Field. Please, see Popular Meta keys at the bottom"
-msgid ""
-"Name of the Custom Field. Please, see the Popular Meta keys at the bottom"
-msgstr ""
-"Název vlastního pole. Podívejte se prosím na oblíbené meta klíče v dolní "
-"části"
-
-msgid "Need Your Help"
-msgstr "Potřebuji tvou pomoc"
+msgid "Name of the Custom Field"
+msgstr "Název vlastního pole"
 
 msgid "Never hide"
 msgstr "Nikdy se neschovávejte"
@@ -1690,8 +2580,8 @@ msgstr "Nové pravidlo SEO"
 msgid "No"
 msgstr "Ne"
 
-msgid "No %s lists found on the page"
-msgstr "Na stránce nebyly nalezeny žádné seznamy %s"
+msgid "No %s enabled lists found on the page"
+msgstr "Na stránce nebyly nalezeny žádné seznamy s povoleným %s."
 
 #: pro/Admin/SeoRules.php:568
 msgid "No archive page"
@@ -1718,6 +2608,9 @@ msgstr ""
 #| msgid "No Filter Sets found in Trash"
 msgid "No Filters were found in Trash"
 msgstr "V Koši nebyly nalezeny žádné sady filtrů"
+
+msgid "No list of %s found on this page"
+msgstr "Na této stránce nebyl nalezen žádný seznam %s."
 
 msgid ""
 "No one Filter Set is configured for this post type pages. You can create a "
@@ -1749,6 +2642,9 @@ msgstr "V Koši nebyla nalezena žádná pravidla SEO"
 msgid "No SEO vars"
 msgstr "Žádné SEO vars"
 
+msgid "No taxonomies are associated with the selected post type."
+msgstr "S vybraným typem příspěvku nejsou spojeny žádné taxonomie."
+
 msgid "No title"
 msgstr "Bez názvu"
 
@@ -1757,22 +2653,14 @@ msgid "Not On Sale"
 msgstr "Není v prodeji"
 
 msgid ""
-"Note: filters will only show if there is Filter Set registered for a page(s)"
-msgstr ""
-"Poznámka: filtry se zobrazí pouze v případě, že je pro stránku (stránky) "
-"zaregistrována sada filtrů"
-
-msgid ""
-"Note: for ACF meta fields, please use names without the \"_\" character at "
-"the beginning"
-msgstr "Poznámka: pro metapole ACF používejte názvy bez znaku \"_\" na začátku"
-
-msgid ""
 "Note: if you modify the selected Posts list on the page, please update this "
 "Filter Set"
 msgstr ""
 "Poznámka: pokud změníte seznam vybraných příspěvků na stránce, aktualizujte "
 "tuto sadu filtrů."
+
+msgid "Number of columns"
+msgstr "Počet sloupců"
 
 #: src/Admin/FilterFields.php:248
 #| msgid "Numeric Range"
@@ -1785,6 +2673,12 @@ msgstr "Na doobjednávku"
 #: src/wpc-default-hooks.php:20
 msgid "On Sale"
 msgstr "V prodeji"
+
+msgid "Open"
+msgstr "Otevřít"
+
+msgid "Open XML sitemap"
+msgstr "Otevřít XML mapu stránek"
 
 msgid "OR"
 msgstr "NEBO"
@@ -1820,8 +2714,14 @@ msgstr "stránka %d"
 msgid "Page archive for:"
 msgstr "Archiv stránek pro:"
 
+msgid "page builders & custom queries"
+msgstr "vytvořených pomocí page builderů a vlastních dotazů WP_Query"
+
 msgid "Parent Filter"
 msgstr "Nadřazený filtr"
+
+msgid "Pay once"
+msgstr "Jednorázová platba"
 
 msgid ""
 "Please enable this option only after you have ensured that the filtering is "
@@ -1832,6 +2732,12 @@ msgstr ""
 msgid "Please enable this, if the widget doesn't appear"
 msgstr "Pokud se widget nezobrazuje, povolte prosím tuto funkci"
 
+msgid "Please keep this tab open until the process is complete."
+msgstr "Prosím, nechte tuto kartu otevřenou, dokud proces nebude dokončen."
+
+msgid "Please regenerate the XML sitemap"
+msgstr "Prosím, vygenerujte XML sitemapu znovu."
+
 msgid "Please specify taxonomies whose filters should display color swatches"
 msgstr ""
 "Uveďte prosím taxonomie, jejichž filtry by měly zobrazovat vzorky barev"
@@ -1841,6 +2747,12 @@ msgstr "Nejprve přidejte filtry"
 
 msgid "Please, do not call the \"%s\" function before the \"wp\" action"
 msgstr "Prosím, nevolejte funkci \"%s\" před háček \"wp\"."
+
+msgid ""
+"Please, do not fire this function, until the \"pre_get_posts\" hook has been "
+"called"
+msgstr ""
+"Prosím, nespouštějte tuto funkci, dokud nebyl vyvolán háček „pre_get_posts“."
 
 msgid ""
 "Please, help me make the plugin more popular - leave a good review for it."
@@ -1855,6 +2767,9 @@ msgid ""
 "Please, specify desired Sorting widget by adding the id parameter to the "
 "shortcode."
 msgstr "Zadejte požadovaný widget Třídění přidáním parametru id do zkratky."
+
+msgid "Plugin settings"
+msgstr "Nastavení pluginu"
 
 msgid "Pop-up filters widget"
 msgstr "Widget vyskakovacích filtrů"
@@ -1942,12 +2857,18 @@ msgstr "Prémiová podpora"
 msgid "Preview the selected location in a new tab"
 msgstr "Náhled vybraného umístění na nové kartě"
 
+msgid "Price"
+msgstr "Cena"
+
 #: src/Admin/FilterSet.php:71
 msgid "Priority"
 msgstr "Priorita"
 
 msgid "PRO"
 msgstr "PRO"
+
+msgid "PRO benefits"
+msgstr "Výhody PRO"
 
 #: pro/Admin/MetaBoxes.php:31 src/Admin/MetaBoxes.php:42
 #: src/Admin/MetaBoxes.php:266
@@ -1969,6 +2890,9 @@ msgstr "Hodnocení"
 
 msgid "Read more"
 msgstr "Přečtěte si více"
+
+msgid "Regenerate XML Sitemap"
+msgstr "Znovu vygenerovat XML mapu stránek"
 
 msgid "Registered"
 msgstr "Registrovaný"
@@ -2042,6 +2966,9 @@ msgstr "Vyhledávání SEO Pravidlo"
 msgid "search: %s"
 msgstr "hledat: %s"
 
+msgid "Searching"
+msgstr "Vyhledávání"
+
 msgid "See less"
 msgstr "Ukaž méně"
 
@@ -2055,6 +2982,9 @@ msgstr "Vyberte %s"
 
 msgid "Select %s first"
 msgstr "Nejprve vyberte %s"
+
+msgid "Select File"
+msgstr "Vybrat soubor"
 
 msgid "Select or enter hooks"
 msgstr "Vyberte nebo zadejte WP 'hooks'"
@@ -2076,6 +3006,9 @@ msgstr "Zvolte termíny a"
 msgid "Select the Post Type you need to filter"
 msgstr "Vyberte typ příspěvku, který potřebujete filtrovat"
 
+msgid "Select the settings file to import"
+msgstr "Vyberte konfigurační soubor k importu"
+
 msgid ""
 "Select where to show Chips on your site. Or enter your theme's hooks. For "
 "example: before_main_content"
@@ -2086,6 +3019,9 @@ msgstr ""
 #: src/Settings/Tabs/SettingsTab.php:79
 msgid "Selected Filters (Chips) integration"
 msgstr "Integrace vybraných filtrů (Štítků)"
+
+msgid "SEO"
+msgstr "SEO"
 
 #: pro/Admin/SeoRules.php:200
 msgid "SEO Description"
@@ -2100,9 +3036,15 @@ msgstr "Pravidlo SEO"
 msgid "SEO Rules"
 msgstr "Pravidla SEO"
 
+msgid "SEO rules"
+msgstr "Pravidla SEO"
+
 msgid "SEO Rules, indexing filtering result pages by Search Engines"
 msgstr ""
 "Pravidla SEO, indexování stránek s výsledky vyhledávání ve vyhledávačích"
+
+msgid "SEO settings saved successfully."
+msgstr "Nastavení SEO bylo úspěšně uloženo."
 
 #: pro/Admin/SeoRules.php:171
 msgid "SEO Title"
@@ -2199,6 +3141,9 @@ msgstr ""
 msgid "Sort Terms by"
 msgstr "Třídit podmínky podle"
 
+msgid "Sorting"
+msgstr "Třídění"
+
 msgctxt "sorting"
 msgid "ASC"
 msgstr "ASC"
@@ -2246,6 +3191,14 @@ msgstr "Prodejní číslo produktu"
 msgctxt "sorting"
 msgid "Title"
 msgstr "Název"
+
+msgid ""
+"Sorting is unavailable on this page. It works only with content filtered by "
+"Filter Everything. To enable sorting, assign a Filter Set to this page."
+msgstr ""
+"Řazení není na této stránce dostupné. Funguje pouze s obsahem filtrovaným "
+"pomocí Filter Everything. Chcete-li povolit řazení, přiřaďte této stránce "
+"Sadu filtrů."
 
 msgid "Sorting options:"
 msgstr "Možnosti třídění:"
@@ -2315,6 +3268,9 @@ msgstr "Filtrování krok za krokem"
 msgid "Styled checkboxes and radio buttons"
 msgstr "Stylizovaná zaškrtávací políčka a rádiová tlačítka"
 
+msgid "Success: XML sitemap generated successfully."
+msgstr "Úspěch: XML mapa stránek byla úspěšně vygenerována."
+
 msgid "Supports AJAX"
 msgstr "Podporuje AJAX"
 
@@ -2337,8 +3293,8 @@ msgstr "Filtry taxonomie"
 msgid "Taxonomy Numeric"
 msgstr "Taxonomie Numerický"
 
-msgid "Taxonomy Numeric - Available in Pro"
-msgstr "Taxonomie Numerická – k dispozici v PRO"
+msgid "Taxonomy Numeric - Available in PRO"
+msgstr "Taxonomie Numerická – K dispozici v PRO"
 
 msgid "Taxonomy with numeric values you need to filter by"
 msgstr "Taxonomie s číselnými hodnotami, podle kterých musíte filtrovat"
@@ -2426,6 +3382,21 @@ msgid "The Filter set has not been updated."
 msgstr "Sada filtrů nebyla aktualizována."
 
 msgid ""
+"The free version allows up to 3 filter sets per post type. Upgrade to <a "
+"href=\"%s\">PRO</a> to display more filter sets."
+msgstr ""
+"Bezplatná verze umožňuje až 3 sady filtrů pro každý typ příspěvku. "
+"Upgradujte na <a href=\"%s\">PRO</a>, abyste mohli zobrazit více sad filtrů."
+
+msgid ""
+"The free version allows up to 3 filter sets per post type. Upgrade to <a "
+"href='%1$s' target='_blank'>PRO</a> for unlimited filter sets."
+msgstr ""
+"Bezplatná verze umožňuje až 3 sady filtrů pro každý typ příspěvku. "
+"Upgradujte na <a href='%1$s' target='_blank'>PRO</a> a získejte neomezený "
+"počet sad filtrů."
+
+msgid ""
 "The free version of the plugin does not support filtering on singular pages. "
 "But <a href=\"%s\">PRO version</a> supports."
 msgstr ""
@@ -2455,6 +3426,9 @@ msgstr "Příspěvek nebyl nalezen nebo se nejedná o sadu filtrů."
 #| msgid "Prefix must contain at least one alphabetical character."
 msgid "The Prefix must contain at least one alphabetical character."
 msgstr "Prefix musí obsahovat alespoň jeden abecední znak."
+
+msgid "The request could not be verified. Please try again."
+msgstr "Žádost nebylo možné ověřit. Zkuste to prosím znovu."
 
 msgid "The same as on a desktop"
 msgstr "Stejně jako na desktop"
@@ -2494,6 +3468,15 @@ msgstr "Aktualizováno pravidlo SEO."
 #| msgid "Title will be created automatically"
 msgid "The title will be created automatically"
 msgstr "Název se vytvoří automaticky"
+
+msgid ""
+"The XML sitemap generation exceeded the allowed execution time (%d seconds). "
+"Your server may apply stricter limits. Please increase the time limit or "
+"contact your hosting provider."
+msgstr ""
+"Generování XML sitemapy překročilo povolený čas provedení (%d sekund). Váš "
+"server může uplatňovat přísnější limity. Zvyšte časový limit nebo se obraťte "
+"na svého poskytovatele hostingu."
 
 #: views/frontend/checkboxes.php:26 views/frontend/dropdown.php:26
 #: views/frontend/labels.php:31 views/frontend/radio.php:27
@@ -2546,6 +3529,21 @@ msgid ""
 "This filter is inactive because it is not related to the selected post type."
 msgstr ""
 "Tento filtr je neaktivní, protože nesouvisí s vybraným typem příspěvku."
+
+msgid ""
+"This Filter Set is inactive.<br>The Free version allows up to 3 Filter Sets "
+"per post type.<br>Upgrade to PRO to activate unlimited Filter Sets."
+msgstr ""
+"Tato sada filtrů je neaktivní.<br>Bezplatná verze umožňuje až 3 sady filtrů "
+"pro každý typ příspěvku.<br>Upgradujte na verzi PRO a aktivujte neomezený "
+"počet sad filtrů."
+
+msgid ""
+"This function should not be called before the pre_get_posts hook has fired."
+msgstr "Tato funkce by neměla být volána před spuštěním háčku pre_get_posts."
+
+msgid "This setting has moved to the Filter Set"
+msgstr "Toto nastavení bylo přesunuto do Sady filtrů."
 
 msgid "Time"
 msgstr "Čas"
@@ -2610,6 +3608,13 @@ msgstr "Zkuste zobrazit vybrané výrazy nad kontejnerem s příspěvky"
 msgid "Try to use AJAX"
 msgstr "Zkuste použít AJAX"
 
+msgid "Type to search for a custom field key"
+msgstr "Začněte psát pro vyhledání klíče vlastního pole"
+
+msgid ""
+"Unable to determine the server execution time limit (max_execution_time)."
+msgstr "Nelze určit časový limit pro provedení serveru (max_execution_time)."
+
 msgid "Unknown error."
 msgstr "Neznámá chyba."
 
@@ -2624,8 +3629,23 @@ msgstr ""
 "zaregistrována sada filtrů. Tuto stránku nebo stránky můžete zadat v poli "
 "\"Kde filtrovat?\" Sady filtrů."
 
+msgid "Unlock all PRO features and capabilities"
+msgstr "Přístup ke všem funkcím a možnostem PRO"
+
+msgid "Unlock PRO"
+msgstr "Odblokování PRO"
+
+msgid "Unlock with PRO"
+msgstr "Odblokování s PRO"
+
 msgid "Unregistered"
 msgstr "Neregistrovaný"
+
+msgid "Upgrade to"
+msgstr "Aktualizace na"
+
+msgid "Upgrade to PRO"
+msgstr "Upgrade na PRO"
 
 msgid "Upload image"
 msgstr "Nahrát obrázek"
@@ -2703,6 +3723,9 @@ msgstr "Vertikální a Horizontální rozložení"
 msgid "View"
 msgstr "Zobrazit"
 
+msgid "View all PRO features"
+msgstr "Zobrazení všech funkcí PRO"
+
 msgid "View details"
 msgstr "Zobrazit podrobnosti"
 
@@ -2728,6 +3751,12 @@ msgstr "Navštivte webové stránky"
 #: src/Settings/Tabs/ExperimentalTab.php:36
 msgid "Wait Cursor (on desktop only)"
 msgstr "Čekání na kurzor (pouze na ploše)"
+
+msgid "were imported"
+msgstr "byly importovány"
+
+msgid "What to filter?"
+msgstr "Co filtrovat?"
 
 #: pro/PluginPro.php:250 src/Admin/FilterSet.php:41
 msgid "Where to filter?"
@@ -2787,6 +3816,9 @@ msgstr "Ano"
 
 msgid "You do not have sufficient permissions to duplicate the Filter Set."
 msgstr "Nemáte dostatečná oprávnění k duplikování sady filtrů."
+
+msgid "You do not have sufficient permissions to perform this action."
+msgstr "Nemáte dostatečná oprávnění k provedení této akce."
 
 #| msgid ""
 #| "You have been using the plugin for more than two months without license "
@@ -2861,3 +3893,6 @@ msgstr "— Zatím zde nejsou žádní prodejci —"
 
 msgid "— There is no any %s yet —"
 msgstr "- Zatím není k dispozici žádné %s -"
+
+msgid "∞ Create unlimited filter sets"
+msgstr "∞ Podpora neomezeného počtu sad filtrů"

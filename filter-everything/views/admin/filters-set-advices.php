@@ -8,41 +8,7 @@ if ( ! defined('ABSPATH') ) {
 <div class="wpc-filter-set-advices">
     <ul class="wpc-advices">
         <li>
-            <div class="wpc-advice-head">
-                <span class="wpc-advice-title">Display filters</span>
-                <button type="button" class="wpc-action wpc-advice-toggle widget-action hide-if-no-js" aria-expanded="false">
-                    <span class="toggle-indicator" aria-hidden="true"></span>
-                </button>
-            </div>
-            <div class="wpc-advice-body">
-                <p>To display filters please put <br /><strong>Filter Everything — Filters</strong> widget in desired widget area or sidebar.<br />Or use shortcode <code>[fe_widget]</code> to display them anywhere on your site.</p>
-                <p><blockquote>
-                    <strong>Note:</strong> unlike most of widgets, the Filters widget displays filters only if there is a Filter Set configured for the page you currently see. You can set this page in the <strong>Where to filter?</strong> field<?php
-                    if ( ! defined( 'FLRT_FILTERS_PRO' ) ) :
-                        ?> if you use the <a href="<?php echo FLRT_PLUGIN_URL; ?>" target="_blank" class="wpc-external-link">PRO version</a> of the plugin. In the current Free version it can be a Post type archive page only<?php
-                    endif; ?>.</blockquote></p>
-                <?php if ( defined( 'FLRT_FILTERS_PRO' ) && FLRT_FILTERS_PRO ) : ?>
-                <ol class="wpc-display-widgets">
-                    <li>
-                        <div class="wpc-advice-head">
-                            <span class="wpc-advice-title"><strong>Multiple Filters widget on a page</strong></span>
-                            <button type="button" class="wpc-action wpc-advice-toggle widget-action hide-if-no-js" aria-expanded="false">
-                                <span class="toggle-indicator" aria-hidden="true"></span>
-                            </button>
-                        </div>
-                        <div class="wpc-advice-body">
-                            <p>To display several Filter widgets on a page, you need:<br />
-                                - create several Filter Sets and to direct them to the desired page<br />
-                                - insert several Filter Widgets or their shortcodes on this page. One widget per Filter Set.</p>
-                            <p>You can change the display order of Filter Sets using the Priority field.</p>
-                        </div>
-                    </li>
-                </ol>
-                <?php endif; ?>
-            </div>
-        </li>
-        <li>
-            <div class="wpc-advice-head">
+            <div class="wpc-advice-head wpc-opened">
                 <span class="wpc-advice-title">Show selected terms (Chips)</span>
                 <button type="button" class="wpc-action wpc-advice-toggle widget-action hide-if-no-js" aria-expanded="false">
                     <span class="toggle-indicator" aria-hidden="true"></span>
@@ -52,49 +18,6 @@ if ( ! defined('ABSPATH') ) {
                 <p>Please use <strong>Filter Everything — Chips</strong> widget to display selected terms. Or insert shortcode <code>[fe_chips]</code> in the desired place.</p>
                 <h4>Display via hook</h4>
                 <p>On WooCommerce product pages Chips are displayed automatically.<br />But you can also add your theme hooks (actions) in <em>Filters -> Settings -> Selected Filters (Chips) integration</em> to display Chips in places where these hooks fire.</p>
-            </div>
-        </li>
-        <li>
-            <div class="wpc-advice-head">
-                <span class="wpc-advice-title">Use Meta keys</span>
-                <button type="button" class="wpc-action wpc-advice-toggle widget-action hide-if-no-js" aria-expanded="false">
-                    <span class="toggle-indicator" aria-hidden="true"></span>
-                </button>
-            </div>
-            <div class="wpc-advice-body">
-                <ul>
-                    <li><h4><?php esc_html_e( 'WooCommerce', 'filter-everything' ); ?>:</h4></li>
-                    <?php
-                    printf( '<li><code>_price</code> - %s</li>', esc_html__( 'filter by Product price (Custom Field Numeric)', 'filter-everything' ) );
-                    printf( '<li><code>_stock_status</code> - %s</li>', esc_html__( 'filter by Product Stock status (Custom Field)', 'filter-everything' ) );
-                    printf( '<li><code>_sale_price</code> - %s</li>', esc_html__( 'by Sale Price (Custom Field Numeric) or on Sale Status (Custom Field Exists)', 'filter-everything' ) );
-                    printf( '<li><code>total_sales</code> - %s</li>', esc_html__( 'by Sales Count', 'filter-everything' ) );
-                    printf( '<li><code>_backorders</code> - %s</li>', esc_html__( 'by Backorders Status (Custom Field)', 'filter-everything' ) );
-                    printf( '<li><code>_downloadable</code> - %s</li>', esc_html__( 'by Downloadable Status (Custom Field)', 'filter-everything' ) );
-                    printf( '<li><code>_sold_individually</code> - %s</li>', esc_html__( 'by Sold Individually status (Custom Field)', 'filter-everything' ) );
-                    printf( '<li><code>_stock</code> - %s</li>', esc_html__( 'by Stock Quantity (Custom Field Numeric)', 'filter-everything' ) );
-                    printf( '<li><code>_virtual</code> - %s</li>', esc_html__( 'by Product Virtual status (Custom Field)', 'filter-everything' ) );
-                    printf( '<li><code>_length</code> - %s</li>', esc_html__( 'by product Length', 'filter-everything' ) );
-                    printf( '<li><code>_width</code> - %s</li>', esc_html__( 'by product Width', 'filter-everything' ) );
-                    printf( '<li><code>_height</code> - %s</li>', esc_html__( 'by product Height', 'filter-everything' ) );
-                    printf( '<li><code>_weight</code> - %s</li>', esc_html__( 'by product Weight', 'filter-everything' ) );
-                    echo wp_kses (
-                        sprintf(
-                            __( '<li><code>_wc_average_rating</code> - filter by Product Average Rating. Optionally use <a href="%s" target="_blank" class="wpc-external-link">Product Visibility</a> taxonomy instead</li>', 'filter-everything' ),
-                            'https://demo.filtereverything.pro/example/by-rating/'
-                        ),
-                        array(
-                            'a' => array( 'href' => true, 'target' => true, 'class' => true ),
-                            'li' => array(),
-                            'code' => array(),
-                        )
-                    );
-                    ?>
-                    <li><h4><?php esc_html_e( 'WordPress', 'filter-everything' ); ?>:</h4></li>
-                    <?php
-                    printf( '<li><code>_thumbnail_id</code> - %s</li>', esc_html__( 'filter by Featured Image (Custom Field Exists)', 'filter-everything' ) );
-                    ?>
-                </ul>
             </div>
         </li>
         <li>
@@ -189,7 +112,7 @@ if ( ! defined('ABSPATH') ) {
                         </div>
                         <div class="wpc-advice-body">
                             <?php if ( defined( 'FLRT_FILTERS_PRO' ) && FLRT_FILTERS_PRO ) : ?>
-                            <p>a) Most often, the reason is that you chose an incorrect WP_Query in the <strong>And what to filter?</strong> field in the Filter Set. Please choose another value. If you are not sure which one to choose, please experiment with different ones until the filter starts working correctly.</p>
+                            <p>a) Most often, the reason is that you chose an incorrect WP_Query in the <strong>What to filter?</strong> field in the Filter Set. Please choose another value. If you are not sure which one to choose, please experiment with different ones until the filter starts working correctly.</p>
                             <?php else : ?>
                                 <p>a) Usually it means that you are trying to filter a Custom WP_Query, but not the default Main WP_Query for this archive page. To filter Custom WP_Queries, please use the <a href="<?php echo FLRT_PLUGIN_URL; ?>" target="_blank" class="wpc-external-link">PRO version</a> of the plugin.</p>
                             <?php endif; ?>

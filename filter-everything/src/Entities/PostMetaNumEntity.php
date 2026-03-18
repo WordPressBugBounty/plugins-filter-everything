@@ -8,7 +8,10 @@ if ( ! defined('ABSPATH') ) {
 
 class PostMetaNumEntity implements Entity
 {
+    use PostMetaTrait;
     public $items           = [];
+
+    protected $product_cache  = [];
 
     public $entityName      = '';
 
@@ -22,12 +25,16 @@ class PostMetaNumEntity implements Entity
 
     public $wdr_product_ids = [];
 
+    public $is_woo_discount_rules = false;
+
     public function __construct( $postMetaName, $postType ){
         /**
          * @feature clean code from unused methods
          */
-
         $this->entityName = $postMetaName;
+        if(flrt_is_woo_discount_rules()){
+            $this->is_woo_discount_rules = true;
+        }
         $this->setPostTypes( array($postType) );
     }
 
@@ -232,6 +239,7 @@ class PostMetaNumEntity implements Entity
              * And condition (NULL <= 0) is true
              * */
             $sql[] = "WHERE {$wpdb->postmeta}.meta_key = %s";
+            $sql[] = "AND {$wpdb->postmeta}.meta_value IS NOT NULL";
 
             if( $IN ){
                 $sql[] = "AND {$wpdb->posts}.post_type IN( {$IN} )";
@@ -302,8 +310,11 @@ class PostMetaNumEntity implements Entity
                 }
             }
 
-            if(flrt_is_woo_discount_rules() && (strpos($this->entityName, '_price') !== false))
+            if($this->is_woo_discount_rules && (strpos($this->entityName, '_price') !== false)){
                 $wdr_woo_discount_rules = $this->getWooDiscountRulesClass();
+                $product_ids = array_map('intval', array_column($result, 'post_id'));
+                $this->preloadProducts($product_ids);
+            }
 
             foreach ( $result as $single_post ) {
                 /**
@@ -316,9 +327,9 @@ class PostMetaNumEntity implements Entity
                     }
                 }
 
-                if (flrt_is_woo_discount_rules()) {
+                if ($this->is_woo_discount_rules) {
                     if (strpos($this->entityName, '_price') !== false) {
-                        $product = wc_get_product($single_post['post_id']);
+                        $product = $this->getProductCached($single_post['post_id']);
                         if ($product) {
                             $wdr_product_has_sale = $wdr_woo_discount_rules->getProductPriceToDisplay($product);
                             if ($wdr_product_has_sale) {
@@ -436,211 +447,6 @@ class PostMetaNumEntity implements Entity
         return $return;
     }
 
-    private function isTermInMetaKey( $queried_value, $wp_query ){
-        $duplicate  = [];
-        $terms      = $queried_value['values'];
-        $meta_key   = $wp_query->get('meta_key');
-        $meta_value = $wp_query->get('meta_value');
-
-        foreach ( $terms as $term ) {
-            if( $queried_value['e_name'] === $meta_key ){
-                if( $meta_value === $term ){
-                    $duplicate['post_meta'] = $queried_value['e_name'];
-                    $duplicate['term']      = $term;
-                    return $duplicate;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    private function isTermInMetaQuery( $queried_value, $wp_query ){
-        $duplicate  = [];
-        $meta_query = $wp_query->get('meta_query');
-        $terms      = $queried_value['values'];
-
-        if( ! empty( $meta_query ) ){
-
-            foreach ( $meta_query as $query_array ){
-                if( isset( $query_array['key'] ) && $query_array['key'] === $queried_value['e_name'] ){
-                    $terms_flipped = array_flip($terms);
-                    if( isset( $query_array['value'] ) && isset( $terms_flipped[ $query_array['value'] ] ) ){
-                        $duplicate['post_meta'] = $queried_value['e_name'];
-                        $duplicate['term']      = $query_array['value'];
-                        return $duplicate;
-                    }
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public function isTermAlreadyInQuery( $queried_value, $wp_query )
-    {
-        // Is term in Key
-        if( $duplicate = $this->isTermInMetaKey( $queried_value, $wp_query ) ) {
-            return $duplicate;
-        }
-        // Is term in Query
-        if( $duplicate = $this->isTermInMetaQuery( $queried_value, $wp_query ) ) {
-            return $duplicate;
-        }
-
-        return false;
-    }
-
-    private function normalizeMetaQueryArray( $meta_query )
-    {
-        $normalized_meta_query = [];
-
-        if( ! is_array( $meta_query ) || ! isset( $meta_query['key'] ) ){
-            return false;
-        }
-        if( isset( $meta_query['value'] ) ){
-            if( is_array( $meta_query['value'] ) ){
-                sort( $meta_query['value'] );
-                $meta_query['value'] = implode( '-', $meta_query['value'] );
-                $normalized_meta_query['value']     = $meta_query['value'];
-            }else{
-                $normalized_meta_query['value'] = $meta_query['value'];
-            }
-        }
-
-        $normalized_meta_query['key']       = $meta_query['key'];
-        if( isset( $meta_query['compare'] ) ){
-            $normalized_meta_query['compare']   = isset( $meta_query['compare'] ) ? $meta_query['compare'] : '';
-        }
-
-        return $normalized_meta_query;
-    }
-
-    private function isTheSameMetaQuery( $meta_query_1, $meta_query_2 )
-    {
-        $meta_query_1 = $this->normalizeMetaQueryArray( $meta_query_1 );
-        $meta_query_2 = $this->normalizeMetaQueryArray( $meta_query_2 );
-
-        $diff = array_diff( $meta_query_1, $meta_query_2 );
-
-        if ( empty( $diff ) ){
-            return true;
-        }
-
-        return false;
-    }
-
-    public function addMetaQueryArray( $meta_query_array, $relation = false, $top_index = false )
-    {
-        if( ! isset( $meta_query_array['key'] ) ){
-            return false;
-        }
-
-        $existing_meta_query = $this->new_meta_query;
-
-        foreach ($existing_meta_query as $index => $present_query) {
-
-            if ($this->hasNestedQueries($present_query)) {
-                foreach ($present_query as $k => $nested_present_query) {
-
-                    if (!isset($nested_present_query['key'])) {
-                        // relation arg
-                        continue;
-                    }
-                    if ($this->isTheSameMetaQuery($nested_present_query, $meta_query_array)) {
-                        return false;
-                    }
-                }
-            } else {
-                if ($this->isTheSameMetaQuery($present_query, $meta_query_array)) {
-                    return false;
-                }
-            }
-
-        }
-
-        if ( $relation && in_array( $relation, array( 'AND', 'OR' ) ) ) {
-            if( $top_index !== false ) {
-                $nested_index = $top_index;
-            }else{
-                $nested_index = $this->findNestedIndexForQuery( $meta_query_array );
-            }
-
-            $this->new_meta_query[$nested_index][] = $meta_query_array;
-            $this->new_meta_query[$nested_index]['relation'] = $relation;
-        } else {
-            $this->new_meta_query[] = $meta_query_array;
-        }
-
-    }
-
-    public function findNestedIndexForQuery( $meta_query_array )
-    {
-        $meta_key = $meta_query_array['key'];
-
-        if( empty( $this->new_meta_query ) ){
-            return 0;
-        }
-
-        foreach ( $this->new_meta_query as $i_level_1 => $maybe_meta_query ){
-            // This subquery already exists
-            if( isset( $maybe_meta_query[0]['key'] ) && $maybe_meta_query[0]['key'] === $meta_key ){
-                return $i_level_1;
-            }
-        }
-
-        return count( $this->new_meta_query );
-    }
-
-    public function hasNestedQueries( $meta_query )
-    {
-        if( isset( $meta_query[0]['key'] ) ){
-            return true;
-        }
-
-        return false;
-    }
-
-    public function addMetaKeyToQuery( $wp_query )
-    {
-        $args = [];
-
-        $args['key']   = $wp_query->get( 'meta_key' );
-        if( $wp_query->get( 'meta_value'  ) ){
-            $args['value'] = $wp_query->get( 'meta_value' );
-            $args['compare'] = ( $compare = $wp_query->get( 'meta_compare' ) ) ? $compare : 'IN';
-        }
-
-        $wp_query->set( 'meta_key', '' );
-        $wp_query->set( 'meta_value', '' );
-
-        $this->addMetaQueryArray( $args );
-    }
-
-    public function importExistingMetaQuery( $wp_query )
-    {
-        // Try to check if there is meta_key, meta_value and meta_compare
-        if( $wp_query->get('meta_key') ){
-            $this->addMetaKeyToQuery( $wp_query );
-        }
-
-        $already_existing_meta_query = $wp_query->get('meta_query');
-
-        if( is_array( $already_existing_meta_query ) ){
-            foreach( $already_existing_meta_query as $top_index => $value ){
-
-                if( $this->hasNestedQueries( $value ) ){
-                    foreach( $value as $n => $nested_meta_query ){
-                        $this->addMetaQueryArray( $nested_meta_query, $value['relation'], $top_index );
-                    }
-                }else{
-                    $this->addMetaQueryArray( $value );
-                }
-
-            }
-        }
-    }
-
     /**
      * @return object WP_Query
      */
@@ -658,7 +464,7 @@ class PostMetaNumEntity implements Entity
         $max = isset( $queried_value['values']['max'] ) ? $queried_value['values']['max'] : false;
 
         // Compare with false because $min can be 0
-        if ((strpos($key, '_price') !== false) && flrt_is_woocommerce() && flrt_is_woo_discount_rules()) {
+        if ((strpos($key, '_price') !== false) && flrt_is_woocommerce() && $this->is_woo_discount_rules) {
             $query_post_in = $this->wdrAddProductsRangeToFilterQuery($wp_query);
             $wp_query->set('post__in', $query_post_in);
             if (empty($query_post_in)){
@@ -739,5 +545,27 @@ class PostMetaNumEntity implements Entity
 
     public function getWooDiscountRulesClass(){
         return flrt_woo_discount_rules_class();
+    }
+
+    protected function preloadProducts($product_ids) {
+        if (empty($product_ids)) {
+            return;
+        }
+
+        $products = wc_get_products([
+            'include' => $product_ids,
+            'limit'   => -1,
+        ]);
+
+        foreach ($products as $product) {
+            $this->product_cache[$product->get_id()] = $product;
+        }
+    }
+
+    protected function getProductCached($product_id) {
+        if (!isset($this->product_cache[$product_id])) {
+            $this->product_cache[$product_id] = wc_get_product($product_id);
+        }
+        return $this->product_cache[$product_id];
     }
 }

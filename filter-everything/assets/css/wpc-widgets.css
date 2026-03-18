@@ -1,5 +1,5 @@
 /*!
- * Filter Everything widgets 1.9.1
+ * Filter Everything widgets 1.9.2
  */
 .wpc-sorting-list{
     margin-top: 15px;
@@ -122,7 +122,7 @@
     box-sizing: border-box;
 }
 .wpc-columns-wrapper{
-    visibility: hidden;
+    display:none;
 }
 .wpc-horizontal-checkbox:checked+label+.wpc-columns-wrapper{
     visibility: visible;

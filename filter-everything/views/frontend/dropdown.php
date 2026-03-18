@@ -112,10 +112,12 @@ if ( $is_swatch ){
                         $rating = 0;
                         if( mb_strpos( $term_object->slug, 'rated-' ) !== false){
                             $pieces = explode("-", $term_object->slug);
-                            $rating = isset( $pieces[1] ) ? $pieces[1] : 0;
+                            $rating = (int) isset( $pieces[1] ) ? $pieces[1] : 0;
+                            if ($rating < 1 || $rating > 5) {
+                                $rating = 0;
+                            }
                             $data_rating = ' data-star-rating=' . $rating;
                         }
-
                         ?>
                         <option<?php echo esc_html( $data_image ); echo esc_html( $data_color ); echo esc_html( $data_count ); echo esc_html( $data_rating );?> class="wpc-term-count-<?php echo esc_attr( $term_object->cross_count ); ?> wpc-term-id-<?php echo esc_attr($term_object->term_id); echo esc_attr( $term_hidden_class ); ?>" value="<?php echo esc_attr( $term_object->term_id ); ?>" <?php selected( 1, $selected ); ?> <?php disabled( 1, $disabled ); ?> data-wpc-link="<?php echo esc_attr( $url_manager->getTermUrl( $term_object->slug, $filter['e_name'], $filter['entity'] ) ); ?>" id="wpc-option-<?php echo esc_attr( $filter['entity'] ); ?>-<?php echo esc_attr($filter['e_name']); ?>-<?php echo esc_attr( $id ); ?>">
                             <?php

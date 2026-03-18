@@ -79,7 +79,7 @@ class FilterFields
                 'type'          => 'Text',
                 'label'         => esc_html__(  'Meta Key', 'filter-everything' ),
                 'class'         => 'wpc-field-ename',
-                'instructions'  => esc_html__( 'Name of the Custom Field. Please, see the Popular Meta keys at the bottom', 'filter-everything'),
+                'instructions'  => esc_html__( 'Name of the Custom Field', 'filter-everything'),
                 'required'      => true
             ),
             'label' => array(
@@ -424,7 +424,7 @@ class FilterFields
 
             foreach ( $filters as $filter ) {
 
-                if ( in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date' ] ) ) {
+                if ( in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date', 'post_meta_date' ] ) ) {
                     continue;
                 }
 
@@ -513,7 +513,7 @@ class FilterFields
 
         $postType = '';
         // For post_meta_num entity postType is critical value so we have to set it up
-        if ( in_array( $filter['entity'], array( 'post_meta_num', 'post_meta_exists' ) ) ) {
+        if ( in_array( $filter['entity'], array( 'post_meta_num', 'post_meta_exists', 'post_meta_date' ) ) ) {
             $fss  = Container::instance()->getFilterSetService();
             $set =  $fss->getSet( $filter['parent'] );
             if( isset( $set['post_type']['value'] ) ){
@@ -548,7 +548,7 @@ class FilterFields
 
                 $default_value = isset( $fieldData['default'] ) ? $fieldData['default'] : '';
 
-                $multiple = ( $fieldKey === 'exclude' && ! in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date' ] ) );
+                $multiple = ( $fieldKey === 'exclude' && ! in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date', 'post_meta_date' ] ) );
 
                 $fieldData['name']     = $this->generateInputName( $filter['ID'], $fieldKey, $multiple );
                 $fieldData['id']       = $this->generateInputID( $filter['ID'], $fieldKey );
@@ -629,7 +629,7 @@ class FilterFields
                     // We always add terms even they are empty array to fill Select2 with related terms.
                     $fieldData['options'] = $terms;
 
-                    if( in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date' ] ) ) {
+                    if( in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date', 'post_meta_date' ] ) ) {
                         $fieldData['options'] = [];
                     }
                 }
@@ -639,7 +639,7 @@ class FilterFields
                     $fieldData['disabled'] = array('and');
                 }
 
-                if( in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date' ] ) && $fieldKey === 'logic' ){
+                if( in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date', 'post_meta_date' ] ) && $fieldKey === 'logic' ){
                     $fieldData['disabled'] = array('or');
                 }
 
@@ -651,11 +651,12 @@ class FilterFields
                             'radio',
                             'labels',
                             'date',
+                            'post_meta_date',
                             'colors',
                             'image',
                             'rating',
                         );
-                    } else if ( in_array( $filter['entity'], [ 'post_date' ] ) ) {
+                    } else if ( in_array( $filter['entity'], [ 'post_date', 'post_meta_date' ] ) ) {
                         $fieldData['disabled'] = array(
                             'checkboxes',
                             'dropdown',
@@ -669,12 +670,14 @@ class FilterFields
                     } else if ( in_array( $filter['entity'], [ 'taxonomy_product_visibility' ] ) ) {
                         $fieldData['disabled'] = array(
                             'date',
+                            'post_meta_date',
                             'range',
                         );
                     }else {
                         $fieldData['disabled'] = array(
                             'range',
                             'date',
+                            'post_meta_date',
                             'rating',
                         );
                     }
@@ -686,7 +689,7 @@ class FilterFields
                     }
                 }
 
-                if ( ( $filter['ID'] === self::FLRT_NEW_FILTER_ID || $filter['entity'] === 'post_date' ) && $fieldKey === 'date_format' ) {
+                if ( ( $filter['ID'] === self::FLRT_NEW_FILTER_ID || $filter['entity'] === 'post_date' ||  $filter['entity'] === 'post_meta_date') && $fieldKey === 'date_format' ) {
                     // This can be new filter or existing
                     $date_type         = $filter['date_type'] ? $filter['date_type'] : 'date';
                     $dateFormatOptions = $this->getDateFormatOptions( $date_type );
@@ -918,7 +921,7 @@ class FilterFields
         if ( isset( $filter['e_name'] ) ) {
 
             if( isset( $filter['entity'] ) ) {
-                if ( in_array( $filter['entity'], array( 'post_meta', 'post_meta_num', 'post_meta_exists', 'tax_numeric' ) ) ) {
+                if ( in_array( $filter['entity'], array( 'post_meta', 'post_meta_num', 'post_meta_exists', 'tax_numeric', 'post_meta_date'  ) ) ) {
                     $e_name = $filter['e_name'];
 
                     if ( $e_name === '' ) {
@@ -962,7 +965,7 @@ class FilterFields
                     }
                 }
 
-                if ( in_array( $filter['e_name'], array( 'post_date', 'post_meta_date' ) ) ) {
+                if ( in_array( $filter['e_name'], array( 'post_date') ) ) {
 
                     if ( isset( $filter['date_format'] ) && isset( $filter['date_type'] ) ) {
 
@@ -1044,7 +1047,7 @@ class FilterFields
             }
 
             // For author entity logic can be only OR
-            if ( in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date' ] ) ) {
+            if ( in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date', 'post_meta_date' ] ) ) {
                 if( $filter['logic'] !== 'and' ){
                     $this->pushError( 47, $filterID, 'logic' ); // Not acceptable logic.
                     $valid = false;
@@ -1094,7 +1097,7 @@ class FilterFields
 
         // In case when checkbox is not checked there is no $_POST['in_path'] parameter
         if( isset( $filter['in_path'] ) ){
-            if( in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date' ] ) && $filter['in_path'] === 'yes' ){
+            if( in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date', 'post_meta_date' ] ) && $filter['in_path'] === 'yes' ){
                 $this->pushError( 46, $filterID, 'in_path' ); // Invalid In Path for Post meta num.
                 $valid = false;
             }
@@ -1143,9 +1146,9 @@ class FilterFields
         foreach ( (array) $filters as $filter ) {
             if( isset( $filter['entity'] ) && isset( $filter['e_name'] ) ) {
                 // To avoid few filters with the same meta key
-                if ( in_array( $filter['entity'], array( 'post_meta', 'post_meta_num', 'post_meta_exists' ), true ) ) {
+                if ( in_array( $filter['entity'], array( 'post_meta', 'post_meta_num', 'post_meta_exists'), true ) ) {
                     $keys[] = 'post_meta' . $filter['e_name'];
-                } elseif ( $filter['entity'] === 'tax_numeric' || $filter['entity'] === 'post_date' ) {
+                } elseif ( $filter['entity'] === 'tax_numeric' || $filter['entity'] === 'post_date' || $filter['entity'] === 'post_meta_date') {
                     $keys[] = $filter['entity'] .'_'. $filter['e_name'];
                 } else {
                     $keys[] = $filter['entity'] . $filter['e_name'];
@@ -1594,7 +1597,7 @@ class FilterFields
             'post_date',
             'post_meta',
             'post_meta_num',
-            'post_date',
+            'post_meta_date',
         ) ) ){
             return true;
         }
@@ -1746,6 +1749,7 @@ class FilterFields
             221 => esc_html__( 'Error: invalid query.', 'filter-everything' ),
             23 => esc_html__( 'Error: invalid Hide empty field.', 'filter-everything' ),
             24 => esc_html__( 'Error: invalid Show count field.', 'filter-everything' ),
+            25 => esc_html__( 'Error: invalid Horizontal layout field.', 'filter-everything' ),
             242 => esc_html__( 'Error: invalid «Apply Button» mode field.', 'filter-everything' ),
 //            241 => esc_html__( 'Error: invalid Order field.', 'filter-everything' ),
             // Filters errors
@@ -1794,7 +1798,17 @@ class FilterFields
                 )
             ),
             91 => esc_html__('Error: you can not update settings because the Filter Everything Pro plugin is locked. Please, ask your site Superadmin to enter the plugin license key to unlock it.', 'filter-everything' ),
-
+            92 => wp_kses(
+                sprintf(
+                    __('The free version allows up to 3 filter sets per post type. Upgrade to <a href=\'%1$s\' target=\'_blank\'>PRO</a> for unlimited filter sets.', 'filter-everything' ),
+                    esc_url(FLRT_PLUGIN_URL .'/?get_pro=true') ),
+                array(
+                    'a' => array(
+                        'href'=> true,
+                        'target' => true
+                    )
+                )
+            ),
         );
 
         return $errors;

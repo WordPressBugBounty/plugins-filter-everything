@@ -288,7 +288,7 @@ class Select extends Input {
             }
         }
 
-        $html .= apply_filters('flrt_before_render_admin_select_option', $value, $this->getAttributes());
+        $html .= apply_filters('flrt_before_render_admin_select_option', $value, $this->getAttributes(), $label, $disabled);
 
         $html .= '>' . $label . '</option>'."\r\n";
 
@@ -315,5 +315,11 @@ class Wpeditor extends Input {
             'textarea_name' => $this->getAttribute('name')
         );
         wp_editor( $this->getAttribute('value' ), $this->getAttribute('id' ), $settings );
+    }
+}
+
+class inProButton extends Input {
+    public function render(){
+        return flrt_unlock_in_pro();
     }
 }

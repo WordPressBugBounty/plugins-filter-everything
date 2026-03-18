@@ -16,6 +16,7 @@ if ( ! defined('ABSPATH') ) {
 }
 
 use \FilterEverything\Filter\PostDateEntity;
+use \FilterEverything\Filter\PostMetaDateEntity;
 
 /**
  * @todo We have to display UI calendar in any case even there are no available terms
@@ -25,8 +26,7 @@ use \FilterEverything\Filter\PostDateEntity;
     <?php flrt_filter_header( $filter, $terms ); // Safe, escaped ?>
     <div class="<?php echo esc_attr( flrt_filter_content_class( $filter ) ); ?>">
         <div class="wpc-filters-range-inputs">
-            <?php if( ! empty( $terms ) || $view_args['ask_to_select_parent'] ):
-
+            <?php if( ! empty( $terms ) || $view_args['ask_to_select_parent'] || !empty($filter['values']) ):
                 if( $view_args['ask_to_select_parent'] !== false ) { ?>
                     <div><?php echo esc_html( $view_args['ask_to_select_parent'] ); ?></div>
                 <?php } else {

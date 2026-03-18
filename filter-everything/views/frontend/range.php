@@ -53,9 +53,15 @@ if ( ! defined('ABSPATH') ) {
                             <?php // if there are value in $_GET we have to put it into field ?>
                             <?php // attr step should be configured in options ?>
                             <input type="number" class="wpc-filters-range-min" name="<?php echo esc_attr( $minName ); ?>" value="<?php echo esc_attr( $min ); ?>" step="<?php echo esc_attr( $filter['step'] ); ?>" data-min="<?php echo esc_attr( $absMin ); ?>" />
+                            <button class="wpc-range-clear" type="button" title="<?php esc_html_e('Reset', 'filter-everything' ) ?>">
+                                <span class="wpc-search-clear-icon">&#215;</span>
+                            </button>
                         </div>
                         <div class="wpc-filters-range-column wpc-filters-range-max-column">
                             <input type="number" class="wpc-filters-range-max" name="<?php echo esc_attr( $maxName ); ?>" value="<?php echo esc_attr( $max ); ?>" step="<?php echo esc_attr( $filter['step'] ); ?>" data-max="<?php echo esc_attr( $absMax ); ?>" />
+                            <button class="wpc-range-clear" type="button" title="<?php esc_html_e('Reset', 'filter-everything' ) ?>">
+                                <span class="wpc-search-clear-icon">&#215;</span>
+                            </button>
                         </div>
                     </div>
                     <?php

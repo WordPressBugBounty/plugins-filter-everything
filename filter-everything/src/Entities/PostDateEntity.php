@@ -145,7 +145,7 @@ class PostDateEntity implements Entity
         // Does nothing. It was already done before.
     }
 
-    private function queryTerms()
+    protected function queryTerms()
     {   global $wpdb;
         // @todo delete appropriate transient in resetTransitions();
         $IN                            = false;
@@ -279,6 +279,10 @@ class PostDateEntity implements Entity
                     }
                 }
 
+                if (empty($single_post['post_date'])){
+                    continue;
+                }
+
                 /**
                  * We have to generate and fill two arrays
                  * First to detect $min and $max values
@@ -357,7 +361,7 @@ class PostDateEntity implements Entity
         return $return;
     }
 
-    private function createTermName( $edge, $value, $queried_values )
+    protected function createTermName( $edge, $value, $queried_values )
     {
         $queriedFilter = false;
         if( $edge === 'from' ) {
@@ -401,7 +405,7 @@ class PostDateEntity implements Entity
         return apply_filters( 'wpc_filter_post_date_term_name', $name, $this->getName() );
     }
 
-    private function doRecalculate( $alreadyFilteredPosts )
+    protected function doRecalculate($alreadyFilteredPosts )
     {
         $do_filtered_posts = md5( json_encode( $alreadyFilteredPosts ) );
         $do_from           = md5( $this->from );

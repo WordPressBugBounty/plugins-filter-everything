@@ -104,7 +104,7 @@ function flrt_get_page_related_filters(){
      * @todo add check to hook if
      */
     if( ! did_action( 'pre_get_posts' ) ) {
-        _doing_it_wrong( __FUNCTION__, esc_html__('Please, do not fire this function, until the "pre_get_posts" hook has been called', 'filter-everything'), '1.7.16' );
+        _doing_it_wrong( __FUNCTION__, esc_html__('This function should not be called before the pre_get_posts hook has fired.', 'filter-everything'), '1.7.16' );
     } else{
         $em = \FilterEverything\Filter\Container::instance()->getEntityManager();
         return $em->getSetsRelatedFilters();

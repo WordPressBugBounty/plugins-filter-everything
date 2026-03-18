@@ -9,7 +9,7 @@ use \FilterEverything\Filter\FilterSet;
 use \FilterEverything\Filter\FilterFields;
 use \FilterEverything\Filter\PostMetaNumEntity;
 use \FilterEverything\Filter\PostDateEntity;
-
+use \FilterEverything\Filter\PostMetaDateEntity;
 /**
  * Returns user's caps level that allows to use the plugin.
  * Developers can modify this level via hook 'wpc_plugin_user_caps' ot their own risk.
@@ -73,6 +73,14 @@ function flrt_ucfirst( $text )
         return $text;
     }
     return mb_strtoupper( mb_substr( $text, 0, 1 ) ) . mb_substr( $text, 1 );
+}
+
+function flrt_lcfirst( $text )
+{
+    if( ! is_string( $text ) ){
+        return $text;
+    }
+    return mb_strtolower( mb_substr( $text, 0, 1 ) ) . mb_substr( $text, 1 );
 }
 
 function flrt_sanitize_tooltip($var )
@@ -224,6 +232,39 @@ function flrt_extract_objects_vars( $terms, $keys = [] )
     return $required;
 }
 
+add_filter('wpc_check_broken_query_vars', function ($query_vars, $query) {
+    if (is_admin()) {
+        return $query_vars;
+    }
+
+    $detector_class = 'FilterEverything\\Filter\\WP_Query_Source_Detector';
+    $is_allowed_method = 'is_allowed';
+    $source_var = 'flrt_detected_source';
+
+    if (defined('FLRT_FILTERS_PRO')) {
+        if (defined('FLRT_PRO_BUILDER_KEY')) {
+            $builder_key = apply_filters('wpc_builder_key_pro', $query->get($source_var), constant('FLRT_PRO_BUILDER_KEY'));
+
+            if ($detector_class::$is_allowed_method($builder_key)) {
+                return $query_vars;
+            }
+        }
+    }
+
+    if (!defined('FLRT_FILTERS_PRO')) {
+        $builder_key = apply_filters('wpc_builder_key', $query->get($source_var), $detector_class::$builder_key);
+
+        if ($detector_class::$is_allowed_method($builder_key)) {
+            return $query_vars;
+        }
+    }
+
+    return [];
+}, 10, 2);
+
+add_filter('wpc_builder_key', function ($source, $builder_id) {
+    return (int) sprintf("%u", crc32($source . $builder_id));
+}, 10, 2);
 
 function flrt_remove_level_array( $array )
 {
@@ -246,41 +287,35 @@ function flrt_remove_level_array( $array )
     return $flatten;
 }
 
-/**
- * @return bool whether to ask about rate or not
- */
-function flrt_ask_for_help(){
-    $to_ask        = false;
-    $first_install = get_option( 'wpc_first_install' );
-    /**
-     * string
-     */
-    $the_get       = Container::instance()->getTheGet();
-
-    if ( isset( $the_get['remove_help_tab'] ) && $the_get['remove_help_tab'] == 'true' ) {
-        $first_install['rate_disabled'] = true;
-        update_option( 'wpc_first_install', $first_install );
-        return false;
+add_filter('wpc_check_errors_ids', function ($error_ids, $query) {
+    $source_key = 'flrt_detected_source';
+    if (empty($query->query_vars[$source_key])) {
+        return $error_ids;
     }
 
-    if ( $first_install ) {
-        // Rate is finally disabled
-        if ( isset( $first_install['rate_disabled'] ) && $first_install['rate_disabled'] === true ) {
-            return false;
-        }
-        // If delay time has already passed
-        $now = time();
-        if ( isset( $first_install['rate_delayed'] ) && $first_install['rate_delayed'] > $now ) {
-            return true;
-        }
-        $_30_days_ago = $now - 2592000;
-        if ( isset( $first_install['install_time'] ) && $first_install['install_time'] < $_30_days_ago ) {
-            return true;
+    $source = $query->query_vars[$source_key];
+    $detector_class = 'FilterEverything\\Filter\\WP_Query_Source_Detector';
+    $is_allowed_method = 'is_allowed';
+
+    if (defined('FLRT_FILTERS_PRO')) {
+        if (defined('FLRT_PRO_BUILDER_KEY')) {
+            $builder_key = apply_filters('wpc_builder_key_pro', $source, constant('FLRT_PRO_BUILDER_KEY'));
+            if ($detector_class::$is_allowed_method($builder_key)) {
+                return $error_ids;
+            }
         }
     }
 
-    return $to_ask;
-}
+    if (!defined('FLRT_FILTERS_PRO')) {
+        $builder_key = apply_filters('wpc_builder_key', $source, $detector_class::$builder_key);
+
+        if ($detector_class::$is_allowed_method($builder_key)) {
+            return $error_ids;
+        }
+    }
+
+    return [];
+}, 10, 2);
 
 function flrt_get_forbidden_prefixes()
 {
@@ -397,6 +432,12 @@ function flrt_get_set_settings_fields($post_id)
     return $filterSet->getSettingsTypeFields( $post_id );
 }
 
+function flrt_get_set_settings_location_fields($post_id)
+{
+    $filterSet = Container::instance()->getFilterSetService();
+    return $filterSet->getSettingsLocationTypeFields( $post_id );
+}
+
 function flrt_render_input( $atts )
 {
     $className = isset( $atts['type'] ) ? '\FilterEverything\Filter\\' . $atts['type'] : '\FilterEverything\Filter\Text';
@@ -456,6 +497,8 @@ function flrt_excluded_taxonomies()
         'wp_theme',
         'wp_template_part_area',
         'wp_pattern_category',
+        'elementor_library_type',
+        'elementor_library_category',
     );
 
     return apply_filters( 'wpc_excluded_taxonomies', $excluded_taxonomies );
@@ -627,6 +670,10 @@ function flrt_filters_button( $setId = 0, $class = '' )
     $templateManager = \FilterEverything\Filter\Container::instance()->getTemplateManager();
 
     $draft_sets = $wpManager->getQueryVar('wpc_page_related_set_ids');
+
+    if ( ! is_array( $draft_sets ) ) {
+        $draft_sets = [];
+    }
 
     foreach ( $draft_sets as $set ){
         if( isset( $set['show_on_the_page'] ) && $set['show_on_the_page'] ){
@@ -965,6 +1012,7 @@ if ( ! function_exists( 'flrt_filter_search_field' ) ) {
 
         if( $filter['search'] === 'yes' && $view_args['ask_to_select_parent'] === false ):  ?>
             <div class="wpc-filter-search-wrapper wpc-filter-search-wrapper-<?php echo esc_attr( $filter['ID'] ); ?>">
+                <span class="wpc-search-icon"></span>
                 <input class="wpc-filter-search-field" type="text" value="" placeholder="<?php esc_html_e('Search', 'filter-everything' ) ?>" />
                 <button class="wpc-search-clear" type="button" title="<?php esc_html_e('Clear search', 'filter-everything' ) ?>"><span class="wpc-search-clear-icon">&#215;</span></button>
             </div>
@@ -1056,10 +1104,50 @@ function flrt_term_id($name, $filter, $id, $echo = true )
 
 function flrt_get_icon_svg($color = '#ffffff' )
 {
-    $svg = '<svg enable-background="new 0 0 26 26" id="Layer_1" version="1.1" viewBox="0 0 26 26" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g><path d="M1.75,7.75h6.6803589c0.3355713,1.2952271,1.5039063,2.2587891,2.9026489,2.2587891   S13.9000854,9.0452271,14.2356567,7.75H24.25C24.6640625,7.75,25,7.4140625,25,7s-0.3359375-0.75-0.75-0.75H14.2356567   c-0.3355713-1.2952271-1.5039063-2.2587891-2.9026489-2.2587891S8.7659302,4.9547729,8.4303589,6.25H1.75   C1.3359375,6.25,1,6.5859375,1,7S1.3359375,7.75,1.75,7.75z M11.3330078,5.4912109   c0.8320313,0,1.5087891,0.6767578,1.5087891,1.5087891s-0.6767578,1.5087891-1.5087891,1.5087891S9.8242188,7.8320313,9.8242188,7   S10.5009766,5.4912109,11.3330078,5.4912109z" fill="'.$color.'"/><path d="M24.25,12.25h-1.6061401c-0.3355713-1.2952271-1.5039063-2.2587891-2.9026489-2.2587891   S17.1741333,10.9547729,16.838562,12.25H1.75C1.3359375,12.25,1,12.5859375,1,13s0.3359375,0.75,0.75,0.75h15.088562   c0.3355713,1.2952271,1.5039063,2.2587891,2.9026489,2.2587891s2.5670776-0.963562,2.9026489-2.2587891H24.25   c0.4140625,0,0.75-0.3359375,0.75-0.75S24.6640625,12.25,24.25,12.25z M19.7412109,14.5087891   c-0.8320313,0-1.5087891-0.6767578-1.5087891-1.5087891s0.6767578-1.5087891,1.5087891-1.5087891S21.25,12.1679688,21.25,13   S20.5732422,14.5087891,19.7412109,14.5087891z" fill="'.$color.'"/><path d="M24.25,18.25H9.7181396c-0.3355103-1.2952271-1.5037842-2.2587891-2.9017334-2.2587891   c-1.3987427,0-2.5670776,0.963562-2.9026489,2.2587891H1.75C1.3359375,18.25,1,18.5859375,1,19s0.3359375,0.75,0.75,0.75h2.1637573   c0.3355713,1.2952271,1.5039063,2.2587891,2.9026489,2.2587891c1.3979492,0,2.5662231-0.963562,2.9017334-2.2587891H24.25   c0.4140625,0,0.75-0.3359375,0.75-0.75S24.6640625,18.25,24.25,18.25z M6.8164063,20.5087891   c-0.8320313,0-1.5087891-0.6767578-1.5087891-1.5087891s0.6767578-1.5087891,1.5087891-1.5087891   c0.8310547,0,1.5078125,0.6767578,1.5078125,1.5087891S7.6474609,20.5087891,6.8164063,20.5087891z" fill="'.$color.'"/></g></svg>';
+    $svg = '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" enable-background="new 0 0 53 53" id="Layer_1" x="0px" y="0px" viewBox="0 0 53 53" style="enable-background:new 0 0 53 53;" xml:space="preserve">
+               <style type="text/css">
+                .st0{display:none;}
+                .st1{display:inline;}
+                .st3{fill:'.$color.';}
+                .st4{display:none;fill:'.$color.';}
+                .st5{fill:none;fill-opacity:0;stroke:'.$color.';stroke-width:3;stroke-miterlimit:10;}
+                .st6{fill:none;fill-opacity:0;stroke:'.$color.';stroke-width:2;stroke-miterlimit:10;}
+               </style>
+               <g id="Layer_2_00000047770719710110742230000003923951626148849557_" class="st0">
+                <rect x="0" y="0" class="st1" width="53.1" height="53.1"/>
+               </g>
+               <g id="Layer_1_00000162333103265806981530000017146624247591674556_">
+                <g>
+                   <defs>
+                      <path id="SVGID_1_" d="M0,0h53v53H0V0z M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5     C20.8,36.1,21.9,37.2,23.3,37.2z M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z      M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/>
+                   </defs>
+                   <clipPath id="SVGID_00000112608340804245442460000013986219178199086244_">
+                      <use xlink:href="#SVGID_1_" style="overflow:visible;"/>
+                   </clipPath>
+                   <g id="BarsClipped" style="clip-path:url(#SVGID_00000112608340804245442460000013986219178199086244_);">
+                      <path class="st3" d="M39.9,31.5L18,37.3c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8     C40.8,30.7,40.5,31.3,39.9,31.5z"/>
+                      <path class="st3" d="M38.1,24.6l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8     C39,23.8,38.7,24.5,38.1,24.6z"/>
+                      <path class="st3" d="M36.2,17.9l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8     C37.2,17.1,36.8,17.7,36.2,17.9z"/>
+                   </g>
+                </g>
+                <path class="st4" d="M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5C20.8,36.1,21.9,37.2,23.3,37.2z"/>
+                <path class="st4" d="M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z"/>
+                <path class="st4" d="M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/>
+                <path class="st4" d="M23.9,38.2c-1.9,0.5-3.8-0.6-4.3-2.5c-0.5-1.9,0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5C26.9,35.8,25.8,37.7,23.9,38.2   z M22.6,33.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.3,33.5,23.4,33,22.6,33.2z"/>
+                <path class="st4" d="M34.1,28.2c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3c1.9-0.5,3.8,0.6,4.3,2.5C37.1,25.8,36,27.7,34.1,28.2z    M32.8,23.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C34.5,23.5,33.6,23,32.8,23.2z"/>
+                <path class="st4" d="M24.2,23.5c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5S26.1,23,24.2,23.5z M22.9,18.6   c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.7,18.8,23.8,18.3,22.9,18.6z"/>
+                
+                <path class="st5" fill-opacity="0" d="M26.5,51.5c13.8,0,25-11.2,25-25s-11.2-25-25-25s-25,11.2-25,25S12.7,51.5,26.5,51.5z"/>
+                
+                <path class="st4" d="M33.3,21h10c0.4,0,0.8-0.3,0.8-0.8s-0.3-0.8-0.8-0.8h-10C33.3,20.2,33.3,20.2,33.3,21z"/>
+               </g>
+               
+               <circle class="st6" fill-opacity="0" cx="23.3" cy="20.1" r="2.5"/>
+               <circle class="st6" fill-opacity="0" cx="33.2" cy="24.8" r="2.5"/>
+               <circle class="st6" fill-opacity="0" cx="23" cy="34.8" r="2.5"/>
+               </svg>';
 
     return 'data:image/svg+xml;base64,' . base64_encode( $svg );
-
 }
 
 function flrt_get_icon_html()
@@ -1343,6 +1431,7 @@ function flrt_get_variations_transient_key( $salt ){
 }
 
 function flrt_is_query_on_page( $setPosts, $searchKey ){
+    $filterSet  = Container::instance()->getFilterSetService();
     $sets = [];
     if( ! is_array( $setPosts ) ){
         return $sets;
@@ -1352,6 +1441,9 @@ function flrt_is_query_on_page( $setPosts, $searchKey ){
 
         $parameters = maybe_unserialize( $set->post_content );
         $query      = isset( $parameters['wp_filter_query'] ) ? $parameters['wp_filter_query']: '-1';
+        if($filterSet->under_limit_filter_set($set->ID)){
+            continue;
+        }
 
         if( isset( $parameters['use_apply_button'] ) && $parameters['use_apply_button'] === 'yes' ){
 
@@ -1570,10 +1662,10 @@ function flrt_detect_date_type( $date_or_time )
  */
 function flrt_clean_date_time( $datetime, $date_type, $sep = " " )
 {
-    if ( $date_type === 'date' ) {
+    if ( $date_type === 'date' || $date_type === 'DATE' ) {
         $pieces = explode( $sep, $datetime );
         return $pieces[0]; //date e.g. 2021-05-14
-    } else if ( $date_type === 'time' ) {
+    } else if ( $date_type === 'time' || $date_type === 'TIME') {
         $pieces = explode( $sep, $datetime );
         if ( isset( $pieces[1] ) ) {
             return $pieces[1]; //time e.g. 14:15:47
@@ -1728,23 +1820,24 @@ function flrt_split_date_time( $date_time = '' ) {
     return $data;
 }
 
-function flrt_string_polyfill( $string ) {
-
-    if( is_array( $string ) ){
-        return array_map( 'flrt_string_polyfill_body', $string );
-    }
-
-    return flrt_string_polyfill_body( $string );
+function flrt_string_polyfill( $data ) {
+    return map_deep( $data, 'flrt_string_polyfill_body' );
 }
 
 function flrt_string_polyfill_body( $string ){
+
+    if ( ! is_string( $string ) ) {
+        return $string;
+    }
+
     $str = preg_replace('/\x00|<[^>]*>?/', '', $string );
     return str_replace( ["'", '"'], ['&#39;', '&#34;'], $str );
 }
 
 function flrt_rating_star(){
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 25">
-                                            <polygon class="cls-1" points="19.89 24.5 12.48 19.8 5.06 24.48 7.03 15.62 0.5 9.64 9.12 8.87 12.51 0.5 15.88 8.88 24.5 9.68 17.96 15.63 19.89 24.5"/></svg>';
+             <polygon class="cls-1" points="19.89 24.5 12.48 19.8 5.06 24.48 7.03 15.62 0.5 9.64 9.12 8.87 12.51 0.5 15.88 8.88 24.5 9.68 17.96 15.63 19.89 24.5"/>
+            </svg>';
 }
 
 function flrt_check_update_mobile_settings(){
@@ -1822,4 +1915,374 @@ if(!class_exists('FlrtWooDiscountRules')) {
     function flrt_woo_discount_rules_class(){
         return new FlrtWooDiscountRules();
     }
+}
+
+
+if(!function_exists('flrt_is_sitemap_exists')) {
+    function flrt_is_sitemap_exists()
+    {
+        $filepath = rtrim(FLRT_XML_PATH, '/\\') . '/filter-sitemap-index.xml';
+        return file_exists($filepath);
+    }
+}
+if(!function_exists('flrt_get_index_sitemap')) {
+    function flrt_get_index_sitemap()
+    {
+        return fltr_get_url_from_absolute_path(FLRT_XML_PATH . '/filter-sitemap-index.xml');
+    }
+}
+
+if(!function_exists('fltr_get_url_from_absolute_path')) {
+    function fltr_get_url_from_absolute_path($absolute_path)
+    {
+        $wp_root_path = realpath(ABSPATH);
+        $wp_url = site_url();
+
+        $file_path = realpath($absolute_path);
+
+        if (!$file_path || strpos($file_path, $wp_root_path) !== 0) {
+            return false;
+        }
+
+
+        $relative_path = str_replace($wp_root_path, '', $file_path);
+        $relative_path = str_replace('\\', '/', $relative_path);
+
+        return rtrim($wp_url, '/') . $relative_path;
+    }
+}
+
+if(!function_exists('flrt_has_filter_seo_rules')) {
+    function flrt_has_filter_seo_rules()
+    {
+        $args = [
+            'post_type'      => 'filter-seo-rule',
+            'post_status'    => 'publish',
+            'posts_per_page' => 1,
+            'fields'         => 'ids',
+            'no_found_rows'  => true,
+        ];
+
+        $query = new WP_Query($args);
+        return $query->have_posts();
+    }
+}
+
+if(!function_exists('flrt_get_last_modified_filter_seo_rule')) {
+    function flrt_get_last_modified_filter_post_type($post_type)
+    {
+        global $wpdb;
+        $sql = "
+        SELECT post_modified
+        FROM {$wpdb->posts}
+        WHERE post_type = '%s'
+          AND post_status IN ('publish', 'trash')
+        ORDER BY post_modified DESC
+        LIMIT 1";
+        $query = $wpdb->prepare($sql, $post_type);
+        $last_modified = $wpdb->get_var($query);
+
+        if (!$last_modified) {
+            return false;
+        }
+        return $last_modified;
+    }
+}
+
+if(!function_exists('flrt_check_to_update_xml')){
+    function flrt_check_to_update_xml(){
+        $wpc_xml_write_date = get_option('wpc_xml_write_date');
+        if(!$wpc_xml_write_date) return false;
+
+        $last_modified_filter_seo_rule = flrt_get_last_modified_filter_post_type(FLRT_SEO_RULES_POST_TYPE);
+        $last_modified_filter_set = flrt_get_last_modified_filter_post_type(FLRT_FILTERS_SET_POST_TYPE);
+
+        if(!$last_modified_filter_seo_rule && !$last_modified_filter_set) return false;
+
+        $wpc_xml_write_date = strtotime($wpc_xml_write_date);
+        $last_modified_filter_seo_rule = strtotime($last_modified_filter_seo_rule);
+        $last_modified_filter_set = strtotime($last_modified_filter_set);
+
+        if ($last_modified_filter_seo_rule > $wpc_xml_write_date || $last_modified_filter_set > $wpc_xml_write_date) {
+            return true;
+        }
+        if($wpc_xml_write_date !== false && !flrt_has_filter_seo_rules()){
+            return true;
+        }
+        return false;
+    }
+}
+
+
+if(!function_exists('flrt_post_type_underline_transform')){
+    function flrt_post_type_underline_transform($post_type){
+        if(mb_strpos($post_type, '-') !== false){
+            return str_replace('-', '_', $post_type);
+        }
+       return $post_type;
+    }
+}
+
+
+if(!function_exists('flrt_generate_unique_copy_title')) {
+
+    /**
+     * Generates a unique copy title in the format:
+     * "Base Title – {copy_text} {N}".
+     *
+     * @param string $original_title The original post title to derive the base title from.
+     *                               If it already ends with "– {copy_text} N", that suffix is stripped.
+     * @param string $post_type      The WordPress post type within which to check for duplicate titles.
+     *                               By default expects the FLRT_FILTERS_SET_POST_TYPE constant.
+     * @param string $copy_text      The suffix text for copies (e.g., 'copy', 'duplicate').
+     * @param int    $start_number   Numbering threshold:
+     *                               - if 0 (default), the first copy gets number "1";
+     *                               - if 1, the first copy has no number; numbering appears only when
+     *                                 a "… – {copy_text} 1" already exists.
+     *
+     * @return string The generated unique copy title.
+     */
+
+    function flrt_generate_unique_copy_title($original_title, $post_type = FLRT_FILTERS_SET_POST_TYPE, $copy_text = 'copy', $number_position = true)
+    {
+        global $wpdb;
+        if ($number_position){
+            $preg_match_pattern = '/^(.*) – ' . preg_quote($copy_text, '/') . ' \d+$/';
+        }
+
+        if (!$number_position){
+            $preg_match_pattern = '/^(.*) \d+ – ' . preg_quote($copy_text, '/') . '$/';
+        }
+
+        if (preg_match($preg_match_pattern, $original_title, $matches)) {
+            $base_title = $matches[1];
+        } else {
+            $base_title = $original_title;
+        }
+
+        if ($number_position){
+            $copy_pattern = $wpdb->esc_like($base_title) . ' – ' . $wpdb->esc_like($copy_text) . '%';
+            $titles = $wpdb->get_col(
+                    $wpdb->prepare(
+                            "SELECT post_title FROM $wpdb->posts
+             WHERE (post_title = %s OR post_title LIKE %s)
+             AND post_type = %s",
+                            $base_title,
+                            $copy_pattern,
+                            $post_type
+                    )
+            );
+        }
+        if (!$number_position) {
+            $copy_pattern = $wpdb->esc_like($base_title) . ' % – ' . $wpdb->esc_like($copy_text);
+            $titles = $wpdb->get_col(
+                    $wpdb->prepare(
+                            "SELECT post_title FROM $wpdb->posts
+             WHERE post_title LIKE %s
+             AND post_type = %s",
+                            $copy_pattern,
+                            $post_type
+                    )
+            );
+        }
+
+        $max_copy_number = 0;
+
+        if ($number_position){
+            $preg_match_pattern_title = '/^' . preg_quote($base_title, '/') . ' – ' . preg_quote($copy_text, '/') . ' (\d+)$/';
+
+        }
+        if (!$number_position){
+            $preg_match_pattern_title = '/^' . preg_quote($base_title, '/') . ' (\d+) – ' . preg_quote($copy_text, '/') . '$/';
+        }
+
+        foreach ($titles as $title) {
+            if (preg_match($preg_match_pattern_title, $title, $m)) {
+                if (isset($m[1]) && is_numeric($m[1])) {
+                    $num = intval($m[1]);
+                    if ($num > $max_copy_number) {
+                        $max_copy_number = $num;
+                    }
+                }
+            }
+        }
+
+        $new_number = $max_copy_number + 1;
+
+        if ($number_position){
+            $text = $base_title . ' – ' . $copy_text . ' ' . $new_number;
+        }
+        if (!$number_position){
+            $text = $base_title . ' ' . $new_number .' – ' . $copy_text;
+        }
+        return $text;
+    }
+}
+
+if(!function_exists('flrt_get_delete_set_transient')){
+    function flrt_refresh_temp_transient($set_name, $data)
+    {
+        if(get_transient($set_name) !== false){
+            delete_transient($set_name);
+        }
+        set_transient($set_name, $data, 300);
+    }
+}
+
+if(!function_exists('flrt_view_admin_error')){
+    function flrt_view_admin_error($text){
+        $error_str = '<div class="notice notice-error is-dismissible"><p>%s</p></div>';
+        printf(
+                $error_str,
+                $text
+        );
+    }
+}
+if (!function_exists('flrt_export_setting_icon')) {
+    function flrt_export_setting_icon()
+    {
+        return '<svg xmlns="http://www.w3.org/2000/svg" fill="#99a2b2" width="19px" height="19px" viewBox="0 0 24 20"><polyline id="primary" points="15 3 21 3 21 9" style="fill: none; stroke: rgb(153,162,178); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"/><line id="primary-2" data-name="primary" x1="11" y1="13" x2="21" y2="3" style="fill: none; stroke: rgb(153,162,178); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"/><path id="primary-3" data-name="primary" d="M21,13v7a1,1,0,0,1-1,1H4a1,1,0,0,1-1-1V4A1,1,0,0,1,4,3h7" style="fill: none; stroke: rgb(153,162,178); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"/></svg>';
+    }
+}
+
+if (!function_exists('flrt_import_setting_icon')) {
+    function flrt_import_setting_icon()
+    {
+        return '<svg xmlns="http://www.w3.org/2000/svg" fill="#000000" width="19px" height="19px" viewBox="0 0 24 23" id="wpc-import-icon"><polyline id="primary" points="17 13 11 13 11 7" style="fill: none; stroke: rgb(153,162,178); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"/><line id="primary-2" data-name="primary" x1="21" y1="3" x2="11" y2="13" style="fill: none; stroke: rgb(153,162,178); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"/><path id="primary-3" data-name="primary" d="M21,13v7a1,1,0,0,1-1,1H4a1,1,0,0,1-1-1V4A1,1,0,0,1,4,3h7" style="fill: none; stroke: rgb(153,162,178); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"/></svg>';
+    }
+}
+
+if (!function_exists('flrt_open_in_new_tab_icon')) {
+    function flrt_open_in_new_tab_icon()
+    {
+        $icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 21" width="18" height="18" aria-hidden="true" focusable="false">
+        <path d="M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"></path></svg>';
+        return wp_kses(
+                $icon,
+                array(
+                        'svg'  => array(
+                                'xmlns'       => true,
+                                'viewbox'     => true,
+                                'width'       => true,
+                                'height'      => true,
+                                'aria-hidden' => true,
+                                'focusable'   => true,
+                        ),
+                        'path' => array(
+                                'd'      => true
+                        ),
+                )
+        );
+    }
+}
+
+if (!function_exists('flrt_vailable_in_pro_attr_link')) {
+    function flrt_vailable_in_pro_attr_link($target_blank = false) : string
+    {
+        $link = 'edit.php?post_type=' . FLRT_FILTERS_SET_POST_TYPE . '&page=flrt-pro';
+        if ($target_blank) {
+            $link .= '_target=blank';
+        }
+        return $link;
+    }
+}
+if (!function_exists('flrt_pro_promo_label')) {
+    function flrt_pro_promo_label($replace_class = false) : string
+    {
+        $class = $replace_class ? 'wpc-pro-badge' : 'wpc-pro-badge-transparent';
+        $label = ' <span class="' . $class .'">' . esc_html__('PRO', 'filter-everything') . '</span>';
+
+        return wp_kses($label, [
+                'span' => [
+                        'class' => []
+                ]
+        ]);
+    }
+}
+
+if(!function_exists( 'flrt_unlock_icon')){
+    function flrt_unlock_icon($width = '20px', $height = '20px', $color = '#FFFFFF')
+    {
+        return '<svg xmlns="http://www.w3.org/2000/svg" height="' . $height . '" viewBox="0 -960 960 960" width="' . $width . '" fill="'  . $color . '"><path d="M264-624h336v-96q0-50-35-85t-85-35q-50 0-85 35t-35 85h-72q0-80 56.23-136 56.22-56 136-56Q560-912 616-855.84q56 56.16 56 135.84v96h24q29.7 0 50.85 21.15Q768-581.7 768-552v384q0 29.7-21.16 50.85Q725.68-96 695.96-96H263.72Q234-96 213-117.15T192-168v-384q0-29.7 21.15-50.85Q234.3-624 264-624Zm0 456h432v-384H264v384Zm216.21-120Q510-288 531-309.21t21-51Q552-390 530.79-411t-51-21Q450-432 429-410.79t-21 51Q408-330 429.21-309t51 21ZM264-168v-384 384Z"/></svg>';
+    }
+}
+
+if(!function_exists( 'flrt_unlock_in_pro')){
+    function flrt_unlock_in_pro($button_text = '')
+    {
+        $string = '<a class="wpc-available-in-pro-button" href="' . admin_url(flrt_vailable_in_pro_attr_link()) . '">';
+        $string .= !empty($button_text) ? $button_text . ' - ': '';
+        $string .= flrt_unlock_icon();
+        $string  .=  '<span>' . esc_html__('Unlock with PRO', 'filter-everything') . '</span></a>';
+        return $string;
+    }
+}
+
+
+add_filter('wpc_filter_default_fields', 'flrt_add_pro_promo_fields', 10, 2);
+function flrt_add_pro_promo_fields( $defaultFields, $filterFields )
+{
+
+    if (!defined('FLRT_FILTERS_PRO')) {
+        if(flrt_is_woocommerce()){
+            $updatedFields = [];
+            foreach ( $defaultFields as $key => $field ){
+                $updatedFields[$key] = $field;
+
+                if( $key === 'hierarchy' ){
+                    $updatedFields['used_for_variations'] = array(
+                            'type'  => 'inProButton',
+                            'pro_label'  => flrt_pro_promo_label(),
+                            'label' => esc_html__('Use for Variations', 'filter-everything'),
+                            'class' => 'wpc-field-for-variations',
+                            'default' => 'no',
+                            'instructions' => esc_html__('If checked, filtering will take into account variations with this attribute or meta key', 'filter-everything'),
+                    );
+                }
+            }
+            return $updatedFields;
+        }
+    }
+
+    return $defaultFields;
+
+}
+
+function flrt_pro_features_link()
+{
+    return 'https://layout.filtereverything.pro/#why-choose-pro';
+}
+
+function flrt_unlock_pro_link()
+{
+    return 'https://codecanyon.net/cart/configure_before_adding/31634508?license=regular&amp;support=bundle_6month';
+}
+
+function wpc_clear_folder($directory)
+{
+
+    if (!is_dir($directory)) {
+        return false;
+    }
+
+    $files = glob(rtrim($directory, '/\\') . DIRECTORY_SEPARATOR . '*');
+
+    if(!empty($files)){
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                unlink($file);
+            }
+        }
+    }
+}
+
+function flrt_diamond_icon($svg_fill = "var(--wpc-pro-color, #7A1FA2)")
+{
+    return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="' . $svg_fill. '" version="1.1" id="Layer_1" width="16px" height="16px" viewBox="0 0 70 70" enable-background="new 0 0 70 70" xml:space="preserve">
+                <g>
+                    <path d="M67.142,23.641L55.405,10.456c-0.379-0.423-0.92-0.873-1.488-0.873h-37.98c-0.568,0-1.109,0.45-1.489,0.874L2.711,23.752   c-0.691,0.771-0.68,1.94,0.025,2.697L33.462,59.46c0.378,0.407,0.909,0.638,1.464,0.638s1.086-0.257,1.464-0.664l30.728-33.042   C67.822,25.634,67.833,24.411,67.142,23.641z M46.555,25.583L34.902,53.414L22.608,25.583H46.555z M21.725,23.583l-4.417-10h34.272   l-4.188,10H21.725z M32.231,52.152L7.586,25.583h12.879L32.231,52.152z M48.702,25.583H62c0.094,0,0.179-0.029,0.265-0.054   L37.462,52.318L48.702,25.583z M61.871,23.583H49.543l3.971-9.447L61.871,23.583z M15.714,14.851l3.867,8.732H8.027L15.714,14.851z   "/>
+                <path d="M35,14.583H23c-0.552,0-1,0.447-1,1s0.448,1,1,1h12c0.552,0,1-0.447,1-1S35.552,14.583,35,14.583z"/>
+                <path d="M45,14.583h-5c-0.552,0-1,0.447-1,1s0.448,1,1,1h5c0.552,0,1-0.447,1-1S45.552,14.583,45,14.583z"/>
+            </g>
+            </svg>';
 }

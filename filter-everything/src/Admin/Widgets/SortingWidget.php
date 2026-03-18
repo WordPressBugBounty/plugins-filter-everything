@@ -212,7 +212,7 @@ class SortingWidget extends \WP_Widget
 
     private function _debug_messages() {
         echo '<p class="wpc-debug-message">';
-        echo esc_html__( 'The Filter Everything Sorting widget only works on pages with filtering posts.', 'filter-everything' );
+        echo esc_html__( 'Sorting is unavailable on this page. It works only with content filtered by Filter Everything. To enable sorting, assign a Filter Set to this page.', 'filter-everything' );
         echo '</p>';
     }
 }

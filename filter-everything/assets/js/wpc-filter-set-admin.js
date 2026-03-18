@@ -1,5 +1,5 @@
 /*!
- * Filter Everything set admin 1.9.1
+ * Filter Everything set admin 1.9.2
  */
 (function($) {
     "use strict";
@@ -7,6 +7,7 @@
     let postTypesTaxList = wpcSetVars.postTypesTaxList;
     let numFieldNoTaxes  = wpcSetVars.numFieldNoTaxes;
     let numFieldAttrs    = wpcSetVars.numFieldAttrs;
+    let isLimitFilterSet = wpcSetVars.isLimitFilterSet;
 
     function validateFiltersForm( $el )
     {
@@ -195,7 +196,7 @@
         let usedEntities = [];
         let currentVal   = '';
         // Pass through these entities
-        let doNotInclude = ['post_meta', 'post_meta_num', 'post_meta_exists', 'tax_numeric'];
+        let doNotInclude = ['post_meta', 'post_meta_num', 'post_meta_exists', 'tax_numeric', 'post_meta_date'];
 
         if ( $inputs.length > 0 ) {
             $inputs.each( function(){
@@ -230,8 +231,9 @@
     {   // .wpc-field-entity
         let currentVal      = '';
         let selectClass     = $theSelect.attr('class');
-        let exclude         = getUsedEntities( $( '.'+selectClass ), $theSelect ); // Entities already selected in other filters
-        let forbiddenTaxes  = getForbiddenTaxes(); // Entities that do not belong to the Post type
+        const excludeRaw    = getUsedEntities( $( '.'+selectClass ), $theSelect );
+        const exclude       = Array.isArray(excludeRaw) ? excludeRaw : [];
+        let forbiddenTaxes  = getForbiddenTaxes(); //
 
         $theSelect.find('option').each( function (){
             currentVal = $(this).val();
@@ -323,7 +325,6 @@
     $(document).ready(function (){
 
         $('form#post').on('submit', function(e){
-
             // Clear all errors
             removeElement( $('.wpc-field-notice') );
 
@@ -340,8 +341,10 @@
             }
         });
 
+
         $('.wpc-add-filter').on('click', function (e){
             e.preventDefault();
+
             let html = $('#wpc-new-filter').html();
             let $el = $(html);
             let search = 'wpc_new_id';
@@ -532,7 +535,7 @@
             }
 
             // replace with includes
-            if ( [ 'tax_numeric', 'post_meta', 'post_meta_num', 'post_meta_exists', 'post_date' ].includes(entity) ) {
+            if ( [ 'tax_numeric', 'post_meta', 'post_meta_num', 'post_meta_exists', 'post_date', 'post_meta_date' ].includes(entity) ) {
                 let target = $('#wpc_filter_fields-'+fid+'-exclude');
                 target.select2({
                     disabled: true,
@@ -576,7 +579,9 @@
                     val = 'tax_numeric_' + ename;
                 } else if ( entity === 'post_meta_exists' ) {
                     val = 'post_meta_exists_' + ename;
-                } else {
+                } else if ( entity === 'post_meta_date' ) {
+                    val = 'post_meta_date_' + ename;
+                }else {
                     val = 'post_meta_' + ename;
                 }
 
@@ -794,10 +799,6 @@
                 $('.wpc-location-preview-not-pro').addClass('display-none');
             }
 
-
-            if( wpcSetVars.filtersPro < 1 ){
-                return true;
-            }
             setAvailableEntities( $('.wpc-new-filter-item .wpc-field-entity') );
 
             removeElement( $('.wpc-field-notice') );
@@ -808,8 +809,17 @@
                 wpcGetLocationTerms( selected );
             }
 
+            let selectEntity = $("select.wpc-field-entity");
+
+            const postMetaValues = ['post_meta', 'post_meta_num', 'post_meta_exists', 'post_meta_date'];
+
             // Change options in all select.wpc-field-ename
             let eNameSelect = $("select.wpc-field-ename");
+            if(postMetaValues.includes(selectEntity.val())){
+                handleMetaKeyField(selectEntity);
+                return;
+            }
+
             if( eNameSelect.length > 0 ) {
                 fillTaxNumSelect( eNameSelect, postType );
             }
@@ -922,6 +932,16 @@
             }
         });
 
+        $('body').on('click', '#wpc_set_fields-horizontal_view', function (){
+            let applyButtonChecked = $(this).prop( "checked" );
+            $("#wpc_set_fields-horizontal_view_priority").val('filter_set');
+            if( applyButtonChecked ){
+                $(".wpc-field-horizontal-view-column-tr").addClass('wpc-opened');
+            }else{
+                $(".wpc-field-horizontal-view-column-tr").removeClass('wpc-opened');
+            }
+        });
+
         $('body').on('click', '#wpc_set_fields-use_search_field', function (){
             let searchFieldChecked = $(this).prop( "checked" );
 
@@ -979,9 +999,9 @@
             wpcGetWpQueries( filterPagelink );
         }
 
-        let notProfilterPagelink = $('option:selected', $('#wpc_set_fields-post_type')).data('link');
-        if( typeof notProfilterPagelink !== 'undefined' && notProfilterPagelink ){
-            $('.wpc-location-preview-not-pro').attr('href', notProfilterPagelink);
+        let notProFilterPagelink = $('option:selected', $('#wpc_set_fields-post_type')).data('link');
+        if( typeof notProFilterPagelink !== 'undefined' && notProFilterPagelink ){
+            $('.wpc-location-preview-not-pro').attr('href', notProFilterPagelink);
             $('.wpc-location-preview-not-pro').removeClass('display-none');
         }
     });
@@ -1087,9 +1107,6 @@
     }
 
     function wpcGetWpQueries( filterPagelink ){
-        if( wpcSetVars.filtersPro < 1){
-            return true;
-        }
 
         if( filterPagelink === '' ){
             return true;
@@ -1191,6 +1208,25 @@
         requestParams.postType   = postType;
         requestParams.postId     = $("#post_ID").val();
 
+        const isFreeVersion = Number(wpcSetVars.filtersPro) < 1;
+        const $addFilterDiv = $('.wpc-add-filter-div');
+        const $submitButton = $('#publishing-action input[type=submit]');
+        const $publishingActionDiv = $('#publishing-action');
+        const applyFreeFiltersUiState = (isLimited, isLoading) => {
+            if (!isFreeVersion) return;
+
+            $addFilterDiv.toggleClass('wpc_under_limit_filter_set', Boolean(isLimited));
+            $publishingActionDiv.toggleClass('wpc_under_limit_filter_set_publish', Boolean(isLimited));
+
+            if (isLoading) {
+                $submitButton.addClass('disabled').prop('disabled', true);
+            } else {
+                $submitButton.removeClass('disabled').prop('disabled', false);
+            }
+        };
+
+        applyFreeFiltersUiState(isLimitFilterSet, true);
+
         wp.ajax.post( 'wpc-get-set-location-terms', requestParams )
             .always( function() {
                 $spinner.removeClass( 'is-active' );
@@ -1199,6 +1235,9 @@
                 //
                 let locationTermsSelect = $(response.html).find('#wpc_set_fields-post_name');
                 $( '#wpc_set_fields-post_name' ).replaceWith(locationTermsSelect);
+
+                isLimitFilterSet = response.isLimitFilterSet;
+                applyFreeFiltersUiState(isLimitFilterSet, false);
 
                 let filterPagelink = $('option:selected', $('#wpc_set_fields-post_name') ).data('link');
                 if( typeof filterPagelink !== 'undefined'){
@@ -1298,15 +1337,14 @@
         let fid = entitySelect.parents('.wpc-filter-item').data('fid');
         if( val === 'post_meta_num' || val === 'tax_numeric' ) {
             $('#wpc_filter_fields-' + fid + '-view option:not([value="range"])').attr('disabled', 'disabled');
-            $('#wpc_filter_fields-' + fid + '-view option[value="range"]').removeAttr('disabled')
-                .prop('selected', true);
+            $('#wpc_filter_fields-' + fid + '-view option[value="range"]').removeAttr('disabled').prop('selected', true);
             $('#wpc_filter_fields-' + fid + '-view').trigger('change');
         } else if ( val === 'taxonomy_product_visibility' ) {
             $('#wpc_filter_fields-' + fid + '-view option[value="rating"]').removeAttr('disabled')
                 .prop('selected', true);
             $('.wpc-form-fields-table').addClass('wpc-view-rating');
         }
-        else if ( val === 'post_date' ) {
+        else if ( val === 'post_date' || val === 'post_meta_date' ) {
             $('#wpc_filter_fields-' + fid + '-view option:not([value="date"])').attr('disabled', 'disabled');
             $('#wpc_filter_fields-' + fid + '-view option[value="date"]').removeAttr('disabled')
                 .prop('selected', true);
@@ -1329,10 +1367,12 @@
 
         if ( val === 'author_author' || val === 'post_meta_exists' || val === 'taxonomy_product_visibility' ) {
             $( '#wpc_filter_fields-' + fid + '-logic option[value="and"]' ).attr( 'disabled', 'disabled' );
+            $( '#wpc_filter_fields-'+fid+'-logic option[value="or"]' ).removeAttr( 'disabled' );
             $( '#wpc_filter_fields-' + fid + '-logic option[value="or"]' ).prop( 'selected', true );
-        } else if ( val === 'post_meta_num' || val === 'tax_numeric' || val === 'post_date' ) {
+        } else if ( val === 'post_meta_num' || val === 'tax_numeric' || val === 'post_date' || val === 'post_meta_date' ) {
             // If filter is numeric logic can be AND only
             $( '#wpc_filter_fields-' + fid + '-logic option[value="or"]' ).attr( 'disabled', 'disabled' );
+            $( '#wpc_filter_fields-' + fid + '-logic option[value="and"]' ).removeAttr( 'disabled');
             $( '#wpc_filter_fields-' + fid + '-logic option[value="and"]' ).prop( 'selected', true );
         } else {
             $( '#wpc_filter_fields-'+fid+'-logic option[value="and"]' ).removeAttr( 'disabled' );
@@ -1368,13 +1408,12 @@
     {
         let val = entitySelect.val();
         let fid = entitySelect.parents('.wpc-filter-item').data('fid');
+        let postType = $("#wpc_set_fields-post_type").val();
 
-        if ( val === 'post_meta' || val === 'post_meta_num' || val === 'post_meta_exists' ) {
+        if ( val === 'post_meta' || val === 'post_meta_num' || val === 'post_meta_exists' || val === 'post_meta_date' ) {
             let eNameTag = $('#wpc_filter_fields-'+fid+'-e_name');
-
-            if ( eNameTag.prop("tagName").toLowerCase() === 'select' ) {
+            if ( eNameTag.prop("tagName").toLowerCase() === 'select' && eNameTag.is('[readonly]')) {
                 let eNameInput = $('<input>');
-                let postType = $("#wpc_set_fields-post_type").val();
 
                 eNameInput.attr( 'class', eNameTag.attr('class') )
                     .attr( 'type', 'text' )
@@ -1387,8 +1426,158 @@
 
                 eNameInput.parents('.wpc-field-ename-tr').show();
             } else {
+                if (eNameTag.length > 0 && eNameTag.hasClass('select2-hidden-accessible')) {
+                    eNameTag.select2('destroy');
+                    eNameTag.empty();
+                    eNameTag.off();
+                }
+                let eNameSelect = $('<select>');
+                eNameSelect
+                    .attr('class', eNameTag.attr('class'))
+                    .attr('name', eNameTag.attr('name'))
+                    .attr('id', eNameTag.attr('id'));
+
                 eNameTag.val('');
-                eNameTag.parents('.wpc-field-ename-tr').show();
+                eNameTag.replaceWith(eNameSelect);
+
+                const defaultCustomMetaKeys = wpcSetVars.defaultCustomMetaKeys;
+
+                const ptItems = defaultCustomMetaKeys?.[postType]?.[val];
+                const allItems = defaultCustomMetaKeys?.['all_post_types']?.[val];
+
+                const getItems = (items) => {
+                    if (items && typeof items === 'object') {
+                        Object.entries(items).forEach(function ([key, value]) {
+                            items[key] = value;
+                        });
+                        return items;
+                    }
+                    return [];
+                }
+
+                let tItems = [];
+
+                tItems = getItems(ptItems);
+                if (tItems.length > 0) {
+                    tItems.push(getItems(allItems));
+                }
+
+                const prefillItems = Object.entries(tItems).map(([key, value]) => ({
+                    id: key,
+                    text: value
+                }));
+
+                let minimumInputLength = 1;
+                if(prefillItems.length > 0){
+                    minimumInputLength = 0;
+                }
+
+                eNameSelect.select2({
+                    width: '100%',
+                    ajax: {
+                        url: ajaxurl,
+                        dataType: 'json',
+                        data: function (params) {
+                            return {
+                                action: 'wpc_search_meta_keys',
+                                _flrt_nonce: $('#wpc_set_nonce').val(),
+                                post_type: postType,
+                                post_meta_type: val,
+                                q: params.term || ''
+                            };
+                        },
+                        transport: function (params, success, failure) {
+                            let dots = 0;
+                            let animatedDotInterval;
+                            const startAnimation = (el)=> {
+                                if (!animatedDotInterval) { // Prevent multiple intervals
+                                    animatedDotInterval = setInterval(function() {
+                                        if (dots < 3) {
+                                            el.append('.');
+                                            dots++;
+                                        } else {
+                                            el.text(''); // Clear dots
+                                            dots = 0;
+                                        }
+                                    }, 400); // Interval in milliseconds
+                                }
+                            }
+                            if($('.loading-dots-search').length > 0){
+                                startAnimation($('.loading-dots-search'));
+                            }
+
+                            let term = (params.data && (params.data.q || params.data.term)) || '';
+
+                            if (!term && prefillItems.length > 0) {
+                                success({ items: prefillItems });
+                                return {
+                                    abort: function () {}
+                                };
+                            }
+
+
+                            let delayTime = term ? 0 : 1000;
+                            let doRequest = function () {
+                                let $request = $.ajax(params);
+                                $request.then(success);
+                                $request.fail(failure);
+                                return $request;
+                            };
+                            if (delayTime > 0) {
+                                let timeout = setTimeout(doRequest, delayTime);
+                                return {
+                                    abort: function () { clearTimeout(timeout); }
+                                };
+                            }
+                            return doRequest();
+                        },
+                        processResults: function (data, params) {
+                            let items = (data && data.items) ? data.items : [];
+                            if (!params || !params.term || !params.q) {
+                                if (!items.length && prefillItems.length) {
+                                    return { results: prefillItems };
+                                }
+                            }
+
+                            if (items.length > 0) {
+                                items.forEach((el, index) => {
+                                    if(el.text !== '' && el.text !== el.id && !el.text.startsWith(el.id)){
+                                        el.text = el.id  + '<span class="wpc-select2-dots">:</span><span class="wpc-select2-info">' + el.text + '</span>';
+                                    } else if (el.text !== '' && el.text !== el.id && el.text.startsWith(el.id)) {
+                                    }else{
+                                        el.text = el.id;
+                                    }
+                                    items[index] = el;
+                                });
+                            }
+
+                            return { results: items };
+                        },
+                        cache: false
+
+                    },
+                    placeholder: wpcSetVars.selectMetaKeyPlaceholder,
+                    allowClear: true,
+                    minimumInputLength: minimumInputLength,
+                    templateSelection: function (data, container) {
+                        if (data.id === '' || !data.id) {
+                            return wpcSetVars.selectMetaKeyPlaceholder;
+                        }
+                        return data.id;
+                    },
+                    escapeMarkup: function (markup) { return markup; },
+                    language: {
+                        searching: function () {
+                            return $('<span>' + wpcSetVars.metaKeySearchText +'</span><span class="loading-dots-search"></span>')
+
+                            },
+                        errorLoading: function () {
+                            return $('<span>' + wpcSetVars.metaKeySearchText + '</span><span class="loading-dots-search"></span>')
+                        }
+                    },
+                });
+
+                eNameSelect.parents('.wpc-field-ename-tr').show();
             }
 
             $('#wpc-filter-id-'+fid+' .wpc-field-ename-tr p.wpc-field-description').text( numFieldAttrs['post_meta_num']['description'] );
@@ -1397,9 +1586,16 @@
 
         } else if ( val === 'tax_numeric' ) {
             let eNameTag = $('#wpc_filter_fields-'+fid+'-e_name');
-            let postType = $("#wpc_set_fields-post_type").val();
+            if (eNameTag.length > 0 && eNameTag.hasClass('select2-hidden-accessible')) {
+                eNameTag.select2('destroy');
+                eNameTag.empty();
+                eNameTag.off();
+            }
 
-            if ( eNameTag.prop("tagName").toLowerCase() === 'input' ) {
+            let postType = $("#wpc_set_fields-post_type").val();
+            let tagName = eNameTag.prop("tagName").toLowerCase();
+
+            if ( tagName === 'input') {
                 let eNameSelect = $('<select>');
 
                 eNameSelect.attr( 'class', eNameTag.attr('class') )
@@ -1426,7 +1622,7 @@
         }
 
         // Numeric values can not be in URL path
-        if( val === 'post_meta_num' || val === 'tax_numeric' || val === 'post_date' ){
+        if( val === 'post_meta_num' || val === 'tax_numeric' || val === 'post_date' || val === 'post_meta_date' ){
             $('#wpc_filter_fields-'+fid+'-in_path').prop( "checked", false );
             // $('#wpc_filter_fields-'+fid+'-show_chips').prop( "checked", false );
         }else{
@@ -1478,14 +1674,14 @@
 
     function wpcSerialize( $el ){
 
-        var obj = {};
-        var inputs = $el.find('select, textarea, input').serializeArray();
+        let obj = {};
+        let inputs = $el.find('select, textarea, input').serializeArray();
 
-        for( var i = 0; i < inputs.length; i++ ) {
+        for( let i = 0; i < inputs.length; i++ ) {
             wpcBuildObject( obj, inputs[i].name, inputs[i].value );
         }
         return obj;
-    };
+    }
 
     function wpcBuildObject( obj, name, value ){
         name = name.replace('[]', '[%%index%%]');

@@ -15,6 +15,9 @@ class AdminHooks
         add_filter( 'manage_edit-'.FLRT_FILTERS_SET_POST_TYPE.'_columns', array( $this, 'filterSetPostTypeCol' ) );
         add_action( 'manage_'.FLRT_FILTERS_SET_POST_TYPE.'_posts_custom_column', array( $this, 'filterSetPostTypeColContent'), 10, 2 );
 
+        add_filter( 'manage_edit-'.FLRT_FILTERS_SET_POST_TYPE.'_columns', array( $this, 'filterSetWhereFilterCol' ), 1 );
+        add_action( 'manage_'.FLRT_FILTERS_SET_POST_TYPE.'_posts_custom_column', array( $this, 'filterSetWhereFilterColContent'), 10, 2 );
+
         add_filter( 'manage_edit-'.FLRT_FILTERS_SET_POST_TYPE.'_sortable_columns', array( $this, 'filterSetSortableColumn') );
         add_action( 'pre_get_posts', array( $this, 'filterSetOrderby' ) );
 
@@ -30,12 +33,9 @@ class AdminHooks
     public function aboutPro()
     {
         if ( ! defined('FLRT_FILTERS_PRO') ) {
-            if ( flrt_ask_for_help() ) {
-                echo '<a class="wpc-tab wpc-help-me" href="'.admin_url( 'edit.php?post_type=filter-set&page=filters-settings&tab=helpme' ).'">'.esc_html__( 'Need Your Help', 'filter-everything' ).'</a>'."\r\n";
-            }
 
-            echo '<a class="wpc-tab wpc-get-pro" href="'.admin_url( 'edit.php?post_type=filter-set&page=filters-settings&tab=aboutpro' ).'">'.esc_html__( 'About PRO', 'filter-everything' ).'</a>'."\r\n";
-            echo '<a class="wpc-tab wpc-get-pro button button-primary" href="'.esc_url(FLRT_PLUGIN_URL .'/?get_pro=true').'" target="_blank">'.esc_html__( 'Get PRO', 'filter-everything' ).'</a>'."\r\n";
+            echo '<a class="wpc-tab wpc-get-pro" href="'.admin_url( 'edit.php?post_type=filter-set&page=filters-settings&tab=aboutpro' ).'"><span>'.esc_html__( 'PRO benefits', 'filter-everything' ).'</span>' . flrt_diamond_icon() . "</a>\r\n";;
+            echo '<a class="wpc-tab wpc-get-pro wpc-get-pro-background button button-primary" href="'.esc_url(FLRT_PLUGIN_URL .'/?get_pro=true').'" target="_blank">'.esc_html__( 'Upgrade to PRO', 'filter-everything' ).'</a>'."\r\n";
         }
 
         $this->addHelpTab();
@@ -259,6 +259,25 @@ class AdminHooks
         return $newColumns;
     }
 
+    public function filterSetWhereFilterCol( $columns )
+    {
+        $newColumns = [];
+
+        foreach ( $columns as $columnId => $columnName ) {
+
+            if( $columnId === 'date' ){
+                continue;
+            }
+
+            $newColumns[$columnId] = $columnName;
+            if( $columnId === 'title' ){
+                $newColumns['where_filter'] = "<div>" . esc_html__( 'Open', 'filter-everything' ) . flrt_open_in_new_tab_icon() . '</div>';
+            }
+        }
+
+        return $newColumns;
+    }
+
     public function filterSetPostTypeColContent( $column_name, $post_id )
     {
         if( 'set_post_type' == $column_name ){
@@ -273,6 +292,45 @@ class AdminHooks
         }
     }
 
+    public function filterSetWhereFilterColContent( $column_name, $post_id )
+    {
+        $fss        = Container::instance()->getFilterSetService();
+        $theSet     = $fss->getSet( $post_id );
+        $filterSet  = Container::instance()->getFilterSetService();
+        $under_limit_filter_set = $filterSet->under_limit_filter_set($post_id);
+        $link = '';
+        $html = '';
+
+        if ('where_filter' == $column_name) {
+            $set_settings_fields = $fss->getSettingsLocationTypeFields($post_id);
+
+            foreach ($set_settings_fields as $key => $attributes) {
+                if ($attributes['id'] == $fss->generateFieldId('post_name')) {
+                    $current_index = isset($attributes['value']) ? $attributes['value'] : '';
+                    $options = !empty($attributes['options']) ? $attributes['options'] : [];
+                    if (isset($options[$current_index]['data-link'])) {
+                        $link = esc_attr($options[$current_index]['data-link']);
+                    }
+                }
+            }
+
+            if ($under_limit_filter_set) {
+                $tip_text = wp_kses(
+                        __('This Filter Set is inactive.<br>The Free version allows up to 3 Filter Sets per post type.<br>Upgrade to PRO to activate unlimited Filter Sets.', 'filter-everything'),
+                        array('br' => array())
+                );
+                $html = '<div class="wpc-pro-filter-set-badge"><span class="wpc-alert-emoji wpc-icon-help-tip" data-tip="' . esc_attr($tip_text) . '">' . flrt_unlock_icon('20px', '20px', '#7A1FA2') . '</span><a class="wpc-pro-badge-text" href="' . esc_url(flrt_vailable_in_pro_attr_link()) . '">' . esc_html__('Unlock with PRO', 'filter-everything') . '</a></div>';
+            } else {
+                if (!empty($link)) {
+                    $html = '<a class="wpc-location-preview" target="_blank" href="' . esc_url($link) . '"><span class="dashicons dashicons-visibility"></span></a>';
+                } else {
+                    $html = '—';
+                }
+            }
+
+            echo $html;
+        }
+    }
 }
 
 new AdminHooks();

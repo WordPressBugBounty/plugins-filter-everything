@@ -1,5 +1,5 @@
 /*!
- * Filter Everything seo rules admin 1.9.1
+ * Filter Everything seo rules admin 1.9.2
  */
 (function($) {
     "use strict";
@@ -54,7 +54,7 @@
             text += '<p>' + message + '</p>';
         });
 
-        let html = '<div id="message" class="wpc-error notice notice-error is-dismissible">'
+        let html = '<div id="message" class="wpc-error notice notice-error is-dismissible flrt-notice">'
             + text +
             '<button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>' +
             '</div>';

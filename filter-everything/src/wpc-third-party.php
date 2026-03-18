@@ -396,22 +396,6 @@ if( ! function_exists('flrt_init') ){
 }
 add_action('init', 'flrt_init');
 
-/**
- * @todo check the problem with Elementor archive template and different posts queries
- * Different post types, custom and predefined category or custom term
- */
-//add_filter( 'elementor/theme/posts_archive/query_posts/query_vars', 'flrt_fix_elementor_query_args' );
-//add_filter( 'elementor/query/get_query_args/current_query', 'flrt_fix_elementor_query_args' );
-function flrt_fix_elementor_query_args( $query_args ){
-
-    if( isset( $query_args['taxonomy']  ) ){
-        unset( $query_args['taxonomy'] );
-        unset( $query_args['term'] );
-    }
-
-    return $query_args;
-}
-
 function flrt_wpml_active(){
     if( defined('WPML_PLUGIN_BASENAME') ){
         return true;
@@ -597,6 +581,32 @@ function flrt_remove_product_query_post_clauses( $wp_query, $WC_query ) {
     return $wp_query;
 }
 
+add_filter('wpc_check_broken_filter', function ($is_broken, $query) {
+    $detector_class = 'FilterEverything\\Filter\\WP_Query_Source_Detector';
+    $is_allowed_method = 'is_allowed';
+    $source_var = 'flrt_detected_source';
+
+    if (defined('FLRT_FILTERS_PRO')) {
+        if (defined('FLRT_PRO_BUILDER_KEY')) {
+            $builder_key = apply_filters('wpc_builder_key_pro', $query->get($source_var), constant('FLRT_PRO_BUILDER_KEY'));
+
+            if ($detector_class::$is_allowed_method($builder_key)) {
+                return false;
+            }
+        }
+    }
+
+    if (!defined('FLRT_FILTERS_PRO')) {
+        $builder_key = apply_filters('wpc_builder_key', $query->get($source_var), $detector_class::$builder_key);
+
+        if ($detector_class::$is_allowed_method($builder_key)) {
+            return false;
+        }
+    }
+
+    return true;
+}, 10, 2);
+
 function flrt_is_dokan() {
     return function_exists('dokan');
 }
@@ -778,6 +788,203 @@ function flrt_is_woo_discount_rules()
     }
     return false;
 }
+
+function flrt_is_elementor_active()
+{
+    if ( is_plugin_active( 'elementor/elementor.php' ) ) {
+        return true;
+    }
+    return false;
+}
+
+if ( flrt_is_elementor_active() ) {
+    function wpc_add_elementor_widget_categories( $elements_manager ) {
+        $pro_text = (defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO)
+            ? ' ' .esc_html__('PRO', 'filter-everything')
+            : '';
+
+        $elements_manager->add_category(
+            'filter-everything',
+            [
+                'title' => esc_html__( 'Filter Everything', 'filter-everything'  ) . $pro_text,
+                'icon' => 'fa-solid fa-filter',
+            ]
+        );
+    }
+    add_action( 'elementor/elements/categories_registered', 'wpc_add_elementor_widget_categories' );
+
+    function wpc_register_elementor_widget( $widgets_manager ) {
+
+        flrt_include('src/Admin/Widgets/ElementorWidgets/ChipsElementorWidget.php');
+        flrt_include('src/Admin/Widgets/ElementorWidgets/FiltersElementorWidget.php');
+        flrt_include('src/Admin/Widgets/ElementorWidgets/SortingElementorWidget.php');
+
+        $widgets_manager->register( new \FilterEverything\Filter\ChipsElementorWidget() );
+        $widgets_manager->register( new \FilterEverything\Filter\FiltersElementorWidget() );
+        $widgets_manager->register( new \FilterEverything\Filter\SortingElementorWidget() );
+
+    }
+    add_action( 'elementor/widgets/register', 'wpc_register_elementor_widget' );
+
+    add_action( 'elementor/editor/after_enqueue_styles', function() {
+        wp_enqueue_style(
+            'filter-everything-elementor',
+            FLRT_PLUGIN_DIR_URL . 'assets/css/elementor-icon.css'
+        );
+        $css = '
+        .wpc-fe-icon {
+            background: url(%s) no-repeat;
+            background-size: auto;
+            background-size: contain;
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            margin-bottom: -5px;
+          }  
+        
+          .elementor-navigator__element-widget .wpc-fe-icon {
+            width: 15px;
+            height: 15px;
+            margin-bottom: 0px;
+          }';
+        wp_add_inline_style( 'filter-everything-elementor', sprintf( $css, esc_attr(flrt_get_icon_svg()) ) );
+    });
+
+    add_filter('elementor/document/wrapper_attributes', function($attributes) {
+        $attributes['wpc-filter-elementor-widget'] = true;
+        return $attributes;
+    });
+
+    add_action( 'wp_footer', function() {
+        if ( ! defined( 'ELEMENTOR_VERSION' ) ) {
+            return;
+        }
+        if( flrt_get_option('mobile_filter_settings') === 'show_bottom_widget' ){
+            if( flrt_get_experimental_option('disable_buttons') !== 'on' ) {
+
+        ?>
+
+        <script>
+            jQuery(function($) {
+                $(window).on('elementor/frontend/init', function() {
+                    elementorFrontend.hooks.addAction(
+                        'frontend/element_ready/filter-everything-filters.default',
+                        function($scope) {
+                            let $el = $('[wpc-filter-elementor-widget="1"]');
+                            if($el.length > 0){
+                                $el.before(`<?php flrt_filters_button() ?>`);
+                            }
+                        }
+                    );
+                });
+            });
+        </script>
+        <?php
+            }
+        }
+    });
+}
+
+add_action('admin_enqueue_scripts', function () {
+    $handle = 'filter-everything-menu-icon';
+    wp_register_style($handle, false);
+    wp_enqueue_style($handle);
+
+
+    $css = <<<PHP_CSS
+#toplevel_page_edit-post_type-filter-set .wp-menu-image{
+    content: '';
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 20px;
+    background-image: url('data:image/svg+xml,%3C%3Fxml version="1.0" encoding="utf-8"%3F%3E%3C!--  --%3E%3Csvg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 53 53" style="enable-background:new 0 0 53 53;" xml:space="preserve"%3E%3Cstyle type="text/css"%3E .st0%7Bdisplay:none;%7D .st1%7Bdisplay:inline;%7D .st2%7Bclip-path:url(%23SVGID_00000142154616827085436530000012698217856111301567_);%7D .st3%7Bfill:%23a7aaad;%7D .st4%7Bdisplay:none;fill:%23FFFFFF;%7D .st5%7Bfill:none;stroke:%23a7aaad;stroke-width:3;stroke-miterlimit:10;%7D .st6%7Bfill:none;stroke:%23a7aaad;stroke-width:2;stroke-miterlimit:10;%7D%0A%3C/style%3E%3Cg id="Layer_2_00000047770719710110742230000003923951626148849557_" class="st0"%3E%3Crect class="st1" width="53.1" height="53.1"/%3E%3C/g%3E%3Cg id="Layer_1_00000162333103265806981530000017146624247591674556_"%3E%3Cg%3E%3Cg%3E%3Cdefs%3E%3Cpath id="SVGID_1_" d="M0,0h53v53H0V0z M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5 C20.8,36.1,21.9,37.2,23.3,37.2z M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3C/defs%3E%3CclipPath id="SVGID_00000111880200341027563210000003406718579453459379_"%3E%3Cuse xlink:href="%23SVGID_1_" style="overflow:visible;"/%3E%3C/clipPath%3E%3Cg id="BarsClipped" style="clip-path:url(%23SVGID_00000111880200341027563210000003406718579453459379_);"%3E%3Cpath class="st3" d="M39.9,31.5L18,37.3c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C40.8,30.7,40.5,31.3,39.9,31.5z"/%3E%3Cpath class="st3" d="M38.1,24.6l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C39,23.8,38.7,24.5,38.1,24.6z"/%3E%3Cpath class="st3" d="M36.2,17.9l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C37.2,17.1,36.8,17.7,36.2,17.9z"/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3Cpath class="st4" d="M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5C20.8,36.1,21.9,37.2,23.3,37.2z"/%3E%3Cpath class="st4" d="M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z"/%3E%3Cpath class="st4" d="M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3Cpath class="st4" d="M23.9,38.2c-1.9,0.5-3.8-0.6-4.3-2.5c-0.5-1.9,0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5C26.9,35.8,25.8,37.7,23.9,38.2 z M22.6,33.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.3,33.5,23.4,33,22.6,33.2z"/%3E%3Cpath class="st4" d="M34.1,28.2c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3c1.9-0.5,3.8,0.6,4.3,2.5C37.1,25.8,36,27.7,34.1,28.2z M32.8,23.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C34.5,23.5,33.6,23,32.8,23.2z"/%3E%3Cpath class="st4" d="M24.2,23.5c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5S26.1,23,24.2,23.5z M22.9,18.6 c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.7,18.8,23.8,18.3,22.9,18.6z"/%3E%3Cpath class="st5" d="M26.5,51.5c13.8,0,25-11.2,25-25s-11.2-25-25-25s-25,11.2-25,25S12.7,51.5,26.5,51.5z"/%3E%3Cpath class="st4" d="M33.3,21h10c0.4,0,0.8-0.3,0.8-0.8s-0.3-0.8-0.8-0.8h-10C33.3,20.2,33.3,20.2,33.3,21z"/%3E%3C/g%3E%3Ccircle class="st6" cx="23.3" cy="20.1" r="2.5"/%3E%3Ccircle class="st6" cx="33.2" cy="24.8" r="2.5"/%3E%3Ccircle class="st6" cx="23" cy="34.8" r="2.5"/%3E%3C/svg%3E');
+}
+#toplevel_page_edit-post_type-filter-set:hover .wp-menu-image{
+    background-image: url('data:image/svg+xml,%3C%3Fxml version="1.0" encoding="utf-8"%3F%3E%3C!--  --%3E%3Csvg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 53 53" style="enable-background:new 0 0 53 53;" xml:space="preserve"%3E%3Cstyle type="text/css"%3E .st0%7Bdisplay:none;%7D .st1%7Bdisplay:inline;%7D .st2%7Bclip-path:url(%23SVGID_00000142154616827085436530000012698217856111301567_);%7D .st3%7Bfill:%2372AEE6;%7D .st4%7Bdisplay:none;fill:%23FFFFFF;%7D .st5%7Bfill:none;stroke:%2372AEE6;stroke-width:3;stroke-miterlimit:10;%7D .st6%7Bfill:none;stroke:%2372AEE6;stroke-width:2;stroke-miterlimit:10;%7D%0A%3C/style%3E%3Cg id="Layer_2_00000047770719710110742230000003923951626148849557_" class="st0"%3E%3Crect class="st1" width="53.1" height="53.1"/%3E%3C/g%3E%3Cg id="Layer_1_00000162333103265806981530000017146624247591674556_"%3E%3Cg%3E%3Cg%3E%3Cdefs%3E%3Cpath id="SVGID_1_" d="M0,0h53v53H0V0z M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5 C20.8,36.1,21.9,37.2,23.3,37.2z M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3C/defs%3E%3CclipPath id="SVGID_00000111880200341027563210000003406718579453459379_"%3E%3Cuse xlink:href="%23SVGID_1_" style="overflow:visible;"/%3E%3C/clipPath%3E%3Cg id="BarsClipped" style="clip-path:url(%23SVGID_00000111880200341027563210000003406718579453459379_);"%3E%3Cpath class="st3" d="M39.9,31.5L18,37.3c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C40.8,30.7,40.5,31.3,39.9,31.5z"/%3E%3Cpath class="st3" d="M38.1,24.6l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C39,23.8,38.7,24.5,38.1,24.6z"/%3E%3Cpath class="st3" d="M36.2,17.9l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C37.2,17.1,36.8,17.7,36.2,17.9z"/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3Cpath class="st4" d="M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5C20.8,36.1,21.9,37.2,23.3,37.2z"/%3E%3Cpath class="st4" d="M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z"/%3E%3Cpath class="st4" d="M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3Cpath class="st4" d="M23.9,38.2c-1.9,0.5-3.8-0.6-4.3-2.5c-0.5-1.9,0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5C26.9,35.8,25.8,37.7,23.9,38.2 z M22.6,33.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.3,33.5,23.4,33,22.6,33.2z"/%3E%3Cpath class="st4" d="M34.1,28.2c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3c1.9-0.5,3.8,0.6,4.3,2.5C37.1,25.8,36,27.7,34.1,28.2z M32.8,23.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C34.5,23.5,33.6,23,32.8,23.2z"/%3E%3Cpath class="st4" d="M24.2,23.5c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5S26.1,23,24.2,23.5z M22.9,18.6 c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.7,18.8,23.8,18.3,22.9,18.6z"/%3E%3Cpath class="st5" d="M26.5,51.5c13.8,0,25-11.2,25-25s-11.2-25-25-25s-25,11.2-25,25S12.7,51.5,26.5,51.5z"/%3E%3Cpath class="st4" d="M33.3,21h10c0.4,0,0.8-0.3,0.8-0.8s-0.3-0.8-0.8-0.8h-10C33.3,20.2,33.3,20.2,33.3,21z"/%3E%3C/g%3E%3Ccircle class="st6" cx="23.3" cy="20.1" r="2.5"/%3E%3Ccircle class="st6" cx="33.2" cy="24.8" r="2.5"/%3E%3Ccircle class="st6" cx="23" cy="34.8" r="2.5"/%3E%3C/svg%3E');
+}
+.wp-menu-open#toplevel_page_edit-post_type-filter-set .wp-menu-image {
+    background-image: url('data:image/svg+xml,%3C%3Fxml version="1.0" encoding="utf-8"%3F%3E%3C!--  --%3E%3Csvg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 53 53" style="enable-background:new 0 0 53 53;" xml:space="preserve"%3E%3Cstyle type="text/css"%3E .st0%7Bdisplay:none;%7D .st1%7Bdisplay:inline;%7D .st2%7Bclip-path:url(%23SVGID_00000098199702249043298830000017010845528166695064_);%7D .st3%7Bfill:%23FFFFFF;%7D .st4%7Bdisplay:none;fill:%23FFFFFF;%7D .st5%7Bfill:none;stroke:%23FFFFFF;stroke-width:3;stroke-miterlimit:10;%7D .st6%7Bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-miterlimit:10;%7D%0A%3C/style%3E%3Cg id="Layer_2_00000047770719710110742230000003923951626148849557_" class="st0"%3E%3Crect x="0" y="0" class="st1" width="53.1" height="53.1"/%3E%3C/g%3E%3Cg id="Layer_1_00000162333103265806981530000017146624247591674556_"%3E%3Cg%3E%3Cdefs%3E%3Cpath id="SVGID_1_" d="M0,0h53v53H0V0z M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5 C20.8,36.1,21.9,37.2,23.3,37.2z M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3C/defs%3E%3CclipPath id="SVGID_00000112608340804245442460000013986219178199086244_"%3E%3Cuse xlink:href="%23SVGID_1_" style="overflow:visible;"/%3E%3C/clipPath%3E%3Cg id="BarsClipped" style="clip-path:url(%23SVGID_00000112608340804245442460000013986219178199086244_);"%3E%3Cpath class="st3" d="M39.9,31.5L18,37.3c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C40.8,30.7,40.5,31.3,39.9,31.5z"/%3E%3Cpath class="st3" d="M38.1,24.6l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C39,23.8,38.7,24.5,38.1,24.6z"/%3E%3Cpath class="st3" d="M36.2,17.9l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C37.2,17.1,36.8,17.7,36.2,17.9z"/%3E%3C/g%3E%3C/g%3E%3Cpath class="st4" d="M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5C20.8,36.1,21.9,37.2,23.3,37.2z"/%3E%3Cpath class="st4" d="M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z"/%3E%3Cpath class="st4" d="M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3Cpath class="st4" d="M23.9,38.2c-1.9,0.5-3.8-0.6-4.3-2.5c-0.5-1.9,0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5C26.9,35.8,25.8,37.7,23.9,38.2 z M22.6,33.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.3,33.5,23.4,33,22.6,33.2z"/%3E%3Cpath class="st4" d="M34.1,28.2c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3c1.9-0.5,3.8,0.6,4.3,2.5C37.1,25.8,36,27.7,34.1,28.2z M32.8,23.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C34.5,23.5,33.6,23,32.8,23.2z"/%3E%3Cpath class="st4" d="M24.2,23.5c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5S26.1,23,24.2,23.5z M22.9,18.6 c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.7,18.8,23.8,18.3,22.9,18.6z"/%3E%3Cpath class="st5" d="M26.5,51.5c13.8,0,25-11.2,25-25s-11.2-25-25-25s-25,11.2-25,25S12.7,51.5,26.5,51.5z"/%3E%3Cpath class="st4" d="M33.3,21h10c0.4,0,0.8-0.3,0.8-0.8s-0.3-0.8-0.8-0.8h-10C33.3,20.2,33.3,20.2,33.3,21z"/%3E%3C/g%3E%3Ccircle class="st6" cx="23.3" cy="20.1" r="2.5"/%3E%3Ccircle class="st6" cx="33.2" cy="24.8" r="2.5"/%3E%3Ccircle class="st6" cx="23" cy="34.8" r="2.5"/%3E%3C/svg%3E');
+}
+PHP_CSS;
+    wp_add_inline_style($handle, $css);
+});
+
+/**
+ * Fix Elementor query arguments for filtered content
+ *
+ * This function adjusts Elementor's query arguments when dealing with
+ * filtered content from Filter Everything Pro plugin. It ensures proper
+ * handling of custom post types in Elementor queries.
+ *
+ * @param array $query_args The Elementor query arguments
+ * @return array Modified query arguments
+ */
+add_filter( 'elementor/query/get_query_args/current_query', 'flrt_fix_elementor_query_args' );
+function flrt_fix_elementor_query_args( $query_args ) {
+    // Verify that we're dealing with a filtered query
+    if ( ! isset( $query_args['flrt_filtered_query'] ) || !$query_args['flrt_filtered_query'] ) {
+        return $query_args;
+    }
+
+    // Get post type from query args or current post
+    $post_type = isset( $query_args['post_type'] ) ? $query_args['post_type'] : get_post_type();
+
+    // Sanitize the post type
+    if ( ! empty( $post_type ) ) {
+        $post_type = sanitize_text_field( $post_type );
+    }
+
+    // Check if the post type is non-built-in
+    $post_type_object = get_post_type_object( $post_type );
+
+    if ( $post_type_object && !$post_type_object->_builtin ) {
+        // Remove taxonomy from query args if present
+        if ( isset( $query_args['taxonomy'] ) ) {
+            unset( $query_args['taxonomy'] );
+        }
+    }
+
+    return $query_args;
+}
+
+/**
+ * Fixes Elementor featured products price range query arguments.
+ *
+ * This function addresses an issue where Elementor's featured products widget
+ * incorrectly applies meta_key filtering when sorting by price, which can
+ * interfere with price range filtering functionality. It removes the meta_key
+ * from query arguments for featured products sorted by price.
+ *
+ *
+ * @param array $query_args Query arguments for Elementor widget.
+ * @param object $widget The Elementor widget instance.
+ * @return array Modified query arguments.
+ */
+if ( flrt_is_elementor_active() ) {
+    add_filter( 'elementor/query/query_args', 'flrt_fix_elementor_featured_products_price_range', 10, 2 );
+
+    function flrt_fix_elementor_featured_products_price_range( array $query_args, $widget ): array {
+        $is_featured  = ( $query_args['post_type'] ?? '' ) === 'featured';
+        $is_price_order = ( $query_args['orderby'] ?? '' ) === 'price';
+
+        if ( $is_featured && $is_price_order ) {
+            static $registered = false;
+
+            if ( ! $registered ) {
+                add_filter( 'elementor/query/query_args', function ( array $query_args, $widget ): array {
+                    unset( $query_args['meta_key'] );
+                    return $query_args;
+                }, 11, 2 );
+
+                $registered = true;
+            }
+        }
+
+        return $query_args;
+    }
+}
+
+
 
 //@todo check this with PLL support
 //function flrt_add_cpt_to_pll_tmp( $post_types, $is_settings ) {

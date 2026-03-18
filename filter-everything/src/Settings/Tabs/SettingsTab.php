@@ -38,11 +38,9 @@ class SettingsTab extends BaseSettings
                         'options'       => array(
                             'nothing' => esc_html__('The same as on a desktop', 'filter-everything'),
                             'show_open_close_button' => esc_html__('Collapsed and expanded', 'filter-everything'),
-                            //'popup' => esc_html__('Appear as a Pop-up', 'filter-everything')
                         ),
                         'default' => 'no',
                         'id'    => 'mobile_filter_settings',
-                        //'description' => esc_html__('', 'filter-everything'),
                     ),
                     /*'show_open_close_button'  => array(
                         'type'  => 'checkbox',
@@ -56,7 +54,7 @@ class SettingsTab extends BaseSettings
                         'id'    => 'try_move_to_top_sidebar',
                         'label' => esc_html__('Try to move the sidebar to the top on mobile devices', 'filter-everything'),
                     )
-                )
+                ),
             ),
             'ajax' => array(
                 'label'  => esc_html__('AJAX', 'filter-everything'),
@@ -112,6 +110,11 @@ class SettingsTab extends BaseSettings
                 )
             )
         );
+
+        if (!defined('FLRT_FILTERS_PRO')) {
+            $settings['mobile_devices']['fields']['mobile_filter_settings']['options'][''] = esc_html__('Appear as a Pop-up', 'filter-everything') . ' &mdash; ' . esc_html__('Available in PRO', 'filter-everything');
+            $settings['mobile_devices']['fields']['mobile_filter_settings']['disabled'][] = '';
+        }
 
         $settings = apply_filters('wpc_general_filters_settings', $settings);
 

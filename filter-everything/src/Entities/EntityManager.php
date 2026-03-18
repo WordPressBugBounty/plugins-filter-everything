@@ -73,6 +73,7 @@ class EntityManager
                 'tax_numeric',
                 'author',
                 'post_date',
+                'post_meta_date',
                 )
             ) && $postType ) {
             $storeKey = $key.'_'.$postType;
@@ -121,6 +122,10 @@ class EntityManager
             case 'post_date':
                 $this->storeData( $storeKey, new PostDateEntity( $name, $postType ) );
             break;
+
+            case 'post_meta_date':
+                $this->storeData( $storeKey, new PostMetaDateEntity( $name, $postType ) );
+                break;
         }
 
         unset( $fse, $parts, $entity, $name );
@@ -175,12 +180,13 @@ class EntityManager
         $entities['taxonomy']['entities'] = $this->getPossibleTaxonomies();
 
         $other = array(
-            'post_meta'         => array(
-                'group_label'   => esc_html__( 'Custom Field Filters', 'filter-everything' ),
-                'entities'      => array(
-                    'post_meta'         => esc_html__( 'Custom Field', 'filter-everything' ),
-                    'post_meta_num'     => esc_html__( 'Custom Field Numeric', 'filter-everything' ),
-                    'post_meta_exists'  => esc_html__( 'Custom Field Exists - Available in Pro', 'filter-everything' ),
+            'post_meta' => array(
+                'group_label' => esc_html__('Custom Field Filters', 'filter-everything'),
+                'entities'    => array(
+                    'post_meta'        => esc_html__('Custom Field', 'filter-everything'),
+                    'post_meta_num'    => esc_html__('Custom Field Numeric', 'filter-everything'),
+                    'post_meta_date'   => esc_html__('Custom Field Date', 'filter-everything'),
+                    'post_meta_exists' => esc_html__('Custom Field Exists - Available in PRO', 'filter-everything'),
                 )
             ),
             'other' => array(
@@ -188,7 +194,7 @@ class EntityManager
                 'entities' => array(
                     'post_date'     => esc_html__( 'Post Date', 'filter-everything' ),
                     'author_author' => esc_html__( 'Post Author', 'filter-everything' ),
-                    'tax_numeric'   => esc_html__( 'Taxonomy Numeric - Available in Pro', 'filter-everything' ),
+                    'tax_numeric'   => esc_html__( 'Taxonomy Numeric - Available in PRO', 'filter-everything' ),
                     )
             )
         );
@@ -455,6 +461,10 @@ class EntityManager
         $filters = [];
         foreach ( $results  as $result ) {
             $filterData = maybe_unserialize( $result->post_content );
+
+            if( ! is_array( $filterData ) ){
+                continue;
+            }
 
             if( $entityName && mb_strpos( $result->post_excerpt, $entityName ) === false ){
                 continue;
@@ -807,6 +817,12 @@ class EntityManager
                 }
             }
 
+
+            $detected_source = '';
+            if (!empty($set_filter_query->query_vars['flrt_detected_source'])) {
+                $detected_source = $set_filter_query->query_vars['flrt_detected_source'];
+            }
+
             if ($set_filter_query instanceof \WP_Query) {
 
                 // Configure WP_Query object to select only posts IDs
@@ -821,6 +837,12 @@ class EntityManager
                 $ids = $set_filter_query->get_posts();
 
             }
+
+            if(!empty($detected_source) && isset($set_filter_query->query_vars['flrt_detected_source'])){
+                $set_filter_query->query_vars['flrt_detected_source'] = $detected_source;
+            }
+
+            $ids = apply_filters( 'wpc_check_errors_ids', $ids, $set_filter_query);
 
             $ids = (! empty( $ids ) ) ? $ids : [];
 
@@ -919,7 +941,7 @@ class EntityManager
                     $entity->items[$index]->count = count( $entity->items[$index]->posts );
                 }
 
-                if ( $entity instanceof PostMetaNumEntity || $entity instanceof TaxonomyNumEntity || $entity instanceof PostDateEntity ) {
+                if ( $entity instanceof PostMetaNumEntity || $entity instanceof TaxonomyNumEntity || $entity instanceof PostDateEntity || $entity instanceof PostMetaDateEntity ) {
                     $postsIn = apply_filters( 'wpc_min_and_max_values_numeric_filters', $this->getAlreadyFilteredPostIds( $setId, $entity ), $entity );
                     $entity->updateMinAndMaxValues( $postsIn );
                 }
@@ -934,7 +956,7 @@ class EntityManager
                     }
                 }
 
-                $is_rating = ($filter['view'] === 'rating' && $filter['e_name'] === 'product_visibility' ) ? true : false;
+                $is_rating = (isset($filter['view']) && $filter['view'] === 'rating' && $filter['e_name'] === 'product_visibility' ) ? true : false;
                 if($is_rating){
                     $filter['orderby'] = 'default';
                 }
@@ -1119,6 +1141,9 @@ class EntityManager
         }
 
         if( ! $authors = $this->getData( $key ) ) {
+
+            $authors = [];
+
             $users = get_users($args);
 
             foreach ($users as $user) {
@@ -1135,28 +1160,58 @@ class EntityManager
         return $authors;
     }
 
-    public function safeExplodeFilterValues( $params, $slug, $sep, $explode = true )
+    public function safeExplodeFilterValues($params, $slug, $sep, $explode = true)
     {
-        $allEntityTerms = $this->getEntityAllTermsSlugs( $slug );
-
-        foreach( $allEntityTerms as $entityTerm ){
-            // Detect separator in term
-            if( mb_strpos( $entityTerm, $sep ) !== false ){
-                $position = strrpos( $params, $entityTerm );
-
-                if ( $position !== false ) {
-                    $replacement = str_replace( $sep, '#', $entityTerm );
-                    $params = substr_replace( $params, $replacement, $position, mb_strlen( $entityTerm ) );
-                }
-            }
+        if (!is_string($params)) {
+            $params = (string) $params;
         }
 
-        if( $explode ){
-            return explode( $sep, $params );
+        if ($sep === '') {
+            return $explode ? [$params] : $params;
+        }
+
+        // Get all term slugs for the given filter slug
+        $allEntityTerms = $this->getEntityAllTermsSlugs($slug);
+
+        // Extract pure values (slugs)
+        $terms = array_values($allEntityTerms);
+
+        // Skip empty terms
+        $terms = array_filter($terms, static function ($t) {
+            return $t !== '';
+        });
+
+        // Keep only terms that contain the separator
+        $terms = array_filter($terms, static function ($t) use ($sep) {
+            return mb_strpos($t, $sep) !== false;
+        });
+
+        // Sort by length in descending order to protect longer terms first
+        usort($terms, static function ($a, $b) {
+            return mb_strlen($b) <=> mb_strlen($a);
+        });
+
+        // Replace the separator inside matched terms with a placeholder
+        // so explode() won't split inside a single term
+        foreach ($terms as $entityTerm) {
+            $escapedTerm = preg_quote($entityTerm, '/');
+            $pattern = "/$escapedTerm/u";
+
+            $params = preg_replace_callback($pattern, function ($matches) use ($sep) {
+                // Replace internal separators only inside the matched term
+                return str_replace($sep, '#', $matches[0]);
+            }, $params);
+        }
+
+        // Finally, split by the separator if requested
+        if ($explode) {
+            return explode($sep, $params);
         }
 
         return $params;
     }
+
+
 
     public function safeImplodeFilterValues( $filterValues, $sep )
     {
@@ -1230,7 +1285,7 @@ class EntityManager
                     continue;
                 }
 
-                if ( in_array( $queriedFilter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date' ] ) ) {
+                if ( in_array( $queriedFilter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date', 'post_meta_date' ] ) ) {
                     $doCalculate = in_array( $term->slug, array_keys( $queriedFilter['values'] ) );
                 } else {
                     $doCalculate = in_array( $term->slug, $queriedFilter['values'] );
@@ -1256,7 +1311,7 @@ class EntityManager
             }
         }
 
-        return $queriedAllPosts;
+        return apply_filters( 'wpc_queried_all_posts', $queriedAllPosts, $allSetPostsIds, $queriedFilters, $setId );
     }
 
     public function getSetFilterKeys( $setIds )

@@ -29,7 +29,7 @@ class ExperimentalTab extends BaseSettings
             $taxonomiesForSelect[ $taxonomy->name ] = ucwords( flrt_ucfirst( mb_strtolower( $taxonomy->label ) ) );
 
             if ( $taxonomy->name === 'elementor_library_category' ) {
-                $taxonomiesForSelect[ $taxonomy->name ] .= esc_html__( ' (Elementor Library)', 'filter-everything' );
+                $taxonomiesForSelect[ $taxonomy->name ] .= ' ' . esc_html__( '(Elementor Library)', 'filter-everything' );
             }
         }
 
@@ -92,18 +92,16 @@ class ExperimentalTab extends BaseSettings
                         'id'    => 'disable_woo_orderby',
                         'label' => esc_html__('Hide Woocommerce default sorting dropdown', 'filter-everything'),
                     ),
+                    'hide_out_of_stock' => array(
+                        'type'  => (defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO) ? 'checkbox' : 'inProButton',
+                        'pro_label'  => (defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO) ? '' : flrt_pro_promo_label(),
+                        'title' => esc_html__('Out of stock visibility', 'filter-everything'),
+                        'id'    => 'hide_out_of_stock',
+                        'label' => esc_html__('Hide out of stock items from filtering results', 'filter-everything'),
+                        'description'   => esc_html__( 'It also hides variable products if their variations are out of stock. Please do not use it together with the Filter by the Stock status!', 'filter-everything' ),
+                    )
                 )
             );
-
-            if( defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO ){
-                $settings['woocommerce_settings']['fields']['hide_out_of_stock'] = array(
-                    'type'  => 'checkbox',
-                    'title' => esc_html__('Out of stock visibility', 'filter-everything'),
-                    'id'    => 'hide_out_of_stock',
-                    'label' => esc_html__('Hide out of stock items from filtering results', 'filter-everything'),
-                    'description'   => esc_html__( 'It also hides variable products if their variations are out of stock. Please do not use it together with the Filter by the Stock status!', 'filter-everything' ),
-                );
-            }
         }
 
         $settings['experimental_other'] = array(

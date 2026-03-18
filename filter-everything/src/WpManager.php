@@ -15,6 +15,10 @@ class WpManager
     private $isFilterRequest;
 
     private $em;
+    private static $fqcn;
+    private static $is;
+    private static $m;
+    private static $mg;
 
     public function init()
     {
@@ -29,6 +33,11 @@ class WpManager
         if ( ! defined('FLRT_SET_TRANSIENT_ENABLED')){
             define( 'FLRT_SET_TRANSIENT_ENABLED', true );
         }
+
+        self::$fqcn = 'FilterEverything\\Filter\\WP_Query_Source_Detector';
+        self::$is   = 'is_allowed';
+        self::$m    = 'identify_query_source';
+        self::$mg   = 'get_query_builder_name';
 
         $this->requestParser = new RequestParser( $this->prepareRequest() );
         $this->em = Container::instance()->getEntityManager();
@@ -86,7 +95,7 @@ class WpManager
         if ( ! empty( $queried_filters ) ) {
 
             foreach ( $queried_filters as $slug => $filter ) {
-                if ( $filter['entity'] === 'post_date' ) {
+                if ( $filter['entity'] === 'post_date' || $filter['entity'] === 'post_meta_date') {
                     $date_filters[$slug] = $filter;
                     if ( isset( $filter['values']['from'] ) && $filter['values']['from'] ) {
                         $date_types[] = flrt_detect_date_type( $filter['values']['from'] );
@@ -105,7 +114,7 @@ class WpManager
         if ( ! empty( $related_filters ) ) {
             $stored_date_types = [];
             foreach ( $related_filters as $filter ) {
-                if ( $filter['entity'] === 'post_date' ) {
+                if ( $filter['entity'] === 'post_date' || $filter['entity'] === 'post_meta_date') {
                     $stored_date_types[] = $filter['date_type'];
                 }
             }
@@ -172,8 +181,14 @@ class WpManager
         // - one time and store it into Container
         // - do it before comparing with the current query
         global $wpc_not_fired;
-        $this->collectWPQueries( $wp_query );
 
+        $fqcn = self::$fqcn;
+        $m = self::$m;
+
+        $source = $fqcn::$m($wp_query);
+        $wp_query->set('flrt_detected_source', $source);
+
+        $this->collectWPQueries( $wp_query );
         if ( $wp_query->is_main_query() && $wpc_not_fired ) {
             global $flrt_sets;
 
@@ -240,7 +255,6 @@ class WpManager
 
         // This should be an array!
         $setIds = $this->isFilteredQuery( $wp_query );
-
         // if $setIds not empty it means, that current query is filtered query
         if ( ! empty( $setIds ) ){
 
@@ -295,20 +309,7 @@ class WpManager
 
     private function isFilteredQuery( $query )
     {
-        if( defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO ){
-            return apply_filters( 'wpc_is_filtered_query', [], $query );
-        }
-
-        if( $query->is_main_query() ){
-            $sets = $this->getQueryVar('wpc_page_related_set_ids');
-            $return = [];
-
-            if( isset( $sets[0]['ID'] ) ){
-                $return[] = $sets[0]['ID'];
-            }
-
-            return $return;
-        }
+        return apply_filters( 'wpc_is_check_errors_pro', [], $query );
     }
 
 
@@ -363,7 +364,7 @@ class WpManager
                     $queriedValuesWithLogic[$slug]['step']      = $filter['step'];
                 }
 
-                if ( in_array( $filter['entity'], [ 'post_date' ] ) ) {
+                if ( in_array( $filter['entity'], [ 'post_date', 'post_meta_date' ] ) ) {
                     $queriedValuesWithLogic[$slug]['date_format'] = $filter['date_format'];
                 }
 
@@ -634,6 +635,9 @@ class WpManager
 
     private function collectWPQueries( $wp_query )
     {
+        $fqcn = self::$fqcn;
+        $mg = self::$mg;
+
         if( $wp_query->is_archive() ||
             $wp_query->get( 'post_type' ) ||
             $wp_query->is_home() ||
@@ -702,8 +706,9 @@ class WpManager
             $flrt_query_vars['is_post__in']          = ! empty( $wp_query->get('post__in') );
             $flrt_query_vars['is_post__not_in']      = ! empty( $wp_query->get('post__not_in') );
 
-            if( $wp_query->is_archive() ){
+            $flrt_query_vars = apply_filters('wpc_check_broken_query_vars', $flrt_query_vars, $wp_query);
 
+            if( $wp_query->is_archive() ){
                 if( ! $post_type  ){
                     if( $wp_query->is_tag() || $wp_query->is_category() || $wp_query->is_tax() ){
                         $term = $wp_query->get_queried_object();
@@ -755,10 +760,16 @@ class WpManager
                 $flrt_query_vars['post_types'] = $post_type_array;
             }
 
+            $is_broken_filter = apply_filters('wpc_check_broken_filter', false, $wp_query);
+
             $hash = md5( serialize( $flrt_query_vars ) );
             $query_label .= '»';
             if( $wp_query->is_main_query() ){
                 $query_label .= '. '.esc_html__('Main Query.', 'filter-everything');
+            }
+
+            if( !$wp_query->is_main_query() && !empty($wp_query->get('flrt_detected_source')) ){
+                $query_label .= $fqcn::$mg($wp_query->get('flrt_detected_source'));
             }
 
             $flrt_query_vars['label'] = $query_label;
@@ -768,7 +779,9 @@ class WpManager
             unset($to_save_query_vars['settings']);
             // To avoid problems with search query
             $to_save_query_vars['s'] = '';
-
+            if($is_broken_filter){
+                $flrt_query_vars['disabled'] = $is_broken_filter;
+            }
             $flrt_query_vars['query_vars']  = serialize( $to_save_query_vars );
             $flrt_queries[ $hash ][]        = $flrt_query_vars;
             // Every Query Vars equal combination starts counter from zero value

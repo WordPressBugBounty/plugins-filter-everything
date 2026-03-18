@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Filter Everything PRO\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-16 14:04+0000\n"
-"PO-Revision-Date: 2025-07-21 13:37+0000\n"
+"PO-Revision-Date: 2026-03-18 10:45+0000\n"
 "Last-Translator: \n"
 "Language-Team: French (France)\n"
 "Language: fr_FR\n"
@@ -12,8 +12,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Loco-Version: 2.7.1; wp-6.7.2\n"
+"X-Loco-Version: 2.8.0; wp-6.9.4; php-8.3.16\n"
 "X-Domain: filter-everything"
+
+msgid "%d star"
+msgid_plural "%d stars"
+msgstr[0] "%d étoile"
+msgstr[1] "%d étoiles"
 
 msgid "%s #%s"
 msgstr "%s #%s"
@@ -116,6 +121,35 @@ msgstr[1] ""
 msgid "%s: %d &mdash; %d"
 msgstr "%s: %d &mdash; %d"
 
+msgid ""
+"%sCreate Filters Automatically%s — instantly generate filters from your "
+"site’s categories and fields. You can always edit them later."
+msgstr ""
+"%sCréer des filtres automatiquement%s — générez instantanément des filtres à "
+"partir des catégories et champs de votre site. Vous pouvez toujours les "
+"modifier plus tard."
+
+msgid ""
+"%sCreate Filters Manually%s — full control — add filters exactly as you want."
+msgstr ""
+"%sCréer des filtres manuellement%s — contrôle total — ajoutez des filtres "
+"exactement comme vous le souhaitez."
+
+msgid ""
+"%sTo display filters, add the %sFilter Everything — Filters%s widget to a "
+"widget area or sidebar,%sor use the %s[fe_widget]%s shortcode to place them "
+"anywhere on your site.%s"
+msgstr ""
+"%sPour afficher les filtres, ajoutez le widget %sFilter Everything — "
+"Filtres%s à une zone de widget ou une barre latérale,%sou utilisez le "
+"shortcode %s[fe_widget]%s pour les placer n’importe où sur votre site.%s"
+
+msgid "(auto-generated)"
+msgstr "(généré-automatiquement)"
+
+msgid "(Elementor Library)"
+msgstr "(Elementor Bibliothèque)"
+
 msgid "+ Add sorting option"
 msgstr "+ Ajouter une option de tri"
 
@@ -133,6 +167,9 @@ msgid "1 The SEO rule has not been updated. Someone is editing it."
 msgstr ""
 "1 La règle SEO n'a pas été mise à jour. Quelqu'un est en train de le "
 "modifier."
+
+msgid "6 month of support included"
+msgstr "6 mois d’assistance inclus"
 
 msgid ""
 "<a href=\"%s\" target=\"_blank\">Documentation</a>. Common information on "
@@ -242,6 +279,9 @@ msgstr "AJAX pour les filtres"
 msgid "AJAX loading icon (on desktop only)"
 msgstr "Icône de chargement AJAX (sur ordinateur uniquement)"
 
+msgid "All"
+msgstr "Tous"
+
 #: pro/PluginPro.php:289
 msgid "All archive pages for this Post Type"
 msgstr "Toutes les pages d'archives pour ce Type de publication"
@@ -295,9 +335,6 @@ msgstr "Une erreur s’est produite. Vous n’êtes pas autorisé à modifier ce
 
 msgid "AND"
 msgstr "ET"
-
-msgid "And what to filter?"
-msgstr "Et que filtrer?"
 
 #. Author of the plugin
 msgid "Andrii Stepasiuk"
@@ -362,7 +399,7 @@ msgstr ""
 "Faire défiler automatiquement vers le haut de la grille des publications"
 
 msgid "Available in PRO"
-msgstr "Disponible en PRO"
+msgstr "Disponible en version PRO"
 
 #: pro/PluginPro.php:399
 msgid "Available on"
@@ -371,14 +408,497 @@ msgstr "Disponible sur"
 msgid "Before"
 msgstr "Avant"
 
+msgid "Before importing, make a backup of your database to avoid data loss."
+msgstr ""
+"Avant d’importer, effectuez une sauvegarde de votre base de données pour "
+"éviter toute perte de données."
+
+msgctxt "benefits-landing"
+msgid "15 000+"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "160 000+"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "160,000+"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "4.91/5"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "6 months of support included"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced AJAX Containers"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced Filter Field Types"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced filter types"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced Filtering & Core Value"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Advanced Workflow & Flexibility"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "AJAX Filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"and customize them individually to match the needs of any section or page"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Any Post Type Filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Any WP_Query Filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Apply SEO Rules"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Auto-Generated Filters"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Auto-Hide Empty Filters"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "average rating"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "bringing traffic to your website"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Built-in, user-friendly filter widget for mobile devices."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Buy PRO"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Choose the right version<br>for you"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Control & flexibility"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Create individual filters for each section of your website."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Create unlimited<br>Filter Sets"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Current version"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "customers on CodeCanyon"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Dedicated mobile filters widget"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Duplicate Filter Sets"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Duplicate Filter Sets in one click"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Duplicate, export, import"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Features"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Filter any WP_Query"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"Filter any WP_Query, get SEO Rules, obtain clean URLs, and unlock many "
+"convenient time-saving options — all available in the PRO version."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Filter by Any Criteria"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Filter custom posts and complex<br>WP_Query"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"filtering by variations, hiding empty filters, hiding “out of stock” "
+"products, and more"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Filtering for custom queries & page builders"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"Filters, Filter Sets, and plugin settings (within one or multiple sites)"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Frequently Asked Questions"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "from real customers"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Full control"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Full URL Structure Control"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Generate SEO-optimized<br>results pages"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Get clean URLs"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Hide Out-of-Stock Products"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "How many sites does my license cover?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Import & Export Settings"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Is support included with the PRO upgrade?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Is the PRO version compatible with my theme or page builder?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Lifetime updates"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Maximum convenience for Mobile<br>devices"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Mobile & UX for E-commerce"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Mobile Devices"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Mobile Filters Widget"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Multilingual Support"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "No Empty Pages or 404s"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"No, the PRO version will not slow down your site. The plugin itself is "
+"optimized for fast performance and does not add unnecessary load on its own."
+"<br><br>However, keep in mind that the speed of filtering depends on the "
+"number of posts, attributes, and your hosting resources. With large datasets,"
+" performance is primarily determined by server capacity rather than the "
+"plugin version."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"No, you will not need to rebuild your site after upgrading to PRO. All "
+"existing page structure, content, and filter settings will remain unchanged. "
+"The PRO version simply extends the plugin’s capabilities and adds new "
+"features without affecting your current filtering logic."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"No, your existing filters will not disappear after upgrading to PRO. All "
+"created Filter Sets, filters, and settings are preserved. We recommend "
+"installing and activating the PRO version first, and only then deactivating "
+"the Free version — this way all your data will remain intact."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "on any wordpress page"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "One-click import & export for Filters, Filter Sets, and settings"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "One-time payment"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Priority Support"
+msgstr ""
+
+#. PRO BENEFITS PAGE START
+msgctxt "benefits-landing"
+msgid "PRO"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "rating based on real reviews"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Ready to unlock the full power of Filter Everything?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Responsive Design"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO & promotion"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO & Traffic Growth"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO Capabilities"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO capabilities + clean URLs"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO Rules for Filter Pages"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO rules for filtered pages"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO-Friendly Filter URLs"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO-friendly filter URLs"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO-ready"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Sorting Widget"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Standard Support"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Step-by-Step Filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Support"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"Take full control of SEO for filtered results pages and attract additional "
+"free traffic from search engines or AI services."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"The license covers two sites — your main production website and its "
+"development copy (DEV / staging). This means you can use the plugin on the "
+"live site and simultaneously on its test copy for development, updates, and "
+"verification before applying changes to the production environment."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Trusted by over"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Unlimited Filter Sets"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Unlock all PRO features"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Unlock extra options"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"Upgrade to <b>Filter Everything PRO</b> to unlock advanced filter<br>"
+"capabilities, SEO features, and full control over the filtering process."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"Upgrade to PRO and take full control over filtering, SEO, and scalability."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "User experience"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "users worldwide"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Variation-Based Product Filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"We always do our best to help resolve any issues with the plugin and provide "
+"the necessary support. If this is not possible, you can use the refund "
+"policy and get your money back in accordance with the rules of the website "
+"where you purchased the plugin."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "websites / users worldwide"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "What does Filter Everything PRO<br>unlock?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "What is the refund policy?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Why Upgrade to<br>Filter Everything PRO?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Will I need to rebuild my site after upgrading to PRO?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Will my existing filters disappear after upgrading to PRO?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Will the PRO version slow down my site?"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"With PRO, you can go far beyond basic filtering and build scalable "
+"solutions<br>for real projects"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Works and is trusted<br>worldwide"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "XML Sitemap for Filter Pages"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "XML sitemap for filter pages"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"Yes, support is included with the PRO purchase. You receive 6 months of "
+"support with the option to extend it at any time, along with lifetime plugin "
+"updates that include all new features and bug fixes at no additional cost."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid ""
+"Yes, the PRO version is compatible with most WordPress themes and popular "
+"page builders. The plugin relies on the standard WP_Query mechanism, which "
+"allows it to integrate correctly with Gutenberg, Elementor, WPBakery, Divi, "
+"Avada, and other page builders.<br><br>In most cases, no additional "
+"configuration is required — filters will work with your theme out of the box."
+" For highly customized or non-standard templates, flexible integration "
+"options are also available."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "∞ Unlimited number of Filter Sets"
+msgstr ""
+
 msgid "Blog page"
 msgstr "Page du blog"
 
+msgid "Built-in mobile filter widget"
+msgstr "Widget de filtres intégré pour mobile"
+
 msgid "Buttons for opening widgets"
 msgstr "Boutons d’ouverture des widgets"
-
-msgid "by Backorders Status (Custom Field)"
-msgstr "par statut des commandes en souffrance (champ personnalisé)"
 
 msgid "By date: newest first"
 msgstr "Par date : le plus récent en premier"
@@ -406,41 +926,8 @@ msgstr ""
 "minuscules. Si vous devez les afficher exactement sous forme de noms de "
 "termes, spécifiez-les dans ce champ."
 
-msgid "by Downloadable Status (Custom Field)"
-msgstr "par statut téléchargeable (champ personnalisé)"
-
 msgid "By ID"
 msgstr "Par pièce d’identité"
-
-msgid "by product Height"
-msgstr "par produit Hauteur"
-
-msgid "by product Length"
-msgstr "par produit Longueur"
-
-msgid "by Product Virtual status (Custom Field)"
-msgstr "par statut virtuel du produit (champ personnalisé)"
-
-msgid "by product Weight"
-msgstr "par produit Poids"
-
-msgid "by product Width"
-msgstr "par produit Largeur"
-
-msgid ""
-"by Sale Price (Custom Field Numeric) or on Sale Status (Custom Field Exists)"
-msgstr ""
-"par prix de vente (champ numérique personnalisé) ou sur statut de vente (le "
-"champ personnalisé existe)"
-
-msgid "by Sales Count"
-msgstr "par nombre de ventes"
-
-msgid "by Sold Individually status (Custom Field)"
-msgstr "par statut Vendu individuellement (champ personnalisé)"
-
-msgid "by Stock Quantity (Custom Field Numeric)"
-msgstr "par quantité de stock (champ numérique personnalisé)"
 
 msgid "By title: alphabetical"
 msgstr "Par titre : alphabétique"
@@ -464,6 +951,15 @@ msgstr ""
 #: src/Admin/FilterFields.php:244
 msgid "Checkboxes"
 msgstr "Cases à cocher"
+
+msgid "Chips"
+msgstr "Chips"
+
+msgid "Chips widget"
+msgstr "Widget chips"
+
+msgid "Choose what to export"
+msgstr "Choisissez ce qu’exporter"
 
 msgid "Clean URLs and Permalinks"
 msgstr "Nettoyer les URL et les permaliens"
@@ -526,6 +1022,12 @@ msgstr "copie"
 msgid "Count, dynamic recount in terms"
 msgstr "Count, recomptage dynamique en termes"
 
+msgid "Create Filters Automatically"
+msgstr "Créer des filtres automatiquement"
+
+msgid "Create Filters Manually"
+msgstr "Créer des filtres manuellement"
+
 msgid "Current<br />version"
 msgstr "Version<br />actuelle"
 
@@ -537,12 +1039,15 @@ msgstr "CSS personnalisé"
 msgid "Custom Field"
 msgstr "Champ personnalisé"
 
+msgid "Custom Field Date"
+msgstr "Champ personnalisé: Date"
+
 #: src/Entities/EntityManager.php:120
 msgid "Custom Field Exists"
-msgstr "Un champ personnalisé existe"
+msgstr "Champ personnalisé: Existe"
 
 msgid "Custom Field Exists - Available in PRO"
-msgstr "Un champ personnalisé existe - Disponible dans PRO"
+msgstr "Champ personnalisé: Existe - Disponible en version PRO"
 
 #: src/Entities/EntityManager.php:116
 msgid "Custom Field Filters"
@@ -550,7 +1055,7 @@ msgstr "Filtres de champs personnalisés"
 
 #: src/Entities/EntityManager.php:119
 msgid "Custom Field Numeric"
-msgstr "Champ numérique personnalisé"
+msgstr "Champ personnalisé: Numérique"
 
 msgid "Custom URL prefixes for filters"
 msgstr "Préfixes d’URL personnalisés pour les filtres"
@@ -700,6 +1205,11 @@ msgstr ""
 msgid "Dismiss this notice."
 msgstr "Rejeter cet avis."
 
+#, fuzzy
+#| msgid "Display filters side by side instead of stacked"
+msgid "Display filters side by side instead of one per row"
+msgstr "Afficher les filtres côte à côte au lieu de les empiler"
+
 msgid ""
 "Display the term hierarchy in the filter widget. Child terms will be "
 "collapsed by default"
@@ -744,6 +1254,9 @@ msgstr "Liste déroulante"
 
 msgid "Dropdown Label"
 msgstr "Nom de la liste déroulante"
+
+msgid "Duplicate"
+msgstr "Dupliquer"
 
 msgid "Duplicate Filter Set"
 msgstr "Jeu de filtres en double"
@@ -831,11 +1344,23 @@ msgstr "Activer le widget Filtres Pop-up"
 msgid "Enables filtering by clicking the Apply button"
 msgstr "Active le filtrage en cliquant sur le bouton Appliquer"
 
+msgid "Enter chips title"
+msgstr "Entrer le titre des chips"
+
+msgid "Enter filters title"
+msgstr "Entrer le titre des filtres"
+
+msgid "Enter sorting label"
+msgstr "Entrer l'étiquette de tri"
+
 msgid ""
 "Entities whose terms should display in SEO data without forcing lowercasing"
 msgstr ""
 "Entités dont les termes doivent s’afficher dans les données SEO sans forcer "
 "la casse minuscule"
+
+msgid "Error"
+msgstr "Erreur"
 
 #: src/Admin/AdminHooks.php:154
 #, php-format
@@ -861,6 +1386,20 @@ msgstr[1] ""
 msgid "Error: all SEO data fields could not be empty."
 msgstr "Erreur : tous les champs de données SEO n’ont pas pu être vides."
 
+msgid ""
+"Error: An unexpected error occurred. Please try again or contact support if "
+"the problem persists."
+msgstr ""
+"Erreur : Une erreur inattendue s’est produite. Veuillez réessayer ou "
+"contacter le support si le problème persiste."
+
+msgid ""
+"Error: Automatic filters were not created. Please try again, or set them up "
+"manually."
+msgstr ""
+"Erreur : Les filtres automatiques n’ont pas été créés. Veuillez réessayer ou "
+"les configurer manuellement."
+
 #: src/Admin/FilterFields.php:1261
 msgid "Error: filter prefix is already used for another entity."
 msgstr "Error: filter prefix is already used for another entity."
@@ -880,6 +1419,21 @@ msgid "Error: for filter Post Author logic OR is acceptable only."
 msgstr ""
 "Erreur : pour filtrer la logique Post Author OR n’est acceptable que pour "
 "l’utilisateur."
+
+msgid ""
+"Error: Import file upload failed. Please try again or check your server's "
+"file upload settings."
+msgstr ""
+"Erreur : Échec du téléchargement du fichier d’importation. Veuillez "
+"réessayer ou vérifier les paramètres de téléchargement de fichiers de votre "
+"serveur."
+
+msgid ""
+"Error: Insufficient permissions to perform this action. Please check your "
+"user role or contact the site administrator."
+msgstr ""
+"Erreur : Permissions insuffisantes pour effectuer cette action. Veuillez "
+"vérifier votre rôle d’utilisateur ou contacter l’administrateur du site."
 
 msgid "Error: Invalid date format."
 msgstr "Erreur : Format de date non valide."
@@ -909,6 +1463,9 @@ msgstr "Erreur : ID de filtre non valide."
 #: src/Admin/FilterFields.php:1253
 msgid "Error: invalid Hide empty field."
 msgstr "Erreur : Masquer le champ vide non valide."
+
+msgid "Error: invalid Horizontal layout field."
+msgstr "Erreur : champ de disposition horizontale non valide."
 
 #: src/Admin/FilterFields.php:1271
 msgid "Error: invalid include checkbox value"
@@ -945,6 +1502,9 @@ msgstr "Erreur : l'ID de l'ensemble n'est pas valide."
 msgid "Error: invalid Show count field."
 msgstr "Erreur : le champ Show count n'est pas valide."
 
+msgid "Error: invalid Taxonomy"
+msgstr "Erreur : taxonomie non valide"
+
 #: src/Admin/FilterFields.php:1270
 msgid "Error: invalid the Sort Terms by parameter"
 msgstr "Erreur : le paramètre Sort Terms by n'est pas valide"
@@ -965,6 +1525,102 @@ msgstr "Erreur : type de page WP non valide."
 
 msgid "Error: invalid «Apply Button» mode field."
 msgstr "Erreur : champ de mode «Appliquer le bouton» non valide."
+
+msgid ""
+"Error: No export options selected. Please choose at least one option before "
+"exporting data."
+msgstr ""
+"Erreur : Aucune option d’exportation sélectionnée. Veuillez choisir au moins "
+"une option avant d’exporter les données."
+
+msgid ""
+"Error: No file selected for import. Please choose a JSON file and try again."
+msgstr ""
+"Erreur : Aucun fichier sélectionné pour l’importation. Veuillez choisir un "
+"fichier JSON et réessayer."
+
+msgid ""
+"Error: No Filter Sets found. Please create at least one Filter Set and SEO "
+"Rule, then try generating the XML sitemap again."
+msgstr ""
+"Erreur : Aucun ensemble de filtres trouvé. Veuillez créer au moins un "
+"ensemble de filtres et une règle SEO, puis réessayez de générer le plan du "
+"site XML."
+
+msgid ""
+"Error: No filter sets have been created yet. There is nothing to export."
+msgstr ""
+"Erreur : Aucun ensemble de filtres n’a encore été créé. Il n’y a rien à "
+"exporter."
+
+msgid ""
+"Error: No filters selected for indexing. Please select at least one filter "
+"for indexing in the %sIndexed Filters%s section and then try generating the "
+"XML sitemap again."
+msgstr ""
+"Erreur : Aucun filtre sélectionné pour l’indexation. Veuillez sélectionner "
+"au moins un filtre à indexer dans la section %sFiltres indexés%s, puis "
+"réessayez de générer le plan du site XML."
+
+msgid ""
+"Error: No import options selected. Please choose at least one item to import."
+msgstr ""
+"Erreur : Aucune option d’importation sélectionnée. Veuillez choisir au moins "
+"un élément à importer."
+
+msgid ""
+"Error: No indexing depth settings have been configured. Please check your "
+"SEO settings and set the %sIndexing Depth%s before generating the sitemap."
+msgstr ""
+"Erreur : Aucun paramètre de profondeur d’indexation n’a été configuré. "
+"Veuillez vérifier vos paramètres SEO et définir la %sProfondeur "
+"d’indexation%s avant de générer le plan du site."
+
+msgid ""
+"Error: No post types found. Please add your first post and try again, or "
+"create a Filter Set manually."
+msgstr ""
+"Erreur : Aucun type de contenu trouvé. Veuillez ajouter votre premier "
+"article et réessayer, ou créer un ensemble de filtres manuellement."
+
+msgid ""
+"Error: No SEO rules found. Please create at least one SEO rule and then try "
+"generating the XML sitemap again."
+msgstr ""
+"Erreur : Aucune règle SEO trouvée. Veuillez créer au moins une règle SEO, "
+"puis réessayez de générer le plan du site XML."
+
+msgid "Error: No SEO rules have been created yet. There is nothing to export."
+msgstr ""
+"Erreur : Aucune règle SEO n’a encore été créée. Il n’y a rien à exporter."
+
+msgid "Error: No settings have been modified yet. There is nothing to export."
+msgstr ""
+"Erreur : Aucun paramètre n’a encore été modifié. Il n’y a rien à exporter."
+
+msgid ""
+"Error: No taxonomies found. Please create your first taxonomy and then try "
+"again."
+msgstr ""
+"Erreur : Aucune taxonomie trouvée. Veuillez créer votre première taxonomie, "
+"puis réessayez."
+
+msgid ""
+"Error: No URL prefixes have been configured. Please add at least one URL "
+"prefix in the URL Prefixes section and then try generating the XML sitemap "
+"again."
+msgstr ""
+"Erreur : Aucun préfixe d’URL n’a été configuré. Veuillez ajouter au moins un "
+"préfixe d’URL dans la section Préfixes d’URL, puis réessayez de générer le "
+"plan du site XML."
+
+msgid ""
+"Error: No URLs were found for the XML sitemap. Please create filter sets and "
+"SEO rules before generating the XML sitemap again."
+msgstr ""
+"Erreur : Aucune URL trouvée pour le plan du site XML. Veuillez créer des "
+"ensembles de filtres et des règles SEO avant de réessayer de générer le plan "
+"du site XML."
 
 #: src/Admin/FilterFields.php:1273
 msgid "Error: numeric filter can not be in the URL path."
@@ -992,6 +1648,13 @@ msgstr ""
 "Erreur : Le curseur de plage n’est acceptable que pour les filtres Post Meta "
 "Num."
 
+msgid ""
+"Error: Requested resource not found (404). Please try again or contact "
+"support."
+msgstr ""
+"Erreur : Ressource demandée introuvable (404). Veuillez réessayer ou "
+"contacter le support."
+
 #: src/Admin/FilterFields.php:1277
 msgid "Error: SEO Rule must contain at least one filter."
 msgstr "Erreur : La règle SEO doit contenir au moins un filtre."
@@ -1004,6 +1667,68 @@ msgid "Error: SEO rule with selected Filters Combination already exists."
 msgstr ""
 "Erreur : La règle SEO avec la combinaison de filtres sélectionnée existe "
 "déjà."
+
+msgid ""
+"Error: Service unavailable (503). Please try again later or contact support."
+msgstr ""
+"Erreur : Service indisponible (503). Veuillez réessayer plus tard ou "
+"contacter le support."
+
+msgid ""
+"Error: The file contains invalid JSON. Please check the file contents or "
+"export it again."
+msgstr ""
+"Erreur : Le fichier contient un JSON invalide. Veuillez vérifier le contenu "
+"du fichier ou l’exporter à nouveau."
+
+msgid ""
+"Error: The file must have the .json extension. Please select a valid JSON "
+"file and try again."
+msgstr ""
+"Erreur : Le fichier doit avoir l’extension .json. Veuillez sélectionner un "
+"fichier JSON valide et réessayer."
+
+msgid ""
+"Error: The import file doesn't contain any filter sets data or options. "
+"Please make sure you selected a valid export file that includes this data."
+msgstr ""
+"Erreur : Le fichier d’importation ne contient aucune donnée ou option "
+"d’ensembles de filtres. Veuillez vous assurer d’avoir sélectionné un fichier "
+"d’exportation valide incluant ces données."
+
+msgid ""
+"Error: The import file doesn't contain any SEO rules data or options. Please "
+"make sure you selected a valid export file that includes SEO rules."
+msgstr ""
+"Erreur : Le fichier d’importation ne contient aucune donnée ou option de "
+"règles SEO. Veuillez vous assurer d’avoir sélectionné un fichier "
+"d’exportation valide incluant les règles SEO."
+
+msgid ""
+"Error: The import file doesn't contain any settings data. Please make sure "
+"you selected a valid export file that includes plugin settings."
+msgstr ""
+"Erreur : Le fichier d’importation ne contient aucune donnée de paramètres. "
+"Veuillez vous assurer d’avoir sélectionné un fichier d’exportation valide "
+"incluant les paramètres du plugin."
+
+msgid ""
+"Error: The import process took too long and was stopped by the server. "
+"Please increase the PHP max_execution_time value or contact your hosting "
+"support."
+msgstr ""
+"Erreur : Le processus d’importation a pris trop de temps et a été interrompu "
+"par le serveur. Veuillez augmenter la valeur PHP de `max_execution_time` ou "
+"contacter le support de votre hébergeur."
+
+msgid ""
+"Error: The XML sitemap generation took too long and was stopped by the "
+"server. Please increase the PHP max_execution_time value or contact your "
+"hosting support."
+msgstr ""
+"Erreur : La génération du plan du site XML a pris trop de temps et a été "
+"interrompue par le serveur. Veuillez augmenter la valeur PHP de "
+"`max_execution_time` ou contacter le support de votre hébergeur."
 
 #: src/Admin/FilterFields.php:1265
 msgid ""
@@ -1024,11 +1749,55 @@ msgstr ""
 "filtres égaux."
 
 msgid ""
+"Error: Unable to connect to the server. Please check your network connection "
+"or try again later."
+msgstr ""
+"Erreur : Impossible de se connecter au serveur. Veuillez vérifier votre "
+"connexion réseau ou réessayer plus tard."
+
+msgid ""
+"Error: Unable to create a folder for the XML sitemap file. Please check your "
+"server's write permissions or try again later."
+msgstr ""
+"Erreur : Impossible de créer un dossier pour le fichier du plan du site XML. "
+"Veuillez vérifier les permissions d’écriture de votre serveur ou réessayer "
+"plus tard."
+
+msgid ""
+"Error: Unable to delete the existing XML sitemap file. Please check file "
+"permissions and try generating it again."
+msgstr ""
+"Erreur : Impossible de supprimer le fichier du plan du site XML existant. "
+"Veuillez vérifier les permissions des fichiers et réessayez de le générer."
+
+msgid ""
+"Error: Unable to import data. The selected file is not a valid JSON export "
+"from this plugin."
+msgstr ""
+"Erreur : Impossible d’importer les données. Le fichier sélectionné n’est pas "
+"un export JSON valide de ce plugin."
+
+msgid ""
+"Error: Unable to write data to the XML sitemap file. Please verify write "
+"permissions and available disk space."
+msgstr ""
+"Erreur : Impossible d’écrire les données dans le fichier du plan du site XML."
+" Veuillez vérifier les permissions d’écriture et l’espace disque disponible."
+
+msgid ""
 "Error: var name is not allowed because it matches a taxonomy or term name "
 "already used on your site."
 msgstr ""
 "Erreur : le nom var n’est pas autorisé car il correspond à une taxonomie ou "
 "à un nom de terme déjà utilisé sur votre site."
+
+msgid ""
+"Error: XML sitemap generation failed due to a server error. Please check "
+"your web server's error log or contact support."
+msgstr ""
+"Erreur : La génération du plan du site XML a échoué en raison d’une erreur "
+"serveur. Veuillez vérifier le journal des erreurs de votre serveur web ou "
+"contacter le support."
 
 msgid ""
 "Error: you can not update settings because the Filter Everything Pro plugin "
@@ -1077,23 +1846,98 @@ msgstr "exclure"
 msgid "Experimental"
 msgstr "Expérimental"
 
+msgid "Export"
+msgstr "Exporter"
+
+msgid "Export data"
+msgstr "Exporter les données"
+
+msgid "Export plugin data to a JSON file that you can import later."
+msgstr ""
+"Exporter les données du plugin vers un fichier JSON que vous pourrez "
+"importer ultérieurement."
+
+msgid "Failed to fill temporary table"
+msgstr "Échec de remplissage de la table temporaire"
+
+msgid ""
+"Failed to generate the XML sitemap. Please try again or contact support if "
+"the issue persists."
+msgstr ""
+"Échec de la génération du plan du site XML. Veuillez réessayer ou contacter "
+"le service d'assistance si le problème persiste."
+
+msgid "Failed to generate XML"
+msgstr "Échec de la génération du XML"
+
 #: src/PostTypes.php:45
 msgid "Filter"
 msgstr "Filtre"
+
+msgid "Filter any post list —"
+msgstr "Filtrage de n’importe quelle liste d’articles —"
 
 #: src/Admin/FilterFields.php:72 src/Admin/FilterFields.php:1086
 #: views/admin/filters-set.php:31
 msgid "Filter by"
 msgstr "Filtrer par"
 
-msgid "filter by Featured Image (Custom Field Exists)"
-msgstr "filtrer par image sélectionnée (le champ personnalisé existe)"
+msgid "filter by Featured image"
+msgstr "filtrer par : image à la une"
+
+msgid "filter by Product average rating"
+msgstr "filtrer par : note moyenne du produit"
+
+msgid "filter by Product backorders status"
+msgstr "filtrer par : statut des commandes en attente du produit"
+
+msgid "filter by Product downloadable status"
+msgstr "filtrer par : statut téléchargeable du produit"
+
+msgid "filter by Product height"
+msgstr "filtrer par : hauteur du produit"
+
+msgid "filter by Product length"
+msgstr "filtrer par : longueur du produit"
+
+msgid "filter by Product on sale status"
+msgstr "filtrer par : statut en promotion du produit"
+
+msgid "filter by Product price"
+msgstr "filtrer par : prix du produit"
 
 msgid "filter by Product price (Custom Field Numeric)"
 msgstr "filtrer par prix du produit (champ numérique personnalisé)"
 
+msgid "filter by Product sale price"
+msgstr "filtrer par : prix promotionnel du produit"
+
+msgid "filter by Product sold individually status"
+msgstr "filtrer par : statut « vendu individuellement » du produit"
+
+msgid "filter by Product stock quantity"
+msgstr "filtrer par : quantité en stock du produit"
+
+msgid "filter by Product stock status"
+msgstr "filtrer par : statut du stock du produit"
+
 msgid "filter by Product Stock status (Custom Field)"
-msgstr "filtrer par statut de stock de produits (champ personnalisé)"
+msgstr "filtrer par : statut du stock du produit (champ personnalisé)"
+
+msgid "filter by Product total sales"
+msgstr "filtrer par : total des ventes du produit"
+
+msgid "filter by Product virtual status"
+msgstr "filtrer par : statut virtuel du produit"
+
+msgid "filter by Product weight"
+msgstr "filtrer par : poids du produit"
+
+msgid "filter by Product width"
+msgstr "filtrer par : largeur du produit"
+
+msgid "Filter by WooCommerce variations"
+msgstr "Filtrage par variations de produits WooCommerce"
 
 #: src/Settings/Tabs/SettingsTab.php:73
 msgid "Filter Container max height, px"
@@ -1177,6 +2021,9 @@ msgstr ""
 msgid "Filter Sets"
 msgstr "Jeux de filtres"
 
+msgid "Filter sets"
+msgstr "Ensembles de filtres"
+
 #: src/PostTypes.php:27
 msgid "Filter Sets are Filters grouped together. Create your first Filter Set."
 msgstr ""
@@ -1210,6 +2057,13 @@ msgstr ""
 #: views/frontend/filters-button.php:7
 msgid "Filters"
 msgstr "Filtres"
+
+#| msgid " filters"
+msgid "filters"
+msgstr "filtres"
+
+msgid "Filters and filter sets"
+msgstr "Filtres et ensembles de filtres"
 
 msgid "Filters any Post Type (posts, products, etc.)"
 msgstr ""
@@ -1295,9 +2149,25 @@ msgstr ""
 "besoin de définir des données SEO pour une couleur et une taille spécifiques,"
 " veuillez choisir des valeurs spécifiques telles que «Bleu» et «Large»."
 
+msgid "Free"
+msgstr "Gratuit"
+
 #: src/Settings/Tabs/SettingsTab.php:94
 msgid "General"
 msgstr "Généralités"
+
+msgid "Generate XML Sitemap"
+msgstr "Générer le plan du site XML"
+
+msgid ""
+"Generates an XML sitemap of URLs available for indexing to help search "
+"engines crawl your site faster. You need to submit this sitemap to search "
+"engines for proper indexing."
+msgstr ""
+"Génère un plan du site XML des URL disponibles pour l’indexation afin "
+"d’aider les moteurs de recherche à explorer votre site plus rapidement. Vous "
+"devez soumettre ce plan du site aux moteurs de recherche pour une indexation "
+"correcte."
 
 msgid "Get PRO"
 msgstr "Obtenez PRO"
@@ -1323,6 +2193,9 @@ msgstr "Aide et support"
 #: pro/PluginPro.php:263
 msgid "Hide empty Filters"
 msgstr "Masquer les filtres vides"
+
+msgid "Hide empty filters"
+msgstr "Masquage automatique des filtres complètement vides"
 
 msgid "Hide filter if all terms are empty"
 msgstr "Masquer le filtre si tous les termes sont vides"
@@ -1351,11 +2224,21 @@ msgstr "Masquer jusqu’à ce que le parent soit sélectionné"
 msgid "Hide Woocommerce default sorting dropdown"
 msgstr "Masquer la liste déroulante de tri par défaut de Woocommerce"
 
-msgid "Horizontal layout"
-msgstr "Disposition horizontale"
+#. PRO BENEFITS PAGE END
+msgid "Horizontal filters"
+msgstr "Filtres horizontaux"
+
+msgid "Horizontal priority"
+msgstr "Priorité horizontale"
+
+msgid "How many columns to use in horizontal mode"
+msgstr "Combien de colonnes utiliser en mode horizontal"
 
 msgid "How the date will be displayed in the Filters widget"
 msgstr "Comment la date sera affichée dans le widget Filtres"
+
+msgid "How to?"
+msgstr "Comment faire ?"
 
 #: src/Settings/Tabs/SettingsTab.php:55
 msgid "HTML id or class of the Posts Container"
@@ -1395,6 +2278,23 @@ msgstr ""
 msgid "Image"
 msgstr "Image"
 
+msgid "Import"
+msgstr "Importer"
+
+msgid "Import completed successfully."
+msgstr "Importation terminée avec succès."
+
+msgid "Import data"
+msgstr "Importer les données"
+
+msgid "Import plugin data from a previously exported JSON file."
+msgstr ""
+"Importer les données du plugin à partir d’un fichier JSON exporté "
+"précédemment."
+
+msgid "Import/Export"
+msgstr "Importation/Exportation"
+
 msgid "Improved dropdowns"
 msgstr "Listes déroulantes améliorées"
 
@@ -1427,6 +2327,13 @@ msgstr "Filtres indexés"
 msgid "Indexing Depth"
 msgstr "Profondeur d’indexation"
 
+msgid ""
+"Indexing for your SEO rule will not work because you need to increase the "
+"filter's indexing depth setting"
+msgstr ""
+"L’indexation pour votre règle SEO ne fonctionnera pas car vous devez "
+"augmenter le paramètre de profondeur d’indexation du filtre."
+
 msgid "Individual AJAX containers for Filter Sets"
 msgstr "Conteneurs AJAX individuels pour les jeux de filtres"
 
@@ -1439,6 +2346,9 @@ msgstr "Information"
 #: views/admin/seo-vars.php:3
 msgid "Insert variable"
 msgstr "Insérer une variable"
+
+msgid "Insufficient rights to create XML."
+msgstr "Droits insuffisants pour créer le XML."
 
 msgid ""
 "It also hides variable products if their variations are out of stock. Please "
@@ -1502,6 +2412,12 @@ msgstr "Informations sur la licence"
 
 msgid "License Key"
 msgstr "Clé de licence"
+
+msgid "Lifetime updates"
+msgstr "Mises à jour à vie"
+
+msgid "Location"
+msgstr "Emplacement"
 
 msgid "Locked"
 msgstr "Verrouillé"
@@ -1568,14 +2484,8 @@ msgstr "Nom (nom de la publication)"
 msgid "Name of a part of the URL responsible for this filter"
 msgstr "Nom d’une partie de l’URL responsable de ce filtre"
 
-#: src/Admin/FilterFields.php:83
-msgid ""
-"Name of the Custom Field. Please, see the Popular Meta keys at the bottom"
-msgstr ""
-"Nom du champ personnalisé. Veuillez consulter les clés Meta populaires en bas"
-
-msgid "Need Your Help"
-msgstr "Besoin de votre aide"
+msgid "Name of the Custom Field"
+msgstr "Nom du champ personnalisé"
 
 msgid "Never hide"
 msgstr "Ne vous cachez jamais"
@@ -1595,8 +2505,8 @@ msgstr "Nouvelle règle SEO"
 msgid "No"
 msgstr "Non"
 
-msgid "No %s lists found on the page"
-msgstr "Aucune liste de %s n'a été trouvée sur la page"
+msgid "No %s enabled lists found on the page"
+msgstr "Aucune liste activée %s trouvée sur la page"
 
 #: pro/Admin/SeoRules.php:568
 msgid "No archive page"
@@ -1622,6 +2532,9 @@ msgstr ""
 #: src/PostTypes.php:53
 msgid "No Filters were found in Trash"
 msgstr "Aucun filtre n’a été trouvé dans la corbeille"
+
+msgid "No list of %s found on this page"
+msgstr "Aucune liste de %s trouvée sur cette page"
 
 msgid ""
 "No one Filter Set is configured for this post type pages. You can create a "
@@ -1653,6 +2566,9 @@ msgstr "Aucune règle SEO n’a été trouvée dans la corbeille"
 msgid "No SEO vars"
 msgstr "Pas de vars SEO"
 
+msgid "No taxonomies are associated with the selected post type."
+msgstr "Aucune taxonomie n'est associée au type de publication sélectionné."
+
 msgid "No title"
 msgstr "Sans titre"
 
@@ -1661,24 +2577,14 @@ msgid "Not On Sale"
 msgstr "Non en vente"
 
 msgid ""
-"Note: filters will only show if there is Filter Set registered for a page(s)"
-msgstr ""
-"Remarque : les filtres ne s'affichent que si un jeu de filtres est "
-"enregistré pour une ou plusieurs pages."
-
-msgid ""
-"Note: for ACF meta fields, please use names without the \"_\" character at "
-"the beginning"
-msgstr ""
-"Remarque: pour les champs méta ACF, veuillez utiliser des noms sans le "
-"caractère \"_\" au début"
-
-msgid ""
 "Note: if you modify the selected Posts list on the page, please update this "
 "Filter Set"
 msgstr ""
 "Note : si vous modifiez la liste des messages sélectionnés sur la page, "
 "veuillez mettre à jour ce jeu de filtres"
+
+msgid "Number of columns"
+msgstr "Nombre de colonnes"
 
 #: src/Admin/FilterFields.php:248
 msgid "Numeric range"
@@ -1690,6 +2596,12 @@ msgstr "En rupture de stock"
 #: src/wpc-default-hooks.php:20
 msgid "On Sale"
 msgstr "En vente"
+
+msgid "Open"
+msgstr "Ouvrir"
+
+msgid "Open XML sitemap"
+msgstr "Ouvrir le sitemap XML"
 
 msgid "OR"
 msgstr "OU"
@@ -1725,8 +2637,15 @@ msgstr "page %d"
 msgid "Page archive for:"
 msgstr "Archive de page pour :"
 
+msgid "page builders & custom queries"
+msgstr ""
+"créés avec des constructeurs de pages et des requêtes WP_Query personnalisées"
+
 msgid "Parent Filter"
 msgstr "Filtre parent"
+
+msgid "Pay once"
+msgstr "Paiement unique"
 
 msgid ""
 "Please enable this option only after you have ensured that the filtering is "
@@ -1737,6 +2656,12 @@ msgstr ""
 
 msgid "Please enable this, if the widget doesn't appear"
 msgstr "Veuillez activer cette option si le widget n’apparaît pas"
+
+msgid "Please keep this tab open until the process is complete."
+msgstr "Veuillez garder cet onglet ouvert jusqu’à la fin du processus."
+
+msgid "Please regenerate the XML sitemap"
+msgstr "Veuillez régénérer le plan du site XML."
 
 msgid "Please specify taxonomies whose filters should display color swatches"
 msgstr ""
@@ -1750,6 +2675,13 @@ msgid "Please, do not call the \"%s\" function before the \"wp\" action"
 msgstr "S’il vous plaît, n’appelez pas la fonction «%s» avant l’action «wp»"
 
 msgid ""
+"Please, do not fire this function, until the \"pre_get_posts\" hook has been "
+"called"
+msgstr ""
+"Veuillez ne pas exécuter cette fonction tant que le hook « pre_get_posts » "
+"n'a pas été appelé."
+
+msgid ""
 "Please, help me make the plugin more popular - leave a good review for it."
 msgstr ""
 "S’il vous plaît, aidez-moi à rendre le plugin plus populaire - laissez une "
@@ -1761,6 +2693,9 @@ msgid ""
 msgstr ""
 "Veuillez spécifier le widget Tri souhaité en ajoutant le paramètre id au "
 "shortcode."
+
+msgid "Plugin settings"
+msgstr "Paramètres du plugin"
 
 msgid "Pop-up filters widget"
 msgstr "Widget de filtres pop-up"
@@ -1840,12 +2775,18 @@ msgstr "Support Premium"
 msgid "Preview the selected location in a new tab"
 msgstr "Prévisualiser l’emplacement sélectionné dans un nouvel onglet"
 
+msgid "Price"
+msgstr "Prix"
+
 #: src/Admin/FilterSet.php:71
 msgid "Priority"
 msgstr "Priorité"
 
 msgid "PRO"
 msgstr "PRO"
+
+msgid "PRO benefits"
+msgstr "Avantages PRO"
 
 #: pro/Admin/MetaBoxes.php:31 src/Admin/MetaBoxes.php:42
 #: src/Admin/MetaBoxes.php:266
@@ -1867,6 +2808,9 @@ msgstr "Evaluation"
 
 msgid "Read more"
 msgstr "Lire la suite"
+
+msgid "Regenerate XML Sitemap"
+msgstr "Régénérer le plan du site XML"
 
 msgid "Registered"
 msgstr "Inscrit"
@@ -1939,6 +2883,9 @@ msgstr "Règle SEO de recherche"
 msgid "search: %s"
 msgstr "Recherche : %s"
 
+msgid "Searching"
+msgstr "Recherche"
+
 msgid "See less"
 msgstr "Voir moins"
 
@@ -1952,6 +2899,9 @@ msgstr "Sélectionnez %s"
 
 msgid "Select %s first"
 msgstr "Sélectionnez %s en premier"
+
+msgid "Select File"
+msgstr "Sélectionner le fichier"
 
 msgid "Select or enter hooks"
 msgstr "Sélectionner ou saisir des crochets"
@@ -1972,6 +2922,9 @@ msgstr "Sélectionnez les termes et"
 msgid "Select the Post Type you need to filter"
 msgstr "Sélectionnez le type de publication que vous devez filtrer"
 
+msgid "Select the settings file to import"
+msgstr "Sélectionnez le fichier de paramètres à importer"
+
 msgid ""
 "Select where to show Chips on your site. Or enter your theme's hooks. For "
 "example: before_main_content"
@@ -1982,6 +2935,9 @@ msgstr ""
 #: src/Settings/Tabs/SettingsTab.php:79
 msgid "Selected Filters (Chips) integration"
 msgstr "Intégration des filtres sélectionnés (puces)"
+
+msgid "SEO"
+msgstr "SEO"
 
 #: pro/Admin/SeoRules.php:200
 msgid "SEO Description"
@@ -1996,10 +2952,16 @@ msgstr "Règle SEO"
 msgid "SEO Rules"
 msgstr "Règles SEO"
 
+msgid "SEO rules"
+msgstr "Règles SEO"
+
 msgid "SEO Rules, indexing filtering result pages by Search Engines"
 msgstr ""
 "Règles SEO, indexation filtrage des pages de résultats par les moteurs de "
 "recherche"
+
+msgid "SEO settings saved successfully."
+msgstr "Paramètres SEO enregistrés avec succès."
 
 #: pro/Admin/SeoRules.php:171
 msgid "SEO Title"
@@ -2096,6 +3058,9 @@ msgstr ""
 msgid "Sort Terms by"
 msgstr "Trier les termes par"
 
+msgid "Sorting"
+msgstr "Tri"
+
 msgctxt "sorting"
 msgid "ASC"
 msgstr "ASC"
@@ -2143,6 +3108,14 @@ msgstr "Numéro de vente du produit"
 msgctxt "sorting"
 msgid "Title"
 msgstr "Titre"
+
+msgid ""
+"Sorting is unavailable on this page. It works only with content filtered by "
+"Filter Everything. To enable sorting, assign a Filter Set to this page."
+msgstr ""
+"Le tri n’est pas disponible sur cette page. Il fonctionne uniquement avec le "
+"contenu filtré par Filter Everything. Pour activer le tri, attribuez un "
+"ensemble de filtres à cette page."
 
 msgid "Sorting options:"
 msgstr "Options de tri :"
@@ -2204,6 +3177,9 @@ msgstr "Filtrage pas à pas"
 msgid "Styled checkboxes and radio buttons"
 msgstr "Cases à cocher et boutons radio stylisés"
 
+msgid "Success: XML sitemap generated successfully."
+msgstr "Succès : le plan du site XML a été généré avec succès."
+
 msgid "Supports AJAX"
 msgstr "Prend en charge AJAX"
 
@@ -2226,8 +3202,8 @@ msgstr "Filtres de taxonomie"
 msgid "Taxonomy Numeric"
 msgstr "Taxonomie numérique"
 
-msgid "Taxonomy Numeric - Available in Pro"
-msgstr "Taxonomie numérique - Disponible en Pro"
+msgid "Taxonomy Numeric - Available in PRO"
+msgstr "Taxonomie numérique - Disponible en version PRO"
 
 msgid "Taxonomy with numeric values you need to filter by"
 msgstr "Taxonomie avec valeurs numériques que vous devez filtrer par"
@@ -2312,6 +3288,22 @@ msgid "The Filter set has not been updated."
 msgstr "Le jeu de filtres n’a pas été mis à jour."
 
 msgid ""
+"The free version allows up to 3 filter sets per post type. Upgrade to <a "
+"href=\"%s\">PRO</a> to display more filter sets."
+msgstr ""
+"La version gratuite permet d'utiliser jusqu'à 3 ensembles de filtres par "
+"type de publication. Passez à la version <a href=\"%s\">PRO</a> pour "
+"afficher davantage d'ensembles de filtres."
+
+msgid ""
+"The free version allows up to 3 filter sets per post type. Upgrade to <a "
+"href='%1$s' target='_blank'>PRO</a> for unlimited filter sets."
+msgstr ""
+"La version gratuite permet d'utiliser jusqu'à 3 ensembles de filtres par "
+"type de publication. Passez à la version <a href='%1$s' target='_blank'>"
+"PRO</a> pour bénéficier d'un nombre illimité d'ensembles de filtres."
+
+msgid ""
 "The free version of the plugin does not support filtering on singular pages. "
 "But <a href=\"%s\">PRO version</a> supports."
 msgstr ""
@@ -2337,6 +3329,9 @@ msgstr "Le message n'a pas été trouvé ou n'est pas un jeu de filtres."
 #: src/Settings/Tabs/PermalinksTab.php:164
 msgid "The Prefix must contain at least one alphabetical character."
 msgstr "Le préfixe doit contenir au moins un caractère alphabétique."
+
+msgid "The request could not be verified. Please try again."
+msgstr "La demande n'a pas pu être vérifiée. Veuillez réessayer."
 
 msgid "The same as on a desktop"
 msgstr "Comme sur un ordinateur de bureau"
@@ -2374,6 +3369,15 @@ msgstr "La règle SEO a été mise à jour."
 #: pro/Admin/Admin.php:136
 msgid "The title will be created automatically"
 msgstr "Le titre sera créé automatiquement"
+
+msgid ""
+"The XML sitemap generation exceeded the allowed execution time (%d seconds). "
+"Your server may apply stricter limits. Please increase the time limit or "
+"contact your hosting provider."
+msgstr ""
+"La génération du plan du site XML a dépassé le temps d'exécution autorisé "
+"(%d secondes). Votre serveur applique peut-être des limites plus strictes. "
+"Veuillez augmenter la limite de temps ou contacter votre hébergeur."
 
 #: views/frontend/checkboxes.php:26 views/frontend/dropdown.php:26
 #: views/frontend/labels.php:31 views/frontend/radio.php:27
@@ -2422,6 +3426,23 @@ msgid ""
 msgstr ""
 "Ce filtre est inactif car il n’est pas lié au type de publication "
 "sélectionné."
+
+msgid ""
+"This Filter Set is inactive.<br>The Free version allows up to 3 Filter Sets "
+"per post type.<br>Upgrade to PRO to activate unlimited Filter Sets."
+msgstr ""
+"Cet ensemble de filtres est inactif.<br>La version gratuite autorise jusqu'à "
+"3 ensembles de filtres par type de publication.<br>Passez à la version PRO "
+"pour activer un nombre illimité d'ensembles de filtres."
+
+msgid ""
+"This function should not be called before the pre_get_posts hook has fired."
+msgstr ""
+"Cette fonction ne doit pas être appelée avant que le hook pre_get_posts ne "
+"se soit déclenché."
+
+msgid "This setting has moved to the Filter Set"
+msgstr "Ce paramètre a été déplacé dans l’ensemble de filtres."
 
 msgid "Time"
 msgstr "L'heure"
@@ -2484,6 +3505,15 @@ msgstr ""
 msgid "Try to use AJAX"
 msgstr "Essayez d’utiliser AJAX"
 
+msgid "Type to search for a custom field key"
+msgstr "Tapez pour rechercher une clé de champ personnalisé"
+
+msgid ""
+"Unable to determine the server execution time limit (max_execution_time)."
+msgstr ""
+"Impossible de déterminer la limite de temps d'exécution du serveur "
+"(max_execution_time)."
+
 msgid "Unknown error."
 msgstr "Erreur inconnue."
 
@@ -2499,8 +3529,23 @@ msgstr ""
 "pouvez spécifier cette ou ces pages dans le champ «Où filtrer?» d’un jeu de "
 "filtres."
 
+msgid "Unlock all PRO features and capabilities"
+msgstr "Accès à toutes les fonctionnalités et capacités PRO"
+
+msgid "Unlock PRO"
+msgstr "Déblocage de PRO"
+
+msgid "Unlock with PRO"
+msgstr "Déblocage avec PRO"
+
 msgid "Unregistered"
 msgstr "Non enregistré"
+
+msgid "Upgrade to"
+msgstr "Mise à niveau vers"
+
+msgid "Upgrade to PRO"
+msgstr "Passez à la version PRO"
 
 msgid "Upload image"
 msgstr "Télécharger l’image"
@@ -2568,6 +3613,9 @@ msgstr "Mises en page verticales et horizontales"
 msgid "View"
 msgstr "Vue"
 
+msgid "View all PRO features"
+msgstr "Affichage de toutes les fonctionnalités PRO"
+
 msgid "View details"
 msgstr "Voir les détails"
 
@@ -2593,6 +3641,12 @@ msgstr "Visiter le site web"
 #: src/Settings/Tabs/ExperimentalTab.php:36
 msgid "Wait Cursor (on desktop only)"
 msgstr "Curseur d’attente (sur le bureau uniquement)"
+
+msgid "were imported"
+msgstr "ont été importés"
+
+msgid "What to filter?"
+msgstr "Que filtrer ?"
 
 #: pro/PluginPro.php:250 src/Admin/FilterSet.php:41
 msgid "Where to filter?"
@@ -2652,6 +3706,11 @@ msgid "You do not have sufficient permissions to duplicate the Filter Set."
 msgstr ""
 "Vous n'avez pas les autorisations suffisantes pour dupliquer l'ensemble de "
 "filtres."
+
+msgid "You do not have sufficient permissions to perform this action."
+msgstr ""
+"Vous ne disposez pas des autorisations suffisantes pour effectuer cette "
+"action."
 
 msgid ""
 "You have been using the plugin for over two months without a license key, "
@@ -2717,3 +3776,6 @@ msgstr "— Il n'y a pas encore de vendeurs —"
 
 msgid "— There is no any %s yet —"
 msgstr "— Il n’y a pas encore de %s —"
+
+msgid "∞ Create unlimited filter sets"
+msgstr "∞ Prise en charge d’un nombre illimité de jeux de filtres"

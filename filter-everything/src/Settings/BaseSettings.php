@@ -19,18 +19,22 @@ abstract class BaseSettings implements TabInterface{
     protected function registerSettings($settings, $page, $optionName)
     {
         $callbacks = array(
-            'checkbox' => array($this, 'checkboxCallback'),
-            'text'     => array($this, 'inputCallback'),
-            'license'  => array($this, 'licenseCallback'),
-            'textarea' => array($this, 'textareaCallback'),
-            'editor'   => array($this, 'textEditorCallback'),
-            'select'   => array($this, 'selectCallback'),
-            'hidden'   => array($this, 'hiddenCallback')
+            'checkbox'      => array($this, 'checkboxCallback'),
+            'text'          => array($this, 'inputCallback'),
+            'license'       => array($this, 'licenseCallback'),
+            'textarea'      => array($this, 'textareaCallback'),
+            'editor'        => array($this, 'textEditorCallback'),
+            'select'        => array($this, 'selectCallback'),
+            'hidden'        => array($this, 'hiddenCallback'),
+            'file'          => array($this, 'fileCallback'),
+            'number'        => array($this, 'numberCallback'),
+            'inProButton' => array($this, 'inProButtonCallback'),
         );
 
         foreach ($settings as $sectionId => $section) {
             $callback = isset($section['callback']) ? $section['callback'] : null;
-            add_settings_section($sectionId, $section['label'], $callback, $page);
+            $args     = isset($section['args']) ? $section['args'] : array();
+            add_settings_section($sectionId, $section['label'], $callback, $page, $args );
 
             if( isset( $section['fields'] ) ){
                 foreach ( $section['fields'] as $fieldId => $field) {
@@ -48,13 +52,21 @@ abstract class BaseSettings implements TabInterface{
     public function checkBoxCallback($args)
     {
 
-        $checkbox = '<label><input type="checkbox" name="%s[%s]" %s id="%s">%s</label>';
+        $args = wp_parse_args( $args, array(
+            'checked'   => false,
+            'disabled'  => false,
+            'label'     => '',
+        ) );
+
+        $checkbox = '<label><input type="checkbox" name="%s[%s]" %s id="%s" %s>%s</label>';
         $checkbox = apply_filters( 'wpc_settings_field_checkbox', $checkbox, $args );
         $checked  = $this->getOption($args['label_for']);
 
-        if ($checked == '1') {
+        if ( $checked == '1' || $args['checked'] === true ) {
             $checked = 'on';
         }
+
+        $disabled = ( $args['disabled'] === true ) ? 'disabled' : '';
 
         printf(
             $checkbox,
@@ -62,6 +74,7 @@ abstract class BaseSettings implements TabInterface{
             esc_attr($args['label_for']),
             checked('on', $checked, false),
             esc_attr($args['id']),
+            esc_attr($disabled),
             esc_html($args['label'])
         );
 
@@ -69,6 +82,7 @@ abstract class BaseSettings implements TabInterface{
             printf( '<p class="description">%s</p>', esc_html( $args['description'] ) );
         }
     }
+
 
     public function inputCallback($args)
     {
@@ -80,7 +94,46 @@ abstract class BaseSettings implements TabInterface{
             $value = $this->getOption($args['label_for']);
         }
 
-        $value = trim($value);
+        if (!is_null($value)) {
+            $value = trim($value);
+        }
+
+        printf(
+            $input,
+            esc_attr($class),
+            esc_attr($this->optionName),
+            esc_attr($args['label_for']),
+            esc_attr($value),
+            esc_attr($args['placeholder']),
+            esc_attr($args['id'])
+        );
+
+        if( isset($args['id']) && $args['id'] === 'posts_container' ){
+
+            if( flrt_get_option('enable_ajax') === 'on' && ! $value ){
+                printf( '<p class="wpc-warning">%s</p>', esc_html__( 'You must specify Posts Container, otherwise AJAX will not work properly', 'filter-everything' ) );
+            }
+        }
+
+        if( isset( $args['description'] ) ){
+            printf( '<p class="description">%s</p>', esc_html( $args['description'] ) );
+        }
+
+    }
+
+    public function numberCallback($args)
+    {
+        $input = '<input class="%s" type="number" name="%s[%s]" value="%s" placeholder="%s" id="%s">';
+        $class = isset( $args['class'] ) ? $args['class'] : 'regular-text';
+        if( isset( $args['default'] ) ){
+            $value = $this->getOption($args['label_for']) ? $this->getOption($args['label_for']) : $args['default'];
+        }else{
+            $value = $this->getOption($args['label_for']);
+        }
+
+        if (!is_null($value)) {
+            $value = trim($value);
+        }
 
         printf(
             $input,
@@ -144,9 +197,27 @@ abstract class BaseSettings implements TabInterface{
         );
     }
 
+    public function fileCallback( $args )
+    {
+        $input = '<label for="%s" class="flrt-file-upload"><input class="%s" type="file" name="%s[%s]" value="%s" placeholder="%s" id="%s" %s></label>';
+        $class = isset( $args['class'] ) ? $args['class'] : 'regular-text';
+        printf(
+            $input,
+            esc_attr($args['id']),
+            esc_attr($class),
+            esc_attr($this->optionName),
+            esc_attr($args['label_for']),
+            esc_attr($this->getOption($args['label_for'])),
+            esc_attr($args['placeholder']),
+            esc_attr($args['id']),
+            esc_attr($args['required'])
+        );
+    }
+
     public function selectCallback( $args )
     {
         $options = isset($args['options']) ? $args['options'] : [];
+        $disabled = isset($args['disabled']) ? $args['disabled'] : [];
         $class = isset( $args['class'] ) ? $args['class'] : 'filter-settings-select';
         $value = $this->getOption($args['label_for']);
 
@@ -175,8 +246,12 @@ abstract class BaseSettings implements TabInterface{
             } else {
                 $selected = '';
             }
+            $disabled_option = '';
+            if( in_array($key, $disabled) ){
+                $disabled_option = 'disabled';
+            }
 
-            printf('<option value="%s" %s>%s</option>', esc_attr($key), $selected, esc_html($option));
+            printf('<option value="%s" %s%s>%s</option>', esc_attr($key), $selected, $disabled_option, esc_html($option));
         }
 
         print('</select>');
@@ -195,13 +270,18 @@ abstract class BaseSettings implements TabInterface{
     {
         $textarea = '<textarea class="filter-settings-input large-text code" name="%s[%s]" placeholder="%s" cols="30" rows="10" id="%s">%s</textarea>';
 
+        $textarea_text = $this->getOption($args['label_for']);
+        if(empty($textarea_text)){
+            $textarea_text = '';
+        }
+
         printf(
             $textarea,
             esc_attr($this->optionName),
             esc_attr($args['label_for']),
             esc_attr($args['placeholder']),
             esc_attr($args['id']),
-            esc_textarea( $this->getOption($args['label_for']) )
+            esc_textarea( $textarea_text )
         );
 
     }
@@ -268,6 +348,7 @@ abstract class BaseSettings implements TabInterface{
             $this->doSettingsFields( $page, $section['id'] );
             echo '</table>';
         }
+        do_action('wpc_after_settings_fields', $page );
     }
 
     public function doSettingsFields( $page, $section ) {
@@ -319,8 +400,16 @@ abstract class BaseSettings implements TabInterface{
                 )
             );
 
+
+            $enabled_in_pro_string = '';
+            $enabled_in_pro_class = '';
+            if( !empty($field['args']['pro_label']) ){
+                $enabled_in_pro_string = $field['args']['pro_label'];
+                $enabled_in_pro_class = 'class="wpc-row-pro-only wpc-pro-badge-text"';
+            }
+
             if ( ! empty( $field['args']['label_for'] ) ) {
-                echo '<th scope="row"><label for="' . esc_attr( $field['args']['label_for'] ) . '">' . esc_html($field['title']) . '</label> ' .$tooltip. '</th>'; // $tooltip already escaped
+                echo '<th scope="row" ' . $enabled_in_pro_class. '><label for="' . esc_attr( $field['args']['label_for'] ) . '">' . esc_html($field['title']) . '</label> ' .$tooltip. $enabled_in_pro_string . '</th>'; // $tooltip already escaped
             } else {
                 echo '<th scope="row">'. esc_html($field['title'] ) . ' ' .$tooltip. '</th>'; // $tooltip already escaped
             }
@@ -349,5 +438,10 @@ abstract class BaseSettings implements TabInterface{
         }
 
         return isset($this->options[$key]) ? $this->options[$key] : $default;
+    }
+
+    public function inProButtonCallback($args)
+    {
+        echo flrt_unlock_in_pro();
     }
 }

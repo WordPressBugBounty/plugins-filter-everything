@@ -81,7 +81,7 @@ class UrlManager
                         }
                     } else {
                         // For Post Meta Num values have array index as termslug
-                        if ( in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date' ] ) ) {
+                        if ( in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric', 'post_date', 'post_meta_date' ] ) ) {
                             if ( in_array( $termSlug, array_keys( $queriedValues ) ) ) {
                                 unset( $queriedValues[$termSlug] );
                             } else {
@@ -138,7 +138,7 @@ class UrlManager
                             $paramName = $edge . '_' . $filter['slug'];
                             $url = flrt_add_query_arg($this->getParamName($paramName), $value, $url);
                         }
-                    } elseif ( in_array($filter['entity'], ['post_date'] ) ) {
+                    } elseif ( in_array($filter['entity'], ['post_date', 'post_meta_date'] ) ) {
                         foreach ($filter['values'] as $edge => $date_value) {
                             $paramName = $filter['slug'] . '_' . $edge;
                             $date_value = str_replace(' ', FLRT_DATE_TIME_SEPARATOR, $date_value);
@@ -225,7 +225,7 @@ class UrlManager
             if( in_array( $filter['entity'], [ 'post_meta_num', 'tax_numeric' ] ) ) {
                 $getKeys['max_' . $slug]    = $filter;
                 $getKeys['min_' . $slug]    = $filter;
-            } else if( in_array( $filter['entity'], [ 'post_date' ] ) ) {
+            } else if( in_array( $filter['entity'], [ 'post_date', 'post_meta_date'] ) ) {
                 $getKeys[$slug .'_from']    = $filter;
                 $getKeys[$slug . '_to']     = $filter;
             }else{

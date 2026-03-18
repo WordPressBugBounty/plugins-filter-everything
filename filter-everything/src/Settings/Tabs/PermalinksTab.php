@@ -9,13 +9,14 @@ if ( ! defined('ABSPATH') ) {
 
 class PermalinksTab extends BaseSettings
 {
+    use SeoTabTrait;
     private $em;
 
     private $fs;
 
     protected $page     = 'wpc-filter-admin-permalinks';
 
-    protected $group    = 'wpc_filter_permalinks';
+    protected $group    = 'wpc_seo_settings_permalinks';
 
     public $optionName  = 'wpc_filter_permalinks';
 
@@ -28,8 +29,6 @@ class PermalinksTab extends BaseSettings
         add_action( 'after_delete_post', array( $this, 'maybeRemoveGlobalPrefix' ), 10, 2 );
 
         add_filter( 'pre_update_option', [$this, 'preUpdatePermalinks'], 10, 3 );
-
-        add_action( 'wpc_after_settings_fields_title', array( $this, 'explanationMessage' ) );
 
         $this->em = Container::instance()->getEntityManager();
         $this->fs = Container::instance()->getFilterService();
@@ -59,7 +58,7 @@ class PermalinksTab extends BaseSettings
 
         if ( ! $saved_options ) {
 
-            add_action('wpc_after_sections_settings_fields', array( $this, 'noFiltersMessage' ) );
+            add_action('wpc_after_sections_settings_fields_wpc_slugs', array( $this, 'noFiltersMessage' ) );
 
         } else {
             /**
@@ -81,7 +80,7 @@ class PermalinksTab extends BaseSettings
                     $classes[] = 'free-version';
                 }
 
-                if ( ! in_array( $entity_name, [ 'post_meta_num', 'tax_numeric', 'post_date' ] ) ) {
+                if ( ! in_array( $entity_name, [ 'post_meta_num', 'tax_numeric', 'post_date', 'post_meta_date' ] ) ) {
                     $classes[] = 'wpc-sortable-row';
                 }
 
@@ -100,6 +99,11 @@ class PermalinksTab extends BaseSettings
                 }
             }
         }
+        if (!empty($settings)){
+            $first_key = array_key_first($settings);
+            $settings = $this->addSectionSettingsWrapper($settings, true);
+            add_action('wpc_after_seo_setting_section_title_' . $first_key, array( $this, 'explanationMessage' ));
+        }
 
         $this->registerSettings( $settings, $this->page, $this->optionName );
     }
@@ -110,7 +114,7 @@ class PermalinksTab extends BaseSettings
         $other_saved_options = [];
 
         foreach( $saved_options as $entity => $slug ) {
-            if ( ( mb_strpos( $entity, 'post_meta_num' ) !== false ) || ( mb_strpos( $entity, 'tax_numeric' ) !== false ) || ( mb_strpos( $entity, 'post_date' ) !== false ) ) {
+            if ( ( mb_strpos( $entity, 'post_meta_num' ) !== false ) || ( mb_strpos( $entity, 'tax_numeric' ) !== false ) || ( mb_strpos( $entity, 'post_date' ) !== false ) || ( mb_strpos( $entity, 'post_meta_date' ) !== false ) ) {
                 $num_saved_options[ $entity ]   = $slug;
             } else {
                 $other_saved_options[ $entity ] = $slug;
@@ -212,6 +216,7 @@ class PermalinksTab extends BaseSettings
                         $prefixChangeFrom = $oldPrefixesList[$entityKey];
                         $prefixChangeTo   = $sanitizedPrefixesList[$entityKey];
                         $this->updatePostsPrefixes( $prefixChangeFrom, $prefixChangeTo );
+                        $this->updatePostsSeoRulesPrefixes( $oldPrefixesList[$entityKey], $prefixChangeTo, $entityKey);
                     }
                 }
 
@@ -220,6 +225,79 @@ class PermalinksTab extends BaseSettings
         }
 
         return $prefixesList;
+    }
+
+    /**
+     * @param string $slugChangeFrom
+     * @param string $slugChangeTo
+     * @param string $entityKey
+     */
+    private function updatePostsSeoRulesPrefixes( $slugChangeFrom, $slugChangeTo, $entityKey)
+    {
+        $result = true;
+
+        if( ! $slugChangeFrom || ! $slugChangeTo ){
+            return false;
+        }
+
+        if( $slugChangeFrom === $slugChangeTo ){
+            return false;
+        }
+
+        if(empty($entityKey)){
+            return false;
+        }
+
+
+        if (strpos($entityKey, '#') === false) {
+            return false;
+        }
+
+        $entity = explode('#', $entityKey)[1];
+
+        if(empty($entity)){
+            return false;
+        }
+
+        if ( ! defined('FLRT_SEO_RULES_POST_TYPE') ) {
+            return false;
+        }
+
+        $args = array(
+            'post_type'      => FLRT_SEO_RULES_POST_TYPE,
+            'posts_per_page' => -1,
+            'post_status' => array('any')
+        );
+
+        $filterPosts = new \WP_Query( $args );
+        $postsToChange =  $filterPosts->get_posts();
+
+
+        if( ! empty( $postsToChange ) ){
+            foreach ( $postsToChange as $post){
+                $post->post_excerpt = maybe_unserialize($post->post_excerpt);
+                if (is_array($post->post_excerpt) && isset($post->post_excerpt[$entity])) {
+                    if (mb_strpos($post->post_title, $slugChangeFrom) !== false) {
+                        $slugChangeFrom = preg_quote($slugChangeFrom, '/');
+                        $new_post_title = preg_replace("#$slugChangeFrom#u", $slugChangeTo, $post->post_title);
+                        if ($new_post_title !== $post->post_title) {
+                            $toSave = array(
+                                'ID' => $post->ID,
+                                'post_title' => $new_post_title
+                            );
+
+                            $toSave = wp_slash( $toSave );
+
+                            if( ! wp_update_post( $toSave ) && $result ){
+                                $result = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return $result;
     }
 
     // Add previously configured prefix to filter fields before show them
@@ -297,13 +375,13 @@ class PermalinksTab extends BaseSettings
     {
         /**
          * @feature Prefix may be deleted if form has old prefixes list and submitted.
-        */
+         */
         return update_option( $this->optionName, $prefixes );
     }
 
     public function explanationMessage( $page )
     {
-        if( $page === $this->page ){
+        if( $page === $this->page){
             if( defined('FLRT_FILTERS_PRO') ){
                 echo '<p>'.wp_kses( __( 'Edit, drag filter prefixes, and arrange them in the order you need.<br />This order determines the order of the filters in the URL.', 'filter-everything' ), array( 'br' => array() ) ).'</p>'."\r\n";
             }else{
@@ -315,13 +393,18 @@ class PermalinksTab extends BaseSettings
     function noFiltersMessage($page){
         if( $page === $this->page ){
             echo wp_kses(
-                        sprintf( __('No filters have been created on this site yet. <a href="%s" target="_blank">Create your first one!</a>', 'filter-everything'), admin_url('post-new.php?post_type=' . FLRT_FILTERS_SET_POST_TYPE) ),
-                        array( 'a' => array('href' => true, 'target' => true) )
+                sprintf( __('No filters have been created on this site yet. <a href="%s" target="_blank">Create your first one!</a>', 'filter-everything'), admin_url('post-new.php?post_type=' . FLRT_FILTERS_SET_POST_TYPE) ),
+                array( 'a' => array('href' => true, 'target' => true) )
             );
         }
     }
 
     public function getLabel()
+    {
+        return  esc_html__('SEO', 'filter-everything');
+    }
+
+    public function sectionName()
     {
         return defined('FLRT_FILTERS_PRO') ? esc_html__('URL Prefixes', 'filter-everything') : esc_html__('URL Var Names', 'filter-everything');
     }
@@ -334,5 +417,34 @@ class PermalinksTab extends BaseSettings
     public function valid()
     {
         return true;
+    }
+
+    public function proSettingsLink(): array
+    {
+        if( ! defined('FLRT_FILTERS_PRO') ) {
+            $links = array(
+                array(
+                    'link' => flrt_vailable_in_pro_attr_link(),
+                    'text' => esc_html__('Indexed Filters', 'filter-everything') . flrt_pro_promo_label()
+                ),
+                array(
+                    'link' => flrt_vailable_in_pro_attr_link(),
+                    'text' => esc_html__('Indexing Depth', 'filter-everything') . flrt_pro_promo_label()
+                )
+            );
+            return $links;
+        }
+        return [];
+    }
+
+    public function getFreeLink() : array
+    {
+        if( ! defined('FLRT_FILTERS_PRO') ) {
+            return array(
+                'link' => flrt_vailable_in_pro_attr_link(),
+                'text' => esc_html__('Import/Export', 'filter-everything') . flrt_pro_promo_label()
+            );
+        }
+        return [];
     }
 }

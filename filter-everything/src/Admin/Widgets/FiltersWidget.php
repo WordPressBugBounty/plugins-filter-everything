@@ -73,20 +73,21 @@ class FiltersWidget extends \WP_Widget
         $debug_mode = flrt_is_debug_mode();
         $container  = Container::instance();
         $wpManager  = $container->getWpManager();
+        $fss        = $container->getFilterSetService();
 
         /**
          * Display debug messages in case if the current page has not Filter Set
          */
         if( empty( $wpManager->getQueryVar('wpc_page_related_set_ids') ) ){
+            $under_limit_filter_set = $fss->under_limit_filter_set($set_id);
             if( $debug_mode ){
-                $this->_debug_messages();
+                $this->_debug_messages($under_limit_filter_set);
             }
             return false;
         }
 
         $templateManager    = $container->getTemplateManager();
         $em                 = $container->getEntityManager();
-        $fss                = $container->getFilterSetService();
         $urlManager         = Container::instance()->getUrlManager();
 
         $has_not_empty_children = [];
@@ -126,6 +127,16 @@ class FiltersWidget extends \WP_Widget
         $wrapper_class           = '';
         if ( flrt_is_filter_request() ) {
             $wrapper_class = ' wpc-filter-request';
+        }
+
+        if (isset($set['horizontal_view_priority']['value']) && $set['horizontal_view_priority']['value'] === 'filter_set') {
+
+            if (isset($set['horizontal_view']['value'])) {
+                $horizontal          = ( $set['horizontal_view']['value'] === 'yes') ? true : false;
+                if ( $horizontal ) {
+                    $cols_count          = ( isset( $set['horizontal_view_column']['value'] ) && $set['horizontal_view_column']['value'] > 0 ) ? $set['horizontal_view_column']['value'] : 3;
+                }
+            }
         }
 
         if ( $horizontal ) {
@@ -397,7 +408,7 @@ class FiltersWidget extends \WP_Widget
                 if (
                     ($set['hide_empty']['value'] === 'yes' || $set['hide_empty']['value'] === 'initial')
                     &&
-                    ! in_array( $filter['entity'], ['post_meta_num', 'tax_numeric', 'post_date'] )
+                    ! in_array( $filter['entity'], ['post_meta_num', 'tax_numeric', 'post_date', 'post_meta_date'] )
                 ) {
                     $terms = $checkTerms;
                 }
@@ -487,7 +498,7 @@ class FiltersWidget extends \WP_Widget
 
                 // Show Apply button if configured
                 if ( $use_apply_button && $apply_button_menu_order === $filters_counter) {
-                    $templateManager->includeFrontView('apply-button', array('set' => $set, 'apply_url' => $apply_url, 'reset_url' => $reset_url));
+                    $templateManager->includeFrontView('apply-button', array('set' => $set, 'apply_url' => $apply_url, 'reset_url' => $reset_url, 'found_posts' => $found_posts, 'is_filter_request' => flrt_is_filter_request() ));
                     $apply_button_displayed = true;
                 }
             }
@@ -499,7 +510,7 @@ class FiltersWidget extends \WP_Widget
         }
 
         if ( $use_apply_button && $apply_button_displayed === false ) {
-            $templateManager->includeFrontView('apply-button', array('set' => $set, 'apply_url' => $apply_url, 'reset_url' => $reset_url));
+            $templateManager->includeFrontView('apply-button', array('set' => $set, 'apply_url' => $apply_url, 'reset_url' => $reset_url, 'found_posts' => $found_posts, 'is_filter_request' => flrt_is_filter_request() ));
         }
 
         echo '</div>'."\r\n";
@@ -513,7 +524,7 @@ class FiltersWidget extends \WP_Widget
                 </div>';
 
         if( $use_apply_button ){
-            $templateManager->includeFrontView( 'apply-button', array( 'set' => $set, 'apply_url' => $apply_url, 'reset_url' => $reset_url ) );
+            $templateManager->includeFrontView( 'apply-button', array( 'set' => $set, 'apply_url' => $apply_url, 'reset_url' => $reset_url, 'found_posts' => $found_posts, 'is_filter_request' => flrt_is_filter_request() ) );
         }
 
         echo '</div>';
@@ -567,11 +578,11 @@ class FiltersWidget extends \WP_Widget
             <label for="<?php echo esc_attr( $this->get_field_id( 'chips' ) ); ?>"><?php esc_html_e( 'Show selected terms (Chips)', 'filter-everything' ); ?></label>
         </p>
         <p>
-            <input type="checkbox" class="checkbox wpc-horizontal-checkbox" id="<?php echo esc_attr( $this->get_field_id( 'horizontal' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'horizontal' ) ); ?>"<?php checked( $horizontal ); ?> />
-            <label for="<?php echo esc_attr( $this->get_field_id( 'horizontal' ) ); ?>"><?php esc_html_e( 'Horizontal layout', 'filter-everything' ); ?>.</label>
-            <span class="wpc-columns-wrapper">
+            <input type="checkbox" class="checkbox wpc-horizontal-checkbox" id="<?php echo esc_attr( $this->get_field_id( 'horizontal' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'horizontal' ) ); ?>"<?php checked( $horizontal ); ?> disabled="disabled"/>
+            <label for="<?php echo esc_attr( $this->get_field_id( 'horizontal' ) ); ?>" style="color:#b7b7b7;"><?php esc_html_e( 'Horizontal filters', 'filter-everything' ); ?>.</label>
+            <span class="wpc-columns-wrapper" style="display: none">
                 <label for="<?php echo $this->get_field_id( 'cols_count' ); ?>"><?php _e( 'Columns', 'filter-everything' ); ?>:</label>
-                <select id="<?php echo $this->get_field_id( 'cols_count' ); ?>" name="<?php echo $this->get_field_name( 'cols_count' ); ?>">
+                <select id="<?php echo $this->get_field_id( 'cols_count' ); ?>" name="<?php echo $this->get_field_name( 'cols_count' ); ?>" style="display: none" disabled="disabled">
                     <?php for ( $i = 2; $i <= 5; $i++ ) : ?>
                         <option value="<?php echo esc_attr( $i ); ?>" <?php selected( $cols_count, $i ); ?>>
                             <?php echo esc_html( $i ); ?>
@@ -579,11 +590,9 @@ class FiltersWidget extends \WP_Widget
                     <?php endfor; ?>
                 </select>
             </span>
+            <br>
+            <span>(<?php esc_html_e('This setting has moved to the Filter Set', 'filter-everything'); ?>)</span>
         </p>
-
-        <?php if( defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO ) { ?>
-            <p class="description"><?php esc_html_e( 'Note: filters will only show if there is Filter Set registered for a page(s)', 'filter-everything' ); echo flrt_help_tip( esc_html__('Unlike most widgets, the Filters widget does not always show filters. It is rather a canvas where filters can be displayed if there is a Filter Set registered for the page. You can specify this page or pages in the "Where to filter?" field of a Filter Set.', 'filter-everything' ), true); ?></p>
-        <?php } ?>
         <?php
     }
 
@@ -610,7 +619,7 @@ class FiltersWidget extends \WP_Widget
      * Outputs Filters widget debug messages
      * @since 1.2.2
      */
-    private function _debug_messages(){
+    private function _debug_messages($under_limit_filter_set = false){
         if ( defined('FLRT_FILTERS_PRO') ) {
             echo '<p class="wpc-debug-message">';
             echo sprintf(
@@ -623,6 +632,16 @@ class FiltersWidget extends \WP_Widget
             echo '</p>';
         } else {
             if ( is_singular() ) {
+                echo '<p class="wpc-debug-message">';
+                echo sprintf(
+                        wp_kses(
+                                __( 'The free version allows up to 3 filter sets per post type. Upgrade to <a href="%s">PRO</a> to display more filter sets.', 'filter-everything' ),
+                                array( 'a' => array('href' => true) )
+                        ),
+                        esc_url(FLRT_PLUGIN_URL .'/?get_pro=true')
+                );
+                echo '</p>';
+            } else if ( $under_limit_filter_set ) {
                 echo '<p class="wpc-debug-message">';
                 echo sprintf(
                     wp_kses(

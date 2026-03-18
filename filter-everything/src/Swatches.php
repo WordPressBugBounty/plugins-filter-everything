@@ -102,6 +102,7 @@ class Swatches
                     $swatch = '<span class="wpc-term-swatch" style="background-color: '.$maybe_color.'"></span>';
                 } else {
                     $swatch = '<span class="wpc-term-swatch wpc-no-swatch-yet"></span>';
+                    $wrapper_class = ' wpc-term-swatch-no-image';
                 }
             }
 

@@ -29,8 +29,10 @@ class Chips
         $this->showReset    = $showReset;
 
         if( ! $setIds || empty( $setIds ) ){
-            foreach ( $sets as $set ){
-                $setIds[] = $set['ID'];
+            if(!empty($sets) && is_array( $sets ) ) {
+                foreach ($sets as $set) {
+                    $setIds[] = $set['ID'];
+                }
             }
         }
 
@@ -88,7 +90,7 @@ class Chips
 
                     foreach ($filter['values'] as $key => $termSlug) {
 
-                        if ( in_array($filter['entity'], ['post_meta_num', 'tax_numeric', 'post_date'] ) ) {
+                        if ( in_array($filter['entity'], ['post_meta_num', 'tax_numeric', 'post_date', 'post_meta_date'] ) ) {
                             $termSlug = $key;
                         }
 
