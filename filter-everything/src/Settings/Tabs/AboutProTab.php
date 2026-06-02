@@ -96,19 +96,19 @@ class AboutProTab extends BaseSettings{
                             <p class="wpc-pro-bnf-sect-1-advf-wrap-title">
                                 <?php echo wp_kses(
                                         implode('<br>', array(
-                                                _x('Advanced filtering', 'benefits-landing', 'filter-everything'),
-                                                _x('Full control', 'benefits-landing', 'filter-everything'),
-                                                _x('SEO-ready', 'benefits-landing', 'filter-everything'),
+                                                _x('<span>Full control</span> over filtering,', 'benefits-landing', 'filter-everything'),
+                                                _x('page builders support,', 'benefits-landing', 'filter-everything'),
+                                                _x('mobile & SEO ready<span>.</span>', 'benefits-landing', 'filter-everything'),
                                         )),
-                                        array('br' => array())
+                                        array('br' => array(), 'span' => array())
                                 ); ?>
                             </p>
-                            <p class="wpc-pro-bnf-sect-1-advf-wrap-desc">
-                                <?php echo wp_kses(
-                                        _x('Upgrade to <b>Filter Everything PRO</b> to unlock advanced filter<br>capabilities, SEO features, and full control over the filtering process.', 'benefits-landing', 'filter-everything'),
-                                        array('b' => array(), 'br' => array())
-                                ); ?>
-                            </p>
+<!--                            <p class="wpc-pro-bnf-sect-1-advf-wrap-desc">-->
+                                <?php /* echo wp_kses(
+                                        _x('Upgrade to Filter Everything PRO to unlock the full power of filtering, advanced SEO tools, page builder support, and provide a <strong>much better navigation experience</strong> for your visitors.', 'benefits-landing', 'filter-everything'),
+                                        array('strong' => array(), 'u' => array() )
+                                ); */ ?>
+<!--                            </p>-->
                         </div>
                         <div class="wpc-pro-bnf-sect-1-trst-wrap">
                             <div class="wpc-pro-bnf-sect-1-trst-scl">
@@ -121,7 +121,7 @@ class AboutProTab extends BaseSettings{
                                         <span class="wpc-pro-bnf-sect-1-trst-scl-subtext-bl"><?php echo _x('users worldwide', 'benefits-landing', 'filter-everything'); ?></span>
                                     </div>
                                     <div class="wpc-pro-bnf-sect-1-trst-scl-card trst-scl-card-card-2">
-                                        <div class="wpc-pro-bnf-sect-1-trst-scl-big-number"><?php echo _x('4.91/5', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="wpc-pro-bnf-sect-1-trst-scl-big-number"><?php echo _x('4.88/5', 'benefits-landing', 'filter-everything'); ?></div>
                                         <span class="wpc-pro-bnf-sect-1-trst-scl-label"><?php echo _x('average rating','benefits-landing', 'filter-everything'); ?></span>
                                         <div class="wpc-pro-bnf-sect-1-trst-scl-stars">
                                             <div class="wpc-pro-bnf-sect-1-trst-scl-star"></div>
@@ -137,25 +137,29 @@ class AboutProTab extends BaseSettings{
                         </div>
                         <div class="wpc-pro-bnf-sect-1-anwp-wrap">
                             <div class="wpc-pro-bnf-sect-1-anwp-text-wrap">
-                                <p class="wpc-pro-bnf-sect-1-anwp-text"><?php echo _x('Filter any WP_Query, get SEO Rules, obtain clean URLs, and unlock many convenient time-saving options — all available in the PRO version.','benefits-landing', 'filter-everything'); ?></p>
+                                <p class="wpc-pro-bnf-sect-1-anwp-text"><?php echo wp_kses(
+                                            _x('Upgrade to Filter Everything PRO to unlock the full power of filtering, advanced SEO tools, page builder support, and provide a <strong>much better navigation experience</strong> for your visitors.', 'benefits-landing', 'filter-everything'),
+                                            array('strong' => array(), 'u' => array())
+                                    ); ?>
+                                </p>
                             </div>
                             <ul class="wpc-pro-bnf-sect-1-anwp-list">
                                 <li class="wpc-pro-bnf-sect-1-anwp-list-item">
                                     <div class="wpc-pro-bnf-sect-1-anwp-list-item-icon"></div>
-                                    <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo _x('Filter any WP_Query','benefits-landing', 'filter-everything'); ?></p>
+                                    <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo _x('Filter any posts list, custom query, or page builder content','benefits-landing', 'filter-everything'); ?></p>
                                 </li>
                                 <li class="wpc-pro-bnf-sect-1-anwp-list-item">
                                     <div class="wpc-pro-bnf-sect-1-anwp-list-item-icon"></div>
-                                    <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo _x('Apply SEO Rules','benefits-landing', 'filter-everything'); ?></p>
+                                    <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo _x('Get more organic traffic with SEO tools for filtered pages','benefits-landing', 'filter-everything'); ?></p>
                                 </li>
                                 <li class="wpc-pro-bnf-sect-1-anwp-list-item">
                                     <div class="wpc-pro-bnf-sect-1-anwp-list-item-icon"></div>
-                                    <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo _x('Get clean URLs','benefits-landing', 'filter-everything'); ?></p>
+                                    <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo _x('Improve conversions and user experience with advanced filtering capabilities','benefits-landing', 'filter-everything'); ?></p>
                                 </li>
                             </ul>
                         </div>
                         <div class="wpc-pro-bnf-sect-1-btns-wrap">
-                            <a href="<?php echo esc_url(flrt_unlock_pro_link()) ?>" target="_blank" class="wpc-pro-bnf-sect-1-btns-up-to-pro"><?php echo _x('Upgrade to PRO', 'benefits-landing', 'filter-everything'); ?></a>
+                            <a href="<?php echo esc_url(flrt_unlock_pro_link('features_view_link')) ?>" target="_blank" class="wpc-pro-bnf-sect-1-btns-up-to-pro"><?php echo _x('Upgrade to PRO', 'benefits-landing', 'filter-everything'); ?> <?php echo flrt_crown_icon(); ?></a>
                             <a href="#why-choose-pro" class="wpc-pro-bnf-sect-1-btns-view-all-pro"><?php echo _x('View all PRO features', 'benefits-landing', 'filter-everything'); ?></a>
                         </div>
                     </section>
@@ -172,15 +176,15 @@ class AboutProTab extends BaseSettings{
                             <div class="wpc-pro-bnf-sect-2-ultm-wrap-ultm-img">
                                 <?php echo $this->wpc_pro_bnf_get_retina_img( 'wpc-unlm-numb-fset.png', _x( 'Unlimited Filter Sets', 'benefits-landing', 'filter-everything' ) ); ?>
                             </div>
-                            <h3 class="wpc-pro-bnf-sect-2-ultm-h3-title"><?php echo _x('∞ Unlimited number of Filter Sets', 'benefits-landing', 'filter-everything'); ?></h3>
-                            <p class="wpc-pro-bnf-sect-2-ultm-text"><?php echo _x('Create individual filters for each section of your website.', 'benefits-landing', 'filter-everything'); ?></p>
+                            <h3 class="wpc-pro-bnf-sect-2-ultm-h3-title"><?php echo _x('∞ Create Unlimited Filter Sets', 'benefits-landing', 'filter-everything'); ?></h3>
+                            <p class="wpc-pro-bnf-sect-2-ultm-text"><?php echo _x('Create unique filters for every section of your site and let visitors filter content by relevant criteria — e.g. smartphones by brand, clothing by size, or cars by fuel type.', 'benefits-landing', 'filter-everything'); ?></p>
                         </div>
                         <div class="wpc-pro-bnf-sect-2-seou-wrap">
                             <div class="wpc-pro-bnf-sect-2-seou-img">
                                 <?php echo $this->wpc_pro_bnf_get_retina_img( 'wpc-seo-cap-cln-url.png', _x( 'SEO Capabilities', 'benefits-landing', 'filter-everything' ) ); ?>
                             </div>
-                            <h3 class="wpc-pro-bnf-sect-2-seou-h3-title"><?php echo _x('SEO capabilities + clean URLs', 'benefits-landing', 'filter-everything'); ?></h3>
-                            <p class="wpc-pro-bnf-sect-2-seou-text"><?php echo _x('Take full control of SEO for filtered results pages and attract additional free traffic from search engines or AI services.', 'benefits-landing', 'filter-everything'); ?></p>
+                            <h3 class="wpc-pro-bnf-sect-2-seou-h3-title"><?php echo _x('Auto-generate SEO data for filtered pages', 'benefits-landing', 'filter-everything'); ?></h3>
+                            <p class="wpc-pro-bnf-sect-2-seou-text"><?php echo _x('Generate SEO titles, H1s, descriptions, and SEO texts based on selected filters to attract more organic traffic from search engines and AI services.', 'benefits-landing', 'filter-everything'); ?></p>
                         </div>
                         <div class="wpc-pro-bnf-sect-2-mobl-wrap">
                             <div class="wpc-pro-bnf-sect-2-mobl-img">
@@ -188,10 +192,10 @@ class AboutProTab extends BaseSettings{
                             </div>
                             <div class="wpc-pro-bnf-sect-2-mobl-h3-title-text-wrap">
                                 <h3 class="wpc-pro-bnf-sect-2-mobl-h3-title"><?php echo wp_kses(
-                                            _x('Maximum convenience for Mobile<br>devices', 'benefits-landing', 'filter-everything'),
+                                            _x('Maximum convenience for Mobile devices', 'benefits-landing', 'filter-everything'),
                                             array('br' => array())
                                     ); ?></h3>
-                                <p class="wpc-pro-bnf-sect-2-mobl-text"><?php echo _x('Built-in, user-friendly filter widget for mobile devices.', 'benefits-landing', 'filter-everything'); ?></p>
+                                <p class="wpc-pro-bnf-sect-2-mobl-text"><?php echo _x('Use the built-in, user-friendly filter widget for mobile devices.', 'benefits-landing', 'filter-everything'); ?></p>
                             </div>
                         </div>
                     </section>
@@ -202,15 +206,15 @@ class AboutProTab extends BaseSettings{
                                     array('br' => array())
                             ); ?></h2>
                         <div class="wpc-pro-bnf-sect-3-wbst-wrap">
-                            <h3 class="wpc-pro-bnf-sect-3-wbst-h3"><?php echo _x('160 000+', 'benefits-landing', 'filter-everything'); ?></h3>
+                            <h3 class="wpc-pro-bnf-sect-3-wbst-h3"><?php echo _x('160&nbsp;000+', 'benefits-landing', 'filter-everything'); ?></h3>
                             <p class="wpc-pro-bnf-sect-3-wbst-desc"><?php echo _x('websites / users worldwide', 'benefits-landing', 'filter-everything'); ?></p>
                         </div>
                         <div class="wpc-pro-bnf-sect-3-csmt-wrap">
-                            <h3 class="wpc-pro-bnf-sect-3-csmt-h3"><?php echo _x('15 000+', 'benefits-landing', 'filter-everything'); ?></h3>
+                            <h3 class="wpc-pro-bnf-sect-3-csmt-h3"><?php echo _x('16&nbsp;100+', 'benefits-landing', 'filter-everything'); ?></h3>
                             <p class="wpc-pro-bnf-sect-3-csmt-desc"><?php echo _x('customers on CodeCanyon', 'benefits-landing', 'filter-everything'); ?></p>
                         </div>
                         <div class="wpc-pro-bnf-sect-3-rate-wrap">
-                            <h3 class="wpc-pro-bnf-sect-3-rate-h3"><?php echo _x('4.91/5', 'benefits-landing', 'filter-everything'); ?></h3>
+                            <h3 class="wpc-pro-bnf-sect-3-rate-h3"><?php echo _x('4.88/5', 'benefits-landing', 'filter-everything'); ?></h3>
                             <p class="wpc-pro-bnf-sect-3-rate-desc"><?php echo _x('rating based on real reviews', 'benefits-landing', 'filter-everything'); ?></p>
                         </div>
                     </section>
@@ -219,31 +223,31 @@ class AboutProTab extends BaseSettings{
                         <h2 class="wpc-pro-bnf-sect-4-title">
                             <?php echo wp_kses( _x( 'What does Filter Everything PRO<br>unlock?', 'benefits-landing', 'filter-everything' ), [ 'br' => [] ] ); ?>
                         </h2>
-                        <p class="wpc-pro-bnf-sect-4-desc"><?php echo wp_kses( _x( 'With PRO, you can go far beyond basic filtering and build scalable solutions<br>for real projects', 'benefits-landing', 'filter-everything' ), [ 'br' => [] ] ); ?></p>
+                        <p class="wpc-pro-bnf-sect-4-desc"><span class="wpc-pro-bnf-sect-4-text-wrapper"><?php echo wp_kses( _x( "The PRO version includes tools that <strong>increase conversions</strong><br />by helping visitors find the right content faster.", 'benefits-landing', 'filter-everything' ), [ 'br' => [], 'strong' => [] ] ); ?></span></p>
+                        <div class="wpc-pro-bnf-sect-4-gseo-wrap">
+                            <div class="wpc-pro-bnf-sect-4-gseo-icon"></div>
+                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo wp_kses( _x( 'Full control over SEO', 'benefits-landing', 'filter-everything' ), [ 'br' => [] ] ); ?></p>
+                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Get the most out of filtered pages with full control over SEO titles, H1s, descriptions, SEO text, and XML sitemaps. Better indexation means more organic traffic.', 'benefits-landing', 'filter-everything'); ?></p>
+                        </div>
                         <div class="wpc-pro-bnf-sect-4-flwp-wrap">
                             <div class="wpc-pro-bnf-sect-4-flwp-icon"></div>
-                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo wp_kses( _x( 'Filter custom posts and complex<br>WP_Query', 'benefits-landing', 'filter-everything' ), [ 'br' => [] ] ); ?></p>
-                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('on any wordpress page', 'benefits-landing', 'filter-everything'); ?></p>
+                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo wp_kses( _x( 'Filter Any Content', 'benefits-landing', 'filter-everything' ), [ 'br' => [] ] ); ?></p>
+                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Page builder content, WooCommerce products, custom post types, and even custom WP_Query — the PRO version handles it all!', 'benefits-landing', 'filter-everything'); ?></p>
                         </div>
                         <div class="wpc-pro-bnf-sect-4-flst-wrap">
                             <div class="wpc-pro-bnf-sect-4-flst-icon"></div>
-                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo wp_kses( _x( 'Create unlimited<br>Filter Sets', 'benefits-landing', 'filter-everything' ), [ 'br' => [] ] ); ?></p>
-                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('and customize them individually to match the needs of any section or page', 'benefits-landing', 'filter-everything'); ?></p>
-                        </div>
-                        <div class="wpc-pro-bnf-sect-4-gseo-wrap">
-                            <div class="wpc-pro-bnf-sect-4-gseo-icon"></div>
-                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo wp_kses( _x( 'Generate SEO-optimized<br>results pages', 'benefits-landing', 'filter-everything' ), [ 'br' => [] ] ); ?></p>
-                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('bringing traffic to your website', 'benefits-landing', 'filter-everything'); ?></p>
+                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo wp_kses( _x( '∞ Unlimited Filter Sets', 'benefits-landing', 'filter-everything' ), [ 'br' => [] ] ); ?></p>
+                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Create a dedicated Filter Set for every section of your site instead of using the same filters everywhere.', 'benefits-landing', 'filter-everything'); ?></p>
                         </div>
                         <div class="wpc-pro-bnf-sect-4-dupl-wrap">
                             <div class="wpc-pro-bnf-sect-4-dupl-icon"></div>
-                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo _x('Duplicate, export, import', 'benefits-landing', 'filter-everything'); ?></p>
-                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Filters, Filter Sets, and plugin settings (within one or multiple sites)', 'benefits-landing', 'filter-everything'); ?></p>
+                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo _x('Tools for faster workflow', 'benefits-landing', 'filter-everything'); ?></p>
+                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Back up, duplicate, transfer, and reuse your filters, Filter Sets, and settings with ease.', 'benefits-landing', 'filter-everything'); ?></p>
                         </div>
                         <div class="wpc-pro-bnf-sect-4-extr-wrap">
                             <div class="wpc-pro-bnf-sect-4-extr-icon"></div>
-                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo _x('Unlock extra options', 'benefits-landing', 'filter-everything'); ?></p>
-                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('filtering by variations, hiding empty filters, hiding “out of stock” products, and more', 'benefits-landing', 'filter-everything'); ?></p>
+                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo _x('Professional filtering', 'benefits-landing', 'filter-everything'); ?></p>
+                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Accurate variation filtering, proper handling of out-of-stock products, auto-hiding empty filters, and more — the details that make the difference.', 'benefits-landing', 'filter-everything'); ?></p>
                         </div>
                     </section>
 
@@ -253,18 +257,22 @@ class AboutProTab extends BaseSettings{
                         <div class="wpc-pro-bnf-sect-5-ablt-wrap">
                             <div class="wpc-pro-bnf-sect-5-default-data-wrap">
                                 <div class="wpc-pro-bnf-sect-5-pro-label"><?php echo _x('PRO', 'benefits-landing', 'benefits-landing', 'filter-everything') ?></div>
-                                <p class="pc-pro-bnf-sect-5-default-text"><?php echo _x('Control & flexibility', 'benefits-landing', 'filter-everything'); ?></p>
+                                <p class="pc-pro-bnf-sect-5-default-text"><?php echo _x('Full power of filtering', 'benefits-landing', 'filter-everything'); ?></p>
                                 <div class="pc-pro-bnf-sect-5-default-icon"></div>
                             </div>
                             <div class="wpc-pro-bnf-sect-5-default-hover-list">
                                 <ul class="wpc-pro-bnf-sect-5-default-hover-list-ul">
                                     <li class="wpc-pro-bnf-sect-5-default-item">
                                         <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Filtering any content — including page builders and custom queries', 'benefits-landing', 'filter-everything'); ?></p>
+                                    </li>
+                                    <li class="wpc-pro-bnf-sect-5-default-item">
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
                                         <p class="wpc-pro-bnf-sect-5-default-item-text">∞ <?php echo _x( 'Unlimited Filter Sets', 'benefits-landing', 'filter-everything' ); ?></p>
                                     </li>
                                     <li class="wpc-pro-bnf-sect-5-default-item">
                                         <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Filtering for custom queries & page builders', 'benefits-landing', 'filter-everything'); ?></p>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Works with your existing content — no need to rebuild your site', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                 </ul>
                             </div>
@@ -273,18 +281,22 @@ class AboutProTab extends BaseSettings{
                         <div class="wpc-pro-bnf-sect-5-advn-wrap">
                             <div class="wpc-pro-bnf-sect-5-default-data-wrap">
                                 <div class="wpc-pro-bnf-sect-5-pro-label"><?php echo _x('PRO', 'benefits-landing', 'benefits-landing', 'filter-everything') ?></div>
-                                <p class="pc-pro-bnf-sect-5-default-text"><?php echo _x('Advanced filtering', 'benefits-landing', 'filter-everything'); ?></p>
+                                <p class="pc-pro-bnf-sect-5-default-text"><?php echo _x('Filtering accuracy', 'benefits-landing', 'filter-everything'); ?></p>
                                 <div class="pc-pro-bnf-sect-5-default-icon"></div>
                             </div>
                             <div class="wpc-pro-bnf-sect-5-default-hover-list">
                                 <ul class="wpc-pro-bnf-sect-5-default-hover-list-ul">
                                     <li class="wpc-pro-bnf-sect-5-default-item">
                                         <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Variation-based product filtering', 'benefits-landing', 'filter-everything'); ?></p>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Accurate WooCommerce variation filtering', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                     <li class="wpc-pro-bnf-sect-5-default-item">
                                         <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Advanced filter types', 'benefits-landing', 'filter-everything'); ?></p>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Smart out-of-stock filtering', 'benefits-landing', 'filter-everything'); ?></p>
+                                    </li>
+                                    <li class="wpc-pro-bnf-sect-5-default-item">
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Auto-hiding empty filters', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                 </ul>
                             </div>
@@ -293,14 +305,14 @@ class AboutProTab extends BaseSettings{
                         <div class="wpc-pro-bnf-sect-5-expr-wrap">
                             <div class="wpc-pro-bnf-sect-5-default-data-wrap">
                                 <div class="wpc-pro-bnf-sect-5-pro-label"><?php echo _x('PRO', 'benefits-landing', 'benefits-landing', 'filter-everything') ?></div>
-                                <p class="pc-pro-bnf-sect-5-default-text"><?php echo _x('User experience', 'benefits-landing', 'filter-everything'); ?></p>
+                                <p class="pc-pro-bnf-sect-5-default-text"><?php echo _x('Convenience for everyone', 'benefits-landing', 'filter-everything'); ?></p>
                                 <div class="pc-pro-bnf-sect-5-default-icon"></div>
                             </div>
                             <div class="wpc-pro-bnf-sect-5-default-hover-list">
                                 <ul class="wpc-pro-bnf-sect-5-default-hover-list-ul">
                                     <li class="wpc-pro-bnf-sect-5-default-item">
                                         <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Dedicated mobile filters widget', 'benefits-landing', 'filter-everything'); ?></p>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('User-friendly mobile filters widget', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                     <li class="wpc-pro-bnf-sect-5-default-item">
                                         <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
@@ -308,7 +320,7 @@ class AboutProTab extends BaseSettings{
                                     </li>
                                     <li class="wpc-pro-bnf-sect-5-default-item">
                                         <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Duplicate Filter Sets in one click', 'benefits-landing', 'filter-everything'); ?></p>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Instant Filter Set duplication', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                 </ul>
                             </div>
@@ -317,22 +329,22 @@ class AboutProTab extends BaseSettings{
                         <div class="wpc-pro-bnf-sect-5-seop-wrap">
                             <div class="wpc-pro-bnf-sect-5-default-data-wrap">
                                 <div class="wpc-pro-bnf-sect-5-pro-label"><?php echo _x('PRO', 'benefits-landing', 'benefits-landing', 'filter-everything') ?></div>
-                                <p class="pc-pro-bnf-sect-5-default-text"><?php echo _x('SEO & promotion', 'benefits-landing', 'filter-everything'); ?></p>
+                                <p class="pc-pro-bnf-sect-5-default-text"><?php echo _x('SEO & organic traffic', 'benefits-landing', 'filter-everything'); ?></p>
                                 <div class="pc-pro-bnf-sect-5-default-icon"></div>
                             </div>
                             <div class="wpc-pro-bnf-sect-5-default-hover-list">
                                 <ul class="wpc-pro-bnf-sect-5-default-hover-list-ul">
                                     <li class="wpc-pro-bnf-sect-5-default-item">
                                         <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('SEO rules for filtered pages', 'benefits-landing', 'filter-everything'); ?></p>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('SEO tools for filtered pages', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                     <li class="wpc-pro-bnf-sect-5-default-item">
                                         <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('SEO-friendly filter URLs', 'benefits-landing', 'filter-everything'); ?></p>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('SEO-friendly clean filter URLs', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                     <li class="wpc-pro-bnf-sect-5-default-item">
                                         <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('XML sitemap for filter pages', 'benefits-landing', 'filter-everything'); ?></p>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('XML sitemap for filtered pages', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                 </ul>
                             </div>
@@ -348,7 +360,7 @@ class AboutProTab extends BaseSettings{
                                 <div class="fetm-row fetm-grid-header">
                                     <div class="fetm-feature fetm-header"><?php echo _x('Features', 'benefits-landing', 'filter-everything'); ?></div>
                                     <div class="fetm-header fetm-free"><?php echo _x('Current version', 'benefits-landing', 'filter-everything'); ?></div>
-                                    <div class="fetm-header fetm-pro"><?php echo _x('Pro', 'benefits-landing', 'filter-everything'); ?></div>
+                                    <div class="fetm-header fetm-pro"><?php echo _x('PRO', 'benefits-landing', 'filter-everything'); ?></div>
                                 </div>
                                 <!-- Advanced Filtering & Core Value -->
                                 <div class="fetm-section-group fetm-section-advanced-filtering">
@@ -359,7 +371,7 @@ class AboutProTab extends BaseSettings{
                                         <div class="fetm-cell fetm-pro"></div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Any WP_Query Filtering', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Filter any posts list — page builders & custom queries', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -377,7 +389,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('SEO Rules for Filter Pages', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('SEO tools for filtered pages', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -386,7 +398,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Variation-Based Product Filtering', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Accurate WooCommerce variation filtering', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -395,7 +407,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('SEO-Friendly Filter URLs', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('SEO-friendly clean filter URLs', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -412,7 +424,7 @@ class AboutProTab extends BaseSettings{
                                         <div class="fetm-cell fetm-pro"></div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('XML Sitemap for Filter Pages', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('XML sitemap for filtered pages', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -421,7 +433,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Full URL Structure Control', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Full URL structure control', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -430,7 +442,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('No Empty Pages or 404s', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('No empty pages or 404s', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -449,7 +461,7 @@ class AboutProTab extends BaseSettings{
                                     </div>
 
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Mobile Filters Widget', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('User-friendly mobile filters widget', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -458,7 +470,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Hide Out-of-Stock Products', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Smart out-of-stock filtering', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -475,7 +487,7 @@ class AboutProTab extends BaseSettings{
                                         <div class="fetm-cell fetm-pro"></div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Any Post Type Filtering', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Filtering any post type', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
@@ -484,7 +496,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Filter by Any Criteria', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Filter by any criteria', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
@@ -493,7 +505,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Auto-Generated Filters', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Auto-generated filters', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
@@ -502,7 +514,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('AJAX Filtering', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('AJAX filtering', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
@@ -511,7 +523,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Step-by-Step Filtering', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Step-by-step filtering', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
@@ -520,7 +532,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Search Within Results', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Search within filtered results', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
@@ -529,7 +541,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Sorting Widget', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Sorting widget', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
@@ -538,7 +550,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Multilingual Support', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Multilingual compatibility', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
@@ -547,7 +559,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Responsive Design', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Responsive design', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
@@ -565,7 +577,7 @@ class AboutProTab extends BaseSettings{
                                         <div class="fetm-cell fetm-pro"></div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Import & Export Settings', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Import & export settings', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -574,7 +586,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Advanced AJAX Containers', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Advanced AJAX support', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -583,7 +595,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Auto-Hide Empty Filters', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Auto-hiding empty filters', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -592,7 +604,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Advanced Filter Field Types', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Additional filtering options', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -601,7 +613,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Duplicate Filter Sets', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Filter Set duplication', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -618,7 +630,7 @@ class AboutProTab extends BaseSettings{
                                         <div class="fetm-cell fetm-pro"></div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Standard Support', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Standard support', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -627,7 +639,7 @@ class AboutProTab extends BaseSettings{
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Priority Support', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Priority support', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -640,7 +652,7 @@ class AboutProTab extends BaseSettings{
                             <div class="fetm-freevspro-bottom">
                                 <label for="fetm-toggle-rows" class="fetm-toggle-btn"></label>
                                 <div class="fetm-freevspro-links">
-                                    <a href="<?php echo esc_url(flrt_unlock_pro_link()) ?>" target="_blank" class="wpc-pro-bnf-sect-1-btns-up-to-pro"><?php echo _x('Buy PRO', 'benefits-landing', 'filter-everything'); ?></a>
+                                    <a href="<?php echo esc_url(flrt_unlock_pro_link('compare_buy_btn')) ?>" target="_blank" class="wpc-pro-bnf-sect-1-btns-up-to-pro"><?php echo _x('Buy PRO', 'benefits-landing', 'filter-everything'); ?> <?php echo flrt_crown_icon(); ?></a>
                                 </div>
                             </div>
                             <div class="fetm-freevspro-bottom-extra-wrap">
@@ -682,9 +694,7 @@ class AboutProTab extends BaseSettings{
                         <details>
                             <summary><?php echo _x('Will the PRO version slow down my site?', 'benefits-landing', 'filter-everything'); ?></summary>
                             <p>
-                                <?php echo wp_kses( _x( 'No, the PRO version will not slow down your site. The plugin itself is optimized for fast performance and does not add unnecessary load on its own.
-                                <br><br>
-                                However, keep in mind that the speed of filtering depends on the number of posts, attributes, and your hosting resources. With large datasets, performance is primarily determined by server capacity rather than the plugin version.', 'benefits-landing', 'filter-everything' ),
+                                <?php echo wp_kses( _x( 'No, the PRO version will not slow down your site. The plugin itself is optimized for fast performance and does not add unnecessary load on its own.<br><br>However, keep in mind that the speed of filtering depends on the number of posts, attributes, and your hosting resources. With large datasets, performance is primarily determined by server capacity rather than the plugin version.', 'benefits-landing', 'filter-everything' ),
                                         [ 'br' => [] ]
                                 ); ?>
                             </p>
@@ -692,9 +702,7 @@ class AboutProTab extends BaseSettings{
                         <details>
                             <summary><?php echo _x('Is the PRO version compatible with my theme or page builder?', 'benefits-landing', 'filter-everything'); ?></summary>
                             <p>
-                                <?php echo wp_kses( _x( 'Yes, the PRO version is compatible with most WordPress themes and popular page builders. The plugin relies on the standard WP_Query mechanism, which allows it to integrate correctly with Gutenberg, Elementor, WPBakery, Divi, Avada, and other page builders.
-                                <br><br>
-                                In most cases, no additional configuration is required — filters will work with your theme out of the box. For highly customized or non-standard templates, flexible integration options are also available.', 'benefits-landing', 'filter-everything' ),
+                                <?php echo wp_kses( _x( 'Yes, the PRO version is compatible with most WordPress themes and popular page builders. The plugin relies on the standard WP_Query mechanism, which allows it to integrate correctly with Gutenberg, Elementor, WPBakery, Divi, Avada, and other page builders.<br><br>In most cases, no additional configuration is required — filters will work with your theme out of the box. For highly customized or non-standard templates, flexible integration options are also available.', 'benefits-landing', 'filter-everything' ),
                                         [ 'br' => [] ]
                                 ); ?>
                             </p>
@@ -702,7 +710,10 @@ class AboutProTab extends BaseSettings{
                         <details>
                             <summary><?php echo _x('How many sites does my license cover?', 'benefits-landing', 'filter-everything'); ?></summary>
                             <p>
-                                <?php echo _x('The license covers two sites — your main production website and its development copy (DEV / staging). This means you can use the plugin on the live site and simultaneously on its test copy for development, updates, and verification before applying changes to the production environment.', 'benefits-landing', 'filter-everything'); ?>
+                                <?php echo _x('The Personal license covers two sites — your main production website and its development copy (DEV / staging). This means you can use the plugin on the live site and simultaneously on its test copy for development, updates, and verification before applying changes to the production environment.', 'benefits-landing', 'filter-everything'); ?>
+                            </p>
+                            <p>
+                                <?php echo _x('For larger projects, Freelancer and Agency licenses are available and allow you to use the plugin on multiple websites.', 'benefits-landing', 'filter-everything'); ?>
                             </p>
                         </details>
                         <details>
@@ -716,14 +727,18 @@ class AboutProTab extends BaseSettings{
                             <p>
                                 <?php echo _x('We always do our best to help resolve any issues with the plugin and provide the necessary support. If this is not possible, you can use the refund policy and get your money back in accordance with the rules of the website where you purchased the plugin.', 'benefits-landing', 'filter-everything'); ?>
                             </p>
+
+                            <p>
+                                <?php echo _x('We generally follow a standard refund period — 14 days from the date of purchase.', 'benefits-landing', 'filter-everything'); ?>
+                            </p>
                         </details>
                     </section>
 
                     <section class="wpc-pro-bnf-sect-8">
                         <div class="wpc-pro-bnf-sect-8-left-wrap">
-                            <h2 class="wpc-pro-bnf-sect-8-left-title"><?php echo _x('Ready to unlock the full power of Filter Everything?', 'benefits-landing', 'filter-everything'); ?></h2>
-                            <p class="wpc-pro-bnf-sect-8-left-desc"><?php echo _x('Upgrade to PRO and take full control over filtering, SEO, and scalability.', 'benefits-landing', 'filter-everything'); ?></p>
-                            <a href="<?php echo esc_url(flrt_unlock_pro_link()) ?>" target="_blank" class="wpc-pro-bnf-sect-1-btns-up-to-pro"><?php echo _x('Upgrade to PRO', 'benefits-landing', 'filter-everything'); ?></a>
+                            <h2 class="wpc-pro-bnf-sect-8-left-title"><?php echo _x('Ready to unlock the full power of Filter Everything PRO?', 'benefits-landing', 'filter-everything'); ?></h2>
+                            <p class="wpc-pro-bnf-sect-8-left-desc"><?php echo _x('Upgrade to PRO and take full control over filtering, SEO, and user experience.', 'benefits-landing', 'filter-everything'); ?></p>
+                            <a href="<?php echo esc_url(flrt_unlock_pro_link('footer_upgrade_btn')) ?>" target="_blank" class="wpc-pro-bnf-sect-1-btns-up-to-pro"><?php echo _x('Upgrade to PRO', 'benefits-landing', 'filter-everything'); ?> <?php echo flrt_crown_icon(); ?></a>
                         </div>
                         <div class="wpc-pro-bnf-sect-8-right-wrap">
                             <?php echo $this->wpc_pro_bnf_get_retina_img( 'wpc-red-unl-ftr.png', 'Advanced Features' );?>

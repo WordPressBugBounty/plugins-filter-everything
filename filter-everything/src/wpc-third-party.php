@@ -764,6 +764,8 @@ function flrt_remove_pagination_base( $url ){
 
 function flrt_is_woo_discount_rules()
 {
+    $check_woo_discount_rules = apply_filters('flrt_woo_discount_rules_enabled', true);
+    if(!$check_woo_discount_rules) return false;
     if( flrt_is_woocommerce() &&
         class_exists('Wdr\App\Helpers\Woocommerce') &&
         class_exists('Wdr\App\Controllers\Base') &&
@@ -791,10 +793,7 @@ function flrt_is_woo_discount_rules()
 
 function flrt_is_elementor_active()
 {
-    if ( is_plugin_active( 'elementor/elementor.php' ) ) {
-        return true;
-    }
-    return false;
+    return did_action( 'elementor/loaded' );
 }
 
 if ( flrt_is_elementor_active() ) {
@@ -870,7 +869,7 @@ if ( flrt_is_elementor_active() ) {
                     elementorFrontend.hooks.addAction(
                         'frontend/element_ready/filter-everything-filters.default',
                         function($scope) {
-                            let $el = $('[wpc-filter-elementor-widget="1"]');
+                            let $el = $('[wpc-filter-elementor-widget="1"][data-elementor-type]:not([data-elementor-type="loop-item"])');
                             if($el.length > 0){
                                 $el.before(`<?php flrt_filters_button() ?>`);
                             }

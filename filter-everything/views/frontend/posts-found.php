@@ -7,6 +7,7 @@
  * $posts_found - int|NULL, posts found number
  * $singular_label - string label for single found post
  * $plural_label - string label for multiple found posts
+ * $hidden - makes an element hidden
  *
  * @see https://filtereverything.pro/resources/templates-overriding/
  */
@@ -16,26 +17,28 @@ if ( ! defined('ABSPATH') ) {
 }
 
 ?>
-<div class="wpc-posts-found" data-found="<?php echo esc_attr( $posts_found_count ); ?>">
-<p><?php
-    if( $posts_found_count !== NULL ) {
-        $class = ( $posts_found_count > 1 ) ? 'wpc-posts-found-number wpc-plural' : 'wpc-posts-found-number';
-        $label = ( $posts_found_count > 1 ) ? $plural_label : $singular_label;
+<div class="wpc-posts-found<?php echo ($hidden) ? " wpc-posts-found-hidden" : ''; ?>" data-found="<?php echo esc_attr( $posts_found_count ); ?>">
+<?php if( !$hidden ) : ?>
+    <p><?php
+        if( $posts_found_count !== NULL ) {
+            $class = ( $posts_found_count > 1 ) ? 'wpc-posts-found-number wpc-plural' : 'wpc-posts-found-number';
+            $label = ( $posts_found_count > 1 ) ? $plural_label : $singular_label;
 
-        echo wp_kses(
-            sprintf( _n(
-                '<span class="%s">%d</span> %s found',
-                '<span class="%s">%d</span> %s found',
-                $posts_found_count,
-                'filter-everything'
-            ), $class, $posts_found_count, $label ),
-            array(
-                'span' => array('class' => true)
-            )
-        );
+            echo wp_kses(
+                sprintf( _n(
+                    '<span class="%s">%d</span> %s found',
+                    '<span class="%s">%d</span> %s found',
+                    $posts_found_count,
+                    'filter-everything'
+                ), $class, $posts_found_count, $label ),
+                array(
+                    'span' => array('class' => true)
+                )
+            );
 
-    }else{
-        echo '&nbsp;';
-    }
-?></p>
+        }else{
+            echo '&nbsp;';
+        }
+    ?></p>
+<?php endif; ?>
 </div>

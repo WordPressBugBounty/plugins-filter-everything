@@ -1457,11 +1457,6 @@ msgid ""
 "new <a href=\"%s\">Filter Set</a> for them."
 msgstr ""
 
-msgid ""
-"The free version of the plugin does not support filtering on singular pages. "
-"But <a href=\"%s\">PRO version</a> supports."
-msgstr ""
-
 msgid "Filter Everything debug"
 msgstr ""
 
@@ -2657,6 +2652,10 @@ msgstr ""
 msgid "Unlock with PRO"
 msgstr ""
 
+msgctxt "benefits-landing"
+msgid "Upgrade to PRO"
+msgstr ""
+
 msgid "Upgrade to PRO"
 msgstr ""
 
@@ -2692,9 +2691,10 @@ msgstr ""
 msgid "Hide empty filters"
 msgstr ""
 
-msgid "Filter by WooCommerce variations"
+msgid "Accurate WooCommerce variation filtering"
 msgstr ""
 
+msgctxt "benefits-landing"
 msgid "View all PRO features"
 msgstr ""
 
@@ -2790,15 +2790,15 @@ msgid "PRO"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Advanced filtering"
+msgid "<span>Full control</span> over filtering,"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Full control"
+msgid "page builders support,"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "SEO-ready"
+msgid "mobile & SEO ready<span>.</span>"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -2806,7 +2806,7 @@ msgid "Trusted by over"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Upgrade to <b>Filter Everything PRO</b> to unlock advanced filter<br>capabilities, SEO features, and full control over the filtering process."
+msgid "Upgrade to Filter Everything PRO to unlock the full power of filtering, advanced SEO tools, page builder support, and provide a <strong>much better navigation experience</strong> for your visitors."
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -2822,7 +2822,7 @@ msgid "users worldwide"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "4.91/5"
+msgid "4.88/5"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -2834,19 +2834,15 @@ msgid "from real customers"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Filter any WP_Query, get SEO Rules, obtain clean URLs, and unlock many convenient time-saving options — all available in the PRO version."
+msgid "Filter any posts list, custom query, or page builder content"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Filter any WP_Query"
+msgid "Get more organic traffic with SEO tools for filtered pages"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Apply SEO Rules"
-msgstr ""
-
-msgctxt "benefits-landing"
-msgid "Get clean URLs"
+msgid "Improve conversions and user experience with advanced filtering capabilities"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -2854,15 +2850,19 @@ msgid "Why Upgrade to<br>Filter Everything PRO?"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "∞ Unlimited number of Filter Sets"
+msgid "∞ Create Unlimited Filter Sets"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Create individual filters for each section of your website."
+msgid "Create unique filters for every section of your site and let visitors filter content by relevant criteria — e.g. smartphones by brand, clothing by size, or cars by fuel type."
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "SEO capabilities + clean URLs"
+msgid "Auto-generate SEO data for filtered pages"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Generate SEO titles, H1s, descriptions, and SEO texts based on selected filters to attract more organic traffic from search engines and AI services."
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -2878,15 +2878,15 @@ msgid "Mobile Devices"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Take full control of SEO for filtered results pages and attract additional free traffic from search engines or AI services."
+msgid "Get the most out of filtered pages with full control over SEO titles, H1s, descriptions, SEO text, and XML sitemaps. Better indexation means more organic traffic."
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Maximum convenience for Mobile<br>devices"
+msgid "Maximum convenience for Mobile devices"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Built-in, user-friendly filter widget for mobile devices."
+msgid "Use the built-in, user-friendly filter widget for mobile devices."
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -2894,7 +2894,7 @@ msgid "Works and is trusted<br>worldwide"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "160 000+"
+msgid "160&nbsp;000+"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -2902,7 +2902,7 @@ msgid "websites / users worldwide"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "15 000+"
+msgid "16&nbsp;100+"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -2918,71 +2918,83 @@ msgid "What does Filter Everything PRO<br>unlock?"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "With PRO, you can go far beyond basic filtering and build scalable solutions<br>for real projects"
+msgid "The PRO version includes tools that <strong>increase conversions</strong><br />by helping visitors find the right content faster."
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Filter custom posts and complex<br>WP_Query"
+msgid "Full control over SEO"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "on any wordpress page"
+msgid "Filter Any Content"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Create unlimited<br>Filter Sets"
+msgid "Page builder content, WooCommerce products, custom post types, and even custom WP_Query — the PRO version handles it all!"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "and customize them individually to match the needs of any section or page"
+msgid "∞ Unlimited Filter Sets"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Generate SEO-optimized<br>results pages"
+msgid "Create a dedicated Filter Set for every section of your site instead of using the same filters everywhere."
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "bringing traffic to your website"
+msgid "Get the most out of filtered pages with full control over SEO titles, H1s, descriptions, SEO text, and XML sitemaps. Better indexation means more organic traffic."
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Duplicate, export, import"
+msgid "Tools for faster workflow"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Filters, Filter Sets, and plugin settings (within one or multiple sites)"
+msgid "Back up, duplicate, transfer, and reuse your filters, Filter Sets, and settings with ease."
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Unlock extra options"
+msgid "Professional filtering"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "filtering by variations, hiding empty filters, hiding “out of stock” products, and more"
+msgid "Accurate variation filtering, proper handling of out-of-stock products, auto-hiding empty filters, and more — the details that make the difference."
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Control & flexibility"
+msgid "PRO Features Overview"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Filtering for custom queries & page builders"
+msgid "Full power of filtering"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Advanced filter types"
+msgid "Filtering any content — including page builders and custom queries"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "User experience"
+msgid "Works with your existing content — no need to rebuild your site"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "SEO & promotion"
+msgid "Smart out-of-stock filtering"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Dedicated mobile filters widget"
+msgid "Auto-hiding empty filters"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Convenience for everyone"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO & organic traffic"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "User-friendly mobile filters widget"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -2990,19 +3002,19 @@ msgid "One-click import & export for Filters, Filter Sets, and settings"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Duplicate Filter Sets in one click"
+msgid "Instant Filter Set duplication"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "SEO rules for filtered pages"
+msgid "SEO tools for filtered pages"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "SEO-friendly filter URLs"
+msgid "SEO-friendly clean filter URLs"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "XML sitemap for filter pages"
+msgid "XML sitemap for filtered pages"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3018,23 +3030,31 @@ msgid "Current version"
 msgstr ""
 
 msgctxt "benefits-landing"
+msgid "PRO"
+msgstr ""
+
+msgctxt "benefits-landing"
 msgid "Advanced Filtering & Core Value"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Any WP_Query Filtering"
+msgid "Filter any posts list — page builders & custom queries"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "SEO Rules for Filter Pages"
+msgid "SEO tools for filtered pages"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Variation-Based Product Filtering"
+msgid "Filtering accuracy"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "SEO-Friendly Filter URLs"
+msgid "Accurate WooCommerce variation filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "SEO-friendly clean filter URLs"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3042,15 +3062,15 @@ msgid "SEO & Traffic Growth"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "XML Sitemap for Filter Pages"
+msgid "XML sitemap for filtered pages"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Full URL Structure Control"
+msgid "Full URL structure control"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "No Empty Pages or 404s"
+msgid "No empty pages or 404s"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3058,43 +3078,43 @@ msgid "Mobile & UX for E-commerce"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Mobile Filters Widget"
+msgid "User-friendly mobile filters widget"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Hide Out-of-Stock Products"
+msgid "Smart out-of-stock filtering"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Any Post Type Filtering"
+msgid "Filtering any post type"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Filter by Any Criteria"
+msgid "Filter by any criteria"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Auto-Generated Filters"
+msgid "Auto-generated filters"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "AJAX Filtering"
+msgid "AJAX filtering"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Step-by-Step Filtering"
+msgid "Step-by-step filtering"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Sorting Widget"
+msgid "Sorting widget"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Multilingual Support"
+msgid "Multilingual compatibility"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Responsive Design"
+msgid "Responsive design"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3102,23 +3122,23 @@ msgid "Advanced Workflow & Flexibility"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Import & Export Settings"
+msgid "Import & export settings"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Advanced AJAX Containers"
+msgid "Advanced AJAX support"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Auto-Hide Empty Filters"
+msgid "Auto-hiding empty filters"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Advanced Filter Field Types"
+msgid "Additional filtering options"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Duplicate Filter Sets"
+msgid "Filter Set duplication"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3126,11 +3146,11 @@ msgid "Support"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Standard Support"
+msgid "Standard support"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Priority Support"
+msgid "Priority support"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3154,11 +3174,11 @@ msgid "6 months of support included"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Ready to unlock the full power of Filter Everything?"
+msgid "Ready to unlock the full power of Filter Everything PRO?"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Upgrade to PRO and take full control over filtering, SEO, and scalability."
+msgid "Upgrade to PRO and take full control over filtering, SEO, and user experience."
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3216,7 +3236,15 @@ msgid "What is the refund policy?"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "The license covers two sites — your main production website and its development copy (DEV / staging). This means you can use the plugin on the live site and simultaneously on its test copy for development, updates, and verification before applying changes to the production environment."
+msgid "The Personal license covers two sites — your main production website and its development copy (DEV / staging). This means you can use the plugin on the live site and simultaneously on its test copy for development, updates, and verification before applying changes to the production environment."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "For larger projects, Freelancer and Agency licenses are available and allow you to use the plugin on multiple websites."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "We generally follow a standard refund period — 14 days from the date of purchase."
 msgstr ""
 
 msgctxt "benefits-landing"

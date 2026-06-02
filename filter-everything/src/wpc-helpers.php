@@ -719,7 +719,7 @@ function flrt_filters_button( $setId = 0, $class = '' )
     $templateManager->includeFrontView( 'filters-button', array( 'wpc_found_posts' => $wpc_found_posts, 'class' => $attrClass, 'set_id' => $setId ) );
 }
 
-function flrt_posts_found( $setid = 0, $all = false )
+function flrt_posts_found( $setid = 0, $all = false, $hidden = false )
 {
     $templateManager = \FilterEverything\Filter\Container::instance()->getTemplateManager();
     $fss             = \FilterEverything\Filter\Container::instance()->getFilterSetService();
@@ -736,7 +736,7 @@ function flrt_posts_found( $setid = 0, $all = false )
     $pluralLabel     = isset( $obj->label ) ? apply_filters( 'wpc_label_singular_posts_found_msg', $obj->label ) : esc_html__('items', 'filter-everything');
     $singularLabel   = isset( $obj->labels->singular_name ) ? apply_filters( 'wpc_label_plural_posts_found_msg', $obj->labels->singular_name ) : esc_html__('item', 'filter-everything');
 
-    $templateManager->includeFrontView( 'posts-found', array( 'posts_found_count' => $count, 'singular_label' => $singularLabel, 'plural_label' => $pluralLabel) );
+    $templateManager->includeFrontView( 'posts-found', array( 'posts_found_count' => $count, 'singular_label' => $singularLabel, 'plural_label' => $pluralLabel, 'hidden' => $hidden) );
 }
 
 function flrt_get_option( $key, $default = false )
@@ -2201,9 +2201,16 @@ if (!function_exists('flrt_pro_promo_label')) {
 }
 
 if(!function_exists( 'flrt_unlock_icon')){
-    function flrt_unlock_icon($width = '20px', $height = '20px', $color = '#FFFFFF')
+    function flrt_unlock_icon($width = '20px', $height = '20px', $color = '#3858E9')
     {
         return '<svg xmlns="http://www.w3.org/2000/svg" height="' . $height . '" viewBox="0 -960 960 960" width="' . $width . '" fill="'  . $color . '"><path d="M264-624h336v-96q0-50-35-85t-85-35q-50 0-85 35t-35 85h-72q0-80 56.23-136 56.22-56 136-56Q560-912 616-855.84q56 56.16 56 135.84v96h24q29.7 0 50.85 21.15Q768-581.7 768-552v384q0 29.7-21.16 50.85Q725.68-96 695.96-96H263.72Q234-96 213-117.15T192-168v-384q0-29.7 21.15-50.85Q234.3-624 264-624Zm0 456h432v-384H264v384Zm216.21-120Q510-288 531-309.21t21-51Q552-390 530.79-411t-51-21Q450-432 429-410.79t-21 51Q408-330 429.21-309t51 21ZM264-168v-384 384Z"/></svg>';
+    }
+}
+
+if(!function_exists( 'flrt_crown_icon')){
+    function flrt_crown_icon($width = '16px', $height = '16px', $color = '#FFFFFF')
+    {   
+        return '<svg xmlns="http://www.w3.org/2000/svg" fill="'  . $color . '" viewBox="0 0 16 16" width="' . $width . '" height="' . $height . '" class="wpc-crown-icon"><path fill="'  . $color . '" d="M8.687 1.932c-.238-.634-1.136-.634-1.374 0l-1.642 4.38-3.167-2.11a.733.733 0 0 0-1.126.753L3.333 12h9.334l1.955-7.045a.733.733 0 0 0-1.126-.754L10.33 6.313zM6.654 7.49 8 3.899l1.346 3.59c.166.442.7.614 1.094.352l2.59-1.727-1.363 4.553H4.333L2.97 6.114 5.56 7.841a.733.733 0 0 0 1.094-.352m6.013 5.844H3.333v1.334h9.334z"></path></svg>';
     }
 }
 
@@ -2253,10 +2260,11 @@ function flrt_pro_features_link()
     return 'https://layout.filtereverything.pro/#why-choose-pro';
 }
 
-function flrt_unlock_pro_link()
+function flrt_unlock_pro_link( $utm_content = '' )
 {
-    return 'https://codecanyon.net/cart/configure_before_adding/31634508?license=regular&amp;support=bundle_6month';
+    return 'https://filtereverything.pro/pricing/?utm_source=free_plugin&utm_medium=internal&utm_campaign=free_plugin_upgrade&utm_content=' . $utm_content;
 }
+
 
 function wpc_clear_folder($directory)
 {
@@ -2276,7 +2284,7 @@ function wpc_clear_folder($directory)
     }
 }
 
-function flrt_diamond_icon($svg_fill = "var(--wpc-pro-color, #7A1FA2)")
+function flrt_diamond_icon($svg_fill = "var(--wpc-pro-color, #3858E9)")
 {
     return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="' . $svg_fill. '" version="1.1" id="Layer_1" width="16px" height="16px" viewBox="0 0 70 70" enable-background="new 0 0 70 70" xml:space="preserve">
                 <g>

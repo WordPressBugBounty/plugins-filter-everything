@@ -142,13 +142,14 @@ class Admin
         ?>
         <style type="text/css">
             .wpc-pro-badge {
-                background: #7A1FA2;
+                background: #3858E9;
                 color: #fff;
                 padding: 2px 6px;
                 border-radius: 14px;
                 margin-left: 6px;
                 font-size: 10px;
-                border: 1px solid #7A1FA2;
+                border: 1px solid #3858E9;
+                position: absolute;
             }
         </style>
         <?php

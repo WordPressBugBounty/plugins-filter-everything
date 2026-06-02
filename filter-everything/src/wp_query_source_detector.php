@@ -34,7 +34,7 @@ class WP_Query_Source_Detector
         ],
         'beaver_builder' => [
             'classes'       => ['fl-post-grid', 'fl-post-carousel', 'fl-module-post-grid', 'fl-post-feed'],
-            'data_attrs'    => ['data-settings'],
+            'data_attrs'    => [''],
             'classes_check' => ['FLBuilder'],
             'meta_keys'     => ['_fl_builder_enabled', '_fl_builder_data']
         ],

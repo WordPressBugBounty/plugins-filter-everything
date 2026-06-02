@@ -89,10 +89,12 @@ if ($tabs === false) {
         $is_active = !empty($tab['is_active']) ? ' is-active' : '';
         $is_pro = str_contains($tab['text'], 'wpc-pro-badge') ? ' wpc-pro-badge-text' : '';
         $tab_text = str_replace('wpc-pro-badge', 'wpc-pro-badge-transparent', $tab['text']);
+        $extra_class = preg_replace( '/[^a-z]/', '', strtolower( wp_kses($tab_text, [] ) ) );
         printf(
-                '<a class="wpc-tab%s%s" href="%s">%s</a>',
+                '<a class="wpc-tab%s%s wpc-%s" href="%s">%s</a>',
                 $is_active,
                 $is_pro,
+                $extra_class,
                 esc_url($tab['url']),
                 wp_kses($tab_text, array(
                         'span' => array(

@@ -229,7 +229,7 @@ class FiltersWidget extends \WP_Widget
         if( $show_count ){
             flrt_posts_found( $setId );
         } else {
-            echo '<div class="wpc-instead-of-posts-found"></div>';
+            flrt_posts_found( $setId, false, true );
         }
 
         $to = count( $related_filters );
@@ -645,7 +645,7 @@ class FiltersWidget extends \WP_Widget
                 echo '<p class="wpc-debug-message">';
                 echo sprintf(
                     wp_kses(
-                        __( 'The free version of the plugin does not support filtering on singular pages. But <a href="%s">PRO version</a> supports.', 'filter-everything' ),
+                            __( 'The free version allows up to 3 filter sets per post type. Upgrade to <a href="%s">PRO</a> to display more filter sets.', 'filter-everything' ),
                         array( 'a' => array('href' => true) )
                     ),
                     esc_url(FLRT_PLUGIN_URL .'/?get_pro=true')

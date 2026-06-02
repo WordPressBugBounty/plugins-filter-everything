@@ -1,5 +1,5 @@
 /*!
- * Filter Everything admin 1.9.2
+ * Filter Everything admin 1.9.2.1
  */
 .widget_wpc_filters_widget *{
     box-sizing: border-box;
@@ -2266,5 +2266,8 @@ input[type="number"].wpc-filters-range-min,
 input[type="number"].wpc-filters-range-max,
 input.wpc-filter-search-field {
     padding-right: 40px !important;
+}
+.wpc-posts-found-hidden{
+    display: none;
 }
 

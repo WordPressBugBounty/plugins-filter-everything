@@ -267,8 +267,6 @@ function flrt_initiate_overridden_functions()
     }
 
 }
-$ff = 'ad'.'d'.'_'.'f'.'il'.  'ter';
-
 function flrt_chips( $showReset = false, $setIds = [] ) {
     $templateManager    = \FilterEverything\Filter\Container::instance()->getTemplateManager();
     $wpManager          = \FilterEverything\Filter\Container::instance()->getWpManager();

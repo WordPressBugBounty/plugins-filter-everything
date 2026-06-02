@@ -3,7 +3,7 @@
 Plugin Name: Filter Everything&nbsp;— WordPress & WooCommerce Filters
 Plugin URI: https://filtereverything.pro
 Description: Filters everything in WordPress & WooCommerce: Products, any Post types, by Any Criteria. Compatible with WPML, ACF and others popular. Supports AJAX.
-Version: 1.9.2
+Version: 1.9.2.1
 Author: Andrii Stepasiuk
 Author URI: https://filtereverything.pro/about/
 Text Domain: filter-everything
@@ -31,9 +31,9 @@ if( ! class_exists( 'FlrtFilter' ) ):
             $this->define( 'FLRT_PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );
             $this->define( 'FLRT_PLUGIN_BASENAME', plugin_basename(__FILE__) );
             $this->define( 'FLRT_PLUGIN_SLUG', 'filter-everything-pro' );
-            $this->define( 'FLRT_PLUGIN_VER', '1.9.2' );
+            $this->define( 'FLRT_PLUGIN_VER', '1.9.2.1' );
             $this->define( 'FLRT_PLUGIN_URL', 'https://filtereverything.pro' );
-            $this->define( 'FLRT_PLUGIN_TESTED_TO', '6.9.4' );
+            $this->define( 'FLRT_PLUGIN_TESTED_TO', '7.0' );
             $this->define( 'FLRT_PLUGIN_DEBUG', false );
             $this->define( 'FLRT_TEMPLATES_DIR_NAME', 'filters' );
 
@@ -92,7 +92,7 @@ if( ! class_exists( 'FlrtFilter' ) ):
             flrt_include('src/Settings/Tabs/SeoTabTrait.php');
 
             // Include PRO
-            flrt_include('pro/filters-pro.php');
+//            flrt_include('pro/filters-pro.php');
 
             flrt_include('src/Entities/DefaultEntity.php');
             flrt_include('src/Entities/EntityManager.php');
@@ -195,7 +195,34 @@ if( ! class_exists( 'FlrtFilter' ) ):
 
         public function loadTextdomain()
         {
+            add_filter( 'load_textdomain_mofile', [ $this, 'preferBundledMofile' ], 10, 2 );
             load_plugin_textdomain( 'filter-everything', false, dirname(FLRT_PLUGIN_BASENAME) . '/lang' );
+        }
+
+        /**
+         * Prefer translations bundled in the plugin's /lang folder over those
+         * auto-downloaded by WordPress.org into /wp-content/languages/plugins/.
+         * Our bundled translations are 100% complete and curated; the .org ones
+         * are community-contributed and often partial or lower quality.
+         */
+        public function preferBundledMofile( $mofile, $domain )
+        {
+            if ( $domain !== 'filter-everything' ) {
+                return $mofile;
+            }
+
+            if ( strpos( $mofile, WP_LANG_DIR . '/plugins/' ) === false ) {
+                return $mofile;
+            }
+
+            $locale = function_exists( 'determine_locale' ) ? determine_locale() : get_locale();
+            $bundled = FLRT_PLUGIN_DIR_PATH . 'lang/filter-everything-' . $locale . '.mo';
+
+            if ( is_readable( $bundled ) ) {
+                return $bundled;
+            }
+
+            return $mofile;
         }
 
         public function oneTwoThreeGo()

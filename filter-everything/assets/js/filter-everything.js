@@ -1,5 +1,5 @@
 /*!
- * Filter Everything 1.9.2
+ * Filter Everything 1.9.2.1
  */
 (function ($) {
     "use strict";
@@ -1732,7 +1732,7 @@
             const stickyButtonsHeight = rect.height;
 
             if (stickyButtonsWidth === 0 || stickyButtonsHeight === 0) {
-                return setTimeout(wpcUpdateStickyButtons, 0);
+                return;
             }
 
 

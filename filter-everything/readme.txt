@@ -1,35 +1,41 @@
 === Filter Everything&nbsp;— WordPress & WooCommerce Filters ===
 Contributors: stepasyuk
 Tags: woocommerce product filter, woocommerce filter, product filter, post filter, ajax filter
-Stable tag: 1.9.2
+Stable tag: 1.9.2.1
 Requires at least: 4.6
-Tested up to: 6.9.4
+Tested up to: 7.0
 Requires PHP: 5.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Filter anything on WordPress & WooCommerce. The most flexible filtering plugin.
+The most flexible filters plugin for WordPress & WooCommerce – filter anything.
 
 == Description ==
-*Help visitors quickly find the content they need on your WordPress/WooCommerce site.*
-**Filter Everything** is a WordPress filtering plugin that **_provides everything needed_** for filtering.
+**Filter Everything** — is a powerful WordPress plugin for filtering **any content** by virtually **any criteria.**
 
-It filters any content by virtually any criteria and includes all the options and features needed to build a filtering system.
+It includes *_everything needed_* to build a complete filtering system, so your visitors can easily find what they need on your WordPress/WooCommerce site.
+
+## Try the live demos
+-   [Products](https://demo.filtereverything.pro/product-category/clothing/women/color-red/brand-hm/c-kind-dress/?max_price=100&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [Posts](https://demo.filtereverything.pro/posts/category-health/?max_views=8000&date_from=2018-01-01t15.29.13&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) & Any Content
+-   [SEO Capabilities](https://demo.filtereverything.pro/product-category/electronics/smartphones/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org)
+-   [Elementor](https://demo.filtereverything.pro/elementor/category-health/image-yes/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [ACF](https://demo.filtereverything.pro/example/acf/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) & [WPML](https://wpml.filtereverything.pro/es/filtros-en-espanol/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) Integration
+-   [Apply Button](https://demo.filtereverything.pro/apply-button/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) Mode, [Step-by-Step](https://demo.filtereverything.pro/step-by-step-filtering/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) Filtering, [Built-in Search](https://demo.filtereverything.pro/search-and-filter/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), and [Horizontal Layout](https://demo.filtereverything.pro/5-columns/color-blue/brand-hm/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org)
+
 https://www.youtube.com/watch?v=g1_qlJvNdsg
 
-#### Complete filtering solution
+#### Complete filtering toolkit
 The plugin includes _highly configurable filters_ and also supports: sorting, keyword search, mobile-friendly filters, multiple filter layouts, different submission modes, widgets, AJAX, shortcodes, color swatches and more.
 _— Everything you need to build a complete filtering system._
 
 #### Filters everything by anything
 Allows you to filter any type of content.
-Posts • WooCommerce products • listings • events • portfolios • any custom post type.
+[Posts](https://demo.filtereverything.pro/posts/category-health/genre-epos/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [WooCommerce products](https://demo.filtereverything.pro/product-category/electronics/laptops/color-silver/brand-dell/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), listings, events, portfolios, any custom post type.
 Filtering criteria can be virtually anything.
-Price • brand • category • attributes • color • size • weight — virtually any other data in your content.
+[Price](https://demo.filtereverything.pro/example/by-price/?min_price=75&max_price=250&ordr=price&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [brand](https://demo.filtereverything.pro/product-category/clothing/women/brand-hm/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [category](https://demo.filtereverything.pro/posts/category-health/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [attributes](https://demo.filtereverything.pro/example/by-length-width-height/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [color](https://demo.filtereverything.pro/product-category/clothing/women/color-blue/?ordr=date&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [size](https://demo.filtereverything.pro/product-category/clothing/women/size-xl/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [weight](https://demo.filtereverything.pro/example/by-weight/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) — virtually any other data in your content.
 _— Maximum flexibility._
 
 #### Works with your existing content and setup
-The plugin integrates easily into your existing website structure and works with standard WordPress queries, taxonomies, and custom fields (including ACF, Meta Box fields), without requiring additional tables, indexing systems, or duplicate data.
+The plugin integrates easily into your existing website structure and works with standard WordPress queries, taxonomies, and custom fields (including [ACF](https://demo.filtereverything.pro/example/acf/checkbox-%e4%b8%ad%e6%96%87%e5%96%ae%e5%ad%97%e7%9a%84%e4%be%8b%e5%ad%90/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), Meta Box fields), without requiring additional tables, indexing systems, or duplicate data.
 _— No need to restructure your content. Just install and use it._
 
 #### Compatible. Fast. Supported
@@ -47,12 +53,12 @@ Filter content by price, brand, color, category, size, weight, or any other crit
 -   **Works on any page**
 Each section of your website can have its own set of filters relevant to its content.
 -   **Widgets for page builders**
-Built-in Filters, Chips, and Sorting widgets for Gutenberg, Elementor, Divi, Breakdance, Beaver Builder, and other page builders.
+Built-in Filters, Chips, and Sorting widgets for Gutenberg, [Elementor](https://demo.filtereverything.pro/elementor/category-health/image-yes/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), Divi, Breakdance, Beaver Builder, and other page builders.
 -   **Flexible filter layouts and display options**
-Use checkboxes, radio buttons, dropdowns, labels, color swatches, rating stars, numeric ranges, or date ranges, and display filters as horizontal toolbars or vertical panels.
+Use [checkboxes](https://demo.filtereverything.pro/example/checkboxes/color-blue/brand-issa-plus/size-m/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [radio buttons](https://demo.filtereverything.pro/example/radio-buttons/color-red/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [dropdowns](https://demo.filtereverything.pro/example/dropdowns/color-red/brand-issa-plus/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [labels](https://demo.filtereverything.pro/example/labels/color-green/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [color swatches](https://demo.filtereverything.pro/product-category/clothing/women/color-white/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [rating stars](https://demo.filtereverything.pro/example/by-rating/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [numeric ranges](https://demo.filtereverything.pro/example/range-sliders/?min_price=90&max_price=800&max_quantity=110&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), or [date ranges](https://demo.filtereverything.pro/posts/?date_from=2018-01-01t15.29.13&date_to=2018-04-01t07.04.11&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), and display filters as [horizontal toolbars](https://demo.filtereverything.pro/5-columns/color-blue/brand-hm/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) or [vertical panels](https://demo.filtereverything.pro/search-and-filter/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org).
 -   **Flexible filtering modes**
-Step-by-step filtering, auto-submission, or selecting multiple filters and applying them manually.
--   **Sorting and keyword search**
+[Step-by-step](https://demo.filtereverything.pro/step-by-step-filtering/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) filtering, [auto-submission](https://demo.filtereverything.pro/product-category/electronics/laptops/brand-dell/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), or selecting multiple filters and [applying them](https://demo.filtereverything.pro/apply-button/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) manually.
+-   **[Sorting](https://demo.filtereverything.pro/example/by-price/?min_price=75&max_price=250&ordr=price&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) and [keyword search](https://demo.filtereverything.pro/search-and-filter/brand-hm/?srch=coat&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org)**
 Allow visitors to sort and search within filtered results.
 -   **Developer-friendly and extensible**
 Customize and extend plugin behavior using WordPress actions and filters.
@@ -112,10 +118,20 @@ Uploading via FTP
 
 == Changelog ==
 
+= 1.9.2.1 =
+*Release Date - 02 June 2026*
+* Fix - Removed a code fragment that could trigger false positives in antivirus software
+* Fix - Corrected inaccurate changelog entries about page builder widget support, Filter Set duplication, and Rating filter star icons
+* Fix - Fixed fatal error on frontend caused by is_plugin_active() unavailability
+* Fix - Fixed a duplicate loop for the Apply button in filters
+* Fix - Fixed a bug with automatic page scrolling
+* Fix - Fixed a bug with saving filter sets
+* Tweak - Made the bundled translations in the plugin's /lang folder take priority over the ones auto-downloaded by WordPress.org, since the bundled ones are 100% complete and curated
+
 = 1.9.2 =
 *Release Date - 18 March 2026*
 * Dev   - Added the ability to use filters on Singular pages and filter native WordPress queries, including the Main WP Query and posts displayed with Gutenberg
-* Dev   - Added Filter, Chips, and Sorting widgets for page builders: Elementor, Divi, Bricks Builder, Breakdance, Beaver Builder, and Gutenberg
+* Dev   - Added Filter, Chips, and Sorting widgets for Elementor
 * Dev   - Added the ability to create date filters for both regular post dates and dates stored in custom fields, including fields created with ACF
 * Dev   - Added the ability to create a large number of filters in a Filter Set, such as 100 or more
 * Dev   - Added a 'Horizontal view' checkbox to Filter Sets
@@ -310,20 +326,12 @@ Uploading via FTP
 
 == Upgrade Notice ==
 
-= 1.9.2 =
-*Release Date - 18 March 2026*
-* Dev   - Added the ability to use filters on Singular pages and filter native WordPress queries, including the Main WP Query and posts displayed with Gutenberg
-* Dev   - Added Filter, Chips, and Sorting widgets for page builders: Elementor, Divi, Bricks Builder, Breakdance, Beaver Builder, and Gutenberg
-* Dev   - Added the ability to create date filters for both regular post dates and dates stored in custom fields, including fields created with ACF
-* Dev   - Added the ability to create a large number of filters in a Filter Set, such as 100 or more
-* Dev   - Added a 'Horizontal view' checkbox to Filter Sets
-* Dev   - Added functionality for automatic filter creation based on popular criteria
-* Dev   - Added improved styles for the Filters widget
-* Tweak - Added the ability to reset values in numeric fields
-* Tweak - Added an icon to the 'Where to filter?' field for quick preview of the page where the Filter Set works
-* Tweak - Added suggestions for custom field filters, along with autocomplete while typing
-* Tweak - Improved the Rating filter by adding better star icons and two usage modes
-* Tweak - Moved the 'Where to filter?' and 'What to filter?' fields into a separate metabox called 'Location'
-* Tweak - Improved the Apply and Reset buttons in Apply Button mode. They are now floating for better usability
-* Tweak - Improved the Filters widget on mobile option
-* Fix   - Fixed bugs
+= 1.9.2.1 =
+*Release Date - 02 June 2026*
+* Fix - Removed a code fragment that could trigger false positives in antivirus software
+* Fix - Corrected inaccurate changelog entries about page builder widget support, Filter Set duplication, and Rating filter star icons
+* Fix - Fixed fatal error on frontend caused by is_plugin_active() unavailability
+* Fix - Fixed a duplicate loop for the Apply button in filters
+* Fix - Fixed a bug with automatic page scrolling
+* Fix - Fixed a bug with saving filter sets
+* Tweak - Made the bundled translations in the plugin's /lang folder take priority over the ones auto-downloaded by WordPress.org, since the bundled ones are 100% complete and curated

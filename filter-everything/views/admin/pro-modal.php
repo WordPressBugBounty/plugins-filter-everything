@@ -55,8 +55,8 @@ if (!defined('ABSPATH')) {
                             <div class="flrt-upgrade-to-pro-popup-checkmark-icon"></div>
                         </td>
                     </tr>
-                    <tr>
-                        <td class="flrt-upgrade-to-pro-popup-td"><?php echo esc_html__('Hide empty filters', 'filter-everything'); ?></td>
+                    <tr class="flrt-upgrade-to-pro-popup-tr-last">
+                        <td class="flrt-upgrade-to-pro-popup-td"><?php echo esc_html__('Accurate WooCommerce variation filtering', 'filter-everything'); ?></td>
                         <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
                             <div class="flrt-upgrade-to-pro-popup-dash-icon"></div>
                         </td>
@@ -64,8 +64,8 @@ if (!defined('ABSPATH')) {
                             <div class="flrt-upgrade-to-pro-popup-checkmark-icon"></div>
                         </td>
                     </tr>
-                    <tr class="flrt-upgrade-to-pro-popup-tr-last">
-                        <td class="flrt-upgrade-to-pro-popup-td"><?php echo esc_html__('Filter by WooCommerce variations', 'filter-everything'); ?></td>
+                    <tr>
+                        <td class="flrt-upgrade-to-pro-popup-td"><?php echo esc_html__('Hide empty filters', 'filter-everything'); ?></td>
                         <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
                             <div class="flrt-upgrade-to-pro-popup-dash-icon"></div>
                         </td>
@@ -106,9 +106,9 @@ if (!defined('ABSPATH')) {
 
                     <div class="flrt-upgrade-to-pro-popup-support-text"><?php echo esc_html__('6 month of support included', 'filter-everything'); ?></div>
                 </div>
-                <a href="<?php echo esc_url(flrt_unlock_pro_link()); ?>"
+                <a href="<?php echo esc_url(flrt_unlock_pro_link('popup_unlock_btn')); ?>"
                    class="flrt-upgrade-to-pro-popup-unlock-btn"
-                   target="_blank"><?php echo esc_html__('Unlock PRO', 'filter-everything'); ?></a>
+                   target="_blank"><?php echo esc_html__('Unlock PRO', 'filter-everything'); ?> <?php echo flrt_crown_icon(); ?></a>
             </div>
         </div>
     </div>

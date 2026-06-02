@@ -14,10 +14,13 @@ class RequestParser
 
     private $separator;
 
-    public function __construct( $request )
+    private $separator_for_path_segments;
+
+    public function __construct( $request, $separator = FLRT_PREFIX_SEPARATOR, $separator_for_getPathSegments = '/')
     {
         $this->setRequest( $request );
-        $this->separator    = FLRT_PREFIX_SEPARATOR;
+        $this->separator    = $separator;
+        $this->separator_for_path_segments = $separator_for_getPathSegments;
     }
 
     private function initQueryVars(){
@@ -53,7 +56,7 @@ class RequestParser
     }
 
     private function isSlugInPath( $slug ){
-        if( mb_strpos( '/' . $this->request, '/' . $slug . $this->separator ) !== false ){
+        if( mb_strpos( $this->separator_for_path_segments . $this->request, $this->separator_for_path_segments . $slug . $this->separator ) !== false ){
             return true;
         }
         return false;
@@ -371,7 +374,7 @@ class RequestParser
      */
     private function getPathSegments(){
         if( $this->request ){
-            return explode('/', $this->request );
+            return explode($this->separator_for_path_segments, $this->request );
         }
         return [];
     }
@@ -386,7 +389,7 @@ class RequestParser
                 /**
                  *@improvement Maybe remove query_args also
                  */
-                $request_path = str_replace('/' . $segment, '', $request_path );
+                $request_path = str_replace($this->separator_for_path_segments . $segment, '', $request_path );
             }
         }
 
@@ -403,7 +406,6 @@ class RequestParser
         $fse          = Container::instance()->getFilterService();
         // Path values
         foreach( $pathSegments as $segment ){
-
             if( $slug = $this->getSlugFromSegment( $segment ) ){
                 $segmentParams = $this->cutParamsFromSegment( $segment, $slug );
                 // List of entity, e_name, slug should be unique for all filters

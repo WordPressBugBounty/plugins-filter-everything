@@ -1,5 +1,5 @@
 /*!
- * Filter Everything set admin 1.9.2
+ * Filter Everything set admin 1.9.2.1
  */
 (function($) {
     "use strict";
@@ -1618,7 +1618,25 @@
             $('#wpc-filter-id-'+fid+' .wpc-field-ename-tr p.description').css('visibility', 'hidden');
 
         } else {
-            $('#wpc_filter_fields-'+fid+'-e_name').parents('.wpc-field-ename-tr').hide();
+            let eNameTag = $('#wpc_filter_fields-'+fid+'-e_name');
+            if ( eNameTag.prop("tagName").toLowerCase() === 'select') {
+
+                if (eNameTag.length > 0 && eNameTag.hasClass('select2-hidden-accessible')) {
+                    eNameTag.select2('destroy');
+                    eNameTag.empty();
+                    eNameTag.off();
+                }
+
+                let eNameInput = $('<input>');
+                eNameInput.attr( 'class', eNameTag.attr('class') )
+                    .attr( 'type', 'text' )
+                    .attr( 'name', eNameTag.attr('name') )
+                    .attr( 'id', eNameTag.attr('id') )
+                    .attr( 'value', '');
+
+                eNameTag.replaceWith(eNameInput);
+                $('#wpc_filter_fields-'+fid+'-e_name').parents('.wpc-field-ename-tr').hide();
+            }
         }
 
         // Numeric values can not be in URL path

@@ -33,14 +33,12 @@ class AdminHooks
     public function aboutPro()
     {
         if ( ! defined('FLRT_FILTERS_PRO') ) {
-
             echo '<a class="wpc-tab wpc-get-pro" href="'.admin_url( 'edit.php?post_type=filter-set&page=filters-settings&tab=aboutpro' ).'"><span>'.esc_html__( 'PRO benefits', 'filter-everything' ).'</span>' . flrt_diamond_icon() . "</a>\r\n";;
-            echo '<a class="wpc-tab wpc-get-pro wpc-get-pro-background button button-primary" href="'.esc_url(FLRT_PLUGIN_URL .'/?get_pro=true').'" target="_blank">'.esc_html__( 'Upgrade to PRO', 'filter-everything' ).'</a>'."\r\n";
+            echo '<a class="wpc-tab wpc-get-pro wpc-get-pro-background button button-primary" href="'. esc_url(flrt_unlock_pro_link( 'hero_upgrade_btn' )).'" target="_blank">'.esc_html__( 'Upgrade to PRO', 'filter-everything' ).' '. flrt_crown_icon() .'</a>'."\r\n";
         }
-
         $this->addHelpTab();
-
     }
+
 
     public function addHelpTab() {
         $screen = get_current_screen();
@@ -319,7 +317,7 @@ class AdminHooks
                         __('This Filter Set is inactive.<br>The Free version allows up to 3 Filter Sets per post type.<br>Upgrade to PRO to activate unlimited Filter Sets.', 'filter-everything'),
                         array('br' => array())
                 );
-                $html = '<div class="wpc-pro-filter-set-badge"><span class="wpc-alert-emoji wpc-icon-help-tip" data-tip="' . esc_attr($tip_text) . '">' . flrt_unlock_icon('20px', '20px', '#7A1FA2') . '</span><a class="wpc-pro-badge-text" href="' . esc_url(flrt_vailable_in_pro_attr_link()) . '">' . esc_html__('Unlock with PRO', 'filter-everything') . '</a></div>';
+                $html = '<div class="wpc-pro-filter-set-badge"><span class="wpc-alert-emoji wpc-icon-help-tip" data-tip="' . esc_attr($tip_text) . '">' . flrt_unlock_icon('20px', '20px', '#3858E9') . '</span><a class="wpc-pro-badge-text" href="' . esc_url(flrt_vailable_in_pro_attr_link()) . '">' . esc_html__('Unlock with PRO', 'filter-everything') . '</a></div>';
             } else {
                 if (!empty($link)) {
                     $html = '<a class="wpc-location-preview" target="_blank" href="' . esc_url($link) . '"><span class="dashicons dashicons-visibility"></span></a>';
