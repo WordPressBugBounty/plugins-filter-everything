@@ -196,11 +196,11 @@ function flrt_initiate_overridden_functions()
             }
             $src = flrt_get_term_brand_image($term->term_id, $filter);
 
-            $link_attributes .= ' title="' . $term->name . '"';
+            $link_attributes .= ' title="' . esc_attr( $term->name ) . '"';
 
             if ($src) {
-                $img = '<span class="wpc-term-image-wrapper"><img src="' . $src . '" alt="' . $term->name . '" /></span>';
-                $html = '<a ' . $link_attributes . '>' . $img . '<span class="wpc-term-name">' . $term->name . '</span></a>';
+                $img = '<span class="wpc-term-image-wrapper"><img src="' . esc_url( $src ) . '" alt="' . esc_attr( $term->name ) . '" /></span>';
+                $html = '<a ' . $link_attributes . '>' . $img . '<span class="wpc-term-name">' . esc_html( $term->name ) . '</span></a>';
             }
 
             return $html;
@@ -209,6 +209,12 @@ function flrt_initiate_overridden_functions()
 
     if( !function_exists( 'flrt_remove_default_category_location' ) ) {
         function flrt_remove_default_category_location( $terms, $taxonomy ){
+            // Bail on anything that is not a terms array (e.g. WP_Error when the
+            // taxonomy is unavailable) so we never index into a non-array.
+            if ( is_wp_error( $terms ) || ! is_array( $terms ) ) {
+                return $terms;
+            }
+
             $default_category = 0;
 
             if ( $taxonomy === 'product_cat' ) {

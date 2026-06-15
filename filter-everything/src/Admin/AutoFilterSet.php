@@ -325,9 +325,10 @@ class AutoFilterSet extends FilterSet
                 if(!$is_valid){
                     $errors = $this->getErrors();
                     if(in_array(92, $errors)){
+                        $limit = $this->getFreeLimitForPostType($filterSetFields['post_type'] ?? '');
                         flrt_refresh_temp_transient(
                             'wpc_auto_filters_error',
-                            $filterFields->getErrorMessage(92)
+                            $filterFields->getErrorMessage(92, $limit)
                         );
                     }
                     continue;

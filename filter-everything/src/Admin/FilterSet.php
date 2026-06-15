@@ -13,6 +13,12 @@ class FilterSet
 
     const FIELD_NAME_PREFIX     = 'wpc_set_fields';
 
+    const FREE_LIMIT_NEW         = 2;
+
+    const FREE_LIMIT_LEGACY      = 3;
+
+    const FREE_LIMIT_CUTOFF_DATE = '2026-06-15 00:00:00';
+
     private $defaultFields      = [];
 
     private $hooksRegistered    = false;
@@ -1364,6 +1370,63 @@ class FilterSet
         return is_array($content) ? $content : [];
     }
 
+    /**
+     * Returns the effective free-version Filter Set limit for a given post type.
+     *
+     * The historical free limit was {@see self::FREE_LIMIT_LEGACY} (3) Filter Sets per post type.
+     * From {@see self::FREE_LIMIT_CUTOFF_DATE} onwards the new free limit is {@see self::FREE_LIMIT_NEW} (2).
+     * To avoid breaking existing free-version installs that already relied on the old limit, any post type
+     * that had at least one published Filter Set created before the cutoff is grandfathered at the legacy
+     * limit; only post types whose Filter Sets are all post-cutoff (or have none yet) get the new lower limit.
+     *
+     * @param string $post_type Target post type (stored in wp_posts.post_excerpt for Filter Sets).
+     * @return int Effective max number of published Filter Sets allowed for this post type.
+     */
+    public function getFreeLimitForPostType($post_type) : int
+    {
+        if (empty($post_type)) {
+            return self::FREE_LIMIT_NEW;
+        }
+
+        global $wpdb;
+
+        $legacy_count = (int) $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT COUNT(ID)
+                FROM {$wpdb->posts}
+                WHERE post_type = %s
+                AND post_excerpt = %s
+                AND post_status = %s
+                AND post_date < %s",
+                FLRT_FILTERS_SET_POST_TYPE,
+                $post_type,
+                'publish',
+                self::FREE_LIMIT_CUTOFF_DATE
+            )
+        );
+
+        return $legacy_count > 0 ? self::FREE_LIMIT_LEGACY : self::FREE_LIMIT_NEW;
+    }
+
+    /**
+     * Checks whether the free-version limit of published Filter Sets per post type has been reached.
+     *
+     * In the PRO version (FLRT_FILTERS_PRO is defined and true) the limit does not apply and the method
+     * always returns false. In the free version the effective limit comes from {@see self::getFreeLimitForPostType()}
+     * — {@see self::FREE_LIMIT_LEGACY} (3) for post types grandfathered by Filter Sets created before
+     * {@see self::FREE_LIMIT_CUTOFF_DATE}, and {@see self::FREE_LIMIT_NEW} (2) otherwise. The method then:
+     *  - resolves the post type from $post_id (or $default_post_type if provided),
+     *  - returns true (over the limit) when there are already enough Filter Sets for that post type and
+     *    the current $post_id is not among the first allowed ones, when switching an existing set to a
+     *    post type that already has enough sets, or when no Filter Set context exists yet and the
+     *    post type already has enough sets,
+     *  - returns false otherwise, i.e. the user is still under the limit and may proceed.
+     *
+     * @param int|string $post_id           ID of the Filter Set being edited, or empty when creating a new one.
+     * @param string     $default_post_type Post type explicitly chosen in the UI; overrides the value stored on the set.
+     * @param bool       $update            Reserved flag for update flows (currently unused inside the method).
+     * @return bool True when the free-version limit is reached and the action must be blocked, false otherwise.
+     */
     public function under_limit_filter_set($post_id = '', $default_post_type = '', $update = false) : bool
     {
 
@@ -1391,12 +1454,14 @@ class FilterSet
         }
 
         if (!empty($post_type)) {
+            $limit = $this->getFreeLimitForPostType($post_type);
+
             $count = $wpdb->get_var(
                 $wpdb->prepare(
-                    "SELECT COUNT(ID) 
-                    FROM {$wpdb->posts} 
-                    WHERE post_type = %s 
-                    AND post_excerpt = %s 
+                    "SELECT COUNT(ID)
+                    FROM {$wpdb->posts}
+                    WHERE post_type = %s
+                    AND post_excerpt = %s
                     AND post_status = %s",
                     FLRT_FILTERS_SET_POST_TYPE,
                     $post_type,
@@ -1406,21 +1471,22 @@ class FilterSet
 
             $post_ids = $wpdb->get_col(
                 $wpdb->prepare(
-                    "SELECT ID 
-                            FROM {$wpdb->posts} 
-                            WHERE post_type = %s 
-                            AND post_excerpt = %s 
+                    "SELECT ID
+                            FROM {$wpdb->posts}
+                            WHERE post_type = %s
+                            AND post_excerpt = %s
                             AND post_status = %s
                             ORDER BY ID ASC
-                            LIMIT 3",
+                            LIMIT %d",
                     FLRT_FILTERS_SET_POST_TYPE,
                     $post_type,
-                    'publish'
+                    'publish',
+                    $limit
                 )
             );
 
             if (!empty($post_id)) {
-                if ($count >= 3 && !in_array($post_id, $post_ids)) {
+                if ($count >= $limit && !in_array($post_id, $post_ids)) {
                     return true;
                 }
             }
@@ -1433,13 +1499,13 @@ class FilterSet
 
             if(!empty($default_post_type) && !empty($get_post_type['post_type']['value'])){
                 if($default_post_type !== $get_post_type['post_type']['value']){
-                    if($count >= 3){
+                    if($count >= $limit){
                         return true;
                     }
                 }
             }
 
-            if(empty($get_post_type['post_type']['value']) && $count >= 3){
+            if(empty($get_post_type['post_type']['value']) && $count >= $limit){
                 return true;
             }
 

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Filter Everything PRO\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-16 14:04+0000\n"
+"POT-Creation-Date: 2026-06-09 00:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -2646,7 +2646,8 @@ msgstr ""
 msgid "No %s enabled lists found on the page"
 msgstr ""
 
-msgid "The free version allows up to 3 filter sets per post type. Upgrade to <a href='%1$s' target='_blank'>PRO</a> for unlimited filter sets."
+#. translators: 1: maximum number of free filter sets per post type, 2: PRO upgrade URL
+msgid "The free version allows up to %1$d filter sets per post type. Upgrade to <a href='%2$s' target='_blank'>PRO</a> for unlimited filter sets."
 msgstr ""
 
 msgid "Unlock with PRO"
@@ -2665,33 +2666,17 @@ msgstr ""
 msgid "Sorting"
 msgstr ""
 
-msgid "This Filter Set is inactive.<br>The Free version allows up to 3 Filter Sets per post type.<br>Upgrade to PRO to activate unlimited Filter Sets."
+#. translators: %d: maximum number of free filter sets per post type
+msgid "This Filter Set is inactive.<br>The Free version allows up to %d Filter Sets per post type.<br>Upgrade to PRO to activate unlimited Filter Sets."
 msgstr ""
 
+#. translators: 1: maximum number of free filter sets per post type, 2: PRO upgrade URL
 msgid ""
-"The free version allows up to 3 filter sets per post type. "
-"Upgrade to <a href=\"%s\">PRO</a> to display more filter sets."
+"The free version allows up to %1$d filter sets per post type. "
+"Upgrade to <a href=\"%2$s\">PRO</a> to display more filter sets."
 msgstr ""
 
 msgid "Free"
-msgstr ""
-
-msgid "Filter any post list —"
-msgstr ""
-
-msgid "page builders & custom queries"
-msgstr ""
-
-msgid "∞ Create unlimited filter sets"
-msgstr ""
-
-msgid "Built-in mobile filter widget"
-msgstr ""
-
-msgid "Hide empty filters"
-msgstr ""
-
-msgid "Accurate WooCommerce variation filtering"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -2954,7 +2939,7 @@ msgid "Back up, duplicate, transfer, and reuse your filters, Filter Sets, and se
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Professional filtering"
+msgid "Precision filtering"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -2978,7 +2963,19 @@ msgid "Works with your existing content — no need to rebuild your site"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Smart out-of-stock filtering"
+msgid "Accurate out-of-stock products filtering"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "View more"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "View less"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Accurate filtering of out-of-stock and variable products"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3006,11 +3003,11 @@ msgid "Instant Filter Set duplication"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "SEO tools for filtered pages"
+msgid "Full SEO control for filtered pages"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "SEO-friendly clean filter URLs"
+msgid "Clean, SEO-friendly filter URLs"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3038,11 +3035,11 @@ msgid "Advanced Filtering & Core Value"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Filter any posts list — page builders & custom queries"
+msgid "Filter any content — page builders, plugins, or even custom code"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "SEO tools for filtered pages"
+msgid "Full SEO control for filtered pages"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3054,7 +3051,7 @@ msgid "Accurate WooCommerce variation filtering"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "SEO-friendly clean filter URLs"
+msgid "Clean, SEO-friendly filter URLs"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3066,11 +3063,11 @@ msgid "XML sitemap for filtered pages"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Full URL structure control"
+msgid "No empty filter pages or 404s"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "No empty pages or 404s"
+msgid "Search within filtered results"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3082,7 +3079,7 @@ msgid "User-friendly mobile filters widget"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Smart out-of-stock filtering"
+msgid "Accurate out-of-stock products filtering"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3138,7 +3135,7 @@ msgid "Additional filtering options"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Filter Set duplication"
+msgid "One-click Filter Set duplication"
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3186,19 +3183,11 @@ msgid "Frequently Asked Questions"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "Will my existing filters disappear after upgrading to PRO?"
+msgid "What happens to my existing setup when I upgrade to PRO?"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "No, your existing filters will not disappear after upgrading to PRO. All created Filter Sets, filters, and settings are preserved. We recommend installing and activating the PRO version first, and only then deactivating the Free version — this way all your data will remain intact."
-msgstr ""
-
-msgctxt "benefits-landing"
-msgid "Will I need to rebuild my site after upgrading to PRO?"
-msgstr ""
-
-msgctxt "benefits-landing"
-msgid "No, you will not need to rebuild your site after upgrading to PRO. All existing page structure, content, and filter settings will remain unchanged. The PRO version simply extends the plugin’s capabilities and adds new features without affecting your current filtering logic."
+msgid "None of your work will be lost. All your created Filter Sets, filters, and settings are fully preserved — the PRO version uses the same data. You also won't need to rebuild your page structure, content, or filter placement: PRO simply extends the plugin's capabilities and adds new features without changing your current filtering logic. The only thing we recommend regarding the order of steps is to install and activate the PRO version first, and only then deactivate the Free version. This way all your data is guaranteed to stay in place."
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3236,7 +3225,7 @@ msgid "What is the refund policy?"
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "The Personal license covers two sites — your main production website and its development copy (DEV / staging). This means you can use the plugin on the live site and simultaneously on its test copy for development, updates, and verification before applying changes to the production environment."
+msgid "The <a href=\"%s\" target=\"_blank\">Personal license</a> covers two sites — your main production website and its development copy (DEV / staging). This means you can use the plugin on the live site and simultaneously on its test copy for development, updates, and verification before applying changes to the production environment."
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3244,7 +3233,7 @@ msgid "For larger projects, Freelancer and Agency licenses are available and all
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "We generally follow a standard refund period — 14 days from the date of purchase."
+msgid "We follow a standard refund period — 14 days from the date of purchase."
 msgstr ""
 
 msgctxt "benefits-landing"
@@ -3252,7 +3241,7 @@ msgid "Yes, support is included with the PRO purchase. You receive 6 months of s
 msgstr ""
 
 msgctxt "benefits-landing"
-msgid "We always do our best to help resolve any issues with the plugin and provide the necessary support. If this is not possible, you can use the refund policy and get your money back in accordance with the rules of the website where you purchased the plugin."
+msgid "We always do our best to help resolve any issues with the plugin and provide the support you need. If that's not possible, you can use the refund policy and get your money back in accordance with the rules of the website where you purchased the plugin (CodeCanyon, or the official site <a href=\"%s\" target=\"_blank\">filtereverything.pro</a>)."
 msgstr ""
 #. PRO BENEFITS PAGE END
 
@@ -3269,4 +3258,27 @@ msgid "No list of %s found on this page"
 msgstr ""
 
 msgid "This function should not be called before the pre_get_posts hook has fired."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Trusted by WordPress Professionals"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Real reviews from independent experts<br>and verified customers."
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Read more on CodeCanyon"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "Play video"
+msgstr ""
+
+msgctxt "benefits-landing"
+msgid "%s ago"
+msgstr ""
+
+msgid "Thank you for updating Filter Everything! This release includes a security update related to how <strong>Color swatches</strong> are rendered. Everything should work fine, but just in case, please check how your Color swatches look in the filters on your site's pages. You can see the list of Color swatches you use on %1$s<strong>this settings page</strong>%2$s."
 msgstr ""

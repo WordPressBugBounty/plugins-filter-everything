@@ -126,7 +126,7 @@ class AdminHooks
         $actions = array_merge( $actionsLink, $actions );
 
         if( ! defined( 'FLRT_FILTERS_PRO' ) ){
-            $actions[] = '<a href="' . esc_url(FLRT_PLUGIN_URL .'/?get_pro=true') . '" class="wpc-go-pro" target="_blank">'.esc_html__('Get PRO', 'filter-everything').'</a>';
+            $actions[] = '<a href="' . esc_url(FLRT_PLUGIN_URL .'/pricing/?utm_source=free_plugin&utm_medium=internal&utm_campaign=free_plugin_upgrade&utm_content=plugin_actions_lnk') . '" class="wpc-go-pro" target="_blank">'.esc_html__('Get PRO', 'filter-everything').'</a>';
         }
 
         return $actions;
@@ -194,7 +194,14 @@ class AdminHooks
         }
 
         $messageNum = sanitize_key($get['message']); // no need to escape
-        $errors     = FilterFields::getErrorsList();
+        $limit      = null;
+        if ($messageNum === '92' && !empty($get['post'])) {
+            $filterSet = Container::instance()->getFilterSetService();
+            $post_type_field = $filterSet->getPostTypeField((int) $get['post']);
+            $post_type = !empty($post_type_field['post_type']['value']) ? $post_type_field['post_type']['value'] : '';
+            $limit = $filterSet->getFreeLimitForPostType($post_type);
+        }
+        $errors     = FilterFields::getErrorsList($limit);
 
         ?>
         <?php foreach ( $errors  as $id => $message ) : ?>
@@ -313,8 +320,15 @@ class AdminHooks
             }
 
             if ($under_limit_filter_set) {
+                $post_type_field = $filterSet->getPostTypeField($post_id);
+                $post_type = !empty($post_type_field['post_type']['value']) ? $post_type_field['post_type']['value'] : '';
+                $limit = $filterSet->getFreeLimitForPostType($post_type);
                 $tip_text = wp_kses(
-                        __('This Filter Set is inactive.<br>The Free version allows up to 3 Filter Sets per post type.<br>Upgrade to PRO to activate unlimited Filter Sets.', 'filter-everything'),
+                        sprintf(
+                            /* translators: %d: maximum number of free filter sets per post type */
+                            __('This Filter Set is inactive.<br>The Free version allows up to %d Filter Sets per post type.<br>Upgrade to PRO to activate unlimited Filter Sets.', 'filter-everything'),
+                            $limit
+                        ),
                         array('br' => array())
                 );
                 $html = '<div class="wpc-pro-filter-set-badge"><span class="wpc-alert-emoji wpc-icon-help-tip" data-tip="' . esc_attr($tip_text) . '">' . flrt_unlock_icon('20px', '20px', '#3858E9') . '</span><a class="wpc-pro-badge-text" href="' . esc_url(flrt_vailable_in_pro_attr_link()) . '">' . esc_html__('Unlock with PRO', 'filter-everything') . '</a></div>';

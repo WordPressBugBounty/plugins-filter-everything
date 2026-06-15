@@ -1,19 +1,20 @@
 === Filter Everything&nbsp;— WordPress & WooCommerce Filters ===
 Contributors: stepasyuk
 Tags: woocommerce product filter, woocommerce filter, product filter, post filter, ajax filter
-Stable tag: 1.9.2.1
+Stable tag: 1.9.2.2
 Requires at least: 4.6
 Tested up to: 7.0
 Requires PHP: 5.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-The most flexible filters plugin for WordPress & WooCommerce – filter anything.
+Instantly filter any WordPress content & WooCommerce products by attributes, taxonomies, custom fields + AJAX, Elementor, automatic filter creation.
 
 == Description ==
-**Filter Everything** — is a powerful WordPress plugin for filtering **any content** by virtually **any criteria.**
+Let your visitors instantly find exactly what they need — **filter any content** by virtually **any criteria.**
 
-It includes *_everything needed_* to build a complete filtering system, so your visitors can easily find what they need on your WordPress/WooCommerce site.
+**Filter Everything** works with any content type: WooCommerce products, posts, listings, events, and more.
+It supports page builders like Elementor and Divi, offers 25+ fine-grained settings for every filter, works in three different modes, and includes sorting, keyword search, AJAX, and easy customization for developers — everything you'll ever need for filtering.
 
 ## Try the live demos
 -   [Products](https://demo.filtereverything.pro/product-category/clothing/women/color-red/brand-hm/c-kind-dress/?max_price=100&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [Posts](https://demo.filtereverything.pro/posts/category-health/?max_views=8000&date_from=2018-01-01t15.29.13&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) & Any Content
@@ -117,6 +118,10 @@ Uploading via FTP
 5. Individual filters for any post type
 
 == Changelog ==
+
+= 1.9.2.2 =
+*Release Date - 15 June 2026*
+* Security - A security fix related to the Color swatches feature
 
 = 1.9.2.1 =
 *Release Date - 02 June 2026*
@@ -285,53 +290,10 @@ Uploading via FTP
 *Release Date - 26 May 2023*
 * Fix   - Fixed missing styles on Color swatches and logos edit pages in dashboard
 
-= 1.7.9 =
-*Release Date - 25 May 2023*
-* Fix   - Fixed location for the Apply button, when Filter Set is directed to All archive pages/Any taxonomy,post,author
-* Fix   - Fixed bug when the Apply button does not appear on frontend in the latest position of the Filter Set
-* Fix   - Fixed bug with negative numbers for Numeric filters
-* Fix   - Fixed bug with 404 errors, when Filter Set was in Trash and there were filters without Filter Set in DB
-* Fix   - Fixed bug with JS alert for mobile Pop-up widget when AJAX is disabled
-* Tweak - Replaced /page/ with $wp_query->pagination_base in permalinks
-
-= 1.7.8 =
-*Release Date - 08 May 2023*
-* Fix   - Fixed fatal error in wpc-utility-functions.php(279): flrt_get_post_type_location_terms();
-
-= 1.7.7 =
-*Release Date - 08 May 2023*
-* Dev   - Added Search field in the Filters widget. It is compatible with filtered posts, supports AJAX and allows to search by SKU among Woo products
-* Dev   - Added ability to direct Filter Set to all singular pages (Any page)
-* Fix   - Fixed compatibility issue for Bricks Builder and Filter Set for "Any taxonomy"
-* Fix   - Improved CURL outer request to avoid 10 seconds freezing in /wp-admin when the request is failed
-* Fix   - Fixed fatal error in FiltersWidget.php(32): extract()
-* Tweak - Added filter get terms hooks to allow to select terms from external tables
-* Tweak - Added hook 'widget_title' for all widget titles
-* Tweak - Added hook 'wpc_do_filter_request' to handle every filter action for wp_query
-* Tweak - Added hooks 'wpc_all_set_wp_queried_posts' and 'wpc_variations_meta_query'
-* Tweak - Added notice, when "HTML id or class of the Posts Container" configured wrong
-
-= 1.7.6 =
-*Release Date - 14 March 2023*
-* Dev   - Added [fe_posts_found] shortcode to display filtered posts number
-* Fix   - Fixed bug with "+" symbol in ACF fields
-* Fix   - Fixed compatibility related with post types for the latest Polylang Pro
-* Tweak - Optimized main CSS file
-* Tweak - Disabled including assets on pages does not related with filters
-* Tweak - Improved frontend for the RTL version
-* Tweak - Removed Uncategorized from Category pages list
-* Tweak - Improved filter templates. Overridden templates should be updated
-
 [See changelog for all versions](https://demo.filtereverything.pro/changelog.txt).
 
 == Upgrade Notice ==
 
-= 1.9.2.1 =
-*Release Date - 02 June 2026*
-* Fix - Removed a code fragment that could trigger false positives in antivirus software
-* Fix - Corrected inaccurate changelog entries about page builder widget support, Filter Set duplication, and Rating filter star icons
-* Fix - Fixed fatal error on frontend caused by is_plugin_active() unavailability
-* Fix - Fixed a duplicate loop for the Apply button in filters
-* Fix - Fixed a bug with automatic page scrolling
-* Fix - Fixed a bug with saving filter sets
-* Tweak - Made the bundled translations in the plugin's /lang folder take priority over the ones auto-downloaded by WordPress.org, since the bundled ones are 100% complete and curated
+= 1.9.2.2 =
+*Release Date - 15 June 2026*
+* Security - A security fix related to the Color swatches feature

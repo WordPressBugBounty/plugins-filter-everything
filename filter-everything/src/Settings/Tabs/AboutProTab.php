@@ -145,15 +145,15 @@ class AboutProTab extends BaseSettings{
                             </div>
                             <ul class="wpc-pro-bnf-sect-1-anwp-list">
                                 <li class="wpc-pro-bnf-sect-1-anwp-list-item">
-                                    <div class="wpc-pro-bnf-sect-1-anwp-list-item-icon"></div>
+                                    <div class="wpc-pro-bnf-sect-1-anwp-list-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
                                     <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo _x('Filter any posts list, custom query, or page builder content','benefits-landing', 'filter-everything'); ?></p>
                                 </li>
                                 <li class="wpc-pro-bnf-sect-1-anwp-list-item">
-                                    <div class="wpc-pro-bnf-sect-1-anwp-list-item-icon"></div>
+                                    <div class="wpc-pro-bnf-sect-1-anwp-list-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
                                     <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo _x('Get more organic traffic with SEO tools for filtered pages','benefits-landing', 'filter-everything'); ?></p>
                                 </li>
                                 <li class="wpc-pro-bnf-sect-1-anwp-list-item">
-                                    <div class="wpc-pro-bnf-sect-1-anwp-list-item-icon"></div>
+                                    <div class="wpc-pro-bnf-sect-1-anwp-list-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
                                     <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo _x('Improve conversions and user experience with advanced filtering capabilities','benefits-landing', 'filter-everything'); ?></p>
                                 </li>
                             </ul>
@@ -200,22 +200,70 @@ class AboutProTab extends BaseSettings{
                         </div>
                     </section>
 
-                    <section class="wpc-pro-bnf-sect-3">
-                        <h2 class="wpc-pro-bnf-sect-3-title"><?php echo wp_kses(
-                                    _x('Works and is trusted<br>worldwide', 'benefits-landing', 'filter-everything'),
-                                    array('br' => array())
-                            ); ?></h2>
-                        <div class="wpc-pro-bnf-sect-3-wbst-wrap">
-                            <h3 class="wpc-pro-bnf-sect-3-wbst-h3"><?php echo _x('160&nbsp;000+', 'benefits-landing', 'filter-everything'); ?></h3>
-                            <p class="wpc-pro-bnf-sect-3-wbst-desc"><?php echo _x('websites / users worldwide', 'benefits-landing', 'filter-everything'); ?></p>
-                        </div>
-                        <div class="wpc-pro-bnf-sect-3-csmt-wrap">
-                            <h3 class="wpc-pro-bnf-sect-3-csmt-h3"><?php echo _x('16&nbsp;100+', 'benefits-landing', 'filter-everything'); ?></h3>
-                            <p class="wpc-pro-bnf-sect-3-csmt-desc"><?php echo _x('customers on CodeCanyon', 'benefits-landing', 'filter-everything'); ?></p>
-                        </div>
-                        <div class="wpc-pro-bnf-sect-3-rate-wrap">
-                            <h3 class="wpc-pro-bnf-sect-3-rate-h3"><?php echo _x('4.88/5', 'benefits-landing', 'filter-everything'); ?></h3>
-                            <p class="wpc-pro-bnf-sect-3-rate-desc"><?php echo _x('rating based on real reviews', 'benefits-landing', 'filter-everything'); ?></p>
+                    <!-- ------------------------------------- Trusted by WordPress Professionals (reviews) ----------------------------------------- -->
+                    <section class="wpc-pro-bnf-sect-rvw">
+                        <h2 class="wpc-pro-bnf-sect-rvw-title"><?php echo _x('Trusted by WordPress Professionals', 'benefits-landing', 'filter-everything'); ?></h2>
+                        <p class="wpc-pro-bnf-sect-rvw-subtitle"><?php echo wp_kses( _x( 'Real reviews from independent experts<br>and verified customers.', 'benefits-landing', 'filter-everything' ), array( 'br' => array() ) ); ?></p>
+                        <input type="checkbox" id="wpc-rvw-toggle" class="fetm-toggle-checkbox" hidden>
+                        <div class="wpc-pro-bnf-sect-rvw-grid">
+                            <?php
+                            // YouTube video IDs — to add or swap a video, just change the ID here.
+                            $rvw_videos = array( 'g1_qlJvNdsg', 'cNqd210P920', 'Ki7LBcrYuAo' );
+
+                            // Real customer reviews taken from the filtereverything.pro landing page.
+                            $rvw_reviews = array(
+                                array(
+                                    'author' => 'ScarletLyn',
+                                    'date'   => '2022-03-12',
+                                    'url'    => 'https://codecanyon.net/ratings/3352977',
+                                    'text'   => "I am crying my eyeballs out of happiness. I cannot thank you enough. I just spent the whole weekend trying to make one myself because all the others that were fitting my shop scenario were way too heavy and chunky. I needed a specific structure for my website along with efficiently displaying filters depending on which section of the shop the user is in, and GOD, your plugin has ALL the freaking options possible to make it possible for me. I love you, marry me! (Just kidding, but you get the idea). My Query Monitor is happy, I am happy, and when my shop will go online, my customers will be happy to enjoy a blazing fast filtering engine for my greeting cards and stationery! Keep the great work, and please please, keep it loading FAST. Take care.",
+                                ),
+                                array(
+                                    'author' => 'bsmolyanov',
+                                    'date'   => '2024-09-08',
+                                    'url'    => 'https://codecanyon.net/ratings/3601791',
+                                    'text'   => "Filter Everything Pro is magnificent plugin! I use it for filtering WordPress posts database of more than 150k posts, with more than 10 custom taxonomies and thousands of terms and it does a great job! Not to mention, Filter Everything Pro is working alongside the GeneratePress theme like a charm, where other filtering solutions just do not cut it. The plugin is very well documented and very flexible for customization. Last but not least, the assistance I received was absolutely exceeding any level of support I have received around here - both in terms of speed, thoroughness and accuracy! The support team was extremely helpful, taking the time to review my entire setup (which is quite complex) and to pinpoint an issue which was related to a third-party plugin and has nothing to do with Filter Everything Pro. Outstanding!!! I definitely recommend Filter Everything Pro to everyone who needs a good filtering solution for posts, custom post types or WooCommerce products.",
+                                ),
+                                array(
+                                    'author' => 'migge',
+                                    'date'   => '2024-10-17',
+                                    'url'    => 'https://codecanyon.net/ratings/3605614',
+                                    'text'   => "There are many reason to give this plugin a 5-star rating! I picked Customer Support because it's VERY important. Functionality is easier to spot before purchase. The support for this plugin is beyond what you would expect, so i can recommend Filter Everything both as the best filter plugin that comes along with a matching support. Thanks guys!",
+                                ),
+                            );
+
+                            $rvw_total = max( count( $rvw_videos ), count( $rvw_reviews ) );
+
+                            for ( $i = 0; $i < $rvw_total; $i++ ) :
+                                // After the first row (one video + one review) push the rest under the "View more" toggle.
+                                if ( $i === 1 ) :
+                                    ?>
+                                    </div>
+                                    <div class="wpc-pro-bnf-sect-rvw-more">
+                                        <div class="wpc-pro-bnf-sect-rvw-grid">
+                                    <?php
+                                endif;
+                                $rvw_has_video  = isset( $rvw_videos[ $i ] );
+                                $rvw_has_review = isset( $rvw_reviews[ $i ] );
+
+                                // Checkerboard layout: even rows start with the video card, odd rows start with the text card.
+                                if ( $i % 2 === 0 ) {
+                                    if ( $rvw_has_video )  { $this->renderRvwVideoCard( $rvw_videos[ $i ] ); }
+                                    if ( $rvw_has_review ) { $this->renderRvwReviewCard( $rvw_reviews[ $i ] ); }
+                                } else {
+                                    if ( $rvw_has_review ) { $this->renderRvwReviewCard( $rvw_reviews[ $i ] ); }
+                                    if ( $rvw_has_video )  { $this->renderRvwVideoCard( $rvw_videos[ $i ] ); }
+                                }
+                            endfor;
+                            ?>
+                                </div>
+                                <div class="wpc-pro-bnf-sect-rvw-fade" aria-hidden="true"></div>
+                            </div>
+                        <div class="wpc-pro-bnf-sect-rvw-bottom">
+                            <label for="wpc-rvw-toggle" class="fetm-toggle-btn">
+                                <span class="fetm-toggle-text fetm-toggle-text-more"><?php echo esc_html_x( 'View more', 'benefits-landing', 'filter-everything' ); ?></span>
+                                <span class="fetm-toggle-text fetm-toggle-text-less"><?php echo esc_html_x( 'View less', 'benefits-landing', 'filter-everything' ); ?></span>
+                            </label>
                         </div>
                     </section>
 
@@ -246,8 +294,28 @@ class AboutProTab extends BaseSettings{
                         </div>
                         <div class="wpc-pro-bnf-sect-4-extr-wrap">
                             <div class="wpc-pro-bnf-sect-4-extr-icon"></div>
-                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo _x('Professional filtering', 'benefits-landing', 'filter-everything'); ?></p>
+                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo _x('Precision filtering', 'benefits-landing', 'filter-everything'); ?></p>
                             <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Accurate variation filtering, proper handling of out-of-stock products, auto-hiding empty filters, and more — the details that make the difference.', 'benefits-landing', 'filter-everything'); ?></p>
+                        </div>
+                    </section>
+
+                    <!-- ------------------------------------- Works and is trusted worldwide (moved below "What does PRO unlock?") ----------------------------------------- -->
+                    <section class="wpc-pro-bnf-sect-3">
+                        <h2 class="wpc-pro-bnf-sect-3-title"><?php echo wp_kses(
+                                    _x('Works and is trusted<br>worldwide', 'benefits-landing', 'filter-everything'),
+                                    array('br' => array())
+                            ); ?></h2>
+                        <div class="wpc-pro-bnf-sect-3-wbst-wrap">
+                            <h3 class="wpc-pro-bnf-sect-3-wbst-h3"><?php echo _x('160&nbsp;000+', 'benefits-landing', 'filter-everything'); ?></h3>
+                            <p class="wpc-pro-bnf-sect-3-wbst-desc"><?php echo _x('websites / users worldwide', 'benefits-landing', 'filter-everything'); ?></p>
+                        </div>
+                        <div class="wpc-pro-bnf-sect-3-csmt-wrap">
+                            <h3 class="wpc-pro-bnf-sect-3-csmt-h3"><?php echo _x('16&nbsp;100+', 'benefits-landing', 'filter-everything'); ?></h3>
+                            <p class="wpc-pro-bnf-sect-3-csmt-desc"><?php echo _x('customers on CodeCanyon', 'benefits-landing', 'filter-everything'); ?></p>
+                        </div>
+                        <div class="wpc-pro-bnf-sect-3-rate-wrap">
+                            <h3 class="wpc-pro-bnf-sect-3-rate-h3"><?php echo _x('4.88/5', 'benefits-landing', 'filter-everything'); ?></h3>
+                            <p class="wpc-pro-bnf-sect-3-rate-desc"><?php echo _x('rating based on real reviews', 'benefits-landing', 'filter-everything'); ?></p>
                         </div>
                     </section>
 
@@ -263,15 +331,15 @@ class AboutProTab extends BaseSettings{
                             <div class="wpc-pro-bnf-sect-5-default-hover-list">
                                 <ul class="wpc-pro-bnf-sect-5-default-hover-list-ul">
                                     <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
                                         <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Filtering any content — including page builders and custom queries', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                     <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
                                         <p class="wpc-pro-bnf-sect-5-default-item-text">∞ <?php echo _x( 'Unlimited Filter Sets', 'benefits-landing', 'filter-everything' ); ?></p>
                                     </li>
                                     <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
                                         <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Works with your existing content — no need to rebuild your site', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                 </ul>
@@ -287,15 +355,15 @@ class AboutProTab extends BaseSettings{
                             <div class="wpc-pro-bnf-sect-5-default-hover-list">
                                 <ul class="wpc-pro-bnf-sect-5-default-hover-list-ul">
                                     <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
                                         <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Accurate WooCommerce variation filtering', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                     <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Smart out-of-stock filtering', 'benefits-landing', 'filter-everything'); ?></p>
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Accurate out-of-stock products filtering', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                     <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
                                         <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Auto-hiding empty filters', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                 </ul>
@@ -311,15 +379,15 @@ class AboutProTab extends BaseSettings{
                             <div class="wpc-pro-bnf-sect-5-default-hover-list">
                                 <ul class="wpc-pro-bnf-sect-5-default-hover-list-ul">
                                     <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
                                         <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('User-friendly mobile filters widget', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                     <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
                                         <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('One-click import & export for Filters, Filter Sets, and settings', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                     <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
                                         <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Instant Filter Set duplication', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                 </ul>
@@ -335,15 +403,15 @@ class AboutProTab extends BaseSettings{
                             <div class="wpc-pro-bnf-sect-5-default-hover-list">
                                 <ul class="wpc-pro-bnf-sect-5-default-hover-list-ul">
                                     <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('SEO tools for filtered pages', 'benefits-landing', 'filter-everything'); ?></p>
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Full SEO control for filtered pages', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                     <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('SEO-friendly clean filter URLs', 'benefits-landing', 'filter-everything'); ?></p>
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Clean, SEO-friendly filter URLs', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                     <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"></div>
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
                                         <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('XML sitemap for filtered pages', 'benefits-landing', 'filter-everything'); ?></p>
                                     </li>
                                 </ul>
@@ -371,12 +439,12 @@ class AboutProTab extends BaseSettings{
                                         <div class="fetm-cell fetm-pro"></div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Filter any posts list — page builders & custom queries', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Filter any content — page builders, plugins, or even custom code', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                     <div class="fetm-row">
@@ -385,16 +453,16 @@ class AboutProTab extends BaseSettings{
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('SEO tools for filtered pages', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('Accurate out-of-stock products filtering', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                     <div class="fetm-row">
@@ -403,16 +471,25 @@ class AboutProTab extends BaseSettings{
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('SEO-friendly clean filter URLs', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('User-friendly mobile filters widget', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
+                                        </div>
+                                    </div>
+                                    <div class="fetm-row">
+                                        <div class="fetm-feature"><?php echo _x('Auto-hiding empty filters', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-cell fetm-free">
+                                            <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
+                                        </div>
+                                        <div class="fetm-cell fetm-pro">
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                 </div>
@@ -424,58 +501,39 @@ class AboutProTab extends BaseSettings{
                                         <div class="fetm-cell fetm-pro"></div>
                                     </div>
                                     <div class="fetm-row">
+                                        <div class="fetm-feature"><?php echo _x('Full SEO control for filtered pages', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-cell fetm-free">
+                                            <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
+                                        </div>
+                                        <div class="fetm-cell fetm-pro">
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
+                                        </div>
+                                    </div>
+                                    <div class="fetm-row">
+                                        <div class="fetm-feature"><?php echo _x('Clean, SEO-friendly filter URLs', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-cell fetm-free">
+                                            <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
+                                        </div>
+                                        <div class="fetm-cell fetm-pro">
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
+                                        </div>
+                                    </div>
+                                    <div class="fetm-row">
+                                        <div class="fetm-feature"><?php echo _x('No empty filter pages or 404s', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-cell fetm-free">
+                                            <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
+                                        </div>
+                                        <div class="fetm-cell fetm-pro">
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
+                                        </div>
+                                    </div>
+                                    <div class="fetm-row">
                                         <div class="fetm-feature"><?php echo _x('XML sitemap for filtered pages', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
-                                        </div>
-                                    </div>
-                                    <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Full URL structure control', 'benefits-landing', 'filter-everything'); ?></div>
-                                        <div class="fetm-cell fetm-free">
-                                            <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
-                                        </div>
-                                        <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
-                                        </div>
-                                    </div>
-                                    <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('No empty pages or 404s', 'benefits-landing', 'filter-everything'); ?></div>
-                                        <div class="fetm-cell fetm-free">
-                                            <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
-                                        </div>
-                                        <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Mobile & UX for E-commerce -->
-                                <div class="fetm-section-group fetm-section-mobile-ux">
-
-                                    <div class="fetm-row fetm-section">
-                                        <div class="fetm-feature"><?php echo _x('Mobile & UX for E-commerce', 'benefits-landing', 'filter-everything'); ?></div>
-                                        <div class="fetm-cell fetm-free"></div>
-                                        <div class="fetm-cell fetm-pro"></div>
-                                    </div>
-
-                                    <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('User-friendly mobile filters widget', 'benefits-landing', 'filter-everything'); ?></div>
-                                        <div class="fetm-cell fetm-free">
-                                            <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
-                                        </div>
-                                        <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
-                                        </div>
-                                    </div>
-                                    <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Smart out-of-stock filtering', 'benefits-landing', 'filter-everything'); ?></div>
-                                        <div class="fetm-cell fetm-free">
-                                            <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
-                                        </div>
-                                        <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                 </div>
@@ -492,7 +550,7 @@ class AboutProTab extends BaseSettings{
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                     <div class="fetm-row">
@@ -501,7 +559,7 @@ class AboutProTab extends BaseSettings{
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                     <div class="fetm-row">
@@ -510,7 +568,7 @@ class AboutProTab extends BaseSettings{
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                     <div class="fetm-row">
@@ -519,7 +577,7 @@ class AboutProTab extends BaseSettings{
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                     <div class="fetm-row">
@@ -528,7 +586,7 @@ class AboutProTab extends BaseSettings{
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                     <div class="fetm-row">
@@ -537,7 +595,7 @@ class AboutProTab extends BaseSettings{
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                     <div class="fetm-row">
@@ -546,7 +604,7 @@ class AboutProTab extends BaseSettings{
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                     <div class="fetm-row">
@@ -555,7 +613,7 @@ class AboutProTab extends BaseSettings{
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                     <div class="fetm-row">
@@ -564,7 +622,7 @@ class AboutProTab extends BaseSettings{
                                             <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                 </div>
@@ -582,7 +640,7 @@ class AboutProTab extends BaseSettings{
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                     <div class="fetm-row">
@@ -591,16 +649,7 @@ class AboutProTab extends BaseSettings{
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
-                                        </div>
-                                    </div>
-                                    <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Auto-hiding empty filters', 'benefits-landing', 'filter-everything'); ?></div>
-                                        <div class="fetm-cell fetm-free">
-                                            <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
-                                        </div>
-                                        <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                     <div class="fetm-row">
@@ -609,16 +658,16 @@ class AboutProTab extends BaseSettings{
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                     <div class="fetm-row">
-                                        <div class="fetm-feature"><?php echo _x('Filter Set duplication', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-feature"><?php echo _x('One-click Filter Set duplication', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                 </div>
@@ -632,10 +681,10 @@ class AboutProTab extends BaseSettings{
                                     <div class="fetm-row">
                                         <div class="fetm-feature"><?php echo _x('Standard support', 'benefits-landing', 'filter-everything'); ?></div>
                                         <div class="fetm-cell fetm-free">
-                                            <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                     <div class="fetm-row">
@@ -644,13 +693,16 @@ class AboutProTab extends BaseSettings{
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
                                         <div class="fetm-cell fetm-pro">
-                                            <svg width="24" height="24"><use href="#fetm-icon-check"/></svg>
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="fetm-freevspro-bottom">
-                                <label for="fetm-toggle-rows" class="fetm-toggle-btn"></label>
+                                <label for="fetm-toggle-rows" class="fetm-toggle-btn">
+                                    <span class="fetm-toggle-text fetm-toggle-text-more"><?php echo esc_html_x('View more', 'benefits-landing', 'filter-everything'); ?></span>
+                                    <span class="fetm-toggle-text fetm-toggle-text-less"><?php echo esc_html_x('View less', 'benefits-landing', 'filter-everything'); ?></span>
+                                </label>
                                 <div class="fetm-freevspro-links">
                                     <a href="<?php echo esc_url(flrt_unlock_pro_link('compare_buy_btn')) ?>" target="_blank" class="wpc-pro-bnf-sect-1-btns-up-to-pro"><?php echo _x('Buy PRO', 'benefits-landing', 'filter-everything'); ?> <?php echo flrt_crown_icon(); ?></a>
                                 </div>
@@ -680,15 +732,9 @@ class AboutProTab extends BaseSettings{
                     <section class="fetm-sec-faq fetm-section">
                         <h2 class="fetm-h2-medium"><?php echo _x('Frequently Asked Questions', 'benefits-landing', 'filter-everything'); ?></h2>
                         <details>
-                            <summary><?php echo _x('Will my existing filters disappear after upgrading to PRO?', 'benefits-landing', 'filter-everything'); ?></summary>
+                            <summary><?php echo _x('What happens to my existing setup when I upgrade to PRO?', 'benefits-landing', 'filter-everything'); ?></summary>
                             <p>
-                                <?php echo _x('No, your existing filters will not disappear after upgrading to PRO. All created Filter Sets, filters, and settings are preserved. We recommend installing and activating the PRO version first, and only then deactivating the Free version — this way all your data will remain intact.', 'benefits-landing', 'filter-everything'); ?>
-                            </p>
-                        </details>
-                        <details>
-                            <summary><?php echo _x('Will I need to rebuild my site after upgrading to PRO?', 'benefits-landing', 'filter-everything'); ?></summary>
-                            <p>
-                                <?php echo _x('No, you will not need to rebuild your site after upgrading to PRO. All existing page structure, content, and filter settings will remain unchanged. The PRO version simply extends the plugin’s capabilities and adds new features without affecting your current filtering logic.', 'benefits-landing', 'filter-everything'); ?>
+                                <?php echo _x('None of your work will be lost. All your created Filter Sets, filters, and settings are fully preserved — the PRO version uses the same data. You also won\'t need to rebuild your page structure, content, or filter placement: PRO simply extends the plugin\'s capabilities and adds new features without changing your current filtering logic. The only thing we recommend regarding the order of steps is to install and activate the PRO version first, and only then deactivate the Free version. This way all your data is guaranteed to stay in place.', 'benefits-landing', 'filter-everything'); ?>
                             </p>
                         </details>
                         <details>
@@ -710,7 +756,7 @@ class AboutProTab extends BaseSettings{
                         <details>
                             <summary><?php echo _x('How many sites does my license cover?', 'benefits-landing', 'filter-everything'); ?></summary>
                             <p>
-                                <?php echo _x('The Personal license covers two sites — your main production website and its development copy (DEV / staging). This means you can use the plugin on the live site and simultaneously on its test copy for development, updates, and verification before applying changes to the production environment.', 'benefits-landing', 'filter-everything'); ?>
+                                <?php printf( _x('The <a href="%s" target="_blank">Personal license</a> covers two sites — your main production website and its development copy (DEV / staging). This means you can use the plugin on the live site and simultaneously on its test copy for development, updates, and verification before applying changes to the production environment.', 'benefits-landing', 'filter-everything'), esc_url( flrt_unlock_pro_link( 'faq_hms' ) ) ); ?>
                             </p>
                             <p>
                                 <?php echo _x('For larger projects, Freelancer and Agency licenses are available and allow you to use the plugin on multiple websites.', 'benefits-landing', 'filter-everything'); ?>
@@ -725,11 +771,11 @@ class AboutProTab extends BaseSettings{
                         <details>
                             <summary><?php echo _x('What is the refund policy?', 'benefits-landing', 'filter-everything'); ?></summary>
                             <p>
-                                <?php echo _x('We always do our best to help resolve any issues with the plugin and provide the necessary support. If this is not possible, you can use the refund policy and get your money back in accordance with the rules of the website where you purchased the plugin.', 'benefits-landing', 'filter-everything'); ?>
+                                <?php printf( _x('We always do our best to help resolve any issues with the plugin and provide the support you need. If that\'s not possible, you can use the refund policy and get your money back in accordance with the rules of the website where you purchased the plugin (CodeCanyon, or the official site <a href="%s" target="_blank">filtereverything.pro</a>).', 'benefits-landing', 'filter-everything'), esc_url( flrt_refund_policy_link() ) ); ?>
                             </p>
 
                             <p>
-                                <?php echo _x('We generally follow a standard refund period — 14 days from the date of purchase.', 'benefits-landing', 'filter-everything'); ?>
+                                <?php echo _x('We follow a standard refund period — 14 days from the date of purchase.', 'benefits-landing', 'filter-everything'); ?>
                             </p>
                         </details>
                     </section>
@@ -756,14 +802,114 @@ class AboutProTab extends BaseSettings{
                           stroke-linecap="round"
                           stroke-linejoin="round"/>
                 </symbol>
+                <symbol fill="none" id="fetm-icon-check-double" viewBox="0 0 24 24">
+                    <path d="M17.75 6.75L7.25 17.25L2 12"
+                          stroke="#3858E9"
+                          stroke-width="2.25"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                    <path d="M22.75 6.75L12.25 17.25"
+                          stroke="#3858E9"
+                          stroke-width="2.25"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"/>
+                </symbol>
                 <symbol fill="none" id="fetm-icon-minus" viewBox="0 0 24 24">
                     <path d="M4 12C4 11.4477 4.44772 11 5 11H19C19.5523 11 20 11.4477 20 12C20 12.5523 19.5523 13 19 13H5C4.44772 13 4 12.5523 4 12Z"
                           fill="#3D484C"/>
                 </symbol>
+                <symbol fill="none" id="fetm-icon-star" viewBox="0 0 24 24">
+                    <path d="M12.0012 16.9998L6.12321 20.5898L7.72121 13.8898L2.49121 9.40976L9.35621 8.85976L12.0012 2.49976L14.6462 8.85976L21.5122 9.40976L16.2812 13.8898L17.8792 20.5898L12.0012 16.9998Z" fill="#3858E9"/>
+                </symbol>
+                <symbol fill="none" id="fetm-icon-link" viewBox="0 0 24 24">
+                    <path d="M18.0001 13.4998V19.4998C18.0001 20.0303 17.7894 20.539 17.4143 20.9141C17.0392 21.2891 16.5305 21.4999 16.0001 21.4999H5.00001C4.46958 21.4999 3.96087 21.2891 3.58579 20.9141C3.21071 20.539 3 20.0303 3 19.4998V8.49977C3 7.96933 3.21071 7.46062 3.58579 7.08555C3.96087 6.71047 4.46958 6.49976 5.00001 6.49976H11.0001" stroke="#3858E9" stroke-width="2.02501" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M15 3.5H21V9.50004" stroke="#3858E9" stroke-width="2.02501" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 14.5001L21.0001 3.5" stroke="#3858E9" stroke-width="2.02501" stroke-linecap="round" stroke-linejoin="round"/>
+                </symbol>
             </svg>
+
+            <script>
+                ( function () {
+                    var section = document.querySelector( '.wpc-pro-bnf-sect-rvw' );
+                    if ( ! section ) {
+                        return;
+                    }
+                    // Delegate from the whole section so the videos under the "View more" area work too.
+                    section.addEventListener( 'click', function ( e ) {
+                        var btn = e.target.closest( '.wpc-pro-bnf-rvw-video-btn' );
+                        if ( ! btn ) {
+                            return;
+                        }
+                        var card = btn.closest( '.wpc-pro-bnf-rvw-video' );
+                        var id   = card && card.getAttribute( 'data-ytid' );
+                        if ( ! id ) {
+                            return;
+                        }
+                        var iframe = document.createElement( 'iframe' );
+                        iframe.className = 'wpc-pro-bnf-rvw-video-iframe';
+                        iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1';
+                        iframe.title = 'YouTube video player';
+                        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+                        iframe.setAttribute( 'referrerpolicy', 'strict-origin-when-cross-origin' );
+                        iframe.setAttribute( 'allowfullscreen', '' );
+                        iframe.frameBorder = '0';
+                        card.innerHTML = '';
+                        card.appendChild( iframe );
+                    } );
+                } )();
+            </script>
 
             <?php
         }
+    }
+
+    /**
+     * Renders a single video review card (lazy YouTube facade) for the "Trusted by WordPress Professionals" section.
+     *
+     * @param string $video_id YouTube video ID.
+     */
+    protected function renderRvwVideoCard( $video_id ) {
+        $vid = preg_replace( '/[^A-Za-z0-9_-]/', '', $video_id );
+        ?>
+        <div class="wpc-pro-bnf-rvw-card wpc-pro-bnf-rvw-video" data-ytid="<?php echo esc_attr( $vid ); ?>">
+            <button type="button" class="wpc-pro-bnf-rvw-video-btn" aria-label="<?php echo esc_attr_x( 'Play video', 'benefits-landing', 'filter-everything' ); ?>">
+                <img class="wpc-pro-bnf-rvw-video-thumb"
+                     src="<?php echo esc_url( 'https://i.ytimg.com/vi/' . $vid . '/maxresdefault.jpg' ); ?>"
+                     onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/<?php echo $vid; ?>/hqdefault.jpg';"
+                     alt="" loading="lazy">
+                <span class="wpc-pro-bnf-rvw-video-play" aria-hidden="true">
+                    <svg viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/>
+                        <path d="M45 24 27 14v20z" fill="#FFFFFF"/>
+                    </svg>
+                </span>
+            </button>
+        </div>
+        <?php
+    }
+
+    /**
+     * Renders a single text review card for the "Trusted by WordPress Professionals" section.
+     *
+     * @param array $rv Review data: author, date (Y-m-d), url, text.
+     */
+    protected function renderRvwReviewCard( $rv ) {
+        ?>
+        <div class="wpc-pro-bnf-rvw-card wpc-pro-bnf-rvw-text">
+            <div class="wpc-pro-bnf-rvw-head">
+                <span class="wpc-pro-bnf-rvw-author"><?php echo esc_html( $rv['author'] ); ?></span>
+                <span class="wpc-pro-bnf-rvw-time"><?php echo esc_html( sprintf( _x( '%s ago', 'benefits-landing', 'filter-everything' ), human_time_diff( strtotime( $rv['date'] ) ) ) ); ?></span>
+            </div>
+            <div class="wpc-pro-bnf-rvw-stars">
+                <?php for ( $s = 0; $s < 5; $s++ ) : ?><svg width="20" height="20"><use href="#fetm-icon-star"/></svg><?php endfor; ?>
+            </div>
+            <p class="wpc-pro-bnf-rvw-text-body"><?php echo esc_html( $rv['text'] ); ?></p>
+            <a class="wpc-pro-bnf-rvw-link" href="<?php echo esc_url( $rv['url'] ); ?>" target="_blank" rel="noopener noreferrer">
+                <?php echo esc_html_x( 'Read more on CodeCanyon', 'benefits-landing', 'filter-everything' ); ?>
+                <svg width="20" height="20"><use href="#fetm-icon-link"/></svg>
+            </a>
+        </div>
+        <?php
     }
 
     public function getLabel()

@@ -1,5 +1,5 @@
 /*!
- * Filter Everything admin 1.9.2.1
+ * Filter Everything admin 1.9.2.2
  */
 :root {
     --wpc-pro-color: #3858E9;
@@ -1925,8 +1925,7 @@ a.wpc-location-preview.display-none, a.wpc-location-preview-not-pro.display-none
 .button.wpc-xml-loader:focus {
     position: relative;
     overflow: hidden;
-    background: repeating-linear-gradient(135deg, #2271b1 0 10px, #4398dc 0 20px) 0/0% no-repeat,
-    #f6f7f7;
+    background: repeating-linear-gradient(135deg, #3858E9 0 10px, #506df4 0 20px) 0 / 0 no-repeat, #f6f7f7;
     animation: fillTo10 2s ease-in-out forwards;
 }
 
@@ -2410,7 +2409,7 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
 .wpc-available-in-pro-button {
     text-decoration: none;
     background: transparent;
-    padding: 8px 20px;
+    padding: 8px 12px;
     border-radius: 2px;
     color: var(--wpc-pro-color);
     display: inline-flex;
@@ -2418,20 +2417,20 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
     align-items: center;
     border: 1px solid var(--wpc-pro-color);
 }
-
 .wpc-available-in-pro-button:hover {
     opacity: 0.8;
 }
 
 .wpc-available-in-pro-button:focus, .wpc-available-in-pro-button:active {
-    color: #fff;
     box-shadow: none;
 }
 
 .wpc-available-in-pro-button span {
     margin-left: 8px;
 }
-
+.locale-de-de .wpc-available-in-pro-button span{
+    margin-left: 2px;
+}
 .wpc-available-in-pro-button:hover {
     color: var(--wpc-pro-color);
 }
@@ -2535,7 +2534,7 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
     font-size: 15px;
     color: #000000;
     vertical-align: middle;
-    line-height: 130%;
+    line-height: 140%;
 }
 
 .flrt-upgrade-to-pro-popup-tr-first .flrt-upgrade-to-pro-popup-td {
@@ -2569,10 +2568,9 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
     width: 24px;
     min-height: 24px;
     min-width: 24px;
-    background-image: url('data:image/svg+xml,%3Csvg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M20.25 6.75L9.75 17.25L4.5 12" stroke="%233858E9" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 24px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin: 0 auto;
 }
 
@@ -2604,7 +2602,8 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
 }
 
 .flrt-upgrade-to-pro-popup-center-col:last-child {
-    font-weight: 600;
+    font-weight: 700;
+    /*color: var(--wpc-pro-color);*/
 }
 
 .flrt-upgrade-to-pro-popup-see-all-container {

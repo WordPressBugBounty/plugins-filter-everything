@@ -94,21 +94,21 @@ class Swatches
             $wrapper_class = '';
 
             if ( $image_src ) {
-                $swatch = '<img src="'.$image_src.'" class="wpc-term-image" />';
+                $swatch = '<img src="'.esc_url( $image_src ).'" class="wpc-term-image" />';
                 $wrapper_class = ' wpc-term-swatch-image';
             } else {
                 $maybe_color = flrt_get_term_swatch_color( $term_object->term_id, $filter );
                 if ( $maybe_color ) {
-                    $swatch = '<span class="wpc-term-swatch" style="background-color: '.$maybe_color.'"></span>';
+                    $swatch = '<span class="wpc-term-swatch" style="background-color: '.esc_attr( $maybe_color ).'"></span>';
                 } else {
                     $swatch = '<span class="wpc-term-swatch wpc-no-swatch-yet"></span>';
                     $wrapper_class = ' wpc-term-swatch-no-image';
                 }
             }
 
-            $link_attributes .= ' title="'.$term_object->name.'"';
+            $link_attributes .= ' title="'.esc_attr( $term_object->name ).'"';
             $term_html = '<a '.$link_attributes.'><span class="wpc-term-swatch-wrapper'.$wrapper_class.'">' . $swatch . '</span> ';
-            $term_html .= '<span class="wpc-term-name">' . $term_object->name . '</span></a>';
+            $term_html .= '<span class="wpc-term-name">' . esc_html( $term_object->name ) . '</span></a>';
         }
 
         return $term_html;
@@ -315,14 +315,14 @@ class Swatches
         if ( $image_id ) {
             $maybe_image = wp_get_attachment_image_url( $image_id, 'thumbnail' );
             if ( $maybe_image ) {
-                echo '<img src="'.$maybe_image.'" class="wpc-term-preview" />'."\r\n";
+                echo '<img src="'.esc_url( $maybe_image ).'" class="wpc-term-preview" />'."\r\n";
                 return true;
             }
         }
 
         $color = get_term_meta( $term_id, $color_key, true );
         if ( $color ) {
-            echo '<div class="wpc-term-preview" style="background-color: '.$color.';"></div>'."\r\n";
+            echo '<div class="wpc-term-preview" style="background-color: '.esc_attr( $color ).';"></div>'."\r\n";
             return true;
         } else {
             echo '<div class="wpc-term-preview" style="background-color: transparent;"></div>'."\r\n";

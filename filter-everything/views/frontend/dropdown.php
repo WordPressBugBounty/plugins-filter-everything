@@ -64,6 +64,7 @@ if ( $is_swatch ){
                     foreach ( $terms as $id => $term_object ) {
                         $disabled          = 0;
                         $data_image        = '';
+                        $data_color        = '';
                         $selected          = ( in_array( $term_object->slug, $filter['values'] ) ) ? 1 : 0;
                         $term_hidden_class = '';
                         $data_count        = '';
@@ -76,8 +77,8 @@ if ( $is_swatch ){
                         if ( $is_brand && ! $is_swatch ) {
                             $src = flrt_get_term_brand_image( $term_object->term_id, $filter );
                             if ( $src ) {
-                                $data_image = ' data-brand=' . $src . '';
-                                $preload_html .= '<img class="wpc-preload-img" src='. $src .' />'."\r\n";
+                                $data_image = ' data-brand="' . esc_url( $src ) . '"';
+                                $preload_html .= '<img class="wpc-preload-img" src="'. esc_url( $src ) .'" />'."\r\n";
                             }
 
                             if ( $filter['show_term_names'] === 'no' ) {
@@ -89,14 +90,14 @@ if ( $is_swatch ){
                             $src = flrt_get_term_swatch_image( $term_object->term_id, $filter );
 
                             if ( $src ) {
-                                $data_image = ' data-image=' . $src . '';
-                                $preload_html .= '<img class="wpc-preload-img" src='. $src .' />'."\r\n";
+                                $data_image = ' data-image="' . esc_url( $src ) . '"';
+                                $preload_html .= '<img class="wpc-preload-img" src="'. esc_url( $src ) .'" />'."\r\n";
                             } else {
                                 $maybe_color = flrt_get_term_swatch_color( $term_object->term_id, $filter );
                                 if ( $maybe_color ) {
-                                    $data_color = ' data-color=' . $maybe_color . '';
+                                    $data_color = ' data-color="' . esc_attr( $maybe_color ) . '"';
                                 } else {
-                                    $data_color = ' data-color=none';
+                                    $data_color = ' data-color="none"';
                                 }
                             }
 
@@ -106,7 +107,7 @@ if ( $is_swatch ){
                         }
 
                         if( $set['show_count']['value'] === 'yes' && $use_select2 ) {
-                            $data_count        = ' data-count=' . $term_object->cross_count;
+                            $data_count        = ' data-count="' . esc_attr( $term_object->cross_count ) . '"';
                         }
 
                         $rating = 0;
@@ -116,10 +117,10 @@ if ( $is_swatch ){
                             if ($rating < 1 || $rating > 5) {
                                 $rating = 0;
                             }
-                            $data_rating = ' data-star-rating=' . $rating;
+                            $data_rating = ' data-star-rating="' . (int) $rating . '"';
                         }
                         ?>
-                        <option<?php echo esc_html( $data_image ); echo esc_html( $data_color ); echo esc_html( $data_count ); echo esc_html( $data_rating );?> class="wpc-term-count-<?php echo esc_attr( $term_object->cross_count ); ?> wpc-term-id-<?php echo esc_attr($term_object->term_id); echo esc_attr( $term_hidden_class ); ?>" value="<?php echo esc_attr( $term_object->term_id ); ?>" <?php selected( 1, $selected ); ?> <?php disabled( 1, $disabled ); ?> data-wpc-link="<?php echo esc_attr( $url_manager->getTermUrl( $term_object->slug, $filter['e_name'], $filter['entity'] ) ); ?>" id="wpc-option-<?php echo esc_attr( $filter['entity'] ); ?>-<?php echo esc_attr($filter['e_name']); ?>-<?php echo esc_attr( $id ); ?>">
+                        <option<?php echo $data_image . $data_color . $data_count . $data_rating; // data-* values are esc_attr/esc_url-escaped and quoted above ?> class="wpc-term-count-<?php echo esc_attr( $term_object->cross_count ); ?> wpc-term-id-<?php echo esc_attr($term_object->term_id); echo esc_attr( $term_hidden_class ); ?>" value="<?php echo esc_attr( $term_object->term_id ); ?>" <?php selected( 1, $selected ); ?> <?php disabled( 1, $disabled ); ?> data-wpc-link="<?php echo esc_attr( $url_manager->getTermUrl( $term_object->slug, $filter['e_name'], $filter['entity'] ) ); ?>" id="wpc-option-<?php echo esc_attr( $filter['entity'] ); ?>-<?php echo esc_attr($filter['e_name']); ?>-<?php echo esc_attr( $id ); ?>">
                             <?php
                             if ($rating > 0){
                                 if($use_select2){

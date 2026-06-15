@@ -2257,12 +2257,21 @@ function flrt_add_pro_promo_fields( $defaultFields, $filterFields )
 
 function flrt_pro_features_link()
 {
-    return 'https://layout.filtereverything.pro/#why-choose-pro';
+    return 'https://filtereverything.pro/?utm_source=free_plugin&utm_medium=internal&utm_campaign=free_plugin_upgrade&utm_content=popup_features_lnk#why-choose-pro';
 }
 
 function flrt_unlock_pro_link( $utm_content = '' )
 {
     return 'https://filtereverything.pro/pricing/?utm_source=free_plugin&utm_medium=internal&utm_campaign=free_plugin_upgrade&utm_content=' . $utm_content;
+}
+
+/**
+ * Link to the refund policy. Currently a FAQ anchor on the main landing page;
+ * will point to a dedicated refund-policy page once that exists.
+ */
+function flrt_refund_policy_link()
+{
+    return 'https://filtereverything.pro/#refund-policy';
 }
 
 

@@ -1,5 +1,5 @@
 /*!
- * Filter Everything 1.9.2.1
+ * Filter Everything 1.9.2.2
  */
 .wpc-pro-bnf-page-wrap,
 .wpc-pro-bnf-page-wrap * {
@@ -137,7 +137,7 @@
 .wpc-pro-bnf-sect-1-trst-scl-card {
     position: absolute;
     background: #f8faff;
-    width: 42.13cqi;
+    width: 42.83cqi;
     height: 45.8cqi;
     padding: 4cqi;
     border-radius: 5cqi;
@@ -163,7 +163,7 @@
 
 .wpc-pro-bnf-sect-1-trst-scl-big-number {
   font-size: 7.34cqi;
-  /*font-weight: 700;*/
+  font-weight: 600;
   /*color: #3858E9;*/
   line-height: 130%;
   margin: 0;
@@ -171,7 +171,7 @@
 
 .wpc-pro-bnf-sect-1-trst-scl-big-number-sls {
     font-size: 7.34cqi;
-    /*font-weight: 700;*/
+    font-weight: 600;
     /*color: #3858E9;*/
     line-height: 130%;
     margin: 2.96cqi 0 2.2cqi 0;
@@ -292,22 +292,19 @@
 }
 
 .wpc-pro-bnf-sect-1-anwp-list-item-icon {
-    background-image: url('data:image/svg+xml,%3Csvg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M20.25 6.75L9.75 17.25L4.5 12" stroke="%233858E9" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E');
-
-    background-repeat: no-repeat;
-    background-size: 24px 24px;
-    background-position: center;
     width: 24px;
     height: 24px;
     min-width: 24px;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     box-sizing: border-box;
 }
 
 .wpc-pro-bnf-sect-1-anwp-list-item-text {
     font-size: 16px;
     line-height: 130%;
-    font-weight: 600;
+    /*font-weight: 600;*/
     color: #1F2028;
 }
 
@@ -545,6 +542,7 @@
     align-items: flex-start;
     justify-content: center;
     padding-left: 47px;
+    margin-left: 24px;
     border-left: 1px solid #C7D1E2;
 }
 
@@ -556,6 +554,7 @@
     align-items: flex-start;
     justify-content: center;
     padding-left: 47px;
+    margin-left: 24px;
     border-left: 1px solid #C7D1E2;
 }
 
@@ -575,7 +574,7 @@
     font-size: 18px;
     line-height: 160%;
     font-weight: 400;
-    color: #1F2028;
+    color: #5A6472;
 }
 
 
@@ -665,7 +664,7 @@
 
 /* Bottom 2 — shifted by 1 column */
 .wpc-pro-bnf-sect-4-dupl-wrap {
-    grid-column: 2 / 4;
+    grid-column: 1 / 3;
     grid-row: 4;
     display: flex;
     flex-direction: column;
@@ -676,7 +675,7 @@
 }
 
 .wpc-pro-bnf-sect-4-extr-wrap {
-    grid-column: 4 / 6;
+    grid-column: 3 / 5;
     grid-row: 4;
     display: flex;
     flex-direction: column;
@@ -917,15 +916,12 @@
 }
 
 .wpc-pro-bnf-sect-5-default-item-icon {
-    background-image: url('data:image/svg+xml,%3Csvg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M20.25 6.75L9.75 17.25L4.5 12" stroke="%233858E9" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E');
-
-    background-repeat: no-repeat;
-    background-size: 24px 24px;
-    background-position: center;
     width: 24px;
     height: 24px;
     min-width: 24px;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     box-sizing: border-box;
 }
 
@@ -1077,7 +1073,7 @@
 
 .fetm-row .fetm-feature {
     font-size: 16px;
-    line-height: 130%;
+    line-height: 1.5;
     font-weight: 400;
     color: #1F2028;
 }
@@ -1126,13 +1122,12 @@
     display: none !important;
 }
 
-.fetm-toggle-checkbox:checked ~ .fetm-freevspro-bottom .fetm-toggle-btn::after {
-    content: "View less";
-    border-image: repeating-linear-gradient(to left, #3858E9 0%, #3858E9 4px, transparent 4px, transparent 8px) 1;
-    font-size: 18px;
-    line-height: 130%;
-    font-weight: 600;
-    color: #3858E9;
+.fetm-toggle-checkbox:checked ~ .fetm-freevspro-bottom .fetm-toggle-text-more {
+    display: none;
+}
+
+.fetm-toggle-checkbox:checked ~ .fetm-freevspro-bottom .fetm-toggle-text-less {
+    display: inline-block;
 }
 
 .fetm-toggle-btn {
@@ -1145,8 +1140,7 @@
     color: #3858E9;
 }
 
-.fetm-toggle-btn::after {
-    content: "View more";
+.fetm-toggle-text {
     display: inline-block;
     margin-right: 12px;
     border-bottom: 1px solid transparent;
@@ -1155,6 +1149,10 @@
     line-height: 130%;
     font-weight: 600;
     color: #3858E9;
+}
+
+.fetm-toggle-text-less {
+    display: none;
 }
 
 .fetm-toggle-btn::before {
@@ -1484,4 +1482,245 @@
         padding-left: 14px;
         padding-right: 14px;
     }
+}
+
+/* ---------------- Reviews section: "Trusted by WordPress Professionals" */
+.wpc-pro-bnf-sect-rvw {
+    width: 100%;
+}
+
+.wpc-pro-bnf-sect-rvw-title {
+    width: 100%;
+    text-align: center;
+    margin-top: 132px;
+    margin-bottom: 16px;
+    font-size: 40px;
+    line-height: 130%;
+    font-weight: 600;
+    color: #1F2028;
+}
+
+.wpc-pro-bnf-sect-rvw-subtitle {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 60px;
+    font-size: 18px;
+    line-height: 160%;
+    font-weight: 400;
+    color: #5A6472;
+}
+
+.wpc-pro-bnf-sect-rvw-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    align-items: stretch;
+}
+
+.wpc-pro-bnf-rvw-card {
+    background-color: #fff;
+    border: 1px solid #E8ECF4;
+    border-radius: 12px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+}
+
+/* --- text review card --- */
+.wpc-pro-bnf-rvw-text {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 28px;
+}
+
+.wpc-pro-bnf-rvw-head {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.wpc-pro-bnf-rvw-author {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1F2028;
+}
+
+.wpc-pro-bnf-rvw-time {
+    font-size: 14px;
+    font-weight: 400;
+    color: #6B7280;
+}
+
+.wpc-pro-bnf-rvw-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.wpc-pro-bnf-rvw-stars svg {
+    width: 20px;
+    height: 20px;
+    flex: none;
+}
+
+.wpc-pro-bnf-rvw-text-body {
+    flex: 1 1 0;
+    min-height: 0;
+    margin: 0;
+    overflow: hidden;
+    color: #1F2028;
+    font-size: 16px;
+    line-height: 180%;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+.wpc-pro-bnf-rvw-link,
+.wpc-pro-bnf-rvw-link:visited,
+.wpc-pro-bnf-rvw-link:hover,
+.wpc-pro-bnf-rvw-link:focus {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: #1F2028;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.wpc-pro-bnf-rvw-link svg {
+    flex: none;
+}
+
+/* --- video review card (lazy YouTube facade) --- */
+.wpc-pro-bnf-rvw-video {
+    position: relative;
+    cursor: pointer;
+    padding: 28px;
+}
+
+.wpc-pro-bnf-rvw-video-btn {
+    display: block;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background-color: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.wpc-pro-bnf-rvw-video-thumb {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.wpc-pro-bnf-rvw-video-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 68px;
+    height: 48px;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    transition: transform 0.2s ease;
+}
+
+.wpc-pro-bnf-rvw-video-play svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.4));
+}
+
+.wpc-pro-bnf-rvw-video-btn:hover .wpc-pro-bnf-rvw-video-play {
+    transform: translate(-50%, -50%) scale(1.08);
+}
+
+.wpc-pro-bnf-rvw-video-iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: 8px;
+}
+
+/* responsive: title scales to match the sibling section headings */
+@media screen and (max-width: 1280px) {
+    .wpc-pro-bnf-sect-rvw-title {
+        font-size: 38px;
+    }
+}
+
+@media screen and (max-width: 1210px) {
+    .wpc-pro-bnf-sect-rvw-title {
+        font-size: 34px;
+    }
+}
+
+/* reviews: "View more / View less" — first row stays visible, the rest collapses with a fade-out peek */
+.wpc-pro-bnf-sect-rvw-more {
+    position: relative;
+    overflow: hidden;
+    max-height: 95px;
+    margin-top: 24px;
+    transition: max-height 0.45s ease;
+}
+
+#wpc-rvw-toggle:checked ~ .wpc-pro-bnf-sect-rvw-more {
+    max-height: 1400px;
+}
+
+.wpc-pro-bnf-sect-rvw-fade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 95px;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 1));
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+#wpc-rvw-toggle:checked ~ .wpc-pro-bnf-sect-rvw-more .wpc-pro-bnf-sect-rvw-fade {
+    opacity: 0;
+}
+
+.wpc-pro-bnf-sect-rvw-bottom {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+
+#wpc-rvw-toggle:checked ~ .wpc-pro-bnf-sect-rvw-bottom .fetm-toggle-text-more {
+    display: none;
+}
+
+#wpc-rvw-toggle:checked ~ .wpc-pro-bnf-sect-rvw-bottom .fetm-toggle-text-less {
+    display: inline-block;
+}
+
+#wpc-rvw-toggle:checked ~ .wpc-pro-bnf-sect-rvw-bottom .fetm-toggle-btn::before {
+    transform: rotate(180deg);
+}
+
+/* sect-4 "What does PRO unlock?" — left-align the icon, title and text instead of centering them */
+.wpc-pro-bnf-sect-4-gseo-wrap,
+.wpc-pro-bnf-sect-4-flwp-wrap,
+.wpc-pro-bnf-sect-4-flst-wrap,
+.wpc-pro-bnf-sect-4-dupl-wrap,
+.wpc-pro-bnf-sect-4-extr-wrap {
+    align-items: flex-start;
+}
+
+.wpc-pro-bnf-sect-4-item-title,
+.wpc-pro-bnf-sect-4-item-desc {
+    text-align: left;
 }

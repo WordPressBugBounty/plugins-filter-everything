@@ -1049,6 +1049,13 @@ class Plugin
         if( ! get_option( 'wpc_filter_experimental' ) ){
             add_option('wpc_filter_experimental', $defaultSettings->wpc_filter_experimental() );
         }
+
+        // Stamp the current version on fresh installs so 'update'-triggered
+        // admin notices (see AdminNotices) fire only when an existing install is
+        // later updated, never on a brand-new installation.
+        if ( ! get_option( 'flrt_version' ) ) {
+            add_option( 'flrt_version', FLRT_PLUGIN_VER );
+        }
     }
 
     /**

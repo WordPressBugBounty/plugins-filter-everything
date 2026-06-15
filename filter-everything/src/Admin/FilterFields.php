@@ -1623,9 +1623,9 @@ class FilterFields
         return false;
     }
 
-    public function getErrorMessage( $code = 20 )
+    public function getErrorMessage( $code = 20, $limit = null )
     {
-        $messages = $this->getErrorsList();
+        $messages = self::getErrorsList($limit);
 
         if( isset( $messages[$code] ) ){
             return $messages[$code];
@@ -1736,8 +1736,10 @@ class FilterFields
         return $name;
     }
 
-    public static function getErrorsList()
+    public static function getErrorsList($limit = null)
     {
+        $effectiveLimit = is_int($limit) ? $limit : FilterSet::FREE_LIMIT_NEW;
+
         $errors = array(
             // Set errors
             20 => esc_html__('An error occurred. Filter Set fields were not saved, please try again.', 'filter-everything'),
@@ -1800,8 +1802,10 @@ class FilterFields
             91 => esc_html__('Error: you can not update settings because the Filter Everything Pro plugin is locked. Please, ask your site Superadmin to enter the plugin license key to unlock it.', 'filter-everything' ),
             92 => wp_kses(
                 sprintf(
-                    __('The free version allows up to 3 filter sets per post type. Upgrade to <a href=\'%1$s\' target=\'_blank\'>PRO</a> for unlimited filter sets.', 'filter-everything' ),
-                    esc_url(FLRT_PLUGIN_URL .'/?get_pro=true') ),
+                    /* translators: 1: maximum number of free filter sets per post type, 2: PRO upgrade URL */
+                    __('The free version allows up to %1$d filter sets per post type. Upgrade to <a href=\'%2$s\' target=\'_blank\'>PRO</a> for unlimited filter sets.', 'filter-everything' ),
+                    $effectiveLimit,
+                    esc_url(FLRT_PLUGIN_URL .'/pricing/?utm_source=free_plugin&utm_medium=internal&utm_campaign=free_plugin_upgrade&utm_content=msg_three_set') ),
                 array(
                     'a' => array(
                         'href'=> true,

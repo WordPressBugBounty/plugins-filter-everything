@@ -290,6 +290,14 @@ function flrt_get_taxonomy_location_terms( $taxonomy, $full_label = true )
     );
 
     $terms          = get_terms( $args );
+
+    // The taxonomy may be unavailable (e.g. WooCommerce deactivated while a
+    // Filter Set still targets product_cat) — get_terms() then returns a
+    // WP_Error. Treat it as "no terms" so it never propagates to filters as an array.
+    if ( is_wp_error( $terms ) ) {
+        $terms = array();
+    }
+
     $taxonomyObject = get_taxonomy( $taxonomy );
 
     $label          = isset( $taxonomyObject->labels->singular_name ) ? $taxonomyObject->labels->singular_name : flrt_ucfirst( $taxonomy );

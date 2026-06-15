@@ -4,6 +4,12 @@ if (!defined('ABSPATH')) {
 }
 ?>
 <div id="flrt-pro-modal-overlay">
+    <svg style="display: none;" xmlns="http://www.w3.org/2000/svg">
+        <symbol fill="none" id="flrt-icon-check-double" viewBox="0 0 24 24">
+            <path d="M17.75 6.75L7.25 17.25L2 12" stroke="#3858E9" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M22.75 6.75L12.25 17.25" stroke="#3858E9" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"/>
+        </symbol>
+    </svg>
     <div class="flrt-upgrade-to-pro-popup-modal-wrapper">
         <div class="flrt-upgrade-to-pro-popup-modal">
             <div class="flrt-upgrade-to-pro-popup-close-btn" id="flrt-close-modal-btn">
@@ -24,53 +30,54 @@ if (!defined('ABSPATH')) {
                     </tr>
                     </thead>
                     <tbody>
+                    <?php $flrt_is_woo = flrt_is_woocommerce(); ?>
                     <tr class="flrt-upgrade-to-pro-popup-tr-first">
+                        <td class="flrt-upgrade-to-pro-popup-td"><?php echo esc_html_x('Filter any content — page builders, plugins, or even custom code', 'benefits-landing', 'filter-everything'); ?></td>
+                        <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
+                            <div class="flrt-upgrade-to-pro-popup-dash-icon"></div>
+                        </td>
+                        <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
+                            <div class="flrt-upgrade-to-pro-popup-checkmark-icon"><svg width="24" height="24"><use href="#flrt-icon-check-double"/></svg></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="flrt-upgrade-to-pro-popup-td"><?php echo '∞ ' . esc_html_x('Unlimited Filter Sets', 'benefits-landing', 'filter-everything'); ?></td>
+                        <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
+                            <div class="flrt-upgrade-to-pro-popup-dash-icon"></div>
+                        </td>
+                        <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
+                            <div class="flrt-upgrade-to-pro-popup-checkmark-icon"><svg width="24" height="24"><use href="#flrt-icon-check-double"/></svg></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="flrt-upgrade-to-pro-popup-td"><?php echo esc_html_x('User-friendly mobile filters widget', 'benefits-landing', 'filter-everything'); ?></td>
+                        <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
+                            <div class="flrt-upgrade-to-pro-popup-dash-icon"></div>
+                        </td>
+                        <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
+                            <div class="flrt-upgrade-to-pro-popup-checkmark-icon"><svg width="24" height="24"><use href="#flrt-icon-check-double"/></svg></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="flrt-upgrade-to-pro-popup-td"><?php echo esc_html_x('Full SEO control for filtered pages', 'benefits-landing', 'filter-everything'); ?></td>
+                        <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
+                            <div class="flrt-upgrade-to-pro-popup-dash-icon"></div>
+                        </td>
+                        <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
+                            <div class="flrt-upgrade-to-pro-popup-checkmark-icon"><svg width="24" height="24"><use href="#flrt-icon-check-double"/></svg></div>
+                        </td>
+                    </tr>
+                    <tr class="flrt-upgrade-to-pro-popup-tr-last">
                         <td class="flrt-upgrade-to-pro-popup-td"><?php
-                            echo esc_html__('Filter any post list —', 'filter-everything')
-                                    . '<br>'
-                                    . esc_html__('page builders & custom queries', 'filter-everything');
+                            echo $flrt_is_woo
+                                ? esc_html_x('Accurate filtering of out-of-stock and variable products', 'benefits-landing', 'filter-everything')
+                                : esc_html_x('Auto-hiding empty filters', 'benefits-landing', 'filter-everything');
                             ?></td>
                         <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
                             <div class="flrt-upgrade-to-pro-popup-dash-icon"></div>
                         </td>
                         <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
-                            <div class="flrt-upgrade-to-pro-popup-checkmark-icon"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="flrt-upgrade-to-pro-popup-td"><?php echo esc_html__('∞ Create unlimited filter sets', 'filter-everything'); ?></td>
-                        <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
-                            <div class="flrt-upgrade-to-pro-popup-dash-icon"></div>
-                        </td>
-                        <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
-                            <div class="flrt-upgrade-to-pro-popup-checkmark-icon"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="flrt-upgrade-to-pro-popup-td"><?php echo esc_html__('Built-in mobile filter widget', 'filter-everything'); ?></td>
-                        <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
-                            <div class="flrt-upgrade-to-pro-popup-dash-icon"></div>
-                        </td>
-                        <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
-                            <div class="flrt-upgrade-to-pro-popup-checkmark-icon"></div>
-                        </td>
-                    </tr>
-                    <tr class="flrt-upgrade-to-pro-popup-tr-last">
-                        <td class="flrt-upgrade-to-pro-popup-td"><?php echo esc_html__('Accurate WooCommerce variation filtering', 'filter-everything'); ?></td>
-                        <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
-                            <div class="flrt-upgrade-to-pro-popup-dash-icon"></div>
-                        </td>
-                        <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
-                            <div class="flrt-upgrade-to-pro-popup-checkmark-icon"></div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="flrt-upgrade-to-pro-popup-td"><?php echo esc_html__('Hide empty filters', 'filter-everything'); ?></td>
-                        <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
-                            <div class="flrt-upgrade-to-pro-popup-dash-icon"></div>
-                        </td>
-                        <td class="flrt-upgrade-to-pro-popup-td flrt-upgrade-to-pro-popup-center-col">
-                            <div class="flrt-upgrade-to-pro-popup-checkmark-icon"></div>
+                            <div class="flrt-upgrade-to-pro-popup-checkmark-icon"><svg width="24" height="24"><use href="#flrt-icon-check-double"/></svg></div>
                         </td>
                     </tr>
                     </tbody>
@@ -79,7 +86,7 @@ if (!defined('ABSPATH')) {
                 <div class="flrt-upgrade-to-pro-popup-see-all-container">
                     <a href="<?php echo esc_url(flrt_pro_features_link()); ?>"
                        class="flrt-upgrade-to-pro-popup-see-all-link" target="_blank">
-                        <?php echo esc_html__('View all PRO features', 'filter-everything'); ?>
+                        <?php echo _x('View all PRO features', 'benefits-landing', 'filter-everything'); ?>
                         <div class="flrt-upgrade-to-pro-popup-link-icon"></div>
                     </a>
                 </div>

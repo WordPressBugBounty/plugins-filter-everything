@@ -81,7 +81,7 @@ class FiltersWidget extends \WP_Widget
         if( empty( $wpManager->getQueryVar('wpc_page_related_set_ids') ) ){
             $under_limit_filter_set = $fss->under_limit_filter_set($set_id);
             if( $debug_mode ){
-                $this->_debug_messages($under_limit_filter_set);
+                $this->_debug_messages($under_limit_filter_set, $fss, $set_id);
             }
             return false;
         }
@@ -619,7 +619,7 @@ class FiltersWidget extends \WP_Widget
      * Outputs Filters widget debug messages
      * @since 1.2.2
      */
-    private function _debug_messages($under_limit_filter_set = false){
+    private function _debug_messages($under_limit_filter_set = false, $fss = null, $set_id = 0){
         if ( defined('FLRT_FILTERS_PRO') ) {
             echo '<p class="wpc-debug-message">';
             echo sprintf(
@@ -632,23 +632,31 @@ class FiltersWidget extends \WP_Widget
             echo '</p>';
         } else {
             if ( is_singular() ) {
+                $limit = $fss ? $fss->getFreeLimitForPostType( get_post_type() ) : FilterSet::FREE_LIMIT_NEW;
                 echo '<p class="wpc-debug-message">';
                 echo sprintf(
                         wp_kses(
-                                __( 'The free version allows up to 3 filter sets per post type. Upgrade to <a href="%s">PRO</a> to display more filter sets.', 'filter-everything' ),
+                                /* translators: 1: maximum number of free filter sets per post type, 2: PRO upgrade URL */
+                                __( 'The free version allows up to %1$d filter sets per post type. Upgrade to <a href="%2$s">PRO</a> to display more filter sets.', 'filter-everything' ),
                                 array( 'a' => array('href' => true) )
                         ),
-                        esc_url(FLRT_PLUGIN_URL .'/?get_pro=true')
+                        $limit,
+                        esc_url(FLRT_PLUGIN_URL .'/pricing/?utm_source=free_plugin&utm_medium=internal&utm_campaign=free_plugin_upgrade&utm_content=msg_debug_three')
                 );
                 echo '</p>';
             } else if ( $under_limit_filter_set ) {
+                $post_type_field = $fss ? $fss->getPostTypeField($set_id) : [];
+                $post_type = !empty($post_type_field['post_type']['value']) ? $post_type_field['post_type']['value'] : '';
+                $limit = $fss ? $fss->getFreeLimitForPostType($post_type) : FilterSet::FREE_LIMIT_NEW;
                 echo '<p class="wpc-debug-message">';
                 echo sprintf(
                     wp_kses(
-                            __( 'The free version allows up to 3 filter sets per post type. Upgrade to <a href="%s">PRO</a> to display more filter sets.', 'filter-everything' ),
+                            /* translators: 1: maximum number of free filter sets per post type, 2: PRO upgrade URL */
+                            __( 'The free version allows up to %1$d filter sets per post type. Upgrade to <a href="%2$s">PRO</a> to display more filter sets.', 'filter-everything' ),
                         array( 'a' => array('href' => true) )
                     ),
-                    esc_url(FLRT_PLUGIN_URL .'/?get_pro=true')
+                    $limit,
+                    esc_url(FLRT_PLUGIN_URL .'/pricing/?utm_source=free_plugin&utm_medium=internal&utm_campaign=free_plugin_upgrade&utm_content=msg_debug_three')
                 );
                 echo '</p>';
             } else {

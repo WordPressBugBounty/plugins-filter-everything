@@ -146,10 +146,17 @@ if ( ! defined('ABSPATH') ) {
         ?>
     </script>
     <div id="wpc-filter-set-pro-dialog" style="display:none;">
+        <?php
+            $dialog_post_type_field = $filterSet->getPostTypeField($set_id);
+            $dialog_post_type = !empty($dialog_post_type_field['post_type']['value']) ? $dialog_post_type_field['post_type']['value'] : '';
+            $dialog_limit = $filterSet->getFreeLimitForPostType($dialog_post_type);
+        ?>
         <p><?php echo wp_kses(
                     sprintf(
-                            __('The free version allows up to 3 filter sets per post type. Upgrade to <a href=\'%1$s\' target=\'_blank\'>PRO</a> for unlimited filter sets.', 'filter-everything' ),
-                            esc_url(FLRT_PLUGIN_URL .'/?get_pro=true') ),
+                            /* translators: 1: maximum number of free filter sets per post type, 2: PRO upgrade URL */
+                            __('The free version allows up to %1$d filter sets per post type. Upgrade to <a href=\'%2$s\' target=\'_blank\'>PRO</a> for unlimited filter sets.', 'filter-everything' ),
+                            $dialog_limit,
+                            esc_url(FLRT_PLUGIN_URL .'/pricing/?utm_source=free_plugin&utm_medium=internal&utm_campaign=free_plugin_upgrade&utm_content=msg_three_set') ),
                     array(
                             'a' => array(
                                     'href'=> true,

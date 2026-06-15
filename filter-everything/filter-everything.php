@@ -2,8 +2,8 @@
 /*
 Plugin Name: Filter Everything&nbsp;— WordPress & WooCommerce Filters
 Plugin URI: https://filtereverything.pro
-Description: Filters everything in WordPress & WooCommerce: Products, any Post types, by Any Criteria. Compatible with WPML, ACF and others popular. Supports AJAX.
-Version: 1.9.2.1
+Description: Instantly filter any WordPress content & WooCommerce products by attributes, taxonomies, custom fields + AJAX, Elementor, automatic filter creation.
+Version: 1.9.2.2
 Author: Andrii Stepasiuk
 Author URI: https://filtereverything.pro/about/
 Text Domain: filter-everything
@@ -31,7 +31,7 @@ if( ! class_exists( 'FlrtFilter' ) ):
             $this->define( 'FLRT_PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );
             $this->define( 'FLRT_PLUGIN_BASENAME', plugin_basename(__FILE__) );
             $this->define( 'FLRT_PLUGIN_SLUG', 'filter-everything-pro' );
-            $this->define( 'FLRT_PLUGIN_VER', '1.9.2.1' );
+            $this->define( 'FLRT_PLUGIN_VER', '1.9.2.2' );
             $this->define( 'FLRT_PLUGIN_URL', 'https://filtereverything.pro' );
             $this->define( 'FLRT_PLUGIN_TESTED_TO', '7.0' );
             $this->define( 'FLRT_PLUGIN_DEBUG', false );
@@ -122,6 +122,7 @@ if( ! class_exists( 'FlrtFilter' ) ):
             flrt_include('src/Admin/FilterFields.php');
             flrt_include('src/Admin/Admin.php');
             flrt_include('src/Admin/AdminHooks.php');
+            flrt_include('src/Admin/AdminNotices.php');
             flrt_include('src/Admin/MetaBoxes.php');
             flrt_include('src/Admin/Widgets/FiltersWidget.php');
             flrt_include('src/Admin/Widgets/ChipsWidget.php');
