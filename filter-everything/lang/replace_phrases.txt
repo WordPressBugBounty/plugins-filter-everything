@@ -1,0 +1,6 @@
+# One pair per block: original on one line, replacement on the next.
+# Blank line(s) separate pairs. Lines starting with # are comments.
+#
+# Example:
+# Old short phrase
+# New short phrase

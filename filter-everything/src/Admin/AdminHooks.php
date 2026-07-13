@@ -307,17 +307,7 @@ class AdminHooks
         $html = '';
 
         if ('where_filter' == $column_name) {
-            $set_settings_fields = $fss->getSettingsLocationTypeFields($post_id);
-
-            foreach ($set_settings_fields as $key => $attributes) {
-                if ($attributes['id'] == $fss->generateFieldId('post_name')) {
-                    $current_index = isset($attributes['value']) ? $attributes['value'] : '';
-                    $options = !empty($attributes['options']) ? $attributes['options'] : [];
-                    if (isset($options[$current_index]['data-link'])) {
-                        $link = esc_attr($options[$current_index]['data-link']);
-                    }
-                }
-            }
+            $link = flrt_filter_set_front_link($post_id);
 
             if ($under_limit_filter_set) {
                 $post_type_field = $filterSet->getPostTypeField($post_id);

@@ -108,6 +108,14 @@ class FilterFields
                 'default'       => 'checkboxes',
                 'instructions'  => '',
             ),
+            'show_range_list' => array(
+                'type'      => 'inProButton',
+                'pro_label' => flrt_pro_promo_label(),
+                'label'     => esc_html__('Show Range List', 'filter-everything'),
+                'class'     => 'wpc-field-show-range-list',
+                'default'   => '',
+                'tooltip'   => '',
+            ),
             'dropdown_label' => array(
                 'type'          => 'Text',
                 'label'         => esc_html__( 'Dropdown Label', 'filter-everything' ),
@@ -521,6 +529,11 @@ class FilterFields
             }
         }
 
+        if ( in_array( $filter['entity'], array( 'post_meta_num', 'tax_numeric')) !== false
+            && $filter['view'] === 'range' && (isset($filter['show_range_list']) && $filter['show_range_list'] === 'yes')) {
+            $short_entity .= ' wpc-view-range-list';
+        }
+
         $entity = $this->em->getEntityByFilter( $filter, $postType );
 
         if( $entity ){
@@ -625,6 +638,13 @@ class FilterFields
 
                 }
 
+                if (!defined('FLRT_FILTERS_PRO')) {
+                    if ($fieldKey === 'show_range_list') {
+                        $fieldData['value'] = '';
+                    }
+                }
+
+
                 if( $fieldKey === 'exclude' ){
                     // We always add terms even they are empty array to fill Select2 with related terms.
                     $fieldData['options'] = $terms;
@@ -728,8 +748,7 @@ class FilterFields
                 }else{
 
                     if( is_array( $value ) ){
-                        array_map( 'esc_html', $value );
-                        $sanitizedFilter[ $key ] = $value;
+                        $sanitizedFilter[ $key ] = map_deep( $value, 'esc_html' );
                     } else {
                         $sanitizedFilter[ $key ] = esc_html( $value );
                     }
@@ -1002,6 +1021,20 @@ class FilterFields
             $valid = false;
         }
 
+
+        if ( defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO && isset($filter['e_name'])) {
+            if (!empty($filter['entity'])) {
+                if (in_array($filter['entity'], array('post_meta_num', 'tax_numeric'))) {
+                    if (isset($filter['view']) && $filter['view'] === 'range' && !empty($filter['show_range_list']) && $filter['show_range_list'] === 'yes') {
+                        if (empty($filter['range_list_input'])) {
+                            $this->pushError(93, $filterID, 'range_list_input'); // Empty range_list.
+                            $valid = false;
+                        }
+                    }
+                }
+            }
+        }
+
         /**
          * View validations
          */
@@ -1168,6 +1201,17 @@ class FilterFields
     {
         $postData   = Container::instance()->getThePost();
         $data       = isset( $postData['validateData'] ) ? $postData['validateData'] : false;
+        // The current admin script sends a JSON string, but a stale (cached or
+        // un-rebuilt .min) copy still sends the bracket-serialized array —
+        // accept both instead of fataling on stripslashes(array) under PHP 8
+        if ( is_array( $data ) ) {
+            $data = wp_unslash( $data );
+        } elseif ( $data ) {
+            $data = json_decode( stripslashes( $data ), true );
+        }
+        if ( isset( $data['wpc_set_fields']['wp_filter_query_vars'] ) ) {
+            $data['wpc_set_fields']['wp_filter_query_vars'] = wp_slash( $data['wpc_set_fields']['wp_filter_query_vars'] );
+        }
         $response   = [];
 
         if( ! $data ){
@@ -1426,7 +1470,7 @@ class FilterFields
         ];
 
         $disabled_custom = true;
-        $value_to_custom = ( $savedValue['date_format'] && $dateType === $savedValue['date_type'] ) ? $savedValue['date_format'] : $default_formats[$dateType];
+        $value_to_custom = ( ! empty( $savedValue['date_format'] ) && $dateType === ( $savedValue['date_type'] ?? '' ) ) ? $savedValue['date_format'] : $default_formats[$dateType];
         if ( $value_to_custom && ! in_array( $value_to_custom, self::getPossibleDateFormats( $dateType ) ) ) {
             $disabled_custom = false;
             $field['value']  = 'other';
@@ -1813,6 +1857,8 @@ class FilterFields
                     )
                 )
             ),
+            93 => esc_html__('Error: The range list is empty. Please add values to the list.', 'filter-everything' ),
+
         );
 
         return $errors;

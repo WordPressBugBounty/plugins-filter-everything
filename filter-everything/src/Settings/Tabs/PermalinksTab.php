@@ -108,7 +108,7 @@ class PermalinksTab extends BaseSettings
         $this->registerSettings( $settings, $this->page, $this->optionName );
     }
 
-    private function movePostMetaNumInTheEnd( $saved_options )
+    public function movePostMetaNumInTheEnd( $saved_options )
     {
         $num_saved_options   = [];
         $other_saved_options = [];

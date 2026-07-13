@@ -23,7 +23,8 @@ class Input {
         'options',
         'textarea_rows',
         'multiple',
-        'title'
+        'title',
+        'button_name'
     );
 
     public $attributes;
@@ -158,13 +159,13 @@ class Submit extends Input {
 
     public function render(){
         $class = 'class';
-        if(!$this -> $class){
+        if(!$this->$class){
             $class = ' class="submit"';
         }
 
         $html = '<input '.$class.' type="submit"';
         $html .= $this -> renderAttributes();
-        $html .= ' value="'.$this -> value.'"';
+        $html .= ' value="'.$this->value.'"';
         $html .= ' />';
 
         return apply_filters( 'wpc_input_type_submit', $html, $this->getAttributes() );
@@ -321,5 +322,42 @@ class Wpeditor extends Input {
 class inProButton extends Input {
     public function render(){
         return flrt_unlock_in_pro();
+    }
+}
+
+class RangeList extends Input {
+    public function render(){
+        $html = '';
+        $disabled = '';
+        $range_list = $this->getAttribute('value');
+        if(!empty($range_list)){
+            foreach ($range_list as $key => $value) {
+                $html .= '<div class="range-list-value" data-list-number="' . $key .'">';
+                $html .= '<div class="wpc-range-list-inputs"><div><input class="wpc-range-list-min-value" type="number" name="' . $this->getAttribute('name' ) .'[' . $key . '][range_list_min_val]" placeholder="' . esc_html__('Min Value', 'filter-everything')  . '" value="' . $value['range_list_min_val'] . '"></div>';
+                $html .= '<div><input class="wpc-range-list-max-value" type="number" name="' . $this->getAttribute('name' ) .'[' . $key . '][range_list_max_val]" placeholder="' . esc_html__('Max Value', 'filter-everything')  . '" value="' . $value['range_list_max_val'] . '"></div>';
+                $html .= '<div><input type="text" class="wpc-range-list-range-text" name="' . $this->getAttribute('name' ) .'[' . $key . '][range_list_range_text]" placeholder="' . esc_html__('Label', 'filter-everything')  . '" value="' . $value['range_list_range_text'] . '"></div>';
+                $html .= '<div><button class="button remove-range-list-value">' . esc_html__('Remove', 'filter-everything') . '</button></div>';
+                $html .= '</div></div>';
+            }
+            $total = (int) (defined('FLRT_RANGE_LIST_LIMIT') && FLRT_RANGE_LIST_LIMIT ) ? FLRT_RANGE_LIST_LIMIT : 20;
+            if(count($range_list) > $total){
+                $disabled = ' disabled';
+            }
+        }
+
+        if(!empty($this->getAttribute('button_name'))){
+            if(!empty($this->getAttribute('class' ))){
+                $id = ' id="'.$this->getAttribute('id' ).'"';
+                $class = ' class="'.$this->getAttribute('class' ).' button"';
+            }
+            $html .= '<button';
+            $html .= ' name="'.$this->getAttribute('name' ).'"';
+            $html .= $id;
+            $html .= $class;
+            $html .= $disabled;
+            $html .= '>' . $this->getAttribute('button_name' );
+            $html .= '</button>'."\r\n";
+        }
+        return apply_filters( 'wpc_input_type_button', $html, $this->getAttributes() );
     }
 }

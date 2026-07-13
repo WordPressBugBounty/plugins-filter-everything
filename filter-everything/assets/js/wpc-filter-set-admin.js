@@ -1,5 +1,5 @@
 /*!
- * Filter Everything set admin 1.9.2.2
+ * Filter Everything set admin 1.9.3
  */
 (function($) {
     "use strict";
@@ -14,13 +14,30 @@
         let $spinner = $('#publishing-action .spinner');
         let requestParams          = {};
 
+        const keepFields = [
+            '_wpnonce',
+            '_flrt_nonce',
+            '_wp_http_referer',
+            'user_ID',
+            'action',
+            'originalaction',
+            'post_author',
+            'post_type',
+            'original_post_status',
+            'post_ID',
+            'post_title',
+            'save',
+            'post_status',
+            'wpc_filter_set_json_data',
+        ];
+
         $spinner.addClass( 'is-active' );
         /**
          * @todo checkboxes does not validates correctly because they send the same value !!! IMPORTANT
          * independently from checked status
          */
 
-        requestParams.validateData = wpcSerialize( $el );
+        requestParams.validateData = JSON.stringify(wpcSerialize( $el ));
 
         wp.ajax.post( 'wpc-validate-filters', requestParams )
             .always( function() {
@@ -28,7 +45,27 @@
             })
             .done( function( response ) {
                 filtersFormValid = true;
+
+                const wpcHiddenInput = document.createElement('input');
+                wpcHiddenInput.type = 'hidden';
+                wpcHiddenInput.name = 'wpc_filter_set_json_data';
+                wpcHiddenInput.value = JSON.stringify(wpcSerialize( $el ));
+                $el.append(wpcHiddenInput);
+
+                // Find the elements that need to be "disabled"
+                const $toDisable = $el.find('[name]').not(keepFields.map(n => `[name="${n}"]`).join(','));
+
+                // Save name and remove before submit
+                $toDisable.each(function() {
+                    $(this).attr('data-name', $(this).attr('name')).removeAttr('name');
+                });
+
                 $el.submit();
+
+                // Restore name after submit
+                $toDisable.each(function() {
+                    $(this).attr('name', $(this).attr('data-name')).removeAttr('data-name');
+                });
             })
             .fail( function( response ) {
 
@@ -649,42 +686,53 @@
             });
         });
 
-        $('body').on('change', '.wpc-field-view', function(){
-            let optionName = $(this).find('option:selected').text();
-            let optionVal  = $(this).find('option:selected').val();
-            let $divFilterItem = $(this).parents('.wpc-filter-item');
-            let target = $divFilterItem.find('.wpc-filter-head li.wpc-filter-view');
-            let allowedViews = ['checkboxes', 'radio', 'labels'];
-            target.text(optionName);
-
-            if( allowedViews.includes(optionVal) ){
-                $divFilterItem.find('.wpc-field-search-tr').show();
-                $divFilterItem.find('.wpc-field-more-less-tr').show();
+        $('body').on('change', '.wpc-field-show-range-list', function (){
+            let rangeListButtonChecked = $(this).prop( "checked" );
+            if( rangeListButtonChecked ){
+                $(".wpc-view-range").addClass('wpc-view-range-list');
             }else{
-                $divFilterItem.find('.wpc-field-search-tr').hide();
-                $divFilterItem.find('.wpc-field-more-less-tr').hide();
+                $(".wpc-view-range").removeClass('wpc-view-range-list');
+            }
+        });
+
+        $('body').on('change', '.wpc-field-view', function(){
+            const $this = $(this);
+            const $option = $this.find('option:selected');
+            const optionName = $option.text();
+            const optionVal  = $option.val();
+            const $divFilterItem = $this.parents('.wpc-filter-item');
+
+            // Update View Label in Header
+            $divFilterItem.find('.wpc-filter-head li.wpc-filter-view').text(optionName);
+
+            // Handle visibility of Search and More/Less fields
+            const allowedViews = ['checkboxes', 'radio', 'labels'];
+            const showExtraFields = allowedViews.includes(optionVal);
+            $divFilterItem.find('.wpc-field-search-tr, .wpc-field-more-less-tr').toggle(showExtraFields);
+
+            // Handle CSS classes for the fields table
+            const $fieldsTable = $divFilterItem.find('.wpc-form-fields-table');
+            const classesToRemove = 'wpc-view-checkboxes wpc-view-dropdown wpc-view-rating wpc-view-range selected-and-above-show';
+
+            // Map option values to their specific CSS classes
+            const viewClasses = {
+                'checkboxes': 'wpc-view-checkboxes',
+                'rating':     'wpc-view-rating',
+                'range':      'wpc-view-range',
+                'dropdown':   'wpc-view-dropdown'
+            };
+
+            // Reset classes first
+            $fieldsTable.removeClass(classesToRemove);
+
+            // Add specific class if exists in map
+            if (viewClasses[optionVal]) {
+                $fieldsTable.addClass(viewClasses[optionVal]);
             }
 
-            let $fieldsTable = $divFilterItem.find('.wpc-form-fields-table');
-            $fieldsTable.removeClass('selected-and-above-show');
-            if( optionVal === 'checkboxes' ) {
-                $fieldsTable.addClass('wpc-view-checkboxes');
-                $fieldsTable.removeClass('wpc-view-dropdown');
-                $fieldsTable.removeClass('wpc-view-rating');
-            } else if( optionVal === 'rating' ){
+            // Handle special case for 'rating'
+            if (optionVal === 'rating') {
                 $fieldsTable.addClass('selected-and-above-show');
-                $fieldsTable.addClass('wpc-view-rating');
-                $fieldsTable.removeClass('wpc-view-checkboxes');
-                $fieldsTable.removeClass('wpc-view-dropdown');
-            }else if( optionVal === 'dropdown' ){
-                $fieldsTable.addClass('wpc-view-dropdown');
-                $fieldsTable.removeClass('wpc-view-checkboxes');
-                $fieldsTable.removeClass('wpc-view-rating');
-            } else {
-                $fieldsTable.removeClass('wpc-view-checkboxes');
-                $fieldsTable.removeClass('wpc-view-dropdown');
-                $fieldsTable.removeClass('wpc-view-rating');
-                $fieldsTable.removeClass('selected-and-above-show');
             }
         });
 
@@ -1005,6 +1053,139 @@
             $('.wpc-location-preview-not-pro').removeClass('display-none');
         }
     });
+    $('body').on('click', '.wpc-field-show-range-list-input', function (e){
+        e.preventDefault();
+        let $prevRow = $(this).prev('.range-list-value');
+        const $currentRangeValues = $(this)
+            .parent()
+            .find('.range-list-value');
+        if($('.wpc-range-list-value-error-button').length > 0){
+            $('.wpc-range-list-value-error-button').remove();
+        }
+        if($prevRow.length > 0 && $prevRow.find('.wpc-range-list-min-value').val() === '' && $prevRow.find('.wpc-range-list-max-value').val() === ''){
+            let error_html = `<div class="wpc-range-list-value-error-button"><span>${wpcSetVars.rangeListTexts.error}</span></div>`;
+            $(this).after(error_html);
+            return false;
+        }
+
+        const name = $(this).attr('name');
+
+
+        let lastRangeListNumber = 1;
+
+        if ($currentRangeValues.length) {
+            lastRangeListNumber =
+                Math.max(
+                    ...$currentRangeValues.map(function () {
+                        return Number($(this).data('list-number')) || 0;
+                    }).get()
+                ) + 1;
+        }
+
+        let html = `<div class="range-list-value" data-list-number="${lastRangeListNumber}">
+            <div class="wpc-range-list-inputs">
+            <div><input type="number" class="wpc-range-list-min-value" name="${name}[${lastRangeListNumber}][range_list_min_val]" placeholder="${wpcSetVars.rangeListTexts.min_value}"></div>
+            <div><input type="number" class="wpc-range-list-max-value" name="${name}[${lastRangeListNumber}][range_list_max_val]" placeholder="${wpcSetVars.rangeListTexts.max_value}"></div>
+            <div><input type="text" class="wpc-range-list-range-text" name="${name}[${lastRangeListNumber}][range_list_range_text]" placeholder="${wpcSetVars.rangeListTexts.label}"></div>
+            <div><button class="button remove-range-list-value">${wpcSetVars.rangeListValueToRemove}</button></div>
+            </div>
+        </div>`;
+        $(this).before(html);
+        if(wpcSetVars.limitForRangeList <= $(this).parent().find('.range-list-value').length){
+            $(this).prop('disabled', true);
+            return false;
+        }
+
+        changeRangeListInputStatus();
+    });
+
+    $(document).on('keyup change mouseup', '.wpc-range-list-min-value, .wpc-range-list-max-value', function (e){
+        let $currentRow = $(this).parents('.range-list-value');
+        let $rangeListMin = $currentRow.find('.wpc-range-list-min-value');
+        let $rangeListMax = $currentRow.find('.wpc-range-list-max-value');
+        let rangeListTextVal = '';
+
+        let $prevRow = $currentRow.prev('.range-list-value');
+        let rangeMinVal = $rangeListMin.val();
+        let rangeMaxVal = $rangeListMax.val();
+
+
+        if ($rangeListMin.val() === '') {
+            rangeMinVal = wpcSetVars.rangeListTexts.up_to;
+        }
+
+
+        if ($rangeListMax.val() === '') {
+            rangeMaxVal = wpcSetVars.rangeListTexts.and_up;
+        }
+
+        if ($prevRow.length > 0) {
+            if ($prevRow.find('.wpc-range-list-max-value').val() !== '' && $prevRow.find('.wpc-range-list-max-value').val() !== 0) {
+                if(typeof $rangeListMin.val() !== 'undefined'){
+                    rangeMinVal = $prevRow.find('.wpc-range-list-max-value').val();
+                    if (e.type === 'change' && $rangeListMin.val() === '' && parseFloat(rangeMinVal) <= parseFloat($rangeListMax.val())) {
+                        $rangeListMin.val(rangeMinVal);
+                    }
+                }
+
+            }
+        }
+
+        if($rangeListMin.val() !== '') {
+            rangeMinVal = $rangeListMin.val();
+        }
+
+        if($rangeListMin.val() === '' && parseFloat(rangeMinVal) >= parseFloat($rangeListMax.val())){
+            rangeMinVal = wpcSetVars.rangeListTexts.up_to;
+        }
+
+        if(typeof rangeMinVal === 'undefined'){
+            rangeMinVal = wpcSetVars.rangeListTexts.up_to;
+        }
+
+        rangeListTextVal += rangeMinVal + ' - ' + rangeMaxVal;
+        if($rangeListMin.val() === '' && $rangeListMax.val() === '' ) {
+            rangeListTextVal = '';
+        }else{
+            if($currentRow.find('.wpc-range-list-value-error').length > 0){
+                $currentRow.find('.wpc-range-list-value-error').remove();
+            }
+        }
+
+        if($('.wpc-range-list-value-error-button').length > 0){
+            $('.wpc-range-list-value-error-button').remove();
+        }
+
+        if(e.type === 'change'){
+            if ($rangeListMin.val() != '' && $rangeListMax.val() != '' && parseFloat($rangeListMin.val()) >= parseFloat($rangeListMax.val())) {
+                let html_val_error = `<div class="wpc-range-list-value-error"><span>${wpcSetVars.rangeListTexts.value_error}</span></div>`;
+                $currentRow.append(html_val_error);
+            }
+        }
+        $currentRow.find('.wpc-range-list-range-text').val(rangeListTextVal);
+    });
+
+    $(document).on('click', '.remove-range-list-value', function (e){
+        e.preventDefault();
+        $(this).parents('.range-list-value').remove();
+        if($('.range-list-value').length < wpcSetVars.limitForRangeList && $('.wpc-field-show-range-list-input').is(':disabled')){
+            $('.wpc-field-show-range-list-input').removeAttr('disabled');
+        }
+        if($('.wpc-range-list-value-error-button').length > 0){
+            $('.wpc-range-list-value-error-button').remove();
+        }
+        changeRangeListInputStatus();
+    });
+
+    function changeRangeListInputStatus(){
+        let $rangeListValues = $('.wpc-field-show-range-list-input-tr').find('.range-list-value');
+        $rangeListValues.removeClass('wpc-is-first-range-list-value wpc-is-last-range-list-value');
+        $rangeListValues.first().addClass('wpc-is-first-range-list-value');
+        $rangeListValues.last().addClass('wpc-is-last-range-list-value');
+       /* if(!$rangeListValues.last().hasClass('wpc-is-first-range-list-value')){
+            $rangeListValues.last().addClass('wpc-is-last-range-list-value');
+        }*/
+    }
 
     function wpcShortenEname( eName ){
         let shortenName = eName;
@@ -1127,6 +1308,11 @@
         requestParams.postId        = $("#post_ID").val();
         requestParams.action        = 'wpc_get_wp_queries';
 
+        let chooseButtonLink = new URL(filterPagelink);
+
+        chooseButtonLink.searchParams.set('flrt_get_html_selector', '1');
+        chooseButtonLink.searchParams.set('flrt_set_id', requestParams.postId);
+
 
         $.ajax({
             'method': 'POST',
@@ -1136,6 +1322,7 @@
             beforeSend: function () {
                 $spinner.addClass( 'is-active' );
                 $(".wpc-location-preview").attr('href', filterPagelink);
+                $("#wpc-choose-selector-button").attr('href', chooseButtonLink.href);
             },
             complete: function () {
                 $spinner.removeClass( 'is-active' );

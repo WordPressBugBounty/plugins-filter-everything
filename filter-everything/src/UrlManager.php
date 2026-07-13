@@ -130,6 +130,12 @@ class UrlManager
                     $filter['values']     = $queriedValues;
                 }
 
+                foreach ($filter['values'] as $val_id => $term_slug){
+                    if(!empty($exclude[$term_slug]) && $exclude[$term_slug] === true){
+                        unset($filter['values'][$val_id]);
+                    }
+                }
+
                 if( ! empty( $filter['values'] ) ) {
                     $filter['values'] = $fse->sortTerms( $filter['values'] );
 

@@ -88,6 +88,13 @@ class Swatches
 
         $taxonomies = flrt_get_experimental_option( 'color_swatches_taxonomies', [] );
 
+        // A brand term already rendered with its brand logo (wpc_term_brand_logo,
+        // priority 5) must keep it — rebuilding here would replace the logo
+        // markup with a swatch square
+        if ( in_array( $filter['e_name'], flrt_brand_filter_entities() ) && flrt_get_term_brand_image( $term_object->term_id, $filter ) ) {
+            return $term_html;
+        }
+
         if ( in_array( $filter['e_name'], $taxonomies ) ) {
 
             $image_src = flrt_get_term_swatch_image( $term_object->term_id, $filter );

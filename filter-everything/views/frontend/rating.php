@@ -16,20 +16,27 @@ if ( ! defined('ABSPATH') ) {
     exit;
 }
 $args = [
-    'hide' => $view_args['ask_to_select_parent']
+    'hide' => $view_args['ask_to_select_parent'],
+    'use_apply_button' => $view_args['use_apply_button'],
+    'hide_empty' => $set['hide_empty']['value'],
+    'hide_empty_filter' => isset($set['hide_empty_filter']['value']) ? $set['hide_empty_filter']['value'] : '',
 ];
 $selected_and_above_status = (isset($filter['selected_and_above']) && $filter['selected_and_above'] === 'yes') ? true : false;
-
+$parent_filter_apply_button_data = flrt_parent_filter_apply_button_data($filter, $view_args);
+$parent_filter_apply_class = flrt_parent_filter_apply_class($filter, $view_args, $terms);
 ?>
-<div class="<?php echo flrt_filter_class( $filter, [], $terms, $args ); // Already escaped ?>" data-fid="<?php echo esc_attr( $filter['ID'] ); ?>">
+<div class="wpc-stars-rating-block <?php echo flrt_filter_class( $filter, [], $terms, $args ); // Already escaped ?><?php echo $parent_filter_apply_class; ?>" data-fid="<?php echo esc_attr( $filter['ID'] ); ?>" data-filter-e-name="<?php echo esc_attr($filter['e_name']); ?>"<?php echo $parent_filter_apply_button_data; ?>>
     <?php flrt_filter_header( $filter, $terms ); // Safe, escaped ?>
     <div class="flrt-stars-wpc-filter-content <?php echo esc_attr( flrt_filter_content_class( $filter ) ); ?>" data-selected-and-above="<?php echo $selected_and_above_status; ?>"  data-show-term-count="<?php echo ( $set['show_count']['value'] === 'yes' ) ? true : false; ?>">
         <ul class="flrt-stars-filter wpc-filters-ul-list wpc-filters-radio wpc-filters-list-<?php echo esc_attr( $filter['ID'] ); ?>">
             <?php if( ! empty( $terms ) || $view_args['ask_to_select_parent']) :
 
-            if( $view_args['ask_to_select_parent'] !== false ) { ?>
-            <li><?php echo esc_html( $view_args['ask_to_select_parent'] ); ?></li>
+            if( $view_args['ask_to_select_parent'] !== false  && !$view_args['use_apply_button'] ) { ?>
+            <li><?php echo esc_html( $view_args['ask_to_select_parent']); ?></li>
             <?php } else {
+                if( $view_args['ask_to_select_parent'] !== false && $view_args['use_apply_button'] ) { ?>
+                    <li class="wpc-ask-to-parent-display"><?php echo esc_html( $view_args['ask_to_select_parent']); ?></li>
+                <?php }
                     $flrt_rating_slug = [];
                     if($selected_and_above_status){
                         $i = 1;
@@ -68,7 +75,7 @@ $selected_and_above_status = (isset($filter['selected_and_above']) && $filter['s
 
                         $slug = $term_object->slug;
 
-                        $link = $url_manager->getTermUrl($slug, $filter['e_name'], $filter['entity'] );
+                        $link = flrt_get_filtered_term_url($term_object, $filter, $url_manager);
                         if($selected_and_above_status){
                             if(isset($filter['values'][0])){
                                 if($filter['values'][0] === $slug)  $link = $url_manager->getTermUrl($slug, $filter['e_name'], $filter['entity'], '', ['rating_slug' => $slug]);
@@ -93,11 +100,9 @@ $selected_and_above_status = (isset($filter['selected_and_above']) && $filter['s
                         ?>
                         <li class="wpc-radio-item wpc-term-item wpc-term-count-<?php echo esc_attr( $term_object->cross_count ); ?> wpc-term-id-<?php echo esc_attr($id); ?>" id="<?php flrt_term_id('term', $filter, $id); ?>">
                             <div class="wpc-term-item-content-wrapper">
-                                <input <?php checked( 1, $checked ); disabled( 1, $disabled ) ?> type="radio" data-wpc-link="<?php echo esc_url( $link ); ?>" name="<?php echo esc_attr( $name ); ?>" id="<?php flrt_term_id('radio', $filter, $id); ?>" class="flrt-star-input"/>
+                                <input <?php checked( 1, $checked ); disabled( 1, $disabled ) ?> type="radio" data-wpc-link="<?php echo esc_url( $link ); ?>" name="<?php echo esc_attr( $name ); ?>" id="<?php flrt_term_id('radio', $filter, $id); ?>"  data-wpc-e-name="<?php echo esc_attr($filter['e_name']); ?>" data-wpc-slug="<?php echo esc_attr($term_object->slug); ?>" class="flrt-star-input" data-term-id="<?php echo esc_attr($id); ?>" data-rating-num="<?php echo $rating_num;?>"<?php echo ($checked) ? ' data-wpc-was-checked="true"' : ''; ?>/>
                                 <label class="flrt-star-label flrt-rating-numb-<?php echo $rating_num;?> <?php echo ($star_switch) ? ' flrt-star-label-hover' : '';?><?php echo ($checked) ? ' flrt-star-label-checked flrt-star-label-hover' : '';?><?php echo ($selected_and_above_status && !$checked) ? ' flrt-star-label-not-checked flrt-remove-star-check' : '';?>" data-rating-num="<?php echo $rating_num;?>" for="<?php flrt_term_id('radio', $filter, $id); ?>"  data-wpc-term-count="<?php echo $data_wpc_term_count; ?>" data-star-rating-index="<?php echo $rating_num;?>">
-                                    <a <?php echo $link_attributes; ?>>
-                                        <?php echo flrt_rating_star();?>
-                                    </a>
+                                    <?php echo apply_filters( 'wpc_filters_rating_term_html', '<a '.$link_attributes.'>'.flrt_rating_star().'</a>', $link_attributes, $term_object, $filter ); ?>
                                 </label></div></li>
                     <?php $rating_num++;
                         }

@@ -12,6 +12,15 @@ use DateTimeZone;
 
 class PostMetaDateEntity extends PostDateEntity
 {
+    /**
+     * Declared explicitly: assigned from the outside in
+     * EntityManager::prepareEntitiesToDisplay(); dynamic properties are
+     * deprecated since PHP 8.2.
+     */
+    public $items_sort = [];
+
+    public $filter = [];
+
     use PostMetaTrait;
 
     private $new_meta_query = [];

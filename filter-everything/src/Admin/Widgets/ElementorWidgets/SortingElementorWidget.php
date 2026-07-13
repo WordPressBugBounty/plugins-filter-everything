@@ -112,28 +112,13 @@ class SortingElementorWidget extends \Elementor\Widget_Base {
             ]
         );
 
-
-
-
-        $default = [];
-
-        if(!empty($filterSorting->getSortingDefaults())){
-            foreach ($filterSorting->getSortingDefaults()['titles'] as $key => $value) {
-                $default[] = [
-                    'titles' => $value,
-                    'orderbies' => $filterSorting->getSortingDefaults()['orderbies'][$key],
-                    'orders' => $filterSorting->getSortingDefaults()['orders'][$key],
-                ];
-            }
-        }
-
         $this->add_control(
             'widget_wpc_sorting_widget',
             [
                 'label' => esc_html__( 'Sorting options:', 'filter-everything' ),
                 'type' => \Elementor\Controls_Manager::REPEATER,
                 'fields' => $repeater->get_controls(),
-                'default' => $default,
+                'default' => $filterSorting->prepareForPageBuilder(),
                 'title_field' => '{{{ titles }}}',
             ]
         );
@@ -152,7 +137,7 @@ class SortingElementorWidget extends \Elementor\Widget_Base {
             $arguments['titles'][$key]    = $setting['titles'];
             $arguments['orderbies'][$key] = $setting['orderbies'];
             $arguments['orders'][$key]    = $setting['orders'];
-            $arguments['meta_keys'][$key] = $setting['meta_keys'];
+            $arguments['meta_keys'][$key] = (!empty($setting['meta_keys'])) ? $setting['meta_keys'] : '';;
         }
         ob_start();
         the_widget('\FilterEverything\Filter\SortingWidget', $arguments );

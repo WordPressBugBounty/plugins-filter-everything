@@ -10,6 +10,14 @@ class PostMetaNumEntity implements Entity
 {
     use PostMetaTrait;
     public $items           = [];
+    /**
+     * Declared explicitly: assigned from the outside in
+     * EntityManager::prepareEntitiesToDisplay(); dynamic properties are
+     * deprecated since PHP 8.2.
+     */
+    public $items_sort = [];
+
+    public $filter = [];
 
     protected $product_cache  = [];
 
@@ -176,6 +184,7 @@ class PostMetaNumEntity implements Entity
             'max' => 0
         ];
         $post_and_types = [];
+        $post_and_meta_values = [];
         $translatable_post_type_exists = false;
 
         /**
@@ -195,7 +204,11 @@ class PostMetaNumEntity implements Entity
          */
         $transient_key = flrt_get_terms_transient_key( 'post_meta_num_'. $this->getName() . $key_in );
 
-        if ( false === ( $result = flrt_get_transient( $transient_key ) ) ) {
+        $result = flrt_get_transient( $transient_key );
+
+        // Cache format v2: ['vals' => [post_id => float|float[]], 'types' => [post_id => post_type]].
+        // Legacy format cached raw SQL rows — detect and rebuild those.
+        if ( ! is_array( $result ) || ! isset( $result['vals'], $result['types'] ) ) {
             // Get all post meta values
             $sql[] = "SELECT {$wpdb->postmeta}.post_id,{$wpdb->postmeta}.meta_value,{$wpdb->posts}.post_type";
             $sql[] = "FROM {$wpdb->postmeta}";
@@ -260,27 +273,52 @@ class PostMetaNumEntity implements Entity
              */
             $sql        = apply_filters( 'wpc_filter_get_post_meta_num_terms_sql', $sql, $e_name );
 
-            $result     = $wpdb->get_results( $sql, ARRAY_A );
+            $rows = $wpdb->get_results( $sql, ARRAY_A );
 
-            $clean_from_non_numeric = [];
-            foreach ( $result as $single_post ) {
+            // Aggregate raw rows into the compact v2 maps. A post can have
+            // several meta rows with different values (e.g. WC variable
+            // products keep one _price row per distinct child price) — such
+            // posts get an array of floats instead of a single float.
+            $vals  = [];
+            $types = [];
+            foreach ( $rows as $single_post ) {
                 if ( preg_match( '/[^\d\.\-]+/', $single_post['meta_value'] ) ) {
                     continue;
                 }
 
-                $clean_from_non_numeric[] = $single_post;
+                $post_id    = (int) $single_post['post_id'];
+                $meta_value = (float) $single_post['meta_value'];
+
+                if ( isset( $vals[ $post_id ] ) ) {
+                    if ( ! is_array( $vals[ $post_id ] ) ) {
+                        $vals[ $post_id ] = array( $vals[ $post_id ] );
+                    }
+                    $vals[ $post_id ][] = $meta_value;
+                } else {
+                    $vals[ $post_id ] = $meta_value;
+                }
+
+                $types[ $post_id ] = $single_post['post_type'];
             }
-            $result = $clean_from_non_numeric;
+            unset( $rows );
+
+            $result = array( 'vals' => $vals, 'types' => $types );
+            unset( $vals, $types );
 
             flrt_set_transient( $transient_key, $result, FLRT_TRANSIENT_PERIOD_HOURS * HOUR_IN_SECONDS );
         }
 
-        if( ! empty( $result ) ) {
+        $meta_vals  = isset( $result['vals'] )  ? $result['vals']  : [];
+        $meta_types = isset( $result['types'] ) ? $result['types'] : [];
+
+        if( ! empty( $meta_vals ) ) {
 
             $postsIn_flipped = array_flip( $alreadyFilteredPosts );
             $wpManager      = Container::instance()->getWpManager();
             $queried_values = $wpManager->getQueryVar( 'queried_values', [] );
+            $fss        = Container::instance()->getFilterSetService();
             $filter_slug    = false;
+            $setId = false;
 
             /**
              * Check if this filter was queried
@@ -288,6 +326,7 @@ class PostMetaNumEntity implements Entity
             foreach ( $queried_values as $slug => $filter ) {
                 if ( $filter[ 'e_name' ] === $this->getName() ) {
                     $filter_slug = $slug;
+                    $setId = $filter['parent'];
                     break;
                 }
             }
@@ -312,67 +351,103 @@ class PostMetaNumEntity implements Entity
 
             if($this->is_woo_discount_rules && (strpos($this->entityName, '_price') !== false)){
                 $wdr_woo_discount_rules = $this->getWooDiscountRulesClass();
-                $product_ids = array_map('intval', array_column($result, 'post_id'));
-                $this->preloadProducts($product_ids);
+                $this->preloadProducts( array_keys( $meta_vals ) );
             }
 
-            foreach ( $result as $single_post ) {
+            foreach ( $meta_vals as $post_id => $post_values ) {
                 /**
                  * If there are already filtered posts, we have to skip posts
                  * that are out of the queried list
                  */
                 if( ! empty( $alreadyFilteredPosts ) ) {
-                    if( ! isset( $postsIn_flipped[ $single_post['post_id'] ] ) ) {
+                    if( ! isset( $postsIn_flipped[ $post_id ] ) ) {
                         continue;
                     }
                 }
 
                 if ($this->is_woo_discount_rules) {
                     if (strpos($this->entityName, '_price') !== false) {
-                        $product = $this->getProductCached($single_post['post_id']);
+                        $product = $this->getProductCached($post_id);
                         if ($product) {
                             $wdr_product_has_sale = $wdr_woo_discount_rules->getProductPriceToDisplay($product);
                             if ($wdr_product_has_sale) {
-                                $single_post['meta_value'] = $wdr_product_has_sale['discounted_price'];
+                                $post_values = (float) $wdr_product_has_sale['discounted_price'];
                             }
                         }
                     }
                 }
-
-
 
                 /**
                  * We have to generate and fill two arrays
                  * First to detect $min and $max values
                  * Second to map post_types with post IDs
                  */
-                $single_post['meta_value'] = (is_float($single_post['meta_value']) ) ? $single_post['meta_value'] : (float) $single_post['meta_value'];
-                $new_result[] = $single_post['meta_value'];
+                foreach ( (array) $post_values as $meta_value ) {
+                    $post_and_meta_values[ $post_id ][] = $meta_value;
+                    $new_result[] = $meta_value;
 
-                if ( $min !== false && $single_post['meta_value'] < $min ){
-                    continue;
+                    if ( $min !== false && $meta_value < $min ){
+                        continue;
+                    }
+
+                    if ( $max !== false && $meta_value > $max ){
+                        continue;
+                    }
+
+                    if($this->is_woo_discount_rules){
+                        $this->wdr_product_ids[] = $post_id;
+                    }
+
+                    $post_and_types[ $post_id ] = $meta_types[ $post_id ];
                 }
-
-                if ( $max !== false && $single_post['meta_value'] > $max ){
-                    continue;
-                }
-
-                $this->wdr_product_ids[] = (int)$single_post['post_id'];
-                $post_and_types[ $single_post['post_id'] ] = $single_post['post_type'];
             }
 
         }
-
+        $abs_min_and_max = [
+            'abs_min' =>  0,
+            'abs_max' =>  0,
+        ];
         if( ! empty( $new_result ) ){
             $min_and_max = [
                 'min' => apply_filters( 'wpc_set_num_shift', min( $new_result ), $this->getName(), 'min' ),
                 'max' => apply_filters( 'wpc_set_num_shift', max( $new_result ), $this->getName(), 'max' ),
             ];
+
+            $flat = [];
+            foreach ($post_and_meta_values as $post_id => $values) {
+                foreach ($values as $value) {
+                    $flat[$post_id][] = $value;
+                }
+            }
+
+            $all_values = array_merge(...array_values($post_and_meta_values));
+
+            $abs_min = min($all_values);
+            $abs_max = max($all_values);
+
+            $min_post_id = null;
+            $max_post_id = null;
+
+            foreach ($post_and_meta_values as $post_id => $values) {
+                if (in_array($abs_min, $values)) {
+                    $min_post_id = $post_id;
+                }
+                if (in_array($abs_max, $values)) {
+                    $max_post_id = $post_id;
+                }
+            }
+
+            $abs_min_and_max = [
+                'abs_min' => $abs_min,
+                'abs_max' => $abs_max,
+            ];
+
+            $post_and_meta_values[$min_post_id] = [$min_and_max['min']];
+            $post_and_meta_values[$max_post_id] = [$min_and_max['max']];
         }
 
         $min_and_max = apply_filters( 'wpc_set_min_max', $min_and_max, $this->getName() );
-
-        return $this->convertSelectResult( $min_and_max, $post_and_types );
+        return $this->convertSelectResult( $min_and_max, $post_and_types, $post_and_meta_values, $abs_min_and_max);
     }
 
     public function updateMinAndMaxValues( $postsIn )
@@ -405,6 +480,9 @@ class PostMetaNumEntity implements Entity
             }
         }
 
+        $name = ($name === 'min') ? esc_html__('min', 'filter-everything') : $name;
+        $name = ($name === 'max') ? esc_html__('max', 'filter-everything') : $name;
+
         if( isset( $queriedFilter['values'][$edge] ) ) {
             $name = $name .' '. $queriedFilter['values'][$edge];
         }else{
@@ -414,7 +492,7 @@ class PostMetaNumEntity implements Entity
         return apply_filters( 'wpc_filter_post_meta_num_term_name', $name, $this->getName() );
     }
 
-    public function convertSelectResult( $result, $post_and_types = [] ){
+    public function convertSelectResult( $result, $post_and_types = [], $post_and_meta_values = [], $abs_min_and_max = [] ){
         $return = [];
 
         if( ! is_array( $result ) ){
@@ -433,11 +511,13 @@ class PostMetaNumEntity implements Entity
             $termObject->name = $this->createTermName( $edge, $value, $queried_values );
             $termObject->term_id = $edge . '_' . $this->getName();
             $termObject->posts = array_keys( $post_and_types );
+            $termObject->meta_values =  $post_and_meta_values;
             $termObject->count = 0;
             $termObject->cross_count = 0;
             $termObject->post_types = $post_and_types; //[];
             $termObject->$edge = $value;
             $termObject->wp_queried  = false;
+            $termObject->abs_values  = $abs_min_and_max;
 
             $return[ $edge ] = $termObject;
 
@@ -471,7 +551,28 @@ class PostMetaNumEntity implements Entity
                 $wp_query->set('posts_per_page', $query_post_in);
             }
         } else {
-            if ($min !== false) {
+            if ($min !== false && $max !== false) {
+                $min = apply_filters('wpc_unset_num_shift', $min, $this->getName());
+                $max = apply_filters('wpc_unset_num_shift', $max, $this->getName());
+
+                $type = ( $this->isDecimal($queried_value['step'], $min) || $this->isDecimal($queried_value['step'], $max) ) ? 'DECIMAL(15,6)' : 'NUMERIC';
+                /**
+                 * Both bounds must live in ONE clause. WP_Meta_Query gives every
+                 * clause its own postmeta JOIN, so separate >= and <= clauses can
+                 * match two DIFFERENT meta rows: a post with several values of the
+                 * key (e.g. variable product _price rows) passed the range even
+                 * when no single value was inside it, and the results disagreed
+                 * with the term counters. BETWEEN checks the same row.
+                 */
+                $meta_query = array(
+                    'key'     => $key,
+                    'value'   => array( $min, $max ),
+                    'compare' => 'BETWEEN',
+                    'type'    => $type
+                );
+                $this->addMetaQueryArray($meta_query);
+
+            } elseif ($min !== false) {
                 $min = apply_filters('wpc_unset_num_shift', $min, $this->getName());
 
                 $type = $this->isDecimal($queried_value['step'], $min) ? 'DECIMAL(15,6)' : 'NUMERIC';
@@ -482,9 +583,8 @@ class PostMetaNumEntity implements Entity
                     'type'    => $type
                 );
                 $this->addMetaQueryArray($meta_query);
-            }
 
-            if ($max !== false) {
+            } elseif ($max !== false) {
                 $max = apply_filters('wpc_unset_num_shift', $max, $this->getName());
 
                 $type = $this->isDecimal($queried_value['step'], $max) ? 'DECIMAL(15,6)' : 'NUMERIC';
@@ -496,8 +596,6 @@ class PostMetaNumEntity implements Entity
                 );
                 $this->addMetaQueryArray($meta_query);
             }
-
-            $this->addMetaQueryArray($meta_query);
 
             if (count($this->new_meta_query) > 1) {
                 $this->new_meta_query['relation'] = 'AND';

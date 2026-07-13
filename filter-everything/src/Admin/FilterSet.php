@@ -314,6 +314,17 @@ class FilterSet
                 'selectMetaKeyPlaceholder'    => esc_html__( 'Type to search for a custom field key', 'filter-everything' ),
                 'metaKeySearchText'    => esc_html__( 'Searching', 'filter-everything' ),
                 'isLimitFilterSet'    => $this->under_limit_filter_set($post_id),
+                'rangeListValueToRemove'   => esc_html__('Remove', 'filter-everything'),
+                'limitForRangeList'        => (int)(defined('FLRT_RANGE_LIST_LIMIT') && FLRT_RANGE_LIST_LIMIT) ? FLRT_RANGE_LIST_LIMIT : 20,
+                'rangeListTexts'           => [
+                    'min_value'   => esc_html__('Min Value', 'filter-everything'),
+                    'max_value'   => esc_html__('Max Value', 'filter-everything'),
+                    'label'       => esc_html__('Label', 'filter-everything'),
+                    'up_to'       => esc_html__('Up to', 'filter-everything'),
+                    'and_up'      => esc_html__('And up', 'filter-everything'),
+                    'error'       => esc_html__('Error: No fields are filled in. Please fill in at least one field.', 'filter-everything'),
+                    'value_error' => esc_html__('Error: The minimum value cannot be greater than or equal to the maximum value.', 'filter-everything'),
+                ],
             );
 
             wp_localize_script( 'wpc-filters-admin-filter-set', 'wpcSetVars', $l10n );
@@ -433,6 +444,7 @@ class FilterSet
         if( ! empty( $filterSets ) ){
             foreach ( $filterSets as $set ){
                 if( isset( $set['show_on_the_page'] ) && $set['show_on_the_page'] === true ){
+                    $this->addFilterSetsToJsonData($filterSets);
                     return $filterSets;
                 }
             }
@@ -449,6 +461,8 @@ class FilterSet
         }
 
         $filterSets = apply_filters( 'wpc_return_relevant_set_ids', $filterSets, $queriedObject );
+
+        $this->addFilterSetsToJsonData($filterSets);
 
         return $filterSets;
     }
@@ -581,6 +595,7 @@ class FilterSet
     public function preSaveSet( $post_id, $data )
     {
         $postData = Container::instance()->getThePost();
+        $postData = prepare_wpc_filter_set_json_data($postData);
 
         if( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
             return $post_id;
@@ -630,6 +645,8 @@ class FilterSet
     public function saveSet( $post_id, $post )
     {
         $postData = Container::instance()->getThePost();
+        $postData = prepare_wpc_filter_set_json_data($postData);
+
         if( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) {
             return $post_id;
         }
@@ -1516,5 +1533,23 @@ class FilterSet
 
     public function getErrors() {
         return $this->errors;
+    }
+
+    private function addFilterSetsToJsonData($filterSets)
+    {
+        global $flrt_json_data;
+        foreach ($filterSets as $set) {
+            $setId = $set['ID'];
+            $setSettings = $this->getSet($setId);
+
+            if(!isset($flrt_json_data[$setId])){
+                $flrt_json_data[$setId] = [];
+            }
+
+            $flrt_json_data[$setId]['settings'] = array_map(
+                fn($item) => is_array($item) ? $item['value'] : $item,
+                $setSettings
+            );
+        }
     }
 }

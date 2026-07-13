@@ -139,7 +139,7 @@ function flrt_get_common_location_terms( $postType = 'post' )
             }
         }else{
             $translated_post_types = PLL()->model->get_translated_post_types();
-            if( isset( $translated_post_types[ $postType ] ) ){
+            if ( array_key_exists( $postType, $translated_post_types ) || in_array( $postType, $translated_post_types, true ) ){
                 $link = PLL()->links_model->switch_language_in_link( $link, $pll_language );
             }
         }
@@ -185,7 +185,7 @@ function flrt_get_common_location_terms( $postType = 'post' )
     $home_url = trailingslashit( get_bloginfo('url') );
     if( function_exists('pll_home_url') ){
         $translated_post_types = PLL()->model->get_translated_post_types();
-        if( isset( $translated_post_types[$postType] ) ){
+        if ( array_key_exists( $postType, $translated_post_types ) || in_array( $postType, $translated_post_types, true ) ){
             $home_url = trailingslashit( pll_home_url($lang) );
         }
     }
@@ -203,7 +203,7 @@ function flrt_get_common_location_terms( $postType = 'post' )
 
         if( function_exists('pll_home_url') ){
             $translated_post_types = PLL()->model->get_translated_post_types();
-            if( isset( $translated_post_types['product'] ) ){
+            if ( array_key_exists( 'product', $translated_post_types ) || in_array( 'product', $translated_post_types, true ) ){
                 $shop_permalink = PLL()->links_model->switch_language_in_link( $shop_permalink, $pll_language );
             }
         }
@@ -393,4 +393,74 @@ function flrt_get_no_page_terms()
     );
 
     return $fields;
+}
+
+function flrt_filter_set_front_link($post_id)
+{
+    $fss                 = Container::instance()->getFilterSetService();
+    $set_settings_fields = $fss->getSettingsLocationTypeFields($post_id);
+    $link = '';
+    foreach ($set_settings_fields as $key => $attributes) {
+        if ($attributes['id'] == $fss->generateFieldId('post_name')) {
+            $current_index = isset($attributes['value']) ? $attributes['value'] : '';
+            $options = !empty($attributes['options']) ? $attributes['options'] : [];
+            if (isset($options[$current_index]['data-link'])) {
+                $link = esc_attr($options[$current_index]['data-link']);
+            }
+        }
+    }
+    return $link;
+}
+
+/**
+ * Front page URL for the «Select visually» container picker: the page where
+ * the user's most likely Filter Set actually filters. Candidates in order:
+ * a WooCommerce product Set, a post Set, any other (CPT) Set — the higher
+ * Priority (menu_order) Set first within each group. With no resolvable Set
+ * at all: the shop page on WooCommerce sites, the blog page otherwise.
+ */
+function flrt_default_selector_page_link()
+{
+    $sets = get_posts( array(
+        'post_type'   => FLRT_FILTERS_SET_POST_TYPE,
+        'post_status' => 'publish',
+        'numberposts' => -1,
+        'orderby'     => array( 'menu_order' => 'DESC', 'date' => 'ASC' ),
+    ) );
+
+    $woo = function_exists( 'wc_get_page_permalink' );
+
+    $candidates = array( 'product' => array(), 'post' => array(), 'other' => array() );
+    foreach ( $sets as $set ) {
+        // Sets keep their filtered post type in post_excerpt; empty means 'post'
+        $type = $set->post_excerpt ? $set->post_excerpt : 'post';
+        if ( $type === 'product' && $woo ) {
+            $candidates['product'][] = $set->ID;
+        } elseif ( $type === 'post' ) {
+            $candidates['post'][] = $set->ID;
+        } else {
+            // Without WooCommerce 'product' is just another CPT
+            $candidates['other'][] = $set->ID;
+        }
+    }
+
+    foreach ( array_merge( $candidates['product'], $candidates['post'], $candidates['other'] ) as $set_id ) {
+        $link = flrt_filter_set_front_link( $set_id );
+        if ( ! empty( $link ) ) {
+            return $link;
+        }
+    }
+
+    if ( $woo ) {
+        $link = wc_get_page_permalink( 'shop' );
+        if ( ! empty( $link ) ) {
+            return $link;
+        }
+    }
+
+    // get_post_type_archive_link('post') is false when the front page is
+    // static and no posts page is assigned
+    $link = get_post_type_archive_link( 'post' );
+
+    return $link ? $link : home_url( '/' );
 }

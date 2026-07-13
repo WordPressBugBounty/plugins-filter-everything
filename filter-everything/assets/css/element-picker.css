@@ -1,0 +1,104 @@
+*{
+    cursor:pointer;
+}
+#wpc-choose-selector {
+    position: fixed;
+    display: none;
+    right: 20px;
+    bottom: 20px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1), 0 3px 6px rgba(0,0,0,0.23);
+    z-index: 999999;
+    border: 1px solid #ccd0d4;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    min-width: 250px;
+}
+
+#wpc-choose-id-css,
+#wpc-choose-class-css {
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: #3c434a;
+}
+
+#wpc-choose-id-css span:first-child,
+#wpc-choose-class-css span:first-child {
+    font-weight: 600;
+}
+
+#wpc-chooses-html-id,
+#wpc-chooses-html-css
+{
+    display: inline-block;
+    padding: 3px 8px;
+    background-color: #f6f7f7;
+    border: 1px solid #dcdcde;
+    margin-left: 10px;
+    border-radius: 2px;
+    font-family: monospace;
+    font-size: 12px;
+    width: 250px;
+    color: #1d2327;
+}
+
+#wpc-choose-selector-buttons {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #dcdcde;
+    text-align: right;
+}
+
+#wpc-choose-selector-buttons button {
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 2.15384615;
+    min-height: 30px;
+    margin: 0;
+    padding: 0 10px;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    -webkit-appearance: none;
+    border-radius: 3px;
+    white-space: nowrap;
+    box-sizing: border-box;
+}
+#wpc-choose-save-btn{
+    display: inline-block;
+}
+
+#wpc-choose-save-btn {
+    background: #3858E9;
+    color: #fff;
+}
+
+#wpc-choose-save-btn:hover,
+#wpc-choose-save-btn:focus {
+    background: #3858E9;
+    color: #fff;
+}
+
+#wpc-choose-cancel-btn {
+    background: #f6f7f7;
+    border-color: #dcdcde;
+    color: #d63638;
+    margin-right: 8px !important;
+}
+
+#wpc-choose-cancel-btn:hover,
+#wpc-choose-cancel-btn:focus {
+    background: #f0f0f1;
+    border-color: #c3c4c7;
+    color: #d63638;
+}
+.wpc-choose-block{
+   display: none;
+}
+#wpc-choose-another-selector{
+    display: none;
+}

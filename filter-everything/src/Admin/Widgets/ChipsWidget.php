@@ -43,6 +43,11 @@ class ChipsWidget extends \WP_Widget
 
         if( $mobile ){
             $classes[] = 'wpc-show-on-mobile';
+            if( strpos($args['before_title'], 'widget-title') !== false ){
+                $args['before_title'] = str_replace('widget-title', 'widget-title wpc-show-on-mobile-widget-title', $args['before_title']);
+            } elseif( strpos($args['before_title'], 'widgettitle') !== false ){
+                $args['before_title'] = str_replace('widgettitle', 'widgettitle wpc-show-on-mobile-widget-title', $args['before_title']);
+            }
         }
 
         if( $set_id ){

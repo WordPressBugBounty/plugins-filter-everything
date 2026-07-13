@@ -1,0 +1,203 @@
+# replace-phrase skill — run results
+# Run at: 2026-07-08
+
+## REPLACE (7 pairs)
+
+### 1. "HTML id or class of the Posts Container" → "Results container"
+- Code sites (3):
+    src/Settings/Tabs/SettingsTab.php:71
+    pro/PluginPro.php:1027
+    src/Plugin.php:274
+- Also (non-gettext HTML): views/admin/filters-set-advices.php (3 bold mentions)
+- POT msgid updated: yes
+- Translations (locale → new msgstr):
+    cs_CZ : Kontejner výsledků
+    de_CH : Ergebnis-Container
+    de_DE : Ergebnis-Container
+    es_ES : Contenedor de resultados
+    fr_FR : Conteneur de résultats
+    it_IT : Contenitore dei risultati
+    nl_NL : Resultatencontainer
+    pl_PL : Kontener wyników
+    uk    : Контейнер з результатами
+
+### 2. "Choose selector" → "Select visually"
+- Code sites (2):
+    src/Settings/Tabs/SettingsTab.php:77 (additional_link label)
+    pro/wpc-default-hooks-pro.php:902
+- POT msgid updated: yes (msgid existed in POT but was missing from all .po — entries APPENDED with translations)
+- Translations (locale → new msgstr):
+    cs_CZ : Vybrat vizuálně
+    de_CH : Visuell auswählen
+    de_DE : Visuell auswählen
+    es_ES : Seleccionar visualmente
+    fr_FR : Sélectionner visuellement
+    it_IT : Seleziona visivamente
+    nl_NL : Visueel selecteren
+    pl_PL : Wybierz wizualnie
+    uk    : Вибрати візуально
+
+### 3. "Specify individual HTML selector of Posts Container for AJAX" → "Specify an individual Results container for AJAX"
+- Code sites (1):
+    pro/PluginPro.php:1033 (custom_posts_container instructions)
+- POT msgid updated: yes
+- Translations (locale → new msgstr):
+    cs_CZ : Zadání individuálního kontejneru výsledků pro AJAX
+    de_CH : Individuellen Ergebnis-Container für AJAX festlegen
+    de_DE : Individuellen Ergebnis-Container für AJAX festlegen
+    es_ES : Especificar un contenedor de resultados individual para AJAX
+    fr_FR : Spécifier un conteneur de résultats individuel pour AJAX
+    it_IT : Specificare un contenitore dei risultati individuale per AJAX
+    nl_NL : Individuele resultatencontainer opgeven voor AJAX
+    pl_PL : Określ indywidualny kontener wyników dla AJAX
+    uk    : Вкажіть індивідуальний контейнер з результатами для роботи AJAX
+
+### 4. "It appears that this page does not contain a container with the specified «HTML id or class of the Posts Container». …" → "It appears that this page does not contain the container specified in the «Results container» option. Try to specify the correct one in the Filter Set settings or the common plugin Settings."
+- Code sites (1):
+    src/Plugin.php:1520 (wpcNoPostsContainerMsg, frontend AJAX error)
+- POT msgid updated: yes
+- Translations (locale → new msgstr):
+    cs_CZ : Zdá se, že tato stránka neobsahuje kontejner zadaný v možnosti «Kontejner výsledků». Zkuste zadat správný v nastavení sady filtrů nebo v nastavení pluginu.
+    de_CH : Es scheint, dass diese Seite den in der Option "Ergebnis-Container" angegebenen Container nicht enthält. Versuchen Sie, den korrekten Container in den Filter-Set-Einstellungen oder in den allgemeinen Plugin-Einstellungen anzugeben.
+    de_DE : (same as de_CH)
+    es_ES : Parece que esta página no contiene el contenedor especificado en la opción «Contenedor de resultados». Intente especificar el correcto en la configuración del conjunto de filtros o en la configuración común del complemento.
+    fr_FR : Il semble que cette page ne contienne pas le conteneur spécifié dans l’option «Conteneur de résultats». Essayez de spécifier le bon dans les paramètres du jeu de filtres ou dans les paramètres communs du plugin.
+    it_IT : Sembra che questa pagina non contenga il contenitore specificato nell'opzione «Contenitore dei risultati». Cercare di specificare quello corretto nelle impostazioni del set di filtri o nelle impostazioni comuni del plugin.
+    nl_NL : Het lijkt erop dat deze pagina niet de container bevat die is opgegeven in de optie «Resultatencontainer». Probeer de juiste op te geven in de Filterset-instellingen of de algemene plug-in-instellingen.
+    pl_PL : Wygląda na to, że ta strona nie zawiera kontenera określonego w opcji «Kontener wyników». Spróbuj określić prawidłowy w ustawieniach zestawu filtrów lub we wspólnych ustawieniach wtyczki.
+    uk    : Схоже, що на даній сторінці немає контейнера, який вказаний в опції «Контейнер з результатами». Будь ласка, вкажіть правильний у Фільтр сеті, або в загальних налаштуваннях плагіну.
+
+### 5. "You must specify Posts Container, otherwise AJAX will not work properly" → "You must specify the Results container, otherwise AJAX will not work properly"
+- Code sites (2, same string):
+    src/Settings/BaseSettings.php:117
+    src/Settings/BaseSettings.php:155
+- POT msgid updated: yes
+- Translations (locale → new msgstr):
+    cs_CZ : Musíte zadat kontejner výsledků, jinak nebude AJAX fungovat správně
+    de_CH : Sie müssen den Ergebnis-Container angeben, andernfalls funktioniert AJAX nicht ordnungsgemäss
+    de_DE : (same as de_CH)
+    es_ES : Debe especificar el contenedor de resultados, de lo contrario AJAX no funcionará correctamente
+    fr_FR : Vous devez spécifier le conteneur de résultats, sinon AJAX ne fonctionnera pas correctement
+    it_IT : È necessario specificare il contenitore dei risultati, altrimenti AJAX non funzionerà correttamente.
+    nl_NL : Je moet de resultatencontainer opgeven, anders werkt AJAX niet goed.
+    pl_PL : Musisz określić kontener wyników, w przeciwnym razie AJAX nie będzie działał poprawnie
+    uk    : Потрібно вказати контейнер з результатами, інакше AJAX не працюватиме
+
+### 6. "Try to show selected terms above the posts container" → "Try to show selected terms above the Results container"
+- Code sites (1):
+    src/Settings/Tabs/SettingsTab.php:122 (Chips integration label)
+- POT msgid updated: yes
+- Translations (locale → new msgstr):
+    cs_CZ : Zkuste zobrazit vybrané výrazy nad kontejnerem výsledků
+    de_CH : Versuchen Sie, ausgewählte Begriffe oberhalb des Ergebnis-Containers anzuzeigen
+    de_DE : (same as de_CH)
+    es_ES : Intenta mostrar los términos seleccionados encima del contenedor de resultados
+    fr_FR : Essayez d’afficher les termes sélectionnés au-dessus du conteneur de résultats
+    it_IT : Provare a mostrare i termini selezionati sopra il contenitore dei risultati
+    nl_NL : Probeer geselecteerde termen weer te geven boven de resultatencontainer
+    pl_PL : Spróbuj wyświetlić wybrane określenia nad kontenerem wyników
+    uk    : Спробуйте показати вибрані терми (чіпси) над контейнером з результатами
+
+### 7. "Hover over the post container and click to select it" → "Hover over the Results container and click to select it"
+- Code sites (1):
+    src/Plugin.php:1323 (chooseElementHelpText, selector-picker overlay)
+- POT msgid updated: yes (msgid existed in POT but was missing from all .po — entries APPENDED with translations)
+- Translations (locale → new msgstr):
+    cs_CZ : Najeďte kurzorem na kontejner výsledků a kliknutím jej vyberte
+    de_CH : Fahren Sie mit der Maus über den Ergebnis-Container und klicken Sie, um ihn auszuwählen
+    de_DE : (same as de_CH)
+    es_ES : Pase el cursor sobre el contenedor de resultados y haga clic para seleccionarlo
+    fr_FR : Survolez le conteneur de résultats et cliquez pour le sélectionner
+    it_IT : Passare il mouse sul contenitore dei risultati e fare clic per selezionarlo
+    nl_NL : Beweeg de muis over de resultatencontainer en klik om deze te selecteren
+    pl_PL : Najedź kursorem na kontener wyników i kliknij, aby go wybrać
+    uk    : Наведіть курсор на контейнер з результатами та клацніть, щоб вибрати його
+
+## NEW STRING (1) — tooltip for the Results container option
+
+### "The part of the page where your posts or products are listed. When AJAX is enabled, the plugin refreshes only this area after each filter click, without reloading the whole page.<br /><br />Click «Select visually» and simply click the area with your posts, or enter its CSS id or class if you know it."
+- Code sites (3):
+    src/Settings/Tabs/SettingsTab.php (posts_container 'tooltip')
+    pro/PluginPro.php (custom_posts_container 'tooltip')
+    src/Plugin.php (instead_custom_posts_container free stub 'tooltip')
+- Added to POT: yes
+- Translations:
+    cs_CZ : Část stránky, ve které se zobrazují vaše příspěvky nebo produkty. Když je zapnutý AJAX, plugin po každém kliknutí na filtr obnoví pouze tuto oblast, bez opětovného načtení celé stránky.<br /><br />Klikněte na «Vybrat vizuálně» a jednoduše klikněte na oblast s příspěvky, nebo zadejte její CSS id nebo třídu, pokud je znáte.
+    de_CH : Der Bereich der Seite, in dem Ihre Beiträge oder Produkte aufgelistet sind. Wenn AJAX aktiviert ist, aktualisiert das Plugin nach jedem Filter-Klick nur diesen Bereich, ohne die ganze Seite neu zu laden.<br /><br />Klicken Sie auf "Visuell auswählen" und klicken Sie einfach auf den Bereich mit Ihren Beiträgen, oder geben Sie dessen CSS-id oder -Klasse ein, wenn Sie sie kennen.
+    de_DE : (same as de_CH)
+    es_ES : La parte de la página donde se muestran sus entradas o productos. Cuando AJAX está activado, el plugin actualiza solo esta área después de cada clic en un filtro, sin recargar toda la página.<br /><br />Haga clic en «Seleccionar visualmente» y simplemente haga clic en el área con sus entradas, o introduzca su id o clase CSS si la conoce.
+    fr_FR : La partie de la page où vos publications ou produits sont affichés. Lorsque AJAX est activé, le plugin actualise uniquement cette zone après chaque clic sur un filtre, sans recharger toute la page.<br /><br />Cliquez sur «Sélectionner visuellement» et cliquez simplement sur la zone contenant vos publications, ou saisissez son id ou sa classe CSS si vous les connaissez.
+    it_IT : La parte della pagina in cui sono elencati i post o i prodotti. Quando AJAX è attivo, il plugin aggiorna solo quest'area dopo ogni clic sui filtri, senza ricaricare l'intera pagina.<br /><br />Fare clic su «Seleziona visivamente» e cliccare semplicemente sull'area con i post, oppure inserire il suo id o la sua classe CSS, se li si conosce.
+    nl_NL : Het deel van de pagina waar je berichten of producten worden weergegeven. Als AJAX is ingeschakeld, vernieuwt de plug-in na elke filterklik alleen dit gebied, zonder de hele pagina opnieuw te laden.<br /><br />Klik op «Visueel selecteren» en klik simpelweg op het gebied met je berichten, of voer de CSS-id of -klasse ervan in als je die kent.
+    pl_PL : Część strony, w której wyświetlane są Twoje wpisy lub produkty. Gdy AJAX jest włączony, wtyczka po każdym kliknięciu filtra odświeża tylko ten obszar, bez przeładowania całej strony.<br /><br />Kliknij «Wybierz wizualnie» i po prostu kliknij obszar z wpisami, albo wpisz jego id lub klasę CSS, jeśli je znasz.
+    uk    : Частина сторінки, у якій виводяться ваші дописи або товари. Коли ввімкнено AJAX, плагін після кожного кліку по фільтру оновлює лише цю область, не перезавантажуючи сторінку цілком.<br /><br />Натисніть «Вибрати візуально» і просто клацніть на області з дописами, або впишіть її CSS id чи class, якщо знаєте їх.
+
+## Artifacts regenerated
+- .mo  : 9 / 9
+- .l10n.php : 9 / 9
+
+# ─────────────────────────────────────────────────────────────
+# Run 2 (same day): Instant recount option strings
+# Note: the 3 old msgids existed only in code (never extracted to POT/PO),
+# so all entries below were APPENDED as new, closing the pending
+# "i18n of 3 option strings" release TODO (removed from readme.txt).
+
+## REPLACE (3 pairs)
+
+### 1. "Instant recount for the Apply button" → "Instant recount for the «Apply Button» mode"
+- Code sites (1): src/Settings/Tabs/SettingsTab.php (option title)
+- Translations:
+    cs_CZ : Okamžitý přepočet pro režim tlačítka "Použít"
+    de_CH : Sofortige Neuberechnung für den «Anwenden Knopf» Modus
+    de_DE : (same as de_CH)
+    es_ES : Recuento instantáneo para el modo «Aplicar Botón»
+    fr_FR : Recalcul instantané pour le mode «Appliquer le bouton»
+    it_IT : Riconteggio istantaneo per la modalità «Applica pulsante»
+    nl_NL : Directe hertelling voor de «Toepassen-knop» modus
+    pl_PL : Natychmiastowe przeliczanie dla trybu «Zastosuj przycisk»
+    uk    : Миттєвий перерахунок для режиму Кнопки «Застосувати»
+
+### 2. "Recalculate filter counters in the browser, without AJAX requests" → "Instantly recalculate filter counters in the browser"
+- Code sites (1): src/Settings/Tabs/SettingsTab.php (toggle label)
+- Translations:
+    cs_CZ : Okamžitě přepočítávat počítadla filtrů v prohlížeči
+    de_CH : Filter-Zähler sofort im Browser neu berechnen
+    de_DE : (same as de_CH)
+    es_ES : Recalcular instantáneamente los contadores de filtros en el navegador
+    fr_FR : Recalculer instantanément les compteurs de filtres dans le navigateur
+    it_IT : Ricalcola istantaneamente i contatori dei filtri nel browser
+    nl_NL : Filtertellers direct in de browser opnieuw berekenen
+    pl_PL : Natychmiast przeliczaj liczniki filtrów w przeglądarce
+    uk    : Миттєво перераховувати лічильники фільтрів у браузері
+
+### 3. "When disabled, Filter Sets with the Apply button … as in previous plugin versions." → "When disabled, Filter Sets in the «Apply Button» mode recalculate counters on the server with an AJAX request on every filter click."
+- Code sites (1): src/Settings/Tabs/SettingsTab.php (description)
+- Translations:
+    cs_CZ : Pokud je vypnuto, sady filtrů v režimu tlačítka "Použít" přepočítávají počítadla na serveru pomocí požadavku AJAX při každém kliknutí na filtr.
+    de_CH : Wenn deaktiviert, berechnen Filter-Sets im «Anwenden Knopf» Modus die Zähler bei jedem Filter-Klick mit einer AJAX-Anfrage auf dem Server neu.
+    de_DE : (same as de_CH)
+    es_ES : Cuando está desactivada, los conjuntos de filtros en el modo «Aplicar Botón» recalculan los contadores en el servidor con una petición AJAX en cada clic de filtro.
+    fr_FR : Lorsqu'elle est désactivée, les jeux de filtres en mode «Appliquer le bouton» recalculent les compteurs sur le serveur avec une requête AJAX à chaque clic sur un filtre.
+    it_IT : Quando è disattivata, i set di filtri nella modalità «Applica pulsante» ricalcolano i contatori sul server con una richiesta AJAX a ogni clic sui filtri.
+    nl_NL : Indien uitgeschakeld, berekenen filtersets in de «Toepassen-knop» modus de tellers op de server met een AJAX-verzoek bij elke filterklik.
+    pl_PL : Gdy wyłączone, zestawy filtrów w trybie «Zastosuj przycisk» przeliczają liczniki na serwerze żądaniem AJAX przy każdym kliknięciu filtra.
+    uk    : Коли вимкнено, Фільтр Сети з Кнопкою «Застосувати» перераховують лічильники на сервері AJAX-запитом при кожному кліку по фільтру.
+
+## NEW STRING (1) — tooltip for the Instant recount option
+
+### "This option greatly speeds up filtering, but the recount runs in the visitor's browser and may be heavy on sites with a large amount of content. If you filter more than 30,000 posts, make sure filtering does not freeze — especially on mobile devices."
+- Code sites (1): src/Settings/Tabs/SettingsTab.php ('tooltip')
+- Translations:
+    cs_CZ : Tato volba výrazně zrychluje filtrování, ale přepočet probíhá v prohlížeči návštěvníka a na webech s velkým množstvím obsahu může být náročný. Pokud filtrujete více než 30 000 příspěvků, ujistěte se, že filtrování nezamrzá — zejména na mobilních zařízeních.
+    de_CH : Diese Option beschleunigt das Filtern erheblich, aber die Neuberechnung läuft im Browser des Besuchers und kann den Browser auf Websites mit sehr vielen Inhalten stark belasten. Wenn Sie mehr als 30 000 Beiträge filtern, stellen Sie sicher, dass das Filtern nicht stockt — besonders auf Mobilgeräten.
+    de_DE : (same as de_CH)
+    es_ES : Esta opción acelera considerablemente el filtrado, pero el recálculo se realiza en el navegador del visitante y puede ser pesado en sitios con mucho contenido. Si filtra más de 30 000 entradas, asegúrese de que el filtrado no se congele, especialmente en dispositivos móviles.
+    fr_FR : Cette option accélère considérablement le filtrage, mais le recalcul s'effectue dans le navigateur du visiteur et peut être lourd sur les sites avec beaucoup de contenu. Si vous filtrez plus de 30 000 publications, vérifiez que le filtrage ne se fige pas — en particulier sur les appareils mobiles.
+    it_IT : Questa opzione velocizza notevolmente il filtraggio, ma il ricalcolo avviene nel browser del visitatore e può essere pesante sui siti con molti contenuti. Se si filtrano più di 30 000 post, verificare che il filtraggio non si blocchi, soprattutto sui dispositivi mobili.
+    nl_NL : Deze optie versnelt het filteren aanzienlijk, maar de hertelling gebeurt in de browser van de bezoeker en kan zwaar zijn op sites met veel content. Als je meer dan 30.000 berichten filtert, controleer dan of het filteren niet vastloopt — vooral op mobiele apparaten.
+    pl_PL : Ta opcja znacznie przyspiesza filtrowanie, ale przeliczanie odbywa się w przeglądarce odwiedzającego i może być obciążające na stronach z dużą ilością treści. Jeśli filtrujesz ponad 30 000 wpisów, upewnij się, że filtrowanie nie zawiesza się — zwłaszcza na urządzeniach mobilnych.
+    uk    : Ця опція значно пришвидшує фільтрування, але перерахунок відбувається в браузері відвідувача і може бути важким на сайтах з великою кількістю контенту. Якщо ви фільтруєте понад 30 000 дописів, переконайтеся, що фільтрування не підвисає — особливо на мобільних пристроях.
+
+## Artifacts regenerated (run 2)
+- .mo  : 9 / 9 (863 messages per locale)
+- .l10n.php : 9 / 9

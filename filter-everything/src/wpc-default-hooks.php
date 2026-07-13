@@ -31,6 +31,10 @@ function flrt_initiate_overridden_functions()
     add_filter('wpc_filters_checkbox_term_html', 'wpc_term_brand_logo', 5, 4);
     add_filter('wpc_filters_radio_term_html', 'wpc_term_brand_logo', 5, 4);
     add_filter('wpc_filters_label_term_html', 'wpc_term_brand_logo', 5, 4);
+    add_filter('wpc_filters_checkbox_term_html', 'wpc_replace_links_with_spans', 11, 4);
+    add_filter('wpc_filters_radio_term_html', 'wpc_replace_links_with_spans', 11, 4);
+    add_filter('wpc_filters_label_term_html', 'wpc_replace_links_with_spans', 11, 4);
+    add_filter('wpc_filters_rating_term_html', 'wpc_replace_links_with_spans', 11, 4);
     add_filter('wpc_taxonomy_location_terms', 'flrt_remove_default_category_location', 10, 2);
     add_filter( 'wpc_set_num_shift', 'flrt_round_numeric_values', 10, 3 );
 
@@ -181,7 +185,6 @@ function flrt_initiate_overridden_functions()
             if (isset($attributes['class']) && $attributes['class'] === 'wpc-field-slug' && $attributes['value'] === '') {
                 echo '<p class="description">' . esc_html__('a-z, 0-9, "_" and "-" symbols supported only', 'filter-everything') . '</p>';
             }
-
         }
     }
 
@@ -273,9 +276,11 @@ function flrt_initiate_overridden_functions()
     }
 
 }
+
 function flrt_chips( $showReset = false, $setIds = [] ) {
     $templateManager    = \FilterEverything\Filter\Container::instance()->getTemplateManager();
     $wpManager          = \FilterEverything\Filter\Container::instance()->getWpManager();
+    $filterSet  = Container::instance()->getFilterSetService();
 
     if( empty( $setIds ) || ! $setIds || ! is_array( $setIds ) ){
         $relatedSetIds = $wpManager->getQueryVar('wpc_page_related_set_ids');
@@ -431,23 +436,6 @@ function flrt_frontend_filter_classes( $classes, $filter ){
     return $classes;
 }
 
-//add_filter( 'wpc_filter_classes', 'flrt_same_swatches_width', 20, 4 );
-//function flrt_same_swatches_width( $classes, $filter, $default_classes, $terms, $args ){
-//    if( in_array( 'wpc-filter-has-swatches', $classes ) ){
-//        if( ! empty( $terms ) ) {
-//            $counters = [];
-//            foreach ( $terms as $single_term ) {
-//                $counters[] = $single_term->cross_count;
-//            }
-//
-//            $max = max( $counters );
-//            $classes[] = 'wpc-counter-width-'. strlen( (string)$max );
-//        }
-//    }
-//    return $classes;
-//}
-
-
 // Bricks Builder fix for Any Category Filter Set
 add_action( 'wpc_all_set_wp_queried_posts', 'flrt_bricks_builder_category_compat', 10, 2 );
 function flrt_bricks_builder_category_compat( $set_wp_query, $setId ){
@@ -480,10 +468,11 @@ function flrt_chips_labels( $term_name, $term, $filter ) {
 
         if( $filter['min_num_label'] !== '' ){
             if( ! is_null( $term ) && property_exists( $term, 'slug' ) && in_array( $term->slug, ['min', 'from'] ) ){
+                $value = flrt_chips_label_value( $filter, $term->slug );
                 if( strpos( $filter['min_num_label'], '{value}' ) !== false ){
-                    $term_name = str_replace( '{value}', $filter['values'][$term->slug], $filter['min_num_label'] );
+                    $term_name = str_replace( '{value}', $value, $filter['min_num_label'] );
                 }else {
-                    $term_name = $filter['min_num_label'] .' '.$filter['values'][$term->slug];
+                    $term_name = $filter['min_num_label'] .' '.$value;
                 }
 
             }
@@ -491,10 +480,11 @@ function flrt_chips_labels( $term_name, $term, $filter ) {
 
         if( $filter['max_num_label'] !== '' ){
             if( ! is_null( $term ) && property_exists( $term, 'slug' ) && in_array( $term->slug, ['max', 'to'] ) ){
+                $value = flrt_chips_label_value( $filter, $term->slug );
                 if( strpos( $filter['max_num_label'], '{value}' ) !== false ){
-                    $term_name = str_replace( '{value}', $filter['values'][$term->slug], $filter['max_num_label'] );
+                    $term_name = str_replace( '{value}', $value, $filter['max_num_label'] );
                 }else {
-                    $term_name = $filter['max_num_label'] .' '.$filter['values'][$term->slug];
+                    $term_name = $filter['max_num_label'] .' '.$value;
                 }
             }
         }
@@ -502,6 +492,36 @@ function flrt_chips_labels( $term_name, $term, $filter ) {
     }
 
     return $term_name;
+}
+
+/**
+ * Queried value for a {value} chip label. Date values must respect the
+ * filter's Date Format option, like the default term names built in
+ * PostDateEntity::createTermName() do (raw URL values otherwise leak
+ * into the chips).
+ */
+function flrt_chips_label_value( $filter, $edge ) {
+    $value = isset( $filter['values'][ $edge ] ) ? $filter['values'][ $edge ] : '';
+
+    if ( in_array( $filter['entity'], [ 'post_date', 'post_meta_date' ] ) && ! empty( $filter['date_format'] ) ) {
+        $format    = $filter['date_format'];
+        $date_type = flrt_detect_date_type( $value );
+
+        // In case if we have several date filters on the same page
+        if ( in_array( $date_type, [ 'date', 'time' ] ) ) {
+            $maybe_split_format = flrt_split_date_time( $format );
+            if ( isset( $maybe_split_format[ $date_type ] ) ) {
+                $format = $maybe_split_format[ $date_type ];
+            }
+        }
+
+        $formatted = flrt_apply_date_format( $value, $format );
+        if ( $formatted ) {
+            $value = $formatted;
+        }
+    }
+
+    return $value;
 }
 
 add_filter( 'query_loop_block_query_vars', 'flrt_query_loop_block_query_vars', 10, 2 );
@@ -769,7 +789,7 @@ add_action('wp_ajax_wpc_search_meta_keys', function () {
             static fn(string $key) => strncmp($key, $q, strlen($q)) === 0
         ));
     }
-    $default_items = array_map(static function ($k) {
+    $default_items = array_map(static function ($k) use ($include_custom_meta_keys) {
         return [
             'id'   => $k,
             'text' => $include_custom_meta_keys[$k],
@@ -857,6 +877,134 @@ if (!defined( 'FLRT_FILTERS_PRO' ) ){
 }
 
 
+/**
+ * PRO-only fields have no inputs in the free admin UI, so saving in the free
+ * version would silently wipe their values from the DB. Instead, carry the
+ * previously saved values over — they must survive free-mode saves and start
+ * working again after switching back to PRO. In the free version their
+ * runtime effect is disabled at read time (see the hooks below), not in the DB.
+ */
+add_filter('wpc_pre_save_filter', function($filter) {
+    if( !defined('FLRT_FILTERS_PRO')) {
+        $proFields = array('show_range_list', 'range_list_input', 'used_for_variations');
+
+        // Values for these fields can not come from the free UI — drop any posted ones
+        foreach ($proFields as $proField) {
+            unset($filter[$proField]);
+        }
+
+        if (!empty($filter['ID']) && is_numeric($filter['ID'])) {
+            $savedPost = get_post((int) $filter['ID']);
+
+            if ($savedPost && $savedPost->post_type === FLRT_FILTERS_POST_TYPE) {
+                $savedFields = (array) maybe_unserialize($savedPost->post_content);
+
+                foreach ($proFields as $proField) {
+                    if (isset($savedFields[$proField])) {
+                        $filter[$proField] = $savedFields[$proField];
+                    }
+                }
+            }
+        }
+    }
+    return $filter;
+});
+
+add_filter('wpc_pre_save_set_fields', function($setFields) {
+    if( !defined('FLRT_FILTERS_PRO')) {
+        $proFields = array('hide_empty_filter', 'custom_posts_container', 'apply_button_page_type', 'apply_button_post_name');
+
+        foreach ($proFields as $proField) {
+            unset($setFields[$proField]);
+        }
+
+        if (!empty($setFields['ID']) && is_numeric($setFields['ID'])) {
+            $savedPost = get_post((int) $setFields['ID']);
+
+            if ($savedPost && $savedPost->post_type === FLRT_FILTERS_SET_POST_TYPE) {
+                $savedFields = (array) maybe_unserialize($savedPost->post_content);
+
+                foreach ($proFields as $proField) {
+                    if (isset($savedFields[$proField])) {
+                        $setFields[$proField] = $savedFields[$proField];
+                    }
+                }
+            }
+        }
+    }
+    return $setFields;
+});
+
+/**
+ * PRO-only plugin settings have no inputs in the free Settings UI (they render
+ * as "Unlock with PRO"), so saving the settings form in the free version would
+ * silently drop their values from the option. Carry the previously saved
+ * values over — they must survive free-mode saves and start working again
+ * after switching back to PRO. Their runtime effect is disabled at read time
+ * (flrt_instant_recount, wpc_replace_links_with_spans).
+ */
+add_filter('pre_update_option_wpc_filter_settings', function($value, $old_value) {
+    if( !defined('FLRT_FILTERS_PRO')) {
+        $proOptions = array('apply_button_instant_recount', 'disable_filter_links_for_bots');
+
+        foreach ($proOptions as $proOption) {
+            // Values for these keys can not come from the free UI — drop any posted ones
+            if (is_array($value)) {
+                unset($value[$proOption]);
+            }
+
+            if (is_array($old_value) && isset($old_value[$proOption])) {
+                if (!is_array($value)) {
+                    $value = array();
+                }
+                $value[$proOption] = $old_value[$proOption];
+            }
+        }
+    }
+    return $value;
+}, 10, 2);
+
+/**
+ * Runtime gate for the free version: the PRO-only values preserved in the DB
+ * must not activate PRO features while the plugin runs as free.
+ */
+add_filter('wpc_after_get_filter', function($filter) {
+    if( !defined('FLRT_FILTERS_PRO')) {
+        $filter['show_range_list']     = '';
+        $filter['range_list_input']    = ''; // '' matches getEmptyFilter() and disables the JS range-list branch
+        $filter['used_for_variations'] = '';
+    }
+    return $filter;
+});
+
+add_filter('wpc_filter_before_make_default_set_values', function($parsed) {
+    if( !defined('FLRT_FILTERS_PRO')) {
+        foreach (array('hide_empty_filter', 'custom_posts_container', 'apply_button_page_type', 'apply_button_post_name') as $proField) {
+            unset($parsed[$proField]);
+        }
+    }
+    return $parsed;
+});
+
+if (!function_exists('wpc_replace_links_with_spans')) {
+    function wpc_replace_links_with_spans($term_name, $attributes = '', $term = false, $filter = false)
+    {
+        // PRO-only option: the value preserved in the DB must stay inert in free
+        if( defined('FLRT_FILTERS_PRO') && flrt_get_option('disable_filter_links_for_bots') === 'on' ) {
+            // Keep a real <a> when the target page is indexable (within the
+            // Indexing Depth) — hiding pages the SEO layer indexes would
+            // starve them of internal links; only the noise stays hidden
+            if ( $term && $filter && function_exists('flrt_indexable_link_target')
+                && flrt_indexable_link_target( $term, $filter ) ) {
+                return $term_name;
+            }
+            $term_name = str_replace('<a', '<span', $term_name);
+            $term_name = str_replace('href', 'data-wpc-span-link', $term_name);
+            return str_replace('</a>', '</span>', $term_name);
+        }
+        return $term_name;
+    }
+}
 
 //add_filter( 'stackable/posts/post_query', 'flrt_stackable_block_query_vars', 10, 3 );
 //function flrt_stackable_block_query_vars( $post_query, $context, $query_string ){

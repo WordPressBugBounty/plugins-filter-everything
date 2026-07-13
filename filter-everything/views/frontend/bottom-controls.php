@@ -19,8 +19,8 @@ if ( ! defined('ABSPATH') ) {
     <a class="wpc-filters-apply-button wpc-posts-loaded" href="<?php echo esc_url($action_url); ?>"><?php
         echo wp_kses(
             sprintf( __('Show %s', 'filter-everything'),
-            '<span class="wpc-filters-found-posts-wrapper">(<span class="wpc-filters-found-posts">'.esc_html($found_posts).'</span>)</span>'),
-        array( 'span' => array('class'=>true) )
+            '<span class="wpc-filters-found-posts-wrapper">(<span class="wpc-filters-found-posts" data-wpc-total-found-posts="' . esc_attr($found_posts) . '">'.esc_html($found_posts).'</span>)</span>'),
+        array( 'span' => array('class'=>true, 'data-wpc-total-found-posts'=>true) )
         );
   ?></a>
 </div>

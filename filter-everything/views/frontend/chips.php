@@ -20,13 +20,21 @@ $chips_count++;
 <ul class="wpc-filter-chips-list wpc-filter-chips-<?php echo esc_attr( $setid .'-' .$chips_count ); ?> wpc-filter-chips-<?php echo esc_attr( $setid ); ?><?php if( ! $chips ){echo ' wpc-empty-chips-container';} ?>" data-set="<?php echo esc_attr( $setid ); ?>" data-setcount="<?php echo $setid .'-' .$chips_count ; ?>">
     <?php if( $chips ) : ?>
         <?php foreach( $chips as $chip ): ?>
-            <li class="wpc-filter-chip <?php echo esc_attr( $chip['class'] ); ?>"><a href="<?php echo esc_url( $chip['link'] ); ?>" title="<?php if( $chip['name'] !== esc_html__('Reset all', 'filter-everything') ){
+            <?php
+                // Smart spans: a chip whose removal target is not indexable must
+                // not expose a crawlable link (missing 'crawlable' means a link)
+                $chip_is_link  = ! isset( $chip['crawlable'] ) || $chip['crawlable'];
+                $chip_tag      = $chip_is_link ? 'a' : 'span';
+                $chip_link_att = $chip_is_link ? 'href' : 'data-wpc-span-link';
+            ?>
+            <li class="wpc-filter-chip <?php echo esc_attr( $chip['class'] ); ?>">
+                <<?php echo $chip_tag; ?> <?php echo $chip_link_att; ?>="<?php echo esc_url( $chip['link'] ); ?>" <?php echo (!empty($chip['link_class'])) ? 'class="' . $chip['link_class'] . '"' : ''; ?> title="<?php if( $chip['name'] !== esc_html__('Reset all', 'filter-everything') ){
                     if ( $chip['class'] === 'wpc-chip-search' ) {
                         echo esc_attr( sprintf( __('Remove %s from results', 'filter-everything'), '&laquo;'.$chip['label'].'&raquo;' ) );
                     } else {
                         echo esc_attr( sprintf( __('Remove %s from results', 'filter-everything'), '&laquo;'.$chip['label'] .': '.$chip['name'].'&raquo;' ) );
                     }
-                } ?>"><span class="wpc-chip-content"><?php if(isset($chip['rating'])) : ?><span class="wpc-chip-stars"><?php
+                } ?>"<?php echo (!empty($chip['e_name'])) ? ' data-wpc-e-name="' . $chip['e_name'] . '"' : ''; ?><?php echo (!empty($chip['slug'])) ? ' data-wpc-slug="' . $chip['slug'] . '"' : ''; ?>><span class="wpc-chip-content"><?php if(isset($chip['rating'])) : ?><span class="wpc-chip-stars"><?php
                             for ($i = 1; $i <=  $chip['rating']; $i++){
                                 echo '<span>' . flrt_rating_star() . '</span>';
                             }
@@ -34,7 +42,7 @@ $chips_count++;
                         else :
                             ?><span class="wpc-filter-chip-name"><?php echo esc_html( $chip['name'] ); ?></span><?php
                         endif;
-                        ?><span class="wpc-chip-remove-icon">&#215;</span></a></span></li>
+                        ?><span class="wpc-chip-remove-icon">&#215;</span></span></<?php echo $chip_tag; ?>></li>
         <?php endforeach; ?>
     <?php endif; ?>
 </ul>

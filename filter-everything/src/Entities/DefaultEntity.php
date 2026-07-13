@@ -9,6 +9,14 @@ if ( ! defined('ABSPATH') ) {
 class DefaultEntity implements Entity
 {
     public $items = [];
+    /**
+     * Declared explicitly: assigned from the outside in
+     * EntityManager::prepareEntitiesToDisplay(); dynamic properties are
+     * deprecated since PHP 8.2.
+     */
+    public $items_sort = [];
+
+    public $filter = [];
 
     public $entityName = '';
 

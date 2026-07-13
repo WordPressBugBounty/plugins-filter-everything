@@ -3,7 +3,7 @@
 Plugin Name: Filter Everything&nbsp;— WordPress & WooCommerce Filters
 Plugin URI: https://filtereverything.pro
 Description: Instantly filter any WordPress content & WooCommerce products by attributes, taxonomies, custom fields + AJAX, Elementor, automatic filter creation.
-Version: 1.9.2.2
+Version: 1.9.3
 Author: Andrii Stepasiuk
 Author URI: https://filtereverything.pro/about/
 Text Domain: filter-everything
@@ -21,7 +21,7 @@ if( ! class_exists( 'FlrtFilter' ) ):
 
         public function init()
         {
-            global $flrt_sets, $wpc_not_fired, $chips_count;
+            global $flrt_sets, $wpc_not_fired, $chips_count, $flrt_json_data;
 
             $chips_count   = 0;
             $wpc_not_fired = true;
@@ -31,9 +31,9 @@ if( ! class_exists( 'FlrtFilter' ) ):
             $this->define( 'FLRT_PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );
             $this->define( 'FLRT_PLUGIN_BASENAME', plugin_basename(__FILE__) );
             $this->define( 'FLRT_PLUGIN_SLUG', 'filter-everything-pro' );
-            $this->define( 'FLRT_PLUGIN_VER', '1.9.2.2' );
+            $this->define( 'FLRT_PLUGIN_VER', '1.9.3' );
             $this->define( 'FLRT_PLUGIN_URL', 'https://filtereverything.pro' );
-            $this->define( 'FLRT_PLUGIN_TESTED_TO', '7.0' );
+            $this->define( 'FLRT_PLUGIN_TESTED_TO', '7.0.1' );
             $this->define( 'FLRT_PLUGIN_DEBUG', false );
             $this->define( 'FLRT_TEMPLATES_DIR_NAME', 'filters' );
 
@@ -54,7 +54,12 @@ if( ! class_exists( 'FlrtFilter' ) ):
             $this->define( 'FLRT_RELEASER', 'stepasiuk' );
             $this->define( 'FLRT_APPROVED', 'victor' );
             $this->define( 'FLRT_ITERATION', 'first' );
-            $this->define( 'FLRT_PRO_PRICE', '$49' );
+            $this->define( 'FLRT_PRO_PRICE', '$69' );
+
+            if ( ! defined('FLRT_RANGE_LIST_LIMIT')){
+                $this->define( 'FLRT_RANGE_LIST_LIMIT', 20 );
+            }
+
 
             if ( ! defined('FLRT_XML_PATH')){
                 $wp_upload_dir = wp_upload_dir();
@@ -134,6 +139,7 @@ if( ! class_exists( 'FlrtFilter' ) ):
 
             flrt_include('src/FormFields/Input.php');
             flrt_include('src/wpc-api.php');
+            flrt_include('src/Admin/Widgets/gutenberg/gutenberg.php');
 
             $this->registerHooks();
 

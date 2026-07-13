@@ -45,7 +45,9 @@ if( ! function_exists('flrt_wp') ){
                     }else{
                         if (isset($theme_dependencies['button_hook']) && is_array($theme_dependencies['button_hook'])) {
                             foreach ($theme_dependencies['button_hook'] as $button_hook) {
-                                add_action($button_hook, 'flrt_filters_button', 15);
+                                add_action($button_hook, function() use ($button_hook) {
+                                    flrt_filters_button(0, '', $button_hook);
+                                }, 15);
                             }
                         }
                     }
@@ -53,7 +55,9 @@ if( ! function_exists('flrt_wp') ){
                 } else {
                     if (isset($theme_dependencies['button_hook']) && is_array($theme_dependencies['button_hook'])) {
                         foreach ($theme_dependencies['button_hook'] as $button_hook) {
-                            add_action($button_hook, 'flrt_filters_button', 15);
+                            add_action($button_hook, function() use ($button_hook) {
+                                flrt_filters_button(0, '', $button_hook);
+                            }, 15);
                         }
                     }
                 }
@@ -158,6 +162,13 @@ function flrt_get_theme_dependencies(){
             'primary_color'     => '#0073aa',
             'button_hook'       => '',
             'chips_hook'        => ''
+        ),
+        'twentytwentyfive'    => array(
+                'posts_container'   => '#wp--skip-link--target',
+                'sidebar_container' => '',
+                'primary_color'     => '#0073aa',
+                'button_hook'       => '',
+                'chips_hook'        => ''
         ),
         'twentytwenty'      => array(
             'posts_container'   => '#site-content',
@@ -321,20 +332,28 @@ function flrt_get_theme_dependencies(){
             'button_hook'       => '',
             'chips_hook'        => ''
         ),
-        'divi' => array(
-            'posts_container'   => '#primary',
-            'sidebar_container' => '#secondary',
-            'primary_color'     => '',
-            'button_hook'       => '',
-            'chips_hook'        => ''
-        ),
         'woodmart' => array(
             'posts_container'   => '.site-content',
             'sidebar_container' => '#secondary',
             'primary_color'     => '#83b735',
             'button_hook'       => '',
             'chips_hook'        => array( 'woodmart_shop_filters_area', 'woodmart_main_loop')
-        )
+        ),
+
+        'bricks' => array(
+                'posts_container'   => '.brxe-container',
+                'sidebar_container' => '',
+                'primary_color'     => '',
+                'button_hook'       => array('bricks_after_header'),
+                'chips_hook'        => ''
+        ),
+        'bb-theme' => array(
+                'posts_container'   => '#fl-main-content',
+                'sidebar_container' => '',
+                'primary_color'     => '',
+                'button_hook'       => array('fl_content_open'),
+                'chips_hook'        => ''
+        ),
     );
 
     $theme_dependencies = apply_filters( 'wpc_theme_dependencies', $theme_dependencies );
@@ -832,21 +851,21 @@ if ( flrt_is_elementor_active() ) {
         );
         $css = '
         .wpc-fe-icon {
-            background: url(%s) no-repeat;
+            background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDUzIDUzIiBpZD0iTGF5ZXJfMSIgeD0iMHB4IiB5PSIwcHgiIHZpZXdCb3g9IjAgMCA1MyA1MyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNTMgNTM7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4NCiAgICAgICAgICAgICAgIDxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+DQogICAgICAgICAgICAgICAgLnN0MHtkaXNwbGF5Om5vbmU7fQ0KICAgICAgICAgICAgICAgIC5zdDF7ZGlzcGxheTppbmxpbmU7fQ0KICAgICAgICAgICAgICAgIC5zdDN7ZmlsbDojZmZmZmZmO30NCiAgICAgICAgICAgICAgICAuc3Q0e2Rpc3BsYXk6bm9uZTtmaWxsOiNmZmZmZmY7fQ0KICAgICAgICAgICAgICAgIC5zdDV7ZmlsbDpub25lO2ZpbGwtb3BhY2l0eTowO3N0cm9rZTojZmZmZmZmO3N0cm9rZS13aWR0aDozO3N0cm9rZS1taXRlcmxpbWl0OjEwO30NCiAgICAgICAgICAgICAgICAuc3Q2e2ZpbGw6bm9uZTtmaWxsLW9wYWNpdHk6MDtzdHJva2U6I2ZmZmZmZjtzdHJva2Utd2lkdGg6MjtzdHJva2UtbWl0ZXJsaW1pdDoxMDt9DQogICAgICAgICAgICAgICA8L3N0eWxlPg0KICAgICAgICAgICAgICAgPGcgaWQ9IkxheWVyXzJfMDAwMDAwNDc3NzA3MTk3MTAxMTA3NDIyMzAwMDAwMDM5MjM5NTE2MjYxNDg4NDk1NTdfIiBjbGFzcz0ic3QwIj4NCiAgICAgICAgICAgICAgICA8cmVjdCB4PSIwIiB5PSIwIiBjbGFzcz0ic3QxIiB3aWR0aD0iNTMuMSIgaGVpZ2h0PSI1My4xIi8+DQogICAgICAgICAgICAgICA8L2c+DQogICAgICAgICAgICAgICA8ZyBpZD0iTGF5ZXJfMV8wMDAwMDE2MjMzMzEwMzI2NTgwNjk4MTUzMDAwMDAxNzE0NjYyNDI0NzU5MTY3NDU1Nl8iPg0KICAgICAgICAgICAgICAgIDxnPg0KICAgICAgICAgICAgICAgICAgIDxkZWZzPg0KICAgICAgICAgICAgICAgICAgICAgIDxwYXRoIGlkPSJTVkdJRF8xXyIgZD0iTTAsMGg1M3Y1M0gwVjB6IE0yMy4zLDM3LjJjMS40LDAsMi41LTEuMSwyLjUtMi41cy0xLjEtMi41LTIuNS0yLjVzLTIuNSwxLjEtMi41LDIuNSAgICAgQzIwLjgsMzYuMSwyMS45LDM3LjIsMjMuMywzNy4yeiBNMzMuNCwyNy4yYzEuNCwwLDIuNS0xLjEsMi41LTIuNXMtMS4xLTIuNS0yLjUtMi41cy0yLjUsMS4xLTIuNSwyLjVTMzIsMjcuMiwzMy40LDI3LjJ6ICAgICAgTTIzLDIyLjhjMS42LDAsMi45LTEuMywyLjktMi45UzI0LjYsMTcsMjMsMTdzLTIuOSwxLjMtMi45LDIuOUMyMC4yLDIxLjUsMjEuNSwyMi44LDIzLDIyLjh6Ii8+DQogICAgICAgICAgICAgICAgICAgPC9kZWZzPg0KICAgICAgICAgICAgICAgICAgIDxjbGlwUGF0aCBpZD0iU1ZHSURfMDAwMDAxMTI2MDgzNDA4MDQyNDU0NDI0NjAwMDAwMTM5ODYyMTkxNzgxOTkwODYyNDRfIj4NCiAgICAgICAgICAgICAgICAgICAgICA8dXNlIHhsaW5rOmhyZWY9IiNTVkdJRF8xXyIgc3R5bGU9Im92ZXJmbG93OnZpc2libGU7Ii8+DQogICAgICAgICAgICAgICAgICAgPC9jbGlwUGF0aD4NCiAgICAgICAgICAgICAgICAgICA8ZyBpZD0iQmFyc0NsaXBwZWQiIHN0eWxlPSJjbGlwLXBhdGg6dXJsKCNTVkdJRF8wMDAwMDExMjYwODM0MDgwNDI0NTQ0MjQ2MDAwMDAxMzk4NjIxOTE3ODE5OTA4NjI0NF8pOyI+DQogICAgICAgICAgICAgICAgICAgICAgPHBhdGggY2xhc3M9InN0MyIgZD0iTTM5LjksMzEuNUwxOCwzNy4zYy0wLjYsMC4yLTEuMi0wLjItMS40LTAuOGMtMC4yLTAuNiwwLjItMS4yLDAuOC0xLjRsMjEuOS01LjljMC42LTAuMiwxLjIsMC4yLDEuNCwwLjggICAgIEM0MC44LDMwLjcsNDAuNSwzMS4zLDM5LjksMzEuNXoiLz4NCiAgICAgICAgICAgICAgICAgICAgICA8cGF0aCBjbGFzcz0ic3QzIiBkPSJNMzguMSwyNC42bC0yMS45LDUuOWMtMC42LDAuMi0xLjItMC4yLTEuNC0wLjhjLTAuMi0wLjYsMC4yLTEuMiwwLjgtMS40bDIxLjktNS45YzAuNi0wLjIsMS4yLDAuMiwxLjQsMC44ICAgICBDMzksMjMuOCwzOC43LDI0LjUsMzguMSwyNC42eiIvPg0KICAgICAgICAgICAgICAgICAgICAgIDxwYXRoIGNsYXNzPSJzdDMiIGQ9Ik0zNi4yLDE3LjlsLTIxLjksNS45Yy0wLjYsMC4yLTEuMi0wLjItMS40LTAuOGMtMC4yLTAuNiwwLjItMS4yLDAuOC0xLjRsMjEuOS01LjljMC42LTAuMiwxLjIsMC4yLDEuNCwwLjggICAgIEMzNy4yLDE3LjEsMzYuOCwxNy43LDM2LjIsMTcuOXoiLz4NCiAgICAgICAgICAgICAgICAgICA8L2c+DQogICAgICAgICAgICAgICAgPC9nPg0KICAgICAgICAgICAgICAgIDxwYXRoIGNsYXNzPSJzdDQiIGQ9Ik0yMy4zLDM3LjJjMS40LDAsMi41LTEuMSwyLjUtMi41cy0xLjEtMi41LTIuNS0yLjVzLTIuNSwxLjEtMi41LDIuNUMyMC44LDM2LjEsMjEuOSwzNy4yLDIzLjMsMzcuMnoiLz4NCiAgICAgICAgICAgICAgICA8cGF0aCBjbGFzcz0ic3Q0IiBkPSJNMzMuNCwyNy4yYzEuNCwwLDIuNS0xLjEsMi41LTIuNXMtMS4xLTIuNS0yLjUtMi41cy0yLjUsMS4xLTIuNSwyLjVTMzIsMjcuMiwzMy40LDI3LjJ6Ii8+DQogICAgICAgICAgICAgICAgPHBhdGggY2xhc3M9InN0NCIgZD0iTTIzLDIyLjhjMS42LDAsMi45LTEuMywyLjktMi45UzI0LjYsMTcsMjMsMTdzLTIuOSwxLjMtMi45LDIuOUMyMC4yLDIxLjUsMjEuNSwyMi44LDIzLDIyLjh6Ii8+DQogICAgICAgICAgICAgICAgPHBhdGggY2xhc3M9InN0NCIgZD0iTTIzLjksMzguMmMtMS45LDAuNS0zLjgtMC42LTQuMy0yLjVjLTAuNS0xLjksMC42LTMuOCwyLjUtNC4zczMuOCwwLjYsNC4zLDIuNUMyNi45LDM1LjgsMjUuOCwzNy43LDIzLjksMzguMiAgIHogTTIyLjYsMzMuMmMtMC45LDAuMi0xLjQsMS4xLTEuMSwyYzAuMiwwLjksMS4xLDEuNCwyLDEuMWMwLjktMC4yLDEuNC0xLjEsMS4xLTJDMjQuMywzMy41LDIzLjQsMzMsMjIuNiwzMy4yeiIvPg0KICAgICAgICAgICAgICAgIDxwYXRoIGNsYXNzPSJzdDQiIGQ9Ik0zNC4xLDI4LjJjLTEuOSwwLjUtMy44LTAuNi00LjMtMi41czAuNi0zLjgsMi41LTQuM2MxLjktMC41LDMuOCwwLjYsNC4zLDIuNUMzNy4xLDI1LjgsMzYsMjcuNywzNC4xLDI4LjJ6ICAgIE0zMi44LDIzLjJjLTAuOSwwLjItMS40LDEuMS0xLjEsMmMwLjIsMC45LDEuMSwxLjQsMiwxLjFjMC45LTAuMiwxLjQtMS4xLDEuMS0yQzM0LjUsMjMuNSwzMy42LDIzLDMyLjgsMjMuMnoiLz4NCiAgICAgICAgICAgICAgICA8cGF0aCBjbGFzcz0ic3Q0IiBkPSJNMjQuMiwyMy41Yy0xLjksMC41LTMuOC0wLjYtNC4zLTIuNXMwLjYtMy44LDIuNS00LjNzMy44LDAuNiw0LjMsMi41UzI2LjEsMjMsMjQuMiwyMy41eiBNMjIuOSwxOC42ICAgYy0wLjksMC4yLTEuNCwxLjEtMS4xLDJjMC4yLDAuOSwxLjEsMS40LDIsMS4xYzAuOS0wLjIsMS40LTEuMSwxLjEtMkMyNC43LDE4LjgsMjMuOCwxOC4zLDIyLjksMTguNnoiLz4NCiAgICAgICAgICAgICAgICANCiAgICAgICAgICAgICAgICA8cGF0aCBjbGFzcz0ic3Q1IiBmaWxsLW9wYWNpdHk9IjAiIGQ9Ik0yNi41LDUxLjVjMTMuOCwwLDI1LTExLjIsMjUtMjVzLTExLjItMjUtMjUtMjVzLTI1LDExLjItMjUsMjVTMTIuNyw1MS41LDI2LjUsNTEuNXoiLz4NCiAgICAgICAgICAgICAgICANCiAgICAgICAgICAgICAgICA8cGF0aCBjbGFzcz0ic3Q0IiBkPSJNMzMuMywyMWgxMGMwLjQsMCwwLjgtMC4zLDAuOC0wLjhzLTAuMy0wLjgtMC44LTAuOGgtMTBDMzMuMywyMC4yLDMzLjMsMjAuMiwzMy4zLDIxeiIvPg0KICAgICAgICAgICAgICAgPC9nPg0KICAgICAgICAgICAgICAgDQogICAgICAgICAgICAgICA8Y2lyY2xlIGNsYXNzPSJzdDYiIGZpbGwtb3BhY2l0eT0iMCIgY3g9IjIzLjMiIGN5PSIyMC4xIiByPSIyLjUiLz4NCiAgICAgICAgICAgICAgIDxjaXJjbGUgY2xhc3M9InN0NiIgZmlsbC1vcGFjaXR5PSIwIiBjeD0iMzMuMiIgY3k9IjI0LjgiIHI9IjIuNSIvPg0KICAgICAgICAgICAgICAgPGNpcmNsZSBjbGFzcz0ic3Q2IiBmaWxsLW9wYWNpdHk9IjAiIGN4PSIyMyIgY3k9IjM0LjgiIHI9IjIuNSIvPg0KICAgICAgICAgICAgICAgPC9zdmc+) no-repeat;
             background-size: auto;
             background-size: contain;
             display: inline-block;
             width: 28px;
             height: 28px;
             margin-bottom: -5px;
-          }  
+        } 
         
           .elementor-navigator__element-widget .wpc-fe-icon {
             width: 15px;
             height: 15px;
             margin-bottom: 0px;
           }';
-        wp_add_inline_style( 'filter-everything-elementor', sprintf( $css, esc_attr(flrt_get_icon_svg()) ) );
+        wp_add_inline_style( 'filter-everything-elementor', $css );
     });
 
     add_filter('elementor/document/wrapper_attributes', function($attributes) {
@@ -891,20 +910,20 @@ add_action('admin_enqueue_scripts', function () {
 
 
     $css = <<<PHP_CSS
-#toplevel_page_edit-post_type-filter-set .wp-menu-image{
-    content: '';
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 20px;
-    background-image: url('data:image/svg+xml,%3C%3Fxml version="1.0" encoding="utf-8"%3F%3E%3C!--  --%3E%3Csvg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 53 53" style="enable-background:new 0 0 53 53;" xml:space="preserve"%3E%3Cstyle type="text/css"%3E .st0%7Bdisplay:none;%7D .st1%7Bdisplay:inline;%7D .st2%7Bclip-path:url(%23SVGID_00000142154616827085436530000012698217856111301567_);%7D .st3%7Bfill:%23a7aaad;%7D .st4%7Bdisplay:none;fill:%23FFFFFF;%7D .st5%7Bfill:none;stroke:%23a7aaad;stroke-width:3;stroke-miterlimit:10;%7D .st6%7Bfill:none;stroke:%23a7aaad;stroke-width:2;stroke-miterlimit:10;%7D%0A%3C/style%3E%3Cg id="Layer_2_00000047770719710110742230000003923951626148849557_" class="st0"%3E%3Crect class="st1" width="53.1" height="53.1"/%3E%3C/g%3E%3Cg id="Layer_1_00000162333103265806981530000017146624247591674556_"%3E%3Cg%3E%3Cg%3E%3Cdefs%3E%3Cpath id="SVGID_1_" d="M0,0h53v53H0V0z M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5 C20.8,36.1,21.9,37.2,23.3,37.2z M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3C/defs%3E%3CclipPath id="SVGID_00000111880200341027563210000003406718579453459379_"%3E%3Cuse xlink:href="%23SVGID_1_" style="overflow:visible;"/%3E%3C/clipPath%3E%3Cg id="BarsClipped" style="clip-path:url(%23SVGID_00000111880200341027563210000003406718579453459379_);"%3E%3Cpath class="st3" d="M39.9,31.5L18,37.3c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C40.8,30.7,40.5,31.3,39.9,31.5z"/%3E%3Cpath class="st3" d="M38.1,24.6l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C39,23.8,38.7,24.5,38.1,24.6z"/%3E%3Cpath class="st3" d="M36.2,17.9l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C37.2,17.1,36.8,17.7,36.2,17.9z"/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3Cpath class="st4" d="M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5C20.8,36.1,21.9,37.2,23.3,37.2z"/%3E%3Cpath class="st4" d="M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z"/%3E%3Cpath class="st4" d="M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3Cpath class="st4" d="M23.9,38.2c-1.9,0.5-3.8-0.6-4.3-2.5c-0.5-1.9,0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5C26.9,35.8,25.8,37.7,23.9,38.2 z M22.6,33.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.3,33.5,23.4,33,22.6,33.2z"/%3E%3Cpath class="st4" d="M34.1,28.2c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3c1.9-0.5,3.8,0.6,4.3,2.5C37.1,25.8,36,27.7,34.1,28.2z M32.8,23.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C34.5,23.5,33.6,23,32.8,23.2z"/%3E%3Cpath class="st4" d="M24.2,23.5c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5S26.1,23,24.2,23.5z M22.9,18.6 c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.7,18.8,23.8,18.3,22.9,18.6z"/%3E%3Cpath class="st5" d="M26.5,51.5c13.8,0,25-11.2,25-25s-11.2-25-25-25s-25,11.2-25,25S12.7,51.5,26.5,51.5z"/%3E%3Cpath class="st4" d="M33.3,21h10c0.4,0,0.8-0.3,0.8-0.8s-0.3-0.8-0.8-0.8h-10C33.3,20.2,33.3,20.2,33.3,21z"/%3E%3C/g%3E%3Ccircle class="st6" cx="23.3" cy="20.1" r="2.5"/%3E%3Ccircle class="st6" cx="33.2" cy="24.8" r="2.5"/%3E%3Ccircle class="st6" cx="23" cy="34.8" r="2.5"/%3E%3C/svg%3E');
-}
-#toplevel_page_edit-post_type-filter-set:hover .wp-menu-image{
-    background-image: url('data:image/svg+xml,%3C%3Fxml version="1.0" encoding="utf-8"%3F%3E%3C!--  --%3E%3Csvg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 53 53" style="enable-background:new 0 0 53 53;" xml:space="preserve"%3E%3Cstyle type="text/css"%3E .st0%7Bdisplay:none;%7D .st1%7Bdisplay:inline;%7D .st2%7Bclip-path:url(%23SVGID_00000142154616827085436530000012698217856111301567_);%7D .st3%7Bfill:%2372AEE6;%7D .st4%7Bdisplay:none;fill:%23FFFFFF;%7D .st5%7Bfill:none;stroke:%2372AEE6;stroke-width:3;stroke-miterlimit:10;%7D .st6%7Bfill:none;stroke:%2372AEE6;stroke-width:2;stroke-miterlimit:10;%7D%0A%3C/style%3E%3Cg id="Layer_2_00000047770719710110742230000003923951626148849557_" class="st0"%3E%3Crect class="st1" width="53.1" height="53.1"/%3E%3C/g%3E%3Cg id="Layer_1_00000162333103265806981530000017146624247591674556_"%3E%3Cg%3E%3Cg%3E%3Cdefs%3E%3Cpath id="SVGID_1_" d="M0,0h53v53H0V0z M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5 C20.8,36.1,21.9,37.2,23.3,37.2z M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3C/defs%3E%3CclipPath id="SVGID_00000111880200341027563210000003406718579453459379_"%3E%3Cuse xlink:href="%23SVGID_1_" style="overflow:visible;"/%3E%3C/clipPath%3E%3Cg id="BarsClipped" style="clip-path:url(%23SVGID_00000111880200341027563210000003406718579453459379_);"%3E%3Cpath class="st3" d="M39.9,31.5L18,37.3c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C40.8,30.7,40.5,31.3,39.9,31.5z"/%3E%3Cpath class="st3" d="M38.1,24.6l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C39,23.8,38.7,24.5,38.1,24.6z"/%3E%3Cpath class="st3" d="M36.2,17.9l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C37.2,17.1,36.8,17.7,36.2,17.9z"/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3Cpath class="st4" d="M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5C20.8,36.1,21.9,37.2,23.3,37.2z"/%3E%3Cpath class="st4" d="M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z"/%3E%3Cpath class="st4" d="M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3Cpath class="st4" d="M23.9,38.2c-1.9,0.5-3.8-0.6-4.3-2.5c-0.5-1.9,0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5C26.9,35.8,25.8,37.7,23.9,38.2 z M22.6,33.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.3,33.5,23.4,33,22.6,33.2z"/%3E%3Cpath class="st4" d="M34.1,28.2c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3c1.9-0.5,3.8,0.6,4.3,2.5C37.1,25.8,36,27.7,34.1,28.2z M32.8,23.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C34.5,23.5,33.6,23,32.8,23.2z"/%3E%3Cpath class="st4" d="M24.2,23.5c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5S26.1,23,24.2,23.5z M22.9,18.6 c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.7,18.8,23.8,18.3,22.9,18.6z"/%3E%3Cpath class="st5" d="M26.5,51.5c13.8,0,25-11.2,25-25s-11.2-25-25-25s-25,11.2-25,25S12.7,51.5,26.5,51.5z"/%3E%3Cpath class="st4" d="M33.3,21h10c0.4,0,0.8-0.3,0.8-0.8s-0.3-0.8-0.8-0.8h-10C33.3,20.2,33.3,20.2,33.3,21z"/%3E%3C/g%3E%3Ccircle class="st6" cx="23.3" cy="20.1" r="2.5"/%3E%3Ccircle class="st6" cx="33.2" cy="24.8" r="2.5"/%3E%3Ccircle class="st6" cx="23" cy="34.8" r="2.5"/%3E%3C/svg%3E');
-}
-.wp-menu-open#toplevel_page_edit-post_type-filter-set .wp-menu-image {
-    background-image: url('data:image/svg+xml,%3C%3Fxml version="1.0" encoding="utf-8"%3F%3E%3C!--  --%3E%3Csvg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 53 53" style="enable-background:new 0 0 53 53;" xml:space="preserve"%3E%3Cstyle type="text/css"%3E .st0%7Bdisplay:none;%7D .st1%7Bdisplay:inline;%7D .st2%7Bclip-path:url(%23SVGID_00000098199702249043298830000017010845528166695064_);%7D .st3%7Bfill:%23FFFFFF;%7D .st4%7Bdisplay:none;fill:%23FFFFFF;%7D .st5%7Bfill:none;stroke:%23FFFFFF;stroke-width:3;stroke-miterlimit:10;%7D .st6%7Bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-miterlimit:10;%7D%0A%3C/style%3E%3Cg id="Layer_2_00000047770719710110742230000003923951626148849557_" class="st0"%3E%3Crect x="0" y="0" class="st1" width="53.1" height="53.1"/%3E%3C/g%3E%3Cg id="Layer_1_00000162333103265806981530000017146624247591674556_"%3E%3Cg%3E%3Cdefs%3E%3Cpath id="SVGID_1_" d="M0,0h53v53H0V0z M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5 C20.8,36.1,21.9,37.2,23.3,37.2z M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3C/defs%3E%3CclipPath id="SVGID_00000112608340804245442460000013986219178199086244_"%3E%3Cuse xlink:href="%23SVGID_1_" style="overflow:visible;"/%3E%3C/clipPath%3E%3Cg id="BarsClipped" style="clip-path:url(%23SVGID_00000112608340804245442460000013986219178199086244_);"%3E%3Cpath class="st3" d="M39.9,31.5L18,37.3c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C40.8,30.7,40.5,31.3,39.9,31.5z"/%3E%3Cpath class="st3" d="M38.1,24.6l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C39,23.8,38.7,24.5,38.1,24.6z"/%3E%3Cpath class="st3" d="M36.2,17.9l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C37.2,17.1,36.8,17.7,36.2,17.9z"/%3E%3C/g%3E%3C/g%3E%3Cpath class="st4" d="M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5C20.8,36.1,21.9,37.2,23.3,37.2z"/%3E%3Cpath class="st4" d="M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z"/%3E%3Cpath class="st4" d="M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3Cpath class="st4" d="M23.9,38.2c-1.9,0.5-3.8-0.6-4.3-2.5c-0.5-1.9,0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5C26.9,35.8,25.8,37.7,23.9,38.2 z M22.6,33.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.3,33.5,23.4,33,22.6,33.2z"/%3E%3Cpath class="st4" d="M34.1,28.2c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3c1.9-0.5,3.8,0.6,4.3,2.5C37.1,25.8,36,27.7,34.1,28.2z M32.8,23.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C34.5,23.5,33.6,23,32.8,23.2z"/%3E%3Cpath class="st4" d="M24.2,23.5c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5S26.1,23,24.2,23.5z M22.9,18.6 c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.7,18.8,23.8,18.3,22.9,18.6z"/%3E%3Cpath class="st5" d="M26.5,51.5c13.8,0,25-11.2,25-25s-11.2-25-25-25s-25,11.2-25,25S12.7,51.5,26.5,51.5z"/%3E%3Cpath class="st4" d="M33.3,21h10c0.4,0,0.8-0.3,0.8-0.8s-0.3-0.8-0.8-0.8h-10C33.3,20.2,33.3,20.2,33.3,21z"/%3E%3C/g%3E%3Ccircle class="st6" cx="23.3" cy="20.1" r="2.5"/%3E%3Ccircle class="st6" cx="33.2" cy="24.8" r="2.5"/%3E%3Ccircle class="st6" cx="23" cy="34.8" r="2.5"/%3E%3C/svg%3E');
-}
-PHP_CSS;
+        #toplevel_page_edit-post_type-filter-set .wp-menu-image{
+            content: '';
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 20px;
+            background-image: url('data:image/svg+xml,%3C%3Fxml version="1.0" encoding="utf-8"%3F%3E%3C!--  --%3E%3Csvg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 53 53" style="enable-background:new 0 0 53 53;" xml:space="preserve"%3E%3Cstyle type="text/css"%3E .st0%7Bdisplay:none;%7D .st1%7Bdisplay:inline;%7D .st2%7Bclip-path:url(%23SVGID_00000142154616827085436530000012698217856111301567_);%7D .st3%7Bfill:%23a7aaad;%7D .st4%7Bdisplay:none;fill:%23FFFFFF;%7D .st5%7Bfill:none;stroke:%23a7aaad;stroke-width:3;stroke-miterlimit:10;%7D .st6%7Bfill:none;stroke:%23a7aaad;stroke-width:2;stroke-miterlimit:10;%7D%0A%3C/style%3E%3Cg id="Layer_2_00000047770719710110742230000003923951626148849557_" class="st0"%3E%3Crect class="st1" width="53.1" height="53.1"/%3E%3C/g%3E%3Cg id="Layer_1_00000162333103265806981530000017146624247591674556_"%3E%3Cg%3E%3Cg%3E%3Cdefs%3E%3Cpath id="SVGID_1_" d="M0,0h53v53H0V0z M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5 C20.8,36.1,21.9,37.2,23.3,37.2z M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3C/defs%3E%3CclipPath id="SVGID_00000111880200341027563210000003406718579453459379_"%3E%3Cuse xlink:href="%23SVGID_1_" style="overflow:visible;"/%3E%3C/clipPath%3E%3Cg id="BarsClipped" style="clip-path:url(%23SVGID_00000111880200341027563210000003406718579453459379_);"%3E%3Cpath class="st3" d="M39.9,31.5L18,37.3c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C40.8,30.7,40.5,31.3,39.9,31.5z"/%3E%3Cpath class="st3" d="M38.1,24.6l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C39,23.8,38.7,24.5,38.1,24.6z"/%3E%3Cpath class="st3" d="M36.2,17.9l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C37.2,17.1,36.8,17.7,36.2,17.9z"/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3Cpath class="st4" d="M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5C20.8,36.1,21.9,37.2,23.3,37.2z"/%3E%3Cpath class="st4" d="M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z"/%3E%3Cpath class="st4" d="M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3Cpath class="st4" d="M23.9,38.2c-1.9,0.5-3.8-0.6-4.3-2.5c-0.5-1.9,0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5C26.9,35.8,25.8,37.7,23.9,38.2 z M22.6,33.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.3,33.5,23.4,33,22.6,33.2z"/%3E%3Cpath class="st4" d="M34.1,28.2c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3c1.9-0.5,3.8,0.6,4.3,2.5C37.1,25.8,36,27.7,34.1,28.2z M32.8,23.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C34.5,23.5,33.6,23,32.8,23.2z"/%3E%3Cpath class="st4" d="M24.2,23.5c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5S26.1,23,24.2,23.5z M22.9,18.6 c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.7,18.8,23.8,18.3,22.9,18.6z"/%3E%3Cpath class="st5" d="M26.5,51.5c13.8,0,25-11.2,25-25s-11.2-25-25-25s-25,11.2-25,25S12.7,51.5,26.5,51.5z"/%3E%3Cpath class="st4" d="M33.3,21h10c0.4,0,0.8-0.3,0.8-0.8s-0.3-0.8-0.8-0.8h-10C33.3,20.2,33.3,20.2,33.3,21z"/%3E%3C/g%3E%3Ccircle class="st6" cx="23.3" cy="20.1" r="2.5"/%3E%3Ccircle class="st6" cx="33.2" cy="24.8" r="2.5"/%3E%3Ccircle class="st6" cx="23" cy="34.8" r="2.5"/%3E%3C/svg%3E');
+        }
+        #toplevel_page_edit-post_type-filter-set:hover .wp-menu-image{
+            background-image: url('data:image/svg+xml,%3C%3Fxml version="1.0" encoding="utf-8"%3F%3E%3C!--  --%3E%3Csvg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 53 53" style="enable-background:new 0 0 53 53;" xml:space="preserve"%3E%3Cstyle type="text/css"%3E .st0%7Bdisplay:none;%7D .st1%7Bdisplay:inline;%7D .st2%7Bclip-path:url(%23SVGID_00000142154616827085436530000012698217856111301567_);%7D .st3%7Bfill:%2372AEE6;%7D .st4%7Bdisplay:none;fill:%23FFFFFF;%7D .st5%7Bfill:none;stroke:%2372AEE6;stroke-width:3;stroke-miterlimit:10;%7D .st6%7Bfill:none;stroke:%2372AEE6;stroke-width:2;stroke-miterlimit:10;%7D%0A%3C/style%3E%3Cg id="Layer_2_00000047770719710110742230000003923951626148849557_" class="st0"%3E%3Crect class="st1" width="53.1" height="53.1"/%3E%3C/g%3E%3Cg id="Layer_1_00000162333103265806981530000017146624247591674556_"%3E%3Cg%3E%3Cg%3E%3Cdefs%3E%3Cpath id="SVGID_1_" d="M0,0h53v53H0V0z M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5 C20.8,36.1,21.9,37.2,23.3,37.2z M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3C/defs%3E%3CclipPath id="SVGID_00000111880200341027563210000003406718579453459379_"%3E%3Cuse xlink:href="%23SVGID_1_" style="overflow:visible;"/%3E%3C/clipPath%3E%3Cg id="BarsClipped" style="clip-path:url(%23SVGID_00000111880200341027563210000003406718579453459379_);"%3E%3Cpath class="st3" d="M39.9,31.5L18,37.3c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C40.8,30.7,40.5,31.3,39.9,31.5z"/%3E%3Cpath class="st3" d="M38.1,24.6l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C39,23.8,38.7,24.5,38.1,24.6z"/%3E%3Cpath class="st3" d="M36.2,17.9l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C37.2,17.1,36.8,17.7,36.2,17.9z"/%3E%3C/g%3E%3C/g%3E%3C/g%3E%3Cpath class="st4" d="M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5C20.8,36.1,21.9,37.2,23.3,37.2z"/%3E%3Cpath class="st4" d="M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z"/%3E%3Cpath class="st4" d="M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3Cpath class="st4" d="M23.9,38.2c-1.9,0.5-3.8-0.6-4.3-2.5c-0.5-1.9,0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5C26.9,35.8,25.8,37.7,23.9,38.2 z M22.6,33.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.3,33.5,23.4,33,22.6,33.2z"/%3E%3Cpath class="st4" d="M34.1,28.2c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3c1.9-0.5,3.8,0.6,4.3,2.5C37.1,25.8,36,27.7,34.1,28.2z M32.8,23.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C34.5,23.5,33.6,23,32.8,23.2z"/%3E%3Cpath class="st4" d="M24.2,23.5c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5S26.1,23,24.2,23.5z M22.9,18.6 c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.7,18.8,23.8,18.3,22.9,18.6z"/%3E%3Cpath class="st5" d="M26.5,51.5c13.8,0,25-11.2,25-25s-11.2-25-25-25s-25,11.2-25,25S12.7,51.5,26.5,51.5z"/%3E%3Cpath class="st4" d="M33.3,21h10c0.4,0,0.8-0.3,0.8-0.8s-0.3-0.8-0.8-0.8h-10C33.3,20.2,33.3,20.2,33.3,21z"/%3E%3C/g%3E%3Ccircle class="st6" cx="23.3" cy="20.1" r="2.5"/%3E%3Ccircle class="st6" cx="33.2" cy="24.8" r="2.5"/%3E%3Ccircle class="st6" cx="23" cy="34.8" r="2.5"/%3E%3C/svg%3E');
+        }
+        .wp-menu-open#toplevel_page_edit-post_type-filter-set .wp-menu-image {
+            background-image: url('data:image/svg+xml,%3C%3Fxml version="1.0" encoding="utf-8"%3F%3E%3C!--  --%3E%3Csvg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 53 53" style="enable-background:new 0 0 53 53;" xml:space="preserve"%3E%3Cstyle type="text/css"%3E .st0%7Bdisplay:none;%7D .st1%7Bdisplay:inline;%7D .st2%7Bclip-path:url(%23SVGID_00000098199702249043298830000017010845528166695064_);%7D .st3%7Bfill:%23FFFFFF;%7D .st4%7Bdisplay:none;fill:%23FFFFFF;%7D .st5%7Bfill:none;stroke:%23FFFFFF;stroke-width:3;stroke-miterlimit:10;%7D .st6%7Bfill:none;stroke:%23FFFFFF;stroke-width:2;stroke-miterlimit:10;%7D%0A%3C/style%3E%3Cg id="Layer_2_00000047770719710110742230000003923951626148849557_" class="st0"%3E%3Crect x="0" y="0" class="st1" width="53.1" height="53.1"/%3E%3C/g%3E%3Cg id="Layer_1_00000162333103265806981530000017146624247591674556_"%3E%3Cg%3E%3Cdefs%3E%3Cpath id="SVGID_1_" d="M0,0h53v53H0V0z M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5 C20.8,36.1,21.9,37.2,23.3,37.2z M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3C/defs%3E%3CclipPath id="SVGID_00000112608340804245442460000013986219178199086244_"%3E%3Cuse xlink:href="%23SVGID_1_" style="overflow:visible;"/%3E%3C/clipPath%3E%3Cg id="BarsClipped" style="clip-path:url(%23SVGID_00000112608340804245442460000013986219178199086244_);"%3E%3Cpath class="st3" d="M39.9,31.5L18,37.3c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C40.8,30.7,40.5,31.3,39.9,31.5z"/%3E%3Cpath class="st3" d="M38.1,24.6l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C39,23.8,38.7,24.5,38.1,24.6z"/%3E%3Cpath class="st3" d="M36.2,17.9l-21.9,5.9c-0.6,0.2-1.2-0.2-1.4-0.8c-0.2-0.6,0.2-1.2,0.8-1.4l21.9-5.9c0.6-0.2,1.2,0.2,1.4,0.8 C37.2,17.1,36.8,17.7,36.2,17.9z"/%3E%3C/g%3E%3C/g%3E%3Cpath class="st4" d="M23.3,37.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5C20.8,36.1,21.9,37.2,23.3,37.2z"/%3E%3Cpath class="st4" d="M33.4,27.2c1.4,0,2.5-1.1,2.5-2.5s-1.1-2.5-2.5-2.5s-2.5,1.1-2.5,2.5S32,27.2,33.4,27.2z"/%3E%3Cpath class="st4" d="M23,22.8c1.6,0,2.9-1.3,2.9-2.9S24.6,17,23,17s-2.9,1.3-2.9,2.9C20.2,21.5,21.5,22.8,23,22.8z"/%3E%3Cpath class="st4" d="M23.9,38.2c-1.9,0.5-3.8-0.6-4.3-2.5c-0.5-1.9,0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5C26.9,35.8,25.8,37.7,23.9,38.2 z M22.6,33.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.3,33.5,23.4,33,22.6,33.2z"/%3E%3Cpath class="st4" d="M34.1,28.2c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3c1.9-0.5,3.8,0.6,4.3,2.5C37.1,25.8,36,27.7,34.1,28.2z M32.8,23.2c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C34.5,23.5,33.6,23,32.8,23.2z"/%3E%3Cpath class="st4" d="M24.2,23.5c-1.9,0.5-3.8-0.6-4.3-2.5s0.6-3.8,2.5-4.3s3.8,0.6,4.3,2.5S26.1,23,24.2,23.5z M22.9,18.6 c-0.9,0.2-1.4,1.1-1.1,2c0.2,0.9,1.1,1.4,2,1.1c0.9-0.2,1.4-1.1,1.1-2C24.7,18.8,23.8,18.3,22.9,18.6z"/%3E%3Cpath class="st5" d="M26.5,51.5c13.8,0,25-11.2,25-25s-11.2-25-25-25s-25,11.2-25,25S12.7,51.5,26.5,51.5z"/%3E%3Cpath class="st4" d="M33.3,21h10c0.4,0,0.8-0.3,0.8-0.8s-0.3-0.8-0.8-0.8h-10C33.3,20.2,33.3,20.2,33.3,21z"/%3E%3C/g%3E%3Ccircle class="st6" cx="23.3" cy="20.1" r="2.5"/%3E%3Ccircle class="st6" cx="33.2" cy="24.8" r="2.5"/%3E%3Ccircle class="st6" cx="23" cy="34.8" r="2.5"/%3E%3C/svg%3E');
+        }
+    PHP_CSS;
     wp_add_inline_style($handle, $css);
 });
 
@@ -984,6 +1003,315 @@ if ( flrt_is_elementor_active() ) {
 }
 
 
+
+function flrt_is_divi_theme()
+{
+    if ( 'Divi' === wp_get_theme()->get('Name') || 'Divi' === wp_get_theme()->get_template() ) {
+        return true;
+    }
+    return false;
+}
+
+if ( flrt_is_divi_theme() ) {
+
+    function wpc_initialize_divi_custom_module() {
+        if (!class_exists('ET_Builder_Module')) {
+            return;
+        }
+
+        flrt_include('src/Admin/Widgets/DiviWidgets/ChipsDiviWidget.php');
+        flrt_include('src/Admin/Widgets/DiviWidgets/FiltersDiviWidget.php');
+        flrt_include('src/Admin/Widgets/DiviWidgets/SortingDiviWidget.php');
+    }
+
+    add_action('et_builder_ready', 'wpc_initialize_divi_custom_module');
+
+    add_filter( 'et_builder_inner_content_class', function ($classes){
+        $classes[] = 'wpc-divi-inner-content';
+        return $classes;
+    }, 10 );
+
+    if( flrt_get_option('mobile_filter_settings') === 'show_bottom_widget' ) {
+        if (flrt_get_experimental_option('disable_buttons') !== 'on') {
+            add_action('et_before_main_content', 'flrt_divi_filter_button');
+        }
+    }
+}
+
+function flrt_divi_filter_button()
+{
+    add_filter('et_module_process_display_conditions', 'modify_specific_module', 10, 3);
+    function modify_specific_module($output, $render_slug, $module)
+    {
+        if ($module->slug === 'filter_everything') {
+            flrt_filters_button(0, '', 'et_before_main_content');
+        }
+        return $output;
+    }
+}
+/**
+ * Checks if the Breakdance plugin and its required classes/functions are active and exist.
+ *
+ * This function verifies the presence of the Breakdance plugin, along with specific
+ * classes and functions used by the plugin. It returns true only if all checks pass,
+ * indicating that Breakdance is properly installed and functional.
+ *
+ * @return bool True if Breakdance is active and its required components exist, false otherwise.
+ */
+function flrt_check_breakdance() {
+    if (!is_plugin_active('breakdance/plugin.php')) {
+        return false;
+    }
+
+    if (!function_exists('Breakdance\Util\getDirectoryPathRelativeToPluginFolder')) {
+        return false;
+    }
+
+    return true;
+}
+if(flrt_check_breakdance()){
+    function flrt_breakdance_custom_css() {
+        echo '<style>
+           .breakdance-add-panel__element{
+           background: #0A2D48;
+           }
+    </style>';
+    }
+    add_action('wp_head', 'flrt_breakdance_custom_css');
+    flrt_include('src/Admin/Widgets/breakdance/widgets/breakdance.php');
+}
+
+/**
+ * Checks if Bricks Builder theme and its classes are ready to register custom elements.
+ *
+ * @return bool True if Bricks Builder theme is active and necessary classes exist, false otherwise.
+ */
+function flrt_is_bricks_ready_for_elements() {
+    $theme = wp_get_theme();
+
+    if (
+            $theme->get_stylesheet() !== 'bricks' &&
+            $theme->get_template()   !== 'bricks'
+    ) {
+        return false;
+    }
+
+    if ( ! class_exists( '\Bricks\Elements' ) ) {
+        return false;
+    }
+
+    if ( ! method_exists( '\Bricks\Elements', 'register_element' ) ) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Registers custom Bricks elements during WordPress initialization.
+ *
+ * This function checks if Bricks Builder is ready using flrt_is_bricks_ready_for_elements().
+ * If it is, it includes the ChipsBricksWidget.php file and registers the element using Bricks\Elements::register_element().
+ */
+
+add_action('init', 'flrt_init_bricks_widgets', 11);
+
+function flrt_init_bricks_widgets() {
+    if (flrt_is_bricks_ready_for_elements()) {
+        $element_files = [
+                FLRT_PLUGIN_DIR_PATH .'src/Admin/Widgets/bricks/ChipsBricksWidget.php',
+                FLRT_PLUGIN_DIR_PATH .'src/Admin/Widgets/bricks/FiltersBricksWidget.php',
+                FLRT_PLUGIN_DIR_PATH .'src/Admin/Widgets/bricks/SortingBricksWidget.php',
+        ];
+        foreach ($element_files as $file) {
+            \Bricks\Elements::register_element($file);
+        }
+
+        add_filter( 'bricks/builder/i18n', function( $i18n ) {
+            $i18n['filter-everything'] = esc_html__( 'Filter Everything', 'filter-everything' );
+            return $i18n;
+        } );
+
+        function flrt_bricks_custom_css() {
+            echo '<style>
+            .wpc-fe-icon {
+            background: var(--builder-color);
+            mask-image: url(' . flrt_get_icon_logo_svg_css() . ');
+            mask-repeat: no-repeat;
+            mask-size: contain;
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            margin-bottom: -5px;
+          }
+          
+          .bricks-add-element:focus .wpc-fe-icon, .bricks-add-element:hover .wpc-fe-icon {
+             background: var(--builder-color-accent);
+          }
+       
+          .structure-item .wpc-fe-icon {
+            width: 16px;
+            height: 16px;
+            margin-bottom: 0px;
+          }
+    </style>';
+        }
+        add_action('wp_head', 'flrt_bricks_custom_css');
+    }
+}
+
+function wpc_beaver_builder_widgets_load() {
+    if ( class_exists( 'FLBuilder' ) ) {
+        flrt_include('src/Admin/Widgets/beaver/chips/ChipsBeaverWidget.php');
+        flrt_include('src/Admin/Widgets/beaver/filters/FiltersBeaverWidget.php');
+        flrt_include('src/Admin/Widgets/beaver/sorting/SortingBeaverWidget.php');
+    }
+}
+add_action( 'init', 'wpc_beaver_builder_widgets_load' );
+
+/**
+ * XStore theme — "Display variable products as single variations" compatibility.
+ *
+ * With that XStore option (variable_products_detach) the theme:
+ *   1. adds 'product_variation' to the shop query's post_type, hides variable
+ *      parents via post__not_in and flags the query with single_variations_filter=yes;
+ *   2. on posts_clauses (priority 20) appends a TOP-LEVEL
+ *      "OR ( post_type='product_variation' AND post_status='publish' AND … )"
+ *      branch, re-implementing WooCommerce's own layered-nav filters for the
+ *      detached variations (price, rating, brand, chosen attributes from $_GET).
+ *
+ * The theme knows nothing about Filter Everything, so on FE-filtered pages that
+ * OR branch let EVERY published variation into the results, past FE's term
+ * constraints — filtering visually "did nothing" (each alternative of a
+ * top-level OR must repeat the filter conditions).
+ *
+ * Fix: append FE's active filter constraints AFTER the theme's branch
+ * (priority 30). AND binds tighter than OR, so in
+ *     <first alternative> OR ( <theme branch> ) AND ( <FE constraints> )
+ * the constraints apply to the variations branch only, leaving the first
+ * alternative (already filtered by FE the regular way) untouched.
+ */
+function flrt_xstore_detached_variations_where( $clauses, $wp_query ) {
+    global $wpdb;
+
+    if ( is_admin() || empty( $clauses['where'] ) ) {
+        return $clauses;
+    }
+
+    // Only XStore "detached variations" queries that FE has actually filtered.
+    if ( $wp_query->get( 'single_variations_filter' ) !== 'yes' || ! $wp_query->get( 'flrt_filtered_query' ) ) {
+        return $clauses;
+    }
+
+    // The theme adds its branch at priority 20 — bail if it is not there.
+    if ( strpos( $clauses['where'], "OR ({$wpdb->posts}.post_type = 'product_variation'" ) === false ) {
+        return $clauses;
+    }
+
+    $wpManager      = \FilterEverything\Filter\Container::instance()->getWpManager();
+    $queried_values = $wpManager->getQueryVar( 'queried_values' );
+
+    if ( empty( $queried_values ) || ! is_array( $queried_values ) ) {
+        return $clauses;
+    }
+
+    $conditions = [];
+
+    foreach ( $queried_values as $queried ) {
+
+        if ( ! isset( $queried['entity'], $queried['e_name'] ) ) {
+            continue;
+        }
+
+        // Taxonomy filters: a variation matches when its PARENT product carries
+        // the term (variations have no term_relationships rows of their own).
+        if ( $queried['entity'] === 'taxonomy' && ! empty( $queried['values'] ) ) {
+            $tax       = $queried['e_name'];
+            $and_logic = ( isset( $queried['logic'] ) && $queried['logic'] === 'and' );
+            $groups    = []; // one ttid-group per condition: single for OR-logic, per-term for AND-logic
+            $slugs     = [];
+
+            foreach ( (array) $queried['values'] as $value_slug ) {
+                $term = get_term_by( 'slug', $value_slug, $tax );
+                if ( ! $term ) {
+                    continue;
+                }
+                $slugs[] = esc_sql( $term->slug );
+
+                $ttids = [ (int) $term->term_taxonomy_id ];
+                if ( is_taxonomy_hierarchical( $tax ) && ! $and_logic ) {
+                    foreach ( get_term_children( $term->term_id, $tax ) as $child_id ) {
+                        $child = get_term( $child_id, $tax );
+                        if ( $child && ! is_wp_error( $child ) ) {
+                            $ttids[] = (int) $child->term_taxonomy_id;
+                        }
+                    }
+                }
+
+                if ( $and_logic ) {
+                    $groups[] = $ttids;         // every term required — own condition each
+                } elseif ( empty( $groups ) ) {
+                    $groups[] = $ttids;         // any term enough — collect into one IN()
+                } else {
+                    $groups[0] = array_merge( $groups[0], $ttids );
+                }
+            }
+
+            if ( empty( $groups ) ) {
+                continue;
+            }
+
+            foreach ( $groups as $group_ttids ) {
+                $ttids_in        = implode( ',', array_unique( $group_ttids ) );
+                $parent_has_term = "{$wpdb->posts}.post_parent IN ( SELECT object_id FROM {$wpdb->term_relationships} WHERE term_taxonomy_id IN ({$ttids_in}) )";
+
+                if ( strpos( $tax, 'pa_' ) === 0 && ! $and_logic && ! empty( $slugs ) ) {
+                    // Variation attributes: prefer the variation's own value —
+                    // a variation with a DIFFERENT value must not ride in on its
+                    // parent's term. Variations without own value ("Any …")
+                    // fall back to the parent's term.
+                    $meta_key = esc_sql( 'attribute_' . $tax );
+                    $slugs_in = "'" . implode( "','", $slugs ) . "'";
+
+                    $conditions[] = "( {$wpdb->posts}.ID IN ( SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '{$meta_key}' AND meta_value IN ({$slugs_in}) )"
+                        . " OR ( {$parent_has_term}"
+                        . " AND {$wpdb->posts}.ID NOT IN ( SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '{$meta_key}' AND meta_value <> '' ) ) )";
+                } else {
+                    $conditions[] = $parent_has_term;
+                }
+            }
+        }
+
+        // Numeric meta filters (price and alike): variations carry their own value.
+        if ( $queried['entity'] === 'post_meta_num' && isset( $queried['values'] ) && is_array( $queried['values'] ) ) {
+            $meta_key = esc_sql( $queried['e_name'] );
+            $min      = ( isset( $queried['values']['min'] ) && $queried['values']['min'] !== '' ) ? (float) $queried['values']['min'] : false;
+            $max      = ( isset( $queried['values']['max'] ) && $queried['values']['max'] !== '' ) ? (float) $queried['values']['max'] : false;
+
+            $range = [];
+            if ( $min !== false ) {
+                $range[] = "CAST(meta_value AS DECIMAL(15,6)) >= {$min}";
+            }
+            if ( $max !== false ) {
+                $range[] = "CAST(meta_value AS DECIMAL(15,6)) <= {$max}";
+            }
+
+            if ( $range ) {
+                $conditions[] = "{$wpdb->posts}.ID IN ( SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '{$meta_key}' AND " . implode( ' AND ', $range ) . " )";
+            }
+        }
+
+        // Other filter entities (post_meta choices, author, post_date …) are not
+        // mirrored into the variations branch yet — they are rare on shop archives.
+    }
+
+    if ( ! empty( $conditions ) ) {
+        $clauses['where'] .= ' AND ( ' . implode( ' ) AND ( ', $conditions ) . ' )';
+    }
+
+    return $clauses;
+}
+add_filter( 'posts_clauses', 'flrt_xstore_detached_variations_where', 30, 2 );
 
 //@todo check this with PLL support
 //function flrt_add_cpt_to_pll_tmp( $post_types, $is_settings ) {

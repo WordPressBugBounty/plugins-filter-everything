@@ -16,6 +16,10 @@ $horizontal_view = false;
 if(!empty($set['horizontal_view']['value']) && $set['horizontal_view']['value'] === 'yes'){
     $horizontal_view = true;
 }
+$apply_button_page_type = false;
+if(!empty($set['apply_button_page_type']['value']) && $set['apply_button_page_type']['value'] !== 'no_page___no_page'){
+    $apply_button_page_type = true;
+}
 $term_count_hidden_class = '';
 if(empty($is_filter_request) && !$is_filter_request){
     $term_count_hidden_class .= ' wpc-hidden-term-count';
@@ -26,11 +30,12 @@ if (empty($found_posts)){
 ?>
 <div class="wpc-filters-section wpc-filters-section-<?php echo $set_id; ?> wpc-filter-layout-submit-button <?php echo $horizontal_view ? '' : 'wpc-pc-sticky-buttons'; ?>">
     <div class="wpc-sticky-buttons">
-        <a class="wpc-filters-submit-button" href="<?php echo esc_url( $apply_url ); ?>"><?php
+        <a class="wpc-filters-submit-button" href="<?php echo esc_url( $apply_url ); ?>" data-wpc-apply-url="<?php echo esc_url( $apply_url ); ?>" data-apply-button-page="<?php echo esc_attr( $apply_button_page_type ) ?>">
+            <?php
             $button_text = isset( $set['apply_button_text']['value'] ) ? esc_html( $set['apply_button_text']['value'] ) : esc_html__('Show', 'filter-everything');
             echo $button_text . "<span class='wpc-pc-apply-button " . $term_count_hidden_class . "'>(" . esc_html($found_posts) . ")</span>";
         ?></a>
-        <a class="wpc-filters-reset-button" href="<?php echo esc_attr( $reset_url ) ?>"><?php
+        <a class="wpc-filters-reset-button wpc-filters-reset-button-<?php echo $set_id; ?>" href="<?php echo esc_attr( $reset_url ) ?>" data-wpc-apply-reset-url="<?php echo esc_url( $reset_url ); ?>"><?php
             $reset_button_text = isset( $set['reset_button_text']['value'] ) ? esc_html( $set['reset_button_text']['value'] ) : esc_html__('Reset', 'filter-everything');
             echo $reset_button_text;
         ?></a>

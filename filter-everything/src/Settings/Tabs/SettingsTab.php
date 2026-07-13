@@ -68,11 +68,40 @@ class SettingsTab extends BaseSettings
                     ),
                     'posts_container' => array(
                         'type'      => 'text',
-                        'title'     => esc_html__('HTML id or class of the Posts Container', 'filter-everything'),
+                        'title'     => esc_html__('Results container', 'filter-everything'),
                         'id'        => 'posts_container',
                         'default'   => $defaultPostsContainer,
                         'description' => esc_html__( 'e.g. #primary or .main-content', 'filter-everything' ),
                         'label'     => '',
+                        'tooltip'   => wp_kses(
+                            __( 'The part of the page where your posts or products are listed. When AJAX is enabled, the plugin refreshes only this area after each filter click, without reloading the whole page.<br /><br />Click «Select visually» and simply click the area with your posts, or enter its CSS id or class if you know it.', 'filter-everything' ),
+                            array( 'br' => array() )
+                        ),
+                        'additional_link'     => [
+                            'label' => esc_html__( 'Select visually', 'filter-everything' ),
+                            'url' => add_query_arg(
+                                [
+                                    'flrt_get_html_selector' => 1,
+                                    'flrt_set_id'            => 'global_posts_container',
+                                ],
+                                flrt_default_selector_page_link()
+                            ),
+                        ],
+                    ),
+                    'apply_button_instant_recount' => array(
+                        'type'  => (defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO) ? 'checkbox' : 'inProButton',
+                        'pro_label'  => (defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO) ? '' : flrt_pro_promo_label(),
+                        'title' => esc_html__('Instant recount for the «Apply Button» mode', 'filter-everything'),
+                        'id'    => 'apply_button_instant_recount',
+                        'label' => esc_html__('Instantly recalculate filter counters in the browser', 'filter-everything'),
+                        'description' => (defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO)
+                            ? esc_html__( 'When disabled, Filter Sets in the «Apply Button» mode recalculate counters on the server with an AJAX request on every filter click.', 'filter-everything' )
+                            // Free: promo wording — sells what the PRO option does
+                            : esc_html__( 'When enabled, Filter Sets in the «Apply Button» mode recalculate counters instantly in the browser, without an AJAX request on every filter click.', 'filter-everything' ),
+                        'tooltip'   => wp_kses(
+                            __( 'This option greatly speeds up filtering, but the recount runs in the visitor\'s browser and may be heavy on sites with a large amount of content. If you filter more than 30,000 posts, make sure filtering does not freeze — especially on mobile devices.', 'filter-everything' ),
+                            array( 'br' => array() )
+                        ),
                     )
                 )
             ),
@@ -86,6 +115,21 @@ class SettingsTab extends BaseSettings
                         'default' => $defaultPrimaryColor,
                         'label'   => '',
                     ),
+                    'disable_filter_links_for_bots' => array(
+                        'type'  => (defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO) ? 'checkbox' : 'inProButton',
+                        'pro_label'  => (defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO) ? '' : flrt_pro_promo_label(),
+                        'title' => esc_html__('Disable filter links for crawlers', 'filter-everything'),
+                        'id'    => 'disable_filter_links_for_bots',
+                        'description' => esc_html__( 'Replaces &lt;a&gt; tags with &lt;span&gt; in filters to prevent crawlers from following filter links and overloading your site.', 'filter-everything' ),
+                        // The detailed how-it-works lives in the tooltip; in free the
+                        // short promo description is enough
+                        'tooltip' => (defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO)
+                            ? wp_kses(
+                                __( 'Filter combinations produce thousands of URLs, and crawlers may waste your crawl budget and server resources trying to follow them all. This option renders filter links as &lt;span&gt; tags — they keep working for visitors, but crawlers no longer see them as links.<br /><br />Links to pages that your SEO Rules define as indexed always keep the real &lt;a&gt; tag, so search engines can still discover and rank those pages.<br /><br />You can also block unwanted pages and specific bots in the robots.txt file.', 'filter-everything' ),
+                                array( 'br' => array() )
+                            )
+                            : ''
+                    ),
                     'container_height' => array(
                         'type'  => 'text',
                         'title' => esc_html__('Filter Container max height, px', 'filter-everything'),
@@ -96,7 +140,7 @@ class SettingsTab extends BaseSettings
                         'type'  => 'select',
                         'title' => esc_html__('Selected Filters (Chips) integration', 'filter-everything'),
                         'id'    => 'show_terms_in_content',
-                        'label' => esc_html__('Try to show selected terms above the posts container', 'filter-everything'),
+                        'label' => esc_html__('Try to show selected terms above the Results container', 'filter-everything'),
                         'options' => array(),
                         'multiple' => true,
                         'description' => esc_html__( 'Select where to show Chips on your site. Or enter your theme\'s hooks. For example: before_main_content', 'filter-everything' )

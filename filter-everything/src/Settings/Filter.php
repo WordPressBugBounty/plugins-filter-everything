@@ -37,6 +37,8 @@ class Filter
                     'date_format'  => '',
                     'show_term_names' => '',
                     'selected_and_above' => '',
+                    'show_range_list' => '',
+                    'range_list_input' => '',
                     'logic'      => '',
                     'orderby'    => '',
                     'in_path'    => '',
@@ -57,6 +59,8 @@ class Filter
                     'more_less'  => '',
                     'show_chips' => '',
                     'acf_fields'  => '',
+                    'has_child_filter'  => '',
+                    'child_values'  => '',
             )
         );
     }

@@ -11,6 +11,14 @@ class PostMetaEntity implements Entity
     use PostMetaTrait;
 
     public $items = [];
+    /**
+     * Declared explicitly: assigned from the outside in
+     * EntityManager::prepareEntitiesToDisplay(); dynamic properties are
+     * deprecated since PHP 8.2.
+     */
+    public $items_sort = [];
+
+    public $filter = [];
 
     public $entityName = '';
 
@@ -169,6 +177,36 @@ class PostMetaEntity implements Entity
                         unset( $this->items[$index]->posts[$position] );
                     }
                 }
+            }
+        }
+
+        /**
+         * Keep only posts that belong to the set universe (all queried posts of
+         * the set), same as TaxonomyEntity does. Without this the raw meta lists
+         * (e.g. _stock_status of ALL published products, including those excluded
+         * from the catalog) leak into wpcFilterJsonData, and the client-side
+         * recount shows inflated counters compared to the server-rendered ones.
+         *
+         * Term posts of "Used for Variations" meta keys legitimately contain
+         * variation IDs which are absent from the parent-product universe, so a
+         * post survives when it is in the universe OR in the universe expanded
+         * to variation IDs.
+         */
+        $em                  = Container::instance()->getEntityManager();
+        $allWpQueriedPostIds = $em->getAllSetWpQueriedPostIds( $setId );
+
+        if ( ! empty( $allWpQueriedPostIds ) ) {
+            $universe            = array_flip( $allWpQueriedPostIds );
+            $universe_variations = apply_filters( 'wpc_from_products_to_variations', $universe );
+
+            foreach ( $this->items as $index => $term ) {
+                $intersected_posts = [];
+                foreach ( $term->posts as $post_id ) {
+                    if ( isset( $universe[ $post_id ] ) || isset( $universe_variations[ $post_id ] ) ) {
+                        $intersected_posts[] = $post_id;
+                    }
+                }
+                $this->items[ $index ]->posts = $intersected_posts;
             }
         }
     }

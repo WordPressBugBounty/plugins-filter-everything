@@ -155,12 +155,6 @@ class Admin
         <?php
     }
 
-
-    public function get_icon_svg()
-    {
-        return flrt_get_icon_svg();
-    }
-
     public function checkPermissions()
     {
         $screen     = get_current_screen();

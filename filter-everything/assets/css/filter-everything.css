@@ -1,5 +1,5 @@
 /*!
- * Filter Everything admin 1.9.2.2
+ * Filter Everything 1.9.3
  */
 .widget_wpc_filters_widget *{
     box-sizing: border-box;
@@ -19,12 +19,14 @@
 /* Closed filter container */
 .wpc-filter-collapsible .wpc-filter-content,
 .wpc-filter-collapsible.wpc-closed .wpc-filter-content,
-.wpc-filter-has-brands.wpc-filter-hidden-term-names .wpc-term-name,
+/* li+span bump the specificity above the generic
+   ".wpc-filter-has-* … li.wpc-term-item span {display:inline-flex}" rule */
+.wpc-filter-has-brands.wpc-filter-hidden-term-names li.wpc-term-item span.wpc-term-name,
 .wpc-filter-has-selected.wpc-closed .wpc-filter-content,
 .wpc-filter-has-selected.wpc-filter-more-less .wpc-see-more-control,
 .wpc-filter-has-selected.wpc-filter-more-less.wpc-show-less .wpc-filters-ul-list > li,
 .wpc-filter-has-selected.wpc-show-less .wpc-see-less-control,
-.wpc-filter-has-swatches.wpc-filter-hidden-term-names .wpc-term-name,
+.wpc-filter-has-swatches.wpc-filter-hidden-term-names li.wpc-term-item span.wpc-term-name,
 .wpc-filter-hierarchy-reverse .wpc-checkbox-item > .wpc-term-item-content-wrapper > i.wpc-toggle-children-list:before,
 .wpc-filter-more-less .wpc-filters-ul-list > li,
 .wpc-filter-more-less .wpc-see-less-control,
@@ -48,6 +50,11 @@
 .wpc-search-active .wpc-checkbox-item > .wpc-term-item-content-wrapper > i.wpc-toggle-children-list:before,
 .wpc-search-active .wpc-filters-ul-list li,
 .wpc-search-active.wpc-filter-more-less .wpc-filters-ul-list li,
+/* Active term search must also hide non-matches when the "Show list items"
+   rules for selected/more-less states would otherwise force them visible
+   (same pattern as the .wpc-show-more.wpc-search-active entry above) */
+.wpc-filter-has-selected.wpc-filter-more-less.wpc-search-active .wpc-filters-ul-list li,
+.wpc-show-more-reverse.wpc-search-active .wpc-filters-ul-list li,
 .wpc-show-more-reverse.wpc-filter-more-less .wpc-see-more-control,
 .wpc-show-more-reverse.wpc-filter-more-less.wpc-show-less .wpc-see-less-control,
 /* Hide list items */
@@ -199,6 +206,7 @@ li.wpc-term-item > .wpc-term-item-content-wrapper + ul.children {
 .wpc-filter-has-swatches.wpc-filter-hidden-term-names .wpc-dropdown-default .wpc-term-name,
 .wpc-filter-hierarchy-reverse li.wpc-term-item > .wpc-term-item-content-wrapper + ul.children,
 .wpc-filter-product_visibility .wpc-term-item label a,
+.wpc-filter-product_visibility .wpc-term-item label span,
 .wpc-filters-labels li.wpc-term-item input[type="checkbox"]:checked + label .wpc-term-swatch-wrapper:after,
 .wpc-filters-labels li.wpc-term-item input[type="checkbox"]:checked + label .wpc-term-swatch-wrapper:before,
 .wpc-filters-labels li.wpc-term-item label:hover .wpc-term-swatch-wrapper:after,
@@ -331,6 +339,7 @@ body .wpc-filters-main-wrap li.wpc-term-count-0:not(.wpc-has-not-empty-children)
     outline: 0;
     margin-left: 0;
     margin-right: 8px;
+    padding: 0;
     margin-bottom: 0;
 }
 .wpc-filters-main-wrap li.wpc-term-item input[type="checkbox"]:hover,
@@ -358,7 +367,8 @@ body .wpc-filters-main-wrap li.wpc-term-count-0:not(.wpc-has-not-empty-children)
     padding-left: .5em;
     padding-right: .5em;
 }
-.wpc-filters-main-wrap li.wpc-term-item a {
+.wpc-filters-main-wrap li.wpc-term-item a,
+.wpc-filters-main-wrap li.wpc-term-item span{
     text-decoration: none;
     font-weight: 400;
     outline: 0;
@@ -385,16 +395,30 @@ body .wpc-filters-main-wrap li.wpc-term-count-0:not(.wpc-has-not-empty-children)
     align-items: center;
 }
 .widget-area .widget .wpc-filter-chips-list a:focus,
+.widget-area .widget .wpc-filter-chips-list span[data-wpc-span-link]:focus,
+.widget-area .widget .wpc-filter-chips-list span.wpc-apply-button-chip:focus,
 .widget-area .widget li.wpc-term-item a:focus,
 .widget-area .widget li.wpc-term-item a:hover,
+.widget-area .widget li.wpc-term-item span:focus,
+.widget-area .widget li.wpc-term-item span:hover,
 .wpc-filter-chips-list a:focus,
+.wpc-filter-chips-list span[data-wpc-span-link]:focus,
+.wpc-filter-chips-list span.wpc-apply-button-chip:focus,
 body li.wpc-term-item a:focus,
-body li.wpc-term-item a:hover {
+body li.wpc-term-item a:hover,
+body li.wpc-term-item span:focus,
+body li.wpc-term-item span:hover {
     box-shadow: none;
     text-decoration: none;
 }
 .wpc-filter-chips-list a,
-body .wpc-filter-chips-list li.wpc-filter-chip a {
+body .wpc-filter-chips-list li.wpc-filter-chip a,
+/* Smart spans render non-indexable chips as <span data-wpc-span-link>;
+   client-rebuilt (pending Apply) chips are link-less spans */
+.wpc-filter-chips-list span[data-wpc-span-link],
+body .wpc-filter-chips-list li.wpc-filter-chip span[data-wpc-span-link],
+.wpc-filter-chips-list li.wpc-filter-chip > span.wpc-apply-button-chip,
+body .wpc-filter-chips-list li.wpc-filter-chip > span.wpc-apply-button-chip {
     text-decoration: none;
     font-weight: 400;
     border-radius: 50px;
@@ -405,18 +429,26 @@ body .wpc-filter-chips-list li.wpc-filter-chip a {
     position: relative;
     color: #333;
     height: 100%;
+    cursor: pointer;
 }
-body .wpc-filter-chips-list li.wpc-chip-reset-all a {
+body .wpc-filter-chips-list li.wpc-chip-reset-all a,
+body .wpc-filter-chips-list li.wpc-chip-reset-all span.wpc-apply-button-chips-reset {
     border-color: #cc8181;
     color: inherit;
 }
-.wpc-filters-main-wrap .wpc-filter-chips-list a:hover {
+.wpc-filters-main-wrap .wpc-filter-chips-list a:hover,
+.wpc-filters-main-wrap .wpc-filter-chips-list span[data-wpc-span-link]:hover,
+.wpc-filters-main-wrap .wpc-filter-chips-list span.wpc-apply-button-chip:hover {
     box-shadow: none;
 }
-.wpc-filters-main-wrap .wpc-filter-chips-list li.wpc-filter-chip a:active {
+.wpc-filters-main-wrap .wpc-filter-chips-list li.wpc-filter-chip a:active,
+.wpc-filters-main-wrap .wpc-filter-chips-list li.wpc-filter-chip span[data-wpc-span-link]:active,
+.wpc-filters-main-wrap .wpc-filter-chips-list li.wpc-filter-chip span.wpc-apply-button-chip:active {
     opacity: 0.75;
 }
-.wpc-filter-chips-list a:hover .wpc-chip-remove-icon {
+.wpc-filter-chips-list a:hover .wpc-chip-remove-icon,
+.wpc-filter-chips-list span[data-wpc-span-link]:hover .wpc-chip-remove-icon,
+.wpc-filter-chips-list span.wpc-apply-button-chip:hover .wpc-chip-remove-icon {
     color: #c00;
 }
 body ul.wpc-filter-chips-list {
@@ -427,7 +459,7 @@ body ul.wpc-filter-chips-list {
 .wpc-filter-chips-list li,
 body .wpc-filter-chips-list li.wpc-filter-chip,
 li.wpc-filter-chip {
-    margin: 0 7px 7px 0;
+    margin: 0 7px 11px 0;
     padding: 0;
     border: none;
     display: inline-block;
@@ -696,7 +728,6 @@ html .wpc-filters-range-inputs .ui-button.ui-state-disabled:hover {
     opacity: 0.7;
 }
 .wpc-filters-widget-top-container {
-    background: #fff;
     border-bottom: 1px solid transparent;
     padding: 0;
 }
@@ -1402,6 +1433,12 @@ body .wpc-debug-title {
     align-items: center;
     border-radius: 8px;
 }
+/* The generic "li.wpc-term-item span" reset zeroes vertical paddings; without
+   this the wrapper loses them at rest and the logo jumps when a :hover rule
+   brings the padding back */
+.wpc-filters-main-wrap li.wpc-term-item span.wpc-term-image-wrapper {
+    padding: 4px;
+}
 .select2-container .wpc-term-image-wrapper {
     border: none;
     width: 56px;
@@ -1478,6 +1515,10 @@ body .wpc-debug-title {
 .wpc-filters-main-wrap .wpc-filters-labels li.wpc-term-item.wpc-term-has-image input[type=checkbox]:checked + label a{
     border-color: rgba(0, 0, 0, 0.1);
 }
+/* Hover/checked emphasis: the fixed-size wrapper swaps its 1px grey border
+   for a 2px active-color one (the outer boxes keep the total footprint) —
+   the rest state MUST keep its 4px paddings (see the constant-padding rule
+   above), otherwise the logo jumps when this rule re-applies them */
 .wpc-filters-labels li.wpc-term-has-image input[type="checkbox"]:checked + label .wpc-filter-label-wrapper .wpc-term-image-wrapper,
 .wpc-filters-labels li.wpc-term-has-image label:hover .wpc-filter-label-wrapper .wpc-term-image-wrapper {
     border-width: 2px;
@@ -1510,8 +1551,10 @@ body .wpc-debug-title {
     margin-right: 6px;
 }
 .wpc-filter-has-brands li.wpc-term-item a,
+.wpc-filter-has-brands li.wpc-term-item span,
 .wpc-filter-has-brands li.wpc-term-item label,
 .wpc-filter-has-swatches ul.wpc-filters-ul-list li.wpc-term-item a,
+.wpc-filter-has-swatches ul.wpc-filters-ul-list li.wpc-term-item span,
 span.wpc-item-has-brand,
 span.wpc-item-has-swatch,
 span.wpc-dropdown-default{
@@ -2166,7 +2209,9 @@ input.flrt-star-input{
     border: none !important;
     background-color: none !important;
 }
-.flrt-star-label a .wpc-term-count{
+.flrt-star-label a .wpc-term-count,
+.flrt-star-label span .wpc-term-count
+{
     display: none;
 }
 .flrt-star-label svg{
@@ -2185,7 +2230,8 @@ input.flrt-star-input{
 .flrt-star-label-checked a .wpc-term-count{
     display: block;
 }
-.flrt-star-label a{
+.flrt-star-label a,
+.flrt-star-label span{
     margin-right: 0 !important;
     display: flex !important;
     align-items: center !important;
@@ -2270,4 +2316,54 @@ input.wpc-filter-search-field {
 .wpc-posts-found-hidden{
     display: none;
 }
+.wpc-fe-breakdance-chips {
+    width: 100%;
+}
+.widget_wpc_chips_widget {
+    width: 100%;
+}
+.widget_wpc_sorting_widget{
+    margin-bottom: 12px;
+}
+@media screen and (max-width: 769px) {
+    .wpc-filters-widget-top-container {
+        background: #fff;
+    }
+}
 
+.wpc-apply-button-chip{
+    cursor: pointer;
+}
+.wpc-filters-section-0,
+.wpc-term-count-hidden-0:not(.wpc-term-count-hidden-checked-0){
+    display: none !important;
+}
+.wpc-has-terms-apply-button{
+    display: list-item !important;
+}
+@media screen and (min-width: 769px) {
+    .wpc-inner-widget-chips-wrapper ul.wpc-filter-chips-list{
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+.wpc-parent-filter-terms-unselected:not(.wpc-child-selected-no-parent) .wpc-term-item,
+.wpc-parent-filter-terms-unselected:not(.wpc-child-selected-no-parent) .wpc-filters-ul-list .wpc-term-item,
+.wpc-parent-filter-terms-unselected:not(.wpc-child-selected-no-parent) .wpc-filter-range-form,
+.wpc-parent-filter-terms-unselected:not(.wpc-child-selected-no-parent) .wpc-filter-date-range-form-visible,
+.wpc-parent-filter-terms-unselected:not(.wpc-child-selected-no-parent) .wpc-filter-search-wrapper,
+.wpc-parent-filter-terms-unselected:not(.wpc-child-selected-no-parent) .wpc-see-less-control,
+.wpc-parent-filter-terms-unselected:not(.wpc-child-selected-no-parent) .wpc-see-more-control,
+.wpc-show-with-parent-false,
+.wpc-ask-to-parent-display-none,
+.wpc-parent-filter-terms-selected .wpc-ask-to-parent-display,
+.wpc-hide-terms-until-parent-unselected,
+.wpc-child-selected-no-parent .wpc-ask-to-parent-display
+{
+    display: none !important;
+}
+
+.wpc-filter-more-less:not(.wpc-search-active) .wpc-filters-ul-list > li.wpc-not-hidden-term,
+.wpc-filters-ul-list > li.wpc-ask-to-parent-display{
+    display: list-item;
+}

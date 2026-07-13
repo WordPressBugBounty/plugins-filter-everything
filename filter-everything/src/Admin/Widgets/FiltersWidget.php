@@ -29,6 +29,18 @@ class FiltersWidget extends \WP_Widget
      * @param array $instance Settings for the current Filters widget instance.
      */
     public function widget( $args, $instance ) {
+
+        if (current_user_can(flrt_plugin_user_caps())) {
+            add_action('wp_footer', function () {
+                ?>
+                <script>
+                    window.wpcFilterWidgetActive = true;
+                </script>
+                <?php
+            });
+        }
+
+
         if ( is_array( $args ) ){
             extract( $args );
         }
@@ -119,6 +131,10 @@ class FiltersWidget extends \WP_Widget
         // Apply button preparations
         $filters_counter         = 0;
         $use_apply_button        = ( isset( $set['use_apply_button']['value'] ) && $set['use_apply_button']['value'] === 'yes' );
+        // Instant (client-side) recount is a site-wide opt-in; without it Apply
+        // button Sets keep the legacy per-click AJAX recount markup and behaviour.
+        $instant_recount         = $use_apply_button && flrt_instant_recount();
+        $view_args['use_apply_button'] = $instant_recount;
         $use_search_field        = ( isset( $set['use_search_field']['value'] ) && $set['use_search_field']['value'] === 'yes' );
         $apply_button_menu_order = isset( $set['apply_button_menu_order']['value'] ) ? (int) $set['apply_button_menu_order']['value'] : -1;
         $search_field_menu_order = isset( $set['search_field_menu_order']['value'] ) ? (int) $set['search_field_menu_order']['value'] : -1;
@@ -177,7 +193,10 @@ class FiltersWidget extends \WP_Widget
         }
 
         echo $before_widget;
-        echo '<div class="wpc-filters-main-wrap wpc-filter-set-'.esc_attr( $setId ).$wrapper_class.'" data-set="'.esc_attr( $setId ).'">'."\n";
+        $filter_wrap_classes = apply_filters('wpc_filter_wrap_classes', array(), $setId);
+        $class_attr = implode( ' ', array_map( 'esc_attr', $filter_wrap_classes ) );
+
+        echo '<div class="wpc-filters-main-wrap ' . $class_attr . ' wpc-filter-set-'.esc_attr( $setId ).$wrapper_class.'" data-wpc-hide-empty="'.esc_attr( $set['hide_empty']['value'] ).'" data-wpc-use-apply-button="'.esc_attr( $instant_recount ).'" data-set="'.esc_attr( $setId ).'">'."\n";
         // Open/Closed status class
         $widgetContentClass = flrt_filters_widget_content_class($setId);
         $widgetContentClass .= ' wpc-show-counts-' . $set['show_count']['value'];
@@ -211,7 +230,7 @@ class FiltersWidget extends \WP_Widget
 
         // Add selected terms for mobile widget
         echo '<div class="wpc-inner-widget-chips-wrapper">';
-        $templateManager->includeFrontView( 'chips', array( 'chips' => $chips, 'setid' => $setId ) );
+        $templateManager->includeFrontView( 'chips', array( 'chips' => $chips, 'setid' => $setId, 'use_apply_button' => $instant_recount ) );
         echo '</div>';
 
         echo '</div>';
@@ -263,7 +282,26 @@ class FiltersWidget extends \WP_Widget
             }
         }
 
-        foreach ( $filters_and_fields as $filter_id => $filter ){
+
+        //removes child terms if parent filter is empty
+        foreach ($filters_and_fields as $filter_id => $filter) {
+            if ($filter_id > 0) {
+                $terms = flrt_get_filter_terms($filter, $posType, $em);
+                if (!empty($filter['parent_filter']) && $filter['parent_filter'] !== '-1') {
+                    $parent_filter_id = (int)$filter['parent_filter'];
+                    if (!isset($filters_and_fields[$parent_filter_id]['child_values']) || !is_array($filters_and_fields[$parent_filter_id]['child_values'])) {
+                        $filters_and_fields[$parent_filter_id]['child_values'] = [];
+                    }
+                    $filters_and_fields[$parent_filter_id]['has_child_filter'] = true;
+                    foreach ($terms as $single_term) {
+                        $filters_and_fields[$parent_filter_id]['child_values'][] = $single_term->slug;
+                    }
+                }
+            }
+        }
+
+
+        foreach ($filters_and_fields as $filter_id => $filter) {
             $filters_counter++;
 
             $is_rating = (isset($filter['view']) && $filter['view'] === 'rating' && $filter['e_name'] === 'product_visibility' ) ? true : false;
@@ -276,73 +314,149 @@ class FiltersWidget extends \WP_Widget
                 $terms = flrt_get_filter_terms( $filter, $posType, $em );
 
                 // Collect terms for a parent filter, if exists
-                if ( $filter['parent_filter'] > 0) {
+                if ( $filter['parent_filter'] > 0 || ($filter['parent_filter'] > 0 && $use_apply_button)) {
                     // Here we have to calculate all related with the parent filter
                     $parent_filter_id = (int)$filter['parent_filter'];
-                    if ( isset( $filters_and_fields[$parent_filter_id] ) ) {
-                        $parent_filter       = $filters_and_fields[$parent_filter_id];
+                    if(!$instant_recount){
+                        if ( isset( $filters_and_fields[$parent_filter_id] ) ) {
+                            $parent_filter       = $filters_and_fields[$parent_filter_id];
 
-                        $parent_filter_terms = flrt_get_filter_terms( $parent_filter, $posType, $em );
-                        $wp_queried_term     = flrt_get_wp_queried_term( $parent_filter_terms );
+                            $parent_filter_terms = flrt_get_filter_terms( $parent_filter, $posType, $em );
+                            $wp_queried_term     = flrt_get_wp_queried_term( $parent_filter_terms );
 
-                        if ( $wp_queried_term ) {
-                            $parent_filter['values'][] = $wp_queried_term->slug;
-                        }
-
-                        if ( empty( $parent_filter['values'] ) ) {
-
-                            // Do not show this filter, until parent is selected
-                            if ( $filter['hide_until_parent'] === 'yes' && empty( $filter['values'] ) ) {
-                                continue;
+                            if ( $wp_queried_term ) {
+                                $parent_filter['values'][] = $wp_queried_term->slug;
                             }
 
-                            if ( ! empty( $filter['values'] ) ) {
-                                $actual_filter_terms = [];
-                                $filter_values_flipped = array_flip( $filter['values'] );
-                                foreach ( $terms as $single_term ) {
-                                    if(!$is_rating) {
-                                        if (isset($filter_values_flipped[$single_term->slug])) {
+                            if ( empty( $parent_filter['values'] ) ) {
+
+                                // Do not show this filter, until parent is selected
+                                if ( $filter['hide_until_parent'] === 'yes' && empty( $filter['values'] ) ) {
+                                    continue;
+                                }
+
+                                if ( ! empty( $filter['values'] ) ) {
+                                    $actual_filter_terms = [];
+                                    $filter_values_flipped = array_flip( $filter['values'] );
+                                    foreach ( $terms as $single_term ) {
+                                        if(!$is_rating) {
+                                            if (isset($filter_values_flipped[$single_term->slug])) {
+                                                $actual_filter_terms[] = $single_term;
+                                            }
+                                        }else{
                                             $actual_filter_terms[] = $single_term;
                                         }
-                                    }else{
-                                        $actual_filter_terms[] = $single_term;
                                     }
-                                }
-                                $terms = $actual_filter_terms;
-                            } else {
-                                if( isset( $parent_filter['label'] ) && $parent_filter['label'] ) {
-                                    $view_args['ask_to_select_parent'] = sprintf( esc_html__('Select %s first', 'filter-everything'), $parent_filter['label'] );
+                                    $terms = $actual_filter_terms;
                                 } else {
-                                    $view_args['ask_to_select_parent'] = esc_html__('First, select another filter', 'filter-everything');
-                                }
-                            }
-
-                            // Here we have to setup signal that forces message "Select parent first"
-                        } else {
-                            if ( ! in_array( $filter['entity'], ['post_meta_num', 'tax_numeric'] ) ) {
-                                // Selected values are term slugs
-                                $actual_parent_filter_posts     = [];
-                                $parent_filter_values_flipped   = array_flip( $parent_filter['values'] );
-
-                                foreach ( $parent_filter_terms as $parent_filter_term ) {
-                                    if ( isset( $parent_filter_values_flipped[$parent_filter_term->slug] ) ) {
-                                        $actual_parent_filter_posts = array_merge($actual_parent_filter_posts, $parent_filter_term->posts);
+                                    if( isset( $parent_filter['label'] ) && $parent_filter['label'] ) {
+                                        $view_args['ask_to_select_parent'] = sprintf( esc_html__('Select %s first', 'filter-everything'), $parent_filter['label'] );
+                                    } else {
+                                        $view_args['ask_to_select_parent'] = esc_html__('First, select another filter', 'filter-everything');
                                     }
                                 }
-                                $actual_filter_terms = [];
-                                // if ! empty( $filter['values'] )
-                                foreach ($terms as $single_term) {
-                                    if(!$is_rating){
-                                        $current_intersection = array_intersect($actual_parent_filter_posts, $single_term->posts);
-                                        if (!empty($current_intersection)) {
+
+                                // Here we have to setup signal that forces message "Select parent first"
+                            } else {
+                                if ( ! in_array( $filter['entity'], ['post_meta_num', 'tax_numeric'] ) ) {
+                                    // Selected values are term slugs
+                                    $actual_parent_filter_posts     = [];
+                                    $parent_filter_values_flipped   = array_flip( $parent_filter['values'] );
+
+                                    foreach ( $parent_filter_terms as $parent_filter_term ) {
+                                        if ( isset( $parent_filter_values_flipped[$parent_filter_term->slug] ) ) {
+                                            $actual_parent_filter_posts = array_merge($actual_parent_filter_posts, $parent_filter_term->posts);
+                                        }
+                                    }
+                                    $actual_filter_terms = [];
+                                    // if ! empty( $filter['values'] )
+                                    foreach ($terms as $single_term) {
+                                        if(!$is_rating){
+                                            $current_intersection = array_intersect($actual_parent_filter_posts, $single_term->posts);
+                                            if (!empty($current_intersection)) {
+                                                $actual_filter_terms[] = $single_term;
+                                            }
+                                        }else{
                                             $actual_filter_terms[] = $single_term;
                                         }
-                                    }else{
+                                    }
+                                    $terms = $actual_filter_terms;
+                                }
+                            }
+                        }
+                    }
+
+                    if($instant_recount){
+                        if ( isset( $filters_and_fields[$parent_filter_id] ) ) {
+                            $parent_filter       = $filters_and_fields[$parent_filter_id];
+
+                            $parent_filter_terms = flrt_get_filter_terms( $parent_filter, $posType, $em );
+                            $wp_queried_term     = flrt_get_wp_queried_term( $parent_filter_terms );
+
+                            if( isset( $parent_filter['label'] ) && $parent_filter['label'] ) {
+                                $view_args['ask_to_select_parent'] = sprintf( esc_html__('Select %s first', 'filter-everything'), $parent_filter['label'] );
+                            } else {
+                                $view_args['ask_to_select_parent'] = esc_html__('First, select another filter', 'filter-everything');
+                            }
+
+                            if ( $wp_queried_term ) {
+                                $parent_filter['values'][] = $wp_queried_term->slug;
+                            }
+
+                            if ( empty( $parent_filter['values'] ) ) {
+
+                                if ( ! empty( $filter['values'] ) ) {
+                                    $actual_filter_terms = [];
+                                    $filter_values_flipped = array_flip( $filter['values'] );
+                                    foreach ( $terms as $single_term ) {
+                                        if(!$is_rating) {
+                                            if (isset($filter_values_flipped[$single_term->slug])) {
+                                                $actual_filter_terms[] = $single_term;
+                                            }
+                                        }else{
+                                            $actual_filter_terms[] = $single_term;
+                                        }
+                                    }
+                                    $terms = $actual_filter_terms;
+                                }else{
+                                    $view_args['empty_parent_filter'] = true;
+                                }
+                                // Here we have to setup signal that forces message "Select parent first"
+                            } else {
+                                if ( ! in_array( $filter['entity'], ['post_meta_num', 'tax_numeric'] ) ) {
+                                    // Selected values are term slugs
+                                    $actual_parent_filter_posts     = [];
+                                    $parent_filter_values_flipped   = array_flip( $parent_filter['values'] );
+
+                                    foreach ( $parent_filter_terms as $parent_filter_term ) {
+                                        if ( isset( $parent_filter_values_flipped[$parent_filter_term->slug] ) ) {
+                                            $actual_parent_filter_posts = array_merge($actual_parent_filter_posts, $parent_filter_term->posts);
+                                        }
+                                    }
+                                    $actual_filter_terms = [];
+                                    foreach ($terms as $single_term) {
+                                        $single_term->show_with_parent = false;
+                                        if(!$is_rating){
+                                            $current_intersection = array_intersect($actual_parent_filter_posts, $single_term->posts);
+                                            if (!empty($current_intersection)) {
+                                                $single_term->show_with_parent = true;
+                                            }
+                                            $actual_filter_terms[] = $single_term;
+                                        }else{
+                                            $actual_filter_terms[] = $single_term;
+                                        }
+                                    }
+
+                                    $terms = $actual_filter_terms;
+                                }
+                                if (  in_array( $filter['entity'], ['post_meta_num', 'tax_numeric'] ) ) {
+                                    $actual_filter_terms = [];
+                                    foreach ($terms as $single_term) {
+                                        $single_term->show_with_parent = false;
                                         $actual_filter_terms[] = $single_term;
                                     }
+                                    $terms = $actual_filter_terms;
                                 }
-
-                                $terms = $actual_filter_terms;
                             }
                         }
                     }
@@ -399,7 +513,7 @@ class FiltersWidget extends \WP_Widget
                                 }
                             }
                         } else {
-                            $checkTerms = flrt_remove_empty_terms($terms, $filter, $has_not_empty_children_flipped);
+                            $checkTerms = flrt_remove_empty_terms($terms, $filter, $has_not_empty_children_flipped, $instant_recount);
                         }
                     }
                 }
@@ -424,30 +538,46 @@ class FiltersWidget extends \WP_Widget
                     if ( in_array( $filter['entity'], ['post_meta_num', 'tax_numeric'] ) ) {
                         // Temporary not ideal solution
                         // Sometimes it is $terms[0] sometimes $terms['max']
-                        if (isset($terms[0])) {
-                            if ((int)$terms[0]->max === 0 && (int)$terms[1]->min === 0) {
-                                // Huh, finally
-                                continue;
+                        if(!$instant_recount) {
+                            if (isset($terms[0])) {
+                                if ((int)$terms[0]->max === 0 && (int)$terms[1]->min === 0) {
+                                    // Huh, finally
+                                    continue;
+                                }
                             }
-                        }
 
-                        if (isset($terms['min'])) {
-                            if ((int)$terms['max']->max === 0 && (int)$terms['min']->min === 0) {
-                                // Huh, finally
-                                continue;
+                            if (isset($terms['min'])) {
+                                if ((int)$terms['max']->max === 0 && (int)$terms['min']->min === 0) {
+                                    // Huh, finally
+                                    continue;
+                                }
+                            }
+                        }else{
+                            if (isset($terms[0])) {
+                                if ((int)$terms[0]->max === 0 && (int)$terms[1]->min === 0) {
+                                    $terms = [];
+                                }
+                            }
+
+                            if (isset($terms['min'])) {
+                                if ((int)$terms['max']->max === 0 && (int)$terms['min']->min === 0) {
+                                    $terms = [];
+                                }
                             }
                         }
 
                     } else if ( in_array( $filter['entity'], ['post_date', 'post_meta_date'] ) ) {
-                        if ( $found_posts < 1 ) {
-                            // Huh, finally
-                            continue;
-                        }
+                            if ($found_posts < 1) {
+                                // Huh, finally
+                                continue;
+                            }
                     } else {
                         $checkTerms = flrt_remove_empty_terms($terms, $filter, $has_not_empty_children_flipped);
-                        if (empty($checkTerms)) {
-                            // Huh, finally
-                            continue;
+                        if(!$instant_recount){
+                            if (empty($checkTerms)) {
+                                // Huh, finally
+                                continue;
+                            }
                         }
                     }
                 }
@@ -460,6 +590,8 @@ class FiltersWidget extends \WP_Widget
                         'name',
                         'count',
                         'cross_count',
+                        'range_list_input',
+                        'abs_values',
                         'max',
                         'min',
                         'from',
@@ -467,7 +599,8 @@ class FiltersWidget extends \WP_Widget
                         'time_to',
                         'time_from',
                         'parent',
-                        'wp_queried'
+                        'wp_queried',
+                        'show_with_parent'
                     )
                 );
 

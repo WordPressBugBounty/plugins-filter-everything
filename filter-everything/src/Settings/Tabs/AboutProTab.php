@@ -84,7 +84,7 @@ class AboutProTab extends BaseSettings{
         if( $this->page == $page ){
             ?>
 
-            <div class="wpc-pro-bnf-page-wrap">
+            <div class="wpc-pro-bnf-page-wrap wp-exclude-emoji">
                 <div class="wpc-pro-bnf-wrap">
                     <section class="wpc-pro-bnf-sect-1">
                         <div class="wpc-pro-bnf-sect-1-logo-wrap">
@@ -97,8 +97,8 @@ class AboutProTab extends BaseSettings{
                                 <?php echo wp_kses(
                                         implode('<br>', array(
                                                 _x('<span>Full control</span> over filtering,', 'benefits-landing', 'filter-everything'),
-                                                _x('page builders support,', 'benefits-landing', 'filter-everything'),
-                                                _x('mobile & SEO ready<span>.</span>', 'benefits-landing', 'filter-everything'),
+                                                _x('page builder support,', 'benefits-landing', 'filter-everything'),
+                                                _x('SEO ready & instant', 'benefits-landing', 'filter-everything') . ' ⚡️',
                                         )),
                                         array('br' => array(), 'span' => array())
                                 ); ?>
@@ -150,53 +150,17 @@ class AboutProTab extends BaseSettings{
                                 </li>
                                 <li class="wpc-pro-bnf-sect-1-anwp-list-item">
                                     <div class="wpc-pro-bnf-sect-1-anwp-list-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
-                                    <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo _x('Get more organic traffic with SEO tools for filtered pages','benefits-landing', 'filter-everything'); ?></p>
+                                    <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo _x('Improve conversions and user experience with advanced filtering capabilities','benefits-landing', 'filter-everything'); ?></p>
                                 </li>
                                 <li class="wpc-pro-bnf-sect-1-anwp-list-item">
                                     <div class="wpc-pro-bnf-sect-1-anwp-list-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
-                                    <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo _x('Improve conversions and user experience with advanced filtering capabilities','benefits-landing', 'filter-everything'); ?></p>
+                                    <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo _x('Get more organic traffic with SEO tools for filtered pages','benefits-landing', 'filter-everything'); ?></p>
                                 </li>
                             </ul>
                         </div>
                         <div class="wpc-pro-bnf-sect-1-btns-wrap">
                             <a href="<?php echo esc_url(flrt_unlock_pro_link('features_view_link')) ?>" target="_blank" class="wpc-pro-bnf-sect-1-btns-up-to-pro"><?php echo _x('Upgrade to PRO', 'benefits-landing', 'filter-everything'); ?> <?php echo flrt_crown_icon(); ?></a>
-                            <a href="#why-choose-pro" class="wpc-pro-bnf-sect-1-btns-view-all-pro"><?php echo _x('View all PRO features', 'benefits-landing', 'filter-everything'); ?></a>
-                        </div>
-                    </section>
-
-
-                    <section class="wpc-pro-bnf-sect-2">
-                        <h2 class="wpc-pro-bnf-sect-2-title">
-                            <?php echo wp_kses(
-                                    _x('Why Upgrade to<br>Filter Everything PRO?', 'benefits-landing', 'filter-everything'),
-                                    array('br' => array())
-                            ); ?>
-                        </h2>
-                        <div class="wpc-pro-bnf-sect-2-ultm-wrap">
-                            <div class="wpc-pro-bnf-sect-2-ultm-wrap-ultm-img">
-                                <?php echo $this->wpc_pro_bnf_get_retina_img( 'wpc-unlm-numb-fset.png', _x( 'Unlimited Filter Sets', 'benefits-landing', 'filter-everything' ) ); ?>
-                            </div>
-                            <h3 class="wpc-pro-bnf-sect-2-ultm-h3-title"><?php echo _x('∞ Create Unlimited Filter Sets', 'benefits-landing', 'filter-everything'); ?></h3>
-                            <p class="wpc-pro-bnf-sect-2-ultm-text"><?php echo _x('Create unique filters for every section of your site and let visitors filter content by relevant criteria — e.g. smartphones by brand, clothing by size, or cars by fuel type.', 'benefits-landing', 'filter-everything'); ?></p>
-                        </div>
-                        <div class="wpc-pro-bnf-sect-2-seou-wrap">
-                            <div class="wpc-pro-bnf-sect-2-seou-img">
-                                <?php echo $this->wpc_pro_bnf_get_retina_img( 'wpc-seo-cap-cln-url.png', _x( 'SEO Capabilities', 'benefits-landing', 'filter-everything' ) ); ?>
-                            </div>
-                            <h3 class="wpc-pro-bnf-sect-2-seou-h3-title"><?php echo _x('Auto-generate SEO data for filtered pages', 'benefits-landing', 'filter-everything'); ?></h3>
-                            <p class="wpc-pro-bnf-sect-2-seou-text"><?php echo _x('Generate SEO titles, H1s, descriptions, and SEO texts based on selected filters to attract more organic traffic from search engines and AI services.', 'benefits-landing', 'filter-everything'); ?></p>
-                        </div>
-                        <div class="wpc-pro-bnf-sect-2-mobl-wrap">
-                            <div class="wpc-pro-bnf-sect-2-mobl-img">
-                                <?php echo $this->wpc_pro_bnf_get_retina_img( 'wpc-mob-dvs-comf.png', _x( 'Mobile Devices', 'benefits-landing', 'filter-everything' ) ); ?>
-                            </div>
-                            <div class="wpc-pro-bnf-sect-2-mobl-h3-title-text-wrap">
-                                <h3 class="wpc-pro-bnf-sect-2-mobl-h3-title"><?php echo wp_kses(
-                                            _x('Maximum convenience for Mobile devices', 'benefits-landing', 'filter-everything'),
-                                            array('br' => array())
-                                    ); ?></h3>
-                                <p class="wpc-pro-bnf-sect-2-mobl-text"><?php echo _x('Use the built-in, user-friendly filter widget for mobile devices.', 'benefits-landing', 'filter-everything'); ?></p>
-                            </div>
+                            <a href="#why-choose-pro" class="wpc-pro-bnf-sect-1-btns-view-all-pro"><?php echo _x('View all PRO features', 'benefits-landing', 'filter-everything'); ?> ↓</a>
                         </div>
                     </section>
 
@@ -212,36 +176,36 @@ class AboutProTab extends BaseSettings{
 
                             // Real customer reviews taken from the filtereverything.pro landing page.
                             $rvw_reviews = array(
-                                array(
-                                    'author' => 'ScarletLyn',
-                                    'date'   => '2022-03-12',
-                                    'url'    => 'https://codecanyon.net/ratings/3352977',
-                                    'text'   => "I am crying my eyeballs out of happiness. I cannot thank you enough. I just spent the whole weekend trying to make one myself because all the others that were fitting my shop scenario were way too heavy and chunky. I needed a specific structure for my website along with efficiently displaying filters depending on which section of the shop the user is in, and GOD, your plugin has ALL the freaking options possible to make it possible for me. I love you, marry me! (Just kidding, but you get the idea). My Query Monitor is happy, I am happy, and when my shop will go online, my customers will be happy to enjoy a blazing fast filtering engine for my greeting cards and stationery! Keep the great work, and please please, keep it loading FAST. Take care.",
-                                ),
-                                array(
-                                    'author' => 'bsmolyanov',
-                                    'date'   => '2024-09-08',
-                                    'url'    => 'https://codecanyon.net/ratings/3601791',
-                                    'text'   => "Filter Everything Pro is magnificent plugin! I use it for filtering WordPress posts database of more than 150k posts, with more than 10 custom taxonomies and thousands of terms and it does a great job! Not to mention, Filter Everything Pro is working alongside the GeneratePress theme like a charm, where other filtering solutions just do not cut it. The plugin is very well documented and very flexible for customization. Last but not least, the assistance I received was absolutely exceeding any level of support I have received around here - both in terms of speed, thoroughness and accuracy! The support team was extremely helpful, taking the time to review my entire setup (which is quite complex) and to pinpoint an issue which was related to a third-party plugin and has nothing to do with Filter Everything Pro. Outstanding!!! I definitely recommend Filter Everything Pro to everyone who needs a good filtering solution for posts, custom post types or WooCommerce products.",
-                                ),
-                                array(
-                                    'author' => 'migge',
-                                    'date'   => '2024-10-17',
-                                    'url'    => 'https://codecanyon.net/ratings/3605614',
-                                    'text'   => "There are many reason to give this plugin a 5-star rating! I picked Customer Support because it's VERY important. Functionality is easier to spot before purchase. The support for this plugin is beyond what you would expect, so i can recommend Filter Everything both as the best filter plugin that comes along with a matching support. Thanks guys!",
-                                ),
+                                    array(
+                                            'author' => 'ScarletLyn',
+                                            'date'   => '2022-03-12',
+                                            'url'    => 'https://codecanyon.net/ratings/3352977',
+                                            'text'   => "I am crying my eyeballs out of happiness. I cannot thank you enough. I just spent the whole weekend trying to make one myself because all the others that were fitting my shop scenario were way too heavy and chunky. I needed a specific structure for my website along with efficiently displaying filters depending on which section of the shop the user is in, and GOD, your plugin has ALL the freaking options possible to make it possible for me. I love you, marry me! (Just kidding, but you get the idea). My Query Monitor is happy, I am happy, and when my shop will go online, my customers will be happy to enjoy a blazing fast filtering engine for my greeting cards and stationery! Keep the great work, and please please, keep it loading FAST. Take care.",
+                                    ),
+                                    array(
+                                            'author' => 'bsmolyanov',
+                                            'date'   => '2024-09-08',
+                                            'url'    => 'https://codecanyon.net/ratings/3601791',
+                                            'text'   => "Filter Everything Pro is magnificent plugin! I use it for filtering WordPress posts database of more than 150k posts, with more than 10 custom taxonomies and thousands of terms and it does a great job! Not to mention, Filter Everything Pro is working alongside the GeneratePress theme like a charm, where other filtering solutions just do not cut it. The plugin is very well documented and very flexible for customization. Last but not least, the assistance I received was absolutely exceeding any level of support I have received around here - both in terms of speed, thoroughness and accuracy! The support team was extremely helpful, taking the time to review my entire setup (which is quite complex) and to pinpoint an issue which was related to a third-party plugin and has nothing to do with Filter Everything Pro. Outstanding!!! I definitely recommend Filter Everything Pro to everyone who needs a good filtering solution for posts, custom post types or WooCommerce products.",
+                                    ),
+                                    array(
+                                            'author' => 'migge',
+                                            'date'   => '2024-10-17',
+                                            'url'    => 'https://codecanyon.net/ratings/3605614',
+                                            'text'   => "There are many reason to give this plugin a 5-star rating! I picked Customer Support because it's VERY important. Functionality is easier to spot before purchase. The support for this plugin is beyond what you would expect, so i can recommend Filter Everything both as the best filter plugin that comes along with a matching support. Thanks guys!",
+                                    ),
                             );
 
                             $rvw_total = max( count( $rvw_videos ), count( $rvw_reviews ) );
 
                             for ( $i = 0; $i < $rvw_total; $i++ ) :
-                                // After the first row (one video + one review) push the rest under the "View more" toggle.
-                                if ( $i === 1 ) :
-                                    ?>
-                                    </div>
-                                    <div class="wpc-pro-bnf-sect-rvw-more">
-                                        <div class="wpc-pro-bnf-sect-rvw-grid">
-                                    <?php
+                            // After the first row (one video + one review) push the rest under the "View more" toggle.
+                            if ( $i === 1 ) :
+                            ?>
+                        </div>
+                        <div class="wpc-pro-bnf-sect-rvw-more">
+                            <div class="wpc-pro-bnf-sect-rvw-grid">
+                                <?php
                                 endif;
                                 $rvw_has_video  = isset( $rvw_videos[ $i ] );
                                 $rvw_has_review = isset( $rvw_reviews[ $i ] );
@@ -254,168 +218,16 @@ class AboutProTab extends BaseSettings{
                                     if ( $rvw_has_review ) { $this->renderRvwReviewCard( $rvw_reviews[ $i ] ); }
                                     if ( $rvw_has_video )  { $this->renderRvwVideoCard( $rvw_videos[ $i ] ); }
                                 }
-                            endfor;
-                            ?>
-                                </div>
-                                <div class="wpc-pro-bnf-sect-rvw-fade" aria-hidden="true"></div>
+                                endfor;
+                                ?>
                             </div>
+                            <div class="wpc-pro-bnf-sect-rvw-fade" aria-hidden="true"></div>
+                        </div>
                         <div class="wpc-pro-bnf-sect-rvw-bottom">
                             <label for="wpc-rvw-toggle" class="fetm-toggle-btn">
                                 <span class="fetm-toggle-text fetm-toggle-text-more"><?php echo esc_html_x( 'View more', 'benefits-landing', 'filter-everything' ); ?></span>
                                 <span class="fetm-toggle-text fetm-toggle-text-less"><?php echo esc_html_x( 'View less', 'benefits-landing', 'filter-everything' ); ?></span>
                             </label>
-                        </div>
-                    </section>
-
-                    <section class="wpc-pro-bnf-sect-4">
-                        <h2 class="wpc-pro-bnf-sect-4-title">
-                            <?php echo wp_kses( _x( 'What does Filter Everything PRO<br>unlock?', 'benefits-landing', 'filter-everything' ), [ 'br' => [] ] ); ?>
-                        </h2>
-                        <p class="wpc-pro-bnf-sect-4-desc"><span class="wpc-pro-bnf-sect-4-text-wrapper"><?php echo wp_kses( _x( "The PRO version includes tools that <strong>increase conversions</strong><br />by helping visitors find the right content faster.", 'benefits-landing', 'filter-everything' ), [ 'br' => [], 'strong' => [] ] ); ?></span></p>
-                        <div class="wpc-pro-bnf-sect-4-gseo-wrap">
-                            <div class="wpc-pro-bnf-sect-4-gseo-icon"></div>
-                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo wp_kses( _x( 'Full control over SEO', 'benefits-landing', 'filter-everything' ), [ 'br' => [] ] ); ?></p>
-                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Get the most out of filtered pages with full control over SEO titles, H1s, descriptions, SEO text, and XML sitemaps. Better indexation means more organic traffic.', 'benefits-landing', 'filter-everything'); ?></p>
-                        </div>
-                        <div class="wpc-pro-bnf-sect-4-flwp-wrap">
-                            <div class="wpc-pro-bnf-sect-4-flwp-icon"></div>
-                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo wp_kses( _x( 'Filter Any Content', 'benefits-landing', 'filter-everything' ), [ 'br' => [] ] ); ?></p>
-                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Page builder content, WooCommerce products, custom post types, and even custom WP_Query — the PRO version handles it all!', 'benefits-landing', 'filter-everything'); ?></p>
-                        </div>
-                        <div class="wpc-pro-bnf-sect-4-flst-wrap">
-                            <div class="wpc-pro-bnf-sect-4-flst-icon"></div>
-                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo wp_kses( _x( '∞ Unlimited Filter Sets', 'benefits-landing', 'filter-everything' ), [ 'br' => [] ] ); ?></p>
-                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Create a dedicated Filter Set for every section of your site instead of using the same filters everywhere.', 'benefits-landing', 'filter-everything'); ?></p>
-                        </div>
-                        <div class="wpc-pro-bnf-sect-4-dupl-wrap">
-                            <div class="wpc-pro-bnf-sect-4-dupl-icon"></div>
-                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo _x('Tools for faster workflow', 'benefits-landing', 'filter-everything'); ?></p>
-                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Back up, duplicate, transfer, and reuse your filters, Filter Sets, and settings with ease.', 'benefits-landing', 'filter-everything'); ?></p>
-                        </div>
-                        <div class="wpc-pro-bnf-sect-4-extr-wrap">
-                            <div class="wpc-pro-bnf-sect-4-extr-icon"></div>
-                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo _x('Precision filtering', 'benefits-landing', 'filter-everything'); ?></p>
-                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Accurate variation filtering, proper handling of out-of-stock products, auto-hiding empty filters, and more — the details that make the difference.', 'benefits-landing', 'filter-everything'); ?></p>
-                        </div>
-                    </section>
-
-                    <!-- ------------------------------------- Works and is trusted worldwide (moved below "What does PRO unlock?") ----------------------------------------- -->
-                    <section class="wpc-pro-bnf-sect-3">
-                        <h2 class="wpc-pro-bnf-sect-3-title"><?php echo wp_kses(
-                                    _x('Works and is trusted<br>worldwide', 'benefits-landing', 'filter-everything'),
-                                    array('br' => array())
-                            ); ?></h2>
-                        <div class="wpc-pro-bnf-sect-3-wbst-wrap">
-                            <h3 class="wpc-pro-bnf-sect-3-wbst-h3"><?php echo _x('160&nbsp;000+', 'benefits-landing', 'filter-everything'); ?></h3>
-                            <p class="wpc-pro-bnf-sect-3-wbst-desc"><?php echo _x('websites / users worldwide', 'benefits-landing', 'filter-everything'); ?></p>
-                        </div>
-                        <div class="wpc-pro-bnf-sect-3-csmt-wrap">
-                            <h3 class="wpc-pro-bnf-sect-3-csmt-h3"><?php echo _x('16&nbsp;100+', 'benefits-landing', 'filter-everything'); ?></h3>
-                            <p class="wpc-pro-bnf-sect-3-csmt-desc"><?php echo _x('customers on CodeCanyon', 'benefits-landing', 'filter-everything'); ?></p>
-                        </div>
-                        <div class="wpc-pro-bnf-sect-3-rate-wrap">
-                            <h3 class="wpc-pro-bnf-sect-3-rate-h3"><?php echo _x('4.88/5', 'benefits-landing', 'filter-everything'); ?></h3>
-                            <p class="wpc-pro-bnf-sect-3-rate-desc"><?php echo _x('rating based on real reviews', 'benefits-landing', 'filter-everything'); ?></p>
-                        </div>
-                    </section>
-
-                    <section class="wpc-pro-bnf-sect-5">
-                        <h2 class="wpc-pro-bnf-sect-5-title"><?php echo _x('PRO Features Overview', 'benefits-landing', 'filter-everything'); ?></h2>
-
-                        <div class="wpc-pro-bnf-sect-5-ablt-wrap">
-                            <div class="wpc-pro-bnf-sect-5-default-data-wrap">
-                                <div class="wpc-pro-bnf-sect-5-pro-label"><?php echo _x('PRO', 'benefits-landing', 'benefits-landing', 'filter-everything') ?></div>
-                                <p class="pc-pro-bnf-sect-5-default-text"><?php echo _x('Full power of filtering', 'benefits-landing', 'filter-everything'); ?></p>
-                                <div class="pc-pro-bnf-sect-5-default-icon"></div>
-                            </div>
-                            <div class="wpc-pro-bnf-sect-5-default-hover-list">
-                                <ul class="wpc-pro-bnf-sect-5-default-hover-list-ul">
-                                    <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Filtering any content — including page builders and custom queries', 'benefits-landing', 'filter-everything'); ?></p>
-                                    </li>
-                                    <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text">∞ <?php echo _x( 'Unlimited Filter Sets', 'benefits-landing', 'filter-everything' ); ?></p>
-                                    </li>
-                                    <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Works with your existing content — no need to rebuild your site', 'benefits-landing', 'filter-everything'); ?></p>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="wpc-pro-bnf-sect-5-advn-wrap">
-                            <div class="wpc-pro-bnf-sect-5-default-data-wrap">
-                                <div class="wpc-pro-bnf-sect-5-pro-label"><?php echo _x('PRO', 'benefits-landing', 'benefits-landing', 'filter-everything') ?></div>
-                                <p class="pc-pro-bnf-sect-5-default-text"><?php echo _x('Filtering accuracy', 'benefits-landing', 'filter-everything'); ?></p>
-                                <div class="pc-pro-bnf-sect-5-default-icon"></div>
-                            </div>
-                            <div class="wpc-pro-bnf-sect-5-default-hover-list">
-                                <ul class="wpc-pro-bnf-sect-5-default-hover-list-ul">
-                                    <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Accurate WooCommerce variation filtering', 'benefits-landing', 'filter-everything'); ?></p>
-                                    </li>
-                                    <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Accurate out-of-stock products filtering', 'benefits-landing', 'filter-everything'); ?></p>
-                                    </li>
-                                    <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Auto-hiding empty filters', 'benefits-landing', 'filter-everything'); ?></p>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="wpc-pro-bnf-sect-5-expr-wrap">
-                            <div class="wpc-pro-bnf-sect-5-default-data-wrap">
-                                <div class="wpc-pro-bnf-sect-5-pro-label"><?php echo _x('PRO', 'benefits-landing', 'benefits-landing', 'filter-everything') ?></div>
-                                <p class="pc-pro-bnf-sect-5-default-text"><?php echo _x('Convenience for everyone', 'benefits-landing', 'filter-everything'); ?></p>
-                                <div class="pc-pro-bnf-sect-5-default-icon"></div>
-                            </div>
-                            <div class="wpc-pro-bnf-sect-5-default-hover-list">
-                                <ul class="wpc-pro-bnf-sect-5-default-hover-list-ul">
-                                    <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('User-friendly mobile filters widget', 'benefits-landing', 'filter-everything'); ?></p>
-                                    </li>
-                                    <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('One-click import & export for Filters, Filter Sets, and settings', 'benefits-landing', 'filter-everything'); ?></p>
-                                    </li>
-                                    <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Instant Filter Set duplication', 'benefits-landing', 'filter-everything'); ?></p>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="wpc-pro-bnf-sect-5-seop-wrap">
-                            <div class="wpc-pro-bnf-sect-5-default-data-wrap">
-                                <div class="wpc-pro-bnf-sect-5-pro-label"><?php echo _x('PRO', 'benefits-landing', 'benefits-landing', 'filter-everything') ?></div>
-                                <p class="pc-pro-bnf-sect-5-default-text"><?php echo _x('SEO & organic traffic', 'benefits-landing', 'filter-everything'); ?></p>
-                                <div class="pc-pro-bnf-sect-5-default-icon"></div>
-                            </div>
-                            <div class="wpc-pro-bnf-sect-5-default-hover-list">
-                                <ul class="wpc-pro-bnf-sect-5-default-hover-list-ul">
-                                    <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Full SEO control for filtered pages', 'benefits-landing', 'filter-everything'); ?></p>
-                                    </li>
-                                    <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Clean, SEO-friendly filter URLs', 'benefits-landing', 'filter-everything'); ?></p>
-                                    </li>
-                                    <li class="wpc-pro-bnf-sect-5-default-item">
-                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
-                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('XML sitemap for filtered pages', 'benefits-landing', 'filter-everything'); ?></p>
-                                    </li>
-                                </ul>
-                            </div>
                         </div>
                     </section>
 
@@ -440,6 +252,15 @@ class AboutProTab extends BaseSettings{
                                     </div>
                                     <div class="fetm-row">
                                         <div class="fetm-feature"><?php echo _x('Filter any content — page builders, plugins, or even custom code', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="fetm-cell fetm-free">
+                                            <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
+                                        </div>
+                                        <div class="fetm-cell fetm-pro">
+                                            <svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg>
+                                        </div>
+                                    </div>
+                                    <div class="fetm-row">
+                                        <div class="fetm-feature"><?php echo _x('Instant filter counts', 'benefits-landing', 'filter-everything'); ?><span class="fetm-new-badge"><?php echo _x('New', 'benefits-landing', 'filter-everything'); ?></span><span class="wpc-icon-help-tip fetm-help-tip" data-tip="<?php echo esc_attr_x('Filter counts update instantly as visitors click — no page reload, no server request. Even faster than AJAX.', 'benefits-landing', 'filter-everything'); ?>">?</span></div>
                                         <div class="fetm-cell fetm-free">
                                             <svg width="24" height="24"><use href="#fetm-icon-minus"/></svg>
                                         </div>
@@ -712,21 +533,208 @@ class AboutProTab extends BaseSettings{
                                 <div class="fetm-freevspro-bottom-extra-grid">
                                     <div class="fetm-freevspro-bottom-extra-grid-item">
                                         <div class="fetm-freevspro-bottom-extra-grid-item-wlt-icon"></div>
-                                        <p class="fetm-freevspro-bottom-extra-grid-item-text"><?php echo _x('One-time payment', 'benefits-landing', 'filter-everything'); ?></p>
+                                        <p class="fetm-freevspro-bottom-extra-grid-item-text"><?php echo _x('Risk-free purchase', 'benefits-landing', 'filter-everything'); ?></p>
                                     </div>
                                     <div class="fetm-freevspro-bottom-extra-grid-item">
                                         <div class="fetm-freevspro-bottom-extra-grid-item-res-icon"></div>
-                                        <p class="fetm-freevspro-bottom-extra-grid-item-text"><?php echo _x('Lifetime updates', 'benefits-landing', 'filter-everything'); ?></p>
+                                        <p class="fetm-freevspro-bottom-extra-grid-item-text"><?php echo _x('Regular updates', 'benefits-landing', 'filter-everything'); ?></p>
                                     </div>
                                     <div class="fetm-freevspro-bottom-extra-grid-item">
                                         <div class="fetm-freevspro-bottom-extra-grid-item-hdf-icon"></div>
-                                        <p class="fetm-freevspro-bottom-extra-grid-item-text"><?php echo _x('6 months of support included', 'benefits-landing', 'filter-everything'); ?></p>
+                                        <p class="fetm-freevspro-bottom-extra-grid-item-text"><?php echo _x('Premium support', 'benefits-landing', 'filter-everything'); ?></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </section>
                     <!-- ------------------------------------- section 6 FREE VS PRO END ----------------------------------------- -->
+
+                    <section class="wpc-pro-bnf-sect-2">
+                        <h2 class="wpc-pro-bnf-sect-2-title">
+                            <?php echo wp_kses(
+                                    _x('Why Upgrade to<br>Filter Everything PRO?', 'benefits-landing', 'filter-everything'),
+                                    array('br' => array())
+                            ); ?>
+                        </h2>
+                        <div class="wpc-pro-bnf-sect-2-ultm-wrap">
+                            <div class="wpc-pro-bnf-sect-2-ultm-wrap-ultm-img">
+                                <?php echo $this->wpc_pro_bnf_get_retina_img( 'wpc-unlm-numb-fset.png', _x( 'Unlimited Filter Sets', 'benefits-landing', 'filter-everything' ) ); ?>
+                            </div>
+                            <h3 class="wpc-pro-bnf-sect-2-ultm-h3-title"><?php echo _x('∞ Create Unlimited Filter Sets', 'benefits-landing', 'filter-everything'); ?></h3>
+                            <p class="wpc-pro-bnf-sect-2-ultm-text"><?php echo _x('Create unique filters for every section of your site and let visitors filter content by relevant criteria — e.g. smartphones by brand, clothing by size, or cars by fuel type.', 'benefits-landing', 'filter-everything'); ?></p>
+                        </div>
+                        <div class="wpc-pro-bnf-sect-2-seou-wrap">
+                            <div class="wpc-pro-bnf-sect-2-seou-img">
+                                <?php echo $this->wpc_pro_bnf_get_retina_img( 'wpc-seo-cap-cln-url.png', _x( 'SEO Capabilities', 'benefits-landing', 'filter-everything' ) ); ?>
+                            </div>
+                            <h3 class="wpc-pro-bnf-sect-2-seou-h3-title"><?php echo _x('Auto-generate SEO data for filtered pages', 'benefits-landing', 'filter-everything'); ?></h3>
+                            <p class="wpc-pro-bnf-sect-2-seou-text"><?php echo _x('Generate SEO titles, H1s, descriptions, and SEO texts based on selected filters to attract more organic traffic from search engines and AI services.', 'benefits-landing', 'filter-everything'); ?></p>
+                        </div>
+                        <div class="wpc-pro-bnf-sect-2-mobl-wrap">
+                            <div class="wpc-pro-bnf-sect-2-mobl-img">
+                                <?php echo $this->wpc_pro_bnf_get_retina_img( 'wpc-mob-dvs-comf.png', _x( 'Mobile Devices', 'benefits-landing', 'filter-everything' ) ); ?>
+                            </div>
+                            <div class="wpc-pro-bnf-sect-2-mobl-h3-title-text-wrap">
+                                <h3 class="wpc-pro-bnf-sect-2-mobl-h3-title"><?php echo wp_kses(
+                                            _x('Maximum convenience for Mobile devices', 'benefits-landing', 'filter-everything'),
+                                            array('br' => array())
+                                    ); ?></h3>
+                                <p class="wpc-pro-bnf-sect-2-mobl-text"><?php echo _x('Use the built-in, user-friendly filter widget for mobile devices.', 'benefits-landing', 'filter-everything'); ?></p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="wpc-pro-bnf-sect-4">
+                        <h2 class="wpc-pro-bnf-sect-4-title">
+                            <?php echo wp_kses( _x( 'What does Filter Everything PRO<br>unlock?', 'benefits-landing', 'filter-everything' ), [ 'br' => [] ] ); ?>
+                        </h2>
+                        <p class="wpc-pro-bnf-sect-4-desc"><span class="wpc-pro-bnf-sect-4-text-wrapper"><?php echo wp_kses( _x( "The PRO version includes tools that <strong>increase conversions</strong><br />by helping visitors find the right content faster.", 'benefits-landing', 'filter-everything' ), [ 'br' => [], 'strong' => [] ] ); ?></span></p>
+                        <div class="wpc-pro-bnf-sect-4-gseo-wrap">
+                            <div class="wpc-pro-bnf-sect-4-gseo-icon"></div>
+                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo wp_kses( _x( 'Full control over SEO', 'benefits-landing', 'filter-everything' ), [ 'br' => [] ] ); ?></p>
+                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Get the most out of filtered pages with full control over SEO titles, H1s, descriptions, SEO text, and XML sitemaps. Better indexation means more organic traffic.', 'benefits-landing', 'filter-everything'); ?></p>
+                        </div>
+                        <div class="wpc-pro-bnf-sect-4-flwp-wrap">
+                            <div class="wpc-pro-bnf-sect-4-flwp-icon"></div>
+                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo wp_kses( _x( 'Filter Any Content', 'benefits-landing', 'filter-everything' ), [ 'br' => [] ] ); ?></p>
+                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Page builder content, WooCommerce products, custom post types, and even custom WP_Query — the PRO version handles it all!', 'benefits-landing', 'filter-everything'); ?></p>
+                        </div>
+                        <div class="wpc-pro-bnf-sect-4-flst-wrap">
+                            <div class="wpc-pro-bnf-sect-4-flst-icon"></div>
+                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo wp_kses( _x( '∞ Unlimited Filter Sets', 'benefits-landing', 'filter-everything' ), [ 'br' => [] ] ); ?></p>
+                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Create a dedicated Filter Set for every section of your site instead of using the same filters everywhere.', 'benefits-landing', 'filter-everything'); ?></p>
+                        </div>
+                        <div class="wpc-pro-bnf-sect-4-dupl-wrap">
+                            <div class="wpc-pro-bnf-sect-4-dupl-icon"></div>
+                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo _x('Tools for faster workflow', 'benefits-landing', 'filter-everything'); ?></p>
+                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Back up, duplicate, transfer, and reuse your filters, Filter Sets, and settings with ease.', 'benefits-landing', 'filter-everything'); ?></p>
+                        </div>
+                        <div class="wpc-pro-bnf-sect-4-extr-wrap">
+                            <div class="wpc-pro-bnf-sect-4-extr-icon"></div>
+                            <p class="wpc-pro-bnf-sect-4-item-title"><?php echo _x('Precision filtering', 'benefits-landing', 'filter-everything'); ?></p>
+                            <p class="wpc-pro-bnf-sect-4-item-desc"><?php echo _x('Accurate variation filtering, proper handling of out-of-stock products, auto-hiding empty filters, and more — the details that make the difference.', 'benefits-landing', 'filter-everything'); ?></p>
+                        </div>
+                    </section>
+
+                    <!-- ------------------------------------- Works and is trusted worldwide (moved below "What does PRO unlock?") ----------------------------------------- -->
+                    <section class="wpc-pro-bnf-sect-3">
+                        <h2 class="wpc-pro-bnf-sect-3-title"><?php echo wp_kses(
+                                    _x('Works and is trusted<br>worldwide', 'benefits-landing', 'filter-everything'),
+                                    array('br' => array())
+                            ); ?></h2>
+                        <div class="wpc-pro-bnf-sect-3-wbst-wrap">
+                            <h3 class="wpc-pro-bnf-sect-3-wbst-h3"><?php echo _x('160&nbsp;000+', 'benefits-landing', 'filter-everything'); ?></h3>
+                            <p class="wpc-pro-bnf-sect-3-wbst-desc"><?php echo _x('websites / users worldwide', 'benefits-landing', 'filter-everything'); ?></p>
+                        </div>
+                        <div class="wpc-pro-bnf-sect-3-csmt-wrap">
+                            <h3 class="wpc-pro-bnf-sect-3-csmt-h3"><?php echo _x('16&nbsp;200+', 'benefits-landing', 'filter-everything'); ?></h3>
+                            <p class="wpc-pro-bnf-sect-3-csmt-desc"><?php echo _x('customers on CodeCanyon', 'benefits-landing', 'filter-everything'); ?></p>
+                        </div>
+                        <div class="wpc-pro-bnf-sect-3-rate-wrap">
+                            <h3 class="wpc-pro-bnf-sect-3-rate-h3"><?php echo _x('4.88/5', 'benefits-landing', 'filter-everything'); ?></h3>
+                            <p class="wpc-pro-bnf-sect-3-rate-desc"><?php echo _x('rating based on real reviews', 'benefits-landing', 'filter-everything'); ?></p>
+                        </div>
+                    </section>
+
+                    <section class="wpc-pro-bnf-sect-5">
+                        <h2 class="wpc-pro-bnf-sect-5-title"><?php echo _x('PRO Features Overview', 'benefits-landing', 'filter-everything'); ?></h2>
+
+                        <div class="wpc-pro-bnf-sect-5-ablt-wrap">
+                            <div class="wpc-pro-bnf-sect-5-default-data-wrap">
+                                <div class="wpc-pro-bnf-sect-5-pro-label"><?php echo _x('PRO', 'benefits-landing', 'benefits-landing', 'filter-everything') ?></div>
+                                <p class="pc-pro-bnf-sect-5-default-text"><?php echo _x('Full power of filtering', 'benefits-landing', 'filter-everything'); ?></p>
+                                <div class="pc-pro-bnf-sect-5-default-icon"></div>
+                            </div>
+                            <div class="wpc-pro-bnf-sect-5-default-hover-list">
+                                <ul class="wpc-pro-bnf-sect-5-default-hover-list-ul">
+                                    <li class="wpc-pro-bnf-sect-5-default-item">
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Filtering any content — including page builders and custom queries', 'benefits-landing', 'filter-everything'); ?></p>
+                                    </li>
+                                    <li class="wpc-pro-bnf-sect-5-default-item">
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text">∞ <?php echo _x( 'Unlimited Filter Sets', 'benefits-landing', 'filter-everything' ); ?></p>
+                                    </li>
+                                    <li class="wpc-pro-bnf-sect-5-default-item">
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Works with your existing content — no need to rebuild your site', 'benefits-landing', 'filter-everything'); ?></p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="wpc-pro-bnf-sect-5-advn-wrap">
+                            <div class="wpc-pro-bnf-sect-5-default-data-wrap">
+                                <div class="wpc-pro-bnf-sect-5-pro-label"><?php echo _x('PRO', 'benefits-landing', 'benefits-landing', 'filter-everything') ?></div>
+                                <p class="pc-pro-bnf-sect-5-default-text"><?php echo _x('Filtering accuracy', 'benefits-landing', 'filter-everything'); ?></p>
+                                <div class="pc-pro-bnf-sect-5-default-icon"></div>
+                            </div>
+                            <div class="wpc-pro-bnf-sect-5-default-hover-list">
+                                <ul class="wpc-pro-bnf-sect-5-default-hover-list-ul">
+                                    <li class="wpc-pro-bnf-sect-5-default-item">
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Accurate WooCommerce variation filtering', 'benefits-landing', 'filter-everything'); ?></p>
+                                    </li>
+                                    <li class="wpc-pro-bnf-sect-5-default-item">
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Accurate out-of-stock products filtering', 'benefits-landing', 'filter-everything'); ?></p>
+                                    </li>
+                                    <li class="wpc-pro-bnf-sect-5-default-item">
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Auto-hiding empty filters', 'benefits-landing', 'filter-everything'); ?></p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="wpc-pro-bnf-sect-5-expr-wrap">
+                            <div class="wpc-pro-bnf-sect-5-default-data-wrap">
+                                <div class="wpc-pro-bnf-sect-5-pro-label"><?php echo _x('PRO', 'benefits-landing', 'benefits-landing', 'filter-everything') ?></div>
+                                <p class="pc-pro-bnf-sect-5-default-text"><?php echo _x('Convenience for everyone', 'benefits-landing', 'filter-everything'); ?></p>
+                                <div class="pc-pro-bnf-sect-5-default-icon"></div>
+                            </div>
+                            <div class="wpc-pro-bnf-sect-5-default-hover-list">
+                                <ul class="wpc-pro-bnf-sect-5-default-hover-list-ul">
+                                    <li class="wpc-pro-bnf-sect-5-default-item">
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('User-friendly mobile filters widget', 'benefits-landing', 'filter-everything'); ?></p>
+                                    </li>
+                                    <li class="wpc-pro-bnf-sect-5-default-item">
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('One-click import & export for Filters, Filter Sets, and settings', 'benefits-landing', 'filter-everything'); ?></p>
+                                    </li>
+                                    <li class="wpc-pro-bnf-sect-5-default-item">
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Instant Filter Set duplication', 'benefits-landing', 'filter-everything'); ?></p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="wpc-pro-bnf-sect-5-seop-wrap">
+                            <div class="wpc-pro-bnf-sect-5-default-data-wrap">
+                                <div class="wpc-pro-bnf-sect-5-pro-label"><?php echo _x('PRO', 'benefits-landing', 'benefits-landing', 'filter-everything') ?></div>
+                                <p class="pc-pro-bnf-sect-5-default-text"><?php echo _x('SEO & organic traffic', 'benefits-landing', 'filter-everything'); ?></p>
+                                <div class="pc-pro-bnf-sect-5-default-icon"></div>
+                            </div>
+                            <div class="wpc-pro-bnf-sect-5-default-hover-list">
+                                <ul class="wpc-pro-bnf-sect-5-default-hover-list-ul">
+                                    <li class="wpc-pro-bnf-sect-5-default-item">
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Full SEO control for filtered pages', 'benefits-landing', 'filter-everything'); ?></p>
+                                    </li>
+                                    <li class="wpc-pro-bnf-sect-5-default-item">
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('Clean, SEO-friendly filter URLs', 'benefits-landing', 'filter-everything'); ?></p>
+                                    </li>
+                                    <li class="wpc-pro-bnf-sect-5-default-item">
+                                        <div class="wpc-pro-bnf-sect-5-default-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
+                                        <p class="wpc-pro-bnf-sect-5-default-item-text"><?php echo _x('XML sitemap for filtered pages', 'benefits-landing', 'filter-everything'); ?></p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
 
                     <!-- ------------------------------------- section 6 FAQ START ----------------------------------------- -->
                     <section class="fetm-sec-faq fetm-section">
@@ -765,7 +773,7 @@ class AboutProTab extends BaseSettings{
                         <details>
                             <summary> <?php echo _x('Is support included with the PRO upgrade?', 'benefits-landing', 'filter-everything'); ?></summary>
                             <p>
-                                <?php echo _x('Yes, support is included with the PRO purchase. You receive 6 months of support with the option to extend it at any time, along with lifetime plugin updates that include all new features and bug fixes at no additional cost.', 'benefits-landing', 'filter-everything'); ?>
+                                <?php echo _x('Yes, of course — support is included with the PRO version. Your purchase comes with 1 year of premium support and plugin updates, with the option to renew. Even if you choose not to renew after a year, you can keep using the plugin — you just won\'t receive updates anymore.', 'benefits-landing', 'filter-everything'); ?>
                             </p>
                         </details>
                         <details>
@@ -775,7 +783,7 @@ class AboutProTab extends BaseSettings{
                             </p>
 
                             <p>
-                                <?php echo _x('We follow a standard refund period — 14 days from the date of purchase.', 'benefits-landing', 'filter-everything'); ?>
+                                <?php echo _x('We follow a standard refund period — 30 days from the date of purchase.', 'benefits-landing', 'filter-everything'); ?>
                             </p>
                         </details>
                     </section>
@@ -787,7 +795,7 @@ class AboutProTab extends BaseSettings{
                             <a href="<?php echo esc_url(flrt_unlock_pro_link('footer_upgrade_btn')) ?>" target="_blank" class="wpc-pro-bnf-sect-1-btns-up-to-pro"><?php echo _x('Upgrade to PRO', 'benefits-landing', 'filter-everything'); ?> <?php echo flrt_crown_icon(); ?></a>
                         </div>
                         <div class="wpc-pro-bnf-sect-8-right-wrap">
-                            <?php echo $this->wpc_pro_bnf_get_retina_img( 'wpc-red-unl-ftr.png', 'Advanced Features' );?>
+                            <?php echo $this->wpc_pro_bnf_get_retina_img( 'wpc-red-unl-ftr.png', _x( 'Risk-free purchase, premium support and regular updates', 'benefits-landing', 'filter-everything' ) );?>
                         </div>
                     </section>
 

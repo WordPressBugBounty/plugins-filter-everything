@@ -17,11 +17,18 @@ if ( ! defined('ABSPATH') ) {
 }
 
 $args = [
-    'hide' => $view_args['ask_to_select_parent']
+    'hide' => $view_args['ask_to_select_parent'],
+    'use_apply_button' => $view_args['use_apply_button'],
+    'hide_empty' => $set['hide_empty']['value'],
+    'hide_empty_filter' => isset($set['hide_empty_filter']['value']) ? $set['hide_empty_filter']['value'] : '',
 ];
-
+$parent_filter_apply_button_data = flrt_parent_filter_apply_button_data($filter, $view_args);
+$parent_filter_apply_class = flrt_parent_filter_apply_class($filter, $view_args, $terms);
+$is_hide_empty_terms = (isset($set['hide_empty']['value']) && $set['hide_empty']['value'] === 'yes');
+$isMoreLess = flrtIsMoreLess($filter);
+$isParentFilter = flrtParentFilter($filter);
 ?>
-<div class="<?php echo flrt_filter_class( $filter, [], $terms, $args ); // Already escaped ?>" data-fid="<?php echo esc_attr( $filter['ID'] ); ?>">
+<div class="<?php echo flrt_filter_class( $filter, [], $terms, $args ); // Already escaped ?><?php echo $parent_filter_apply_class; ?>" data-fid="<?php echo esc_attr( $filter['ID'] ); ?>" data-filter-e-name="<?php echo esc_attr($filter['e_name']); ?>"<?php echo $parent_filter_apply_button_data; ?>>
     <?php flrt_filter_header( $filter, $terms ); // Safe, escaped ?>
     <div class="<?php echo esc_attr( flrt_filter_content_class( $filter ) ); ?>">
         <?php flrt_filter_search_field( $filter, $view_args, $terms ); ?>
@@ -29,15 +36,22 @@ $args = [
 
             if( ! empty( $terms ) || $view_args['ask_to_select_parent'] ):
 
-                 if( $view_args['ask_to_select_parent'] !== false ) { ?>
-                     <li><?php echo esc_html( $view_args['ask_to_select_parent'] ); ?></li>
+                 if( $view_args['ask_to_select_parent'] !== false && !$view_args['use_apply_button'] ) { ?>
+                     <li class="wpc-ask-to-parent-display"><?php echo esc_html( $view_args['ask_to_select_parent'] ); ?></li>
                 <?php } else {
-
+                     if( $view_args['ask_to_select_parent'] !== false && $view_args['use_apply_button'] ) { ?>
+                         <li class="wpc-ask-to-parent-display"><?php echo esc_html( $view_args['ask_to_select_parent'] ); ?></li>
+                     <?php }
                      $args = array(
                          'url_manager'  => $url_manager,
                          'filter'       => $filter,
                          'show_count'   => $set['show_count']['value'],
-                         'set'          => $set
+                         'set'          => $set,
+                         'use_apply_button'          => $view_args['use_apply_button'],
+                         'ask_to_select_parent'      => $view_args['ask_to_select_parent'],
+                         'is_hide_empty_terms'      => $is_hide_empty_terms,
+                         'isMoreLess'      => $isMoreLess,
+                         'isParentFilter'      => $isParentFilter,
                      );
 
                      echo flrt_filter_walk_terms_tree( $terms, $args );

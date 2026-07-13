@@ -108,11 +108,15 @@ abstract class BaseSettings implements TabInterface{
             esc_attr($args['id'])
         );
 
-        if( isset($args['id']) && $args['id'] === 'posts_container' ){
+        if(!empty($args['additional_link'])){
+            echo '<a id="wpc-choose-selector-button" href="' . esc_url($args['additional_link']['url']) . '" class="button">' . esc_html($args['additional_link']['label']) . '</a>';
+        }
 
+        if( isset($args['id']) && $args['id'] === 'posts_container' ){
             if( flrt_get_option('enable_ajax') === 'on' && ! $value ){
-                printf( '<p class="wpc-warning">%s</p>', esc_html__( 'You must specify Posts Container, otherwise AJAX will not work properly', 'filter-everything' ) );
+                printf( '<p class="wpc-warning">%s</p>', esc_html__( 'You must specify the Results container, otherwise AJAX will not work properly', 'filter-everything' ) );
             }
+
         }
 
         if( isset( $args['description'] ) ){
@@ -148,7 +152,7 @@ abstract class BaseSettings implements TabInterface{
         if( isset($args['id']) && $args['id'] === 'posts_container' ){
 
             if( flrt_get_option('enable_ajax') === 'on' && ! $value ){
-                printf( '<p class="wpc-warning">%s</p>', esc_html__( 'You must specify Posts Container, otherwise AJAX will not work properly', 'filter-everything' ) );
+                printf( '<p class="wpc-warning">%s</p>', esc_html__( 'You must specify the Results container, otherwise AJAX will not work properly', 'filter-everything' ) );
             }
         }
 
@@ -443,5 +447,9 @@ abstract class BaseSettings implements TabInterface{
     public function inProButtonCallback($args)
     {
         echo flrt_unlock_in_pro();
+
+        if( isset( $args['description'] ) ){
+            printf( '<p class="description">%s</p>', esc_html( $args['description'] ) );
+        }
     }
 }

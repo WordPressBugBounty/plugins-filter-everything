@@ -9,6 +9,14 @@ if ( ! defined('ABSPATH') ) {
 class PostDateEntity implements Entity
 {
     public $items = [];
+    /**
+     * Declared explicitly: assigned from the outside in
+     * EntityManager::prepareEntitiesToDisplay(); dynamic properties are
+     * deprecated since PHP 8.2.
+     */
+    public $items_sort = [];
+
+    public $filter = [];
 
     public $entityName = '';
 
@@ -254,8 +262,13 @@ class PostDateEntity implements Entity
             return [];
         }
 
+        $em = Container::instance()->getEntityManager();
+        $filter = $em->getFilterByEname( $this->entityName );
+        $format = $filter['date_format'];
+
         $new_result         = [];
         $new_time_result    = [];
+        $post_and_meta_values = [];
 //        $from_and_to        = [
 //            'from' => 0,
 //            'to' => 0
@@ -290,6 +303,7 @@ class PostDateEntity implements Entity
                  */
                 $new_result[]      = $single_post['post_date'];
                 $new_time_result[] = flrt_clean_date_time( $single_post['post_date'], 'time' );
+                $post_and_meta_values[ $single_post['ID'] ] = flrtBuildDateTimeString(flrt_apply_date_format( $single_post['post_date'], $format ), $format);
 
                 if ( $this->from !== false && flrt_clean_date_time( $single_post['post_date'], $this->date_type ) < $this->from ){
                     continue;
@@ -321,12 +335,12 @@ class PostDateEntity implements Entity
         }
 
         $from_and_to = apply_filters( 'wpc_set_from_to', $from_and_to, $this->getName() );
-        $x = $this->convertSelectResult( $from_and_to, $time_from_and_to );
+        $x = $this->convertSelectResult( $from_and_to, $time_from_and_to, $post_and_meta_values );
 
         return $x;
     }
 
-    public function convertSelectResult( $result, $time_from_and_to ){
+    public function convertSelectResult( $result, $time_from_and_to, $post_and_meta_values ){
         $return = [];
 
         if( ! is_array( $result ) ){
@@ -346,6 +360,7 @@ class PostDateEntity implements Entity
             $termObject->name = $this->createTermName( $edge, $value, $queried_values );
             $termObject->term_id = $edge . '_' . $this->getName();
             $termObject->posts = array_keys( $this->post_and_types );
+            $termObject->meta_values =  $post_and_meta_values;
             $termObject->count = 0;
             $termObject->cross_count = 0;
             $termObject->post_types = $this->post_and_types; //[];

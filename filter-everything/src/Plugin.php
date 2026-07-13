@@ -102,6 +102,11 @@ class Plugin
         add_action( 'save_post', [$this, 'resetTransitions'] );
         add_action( 'delete_post', [$this, 'resetTransitions'] );
         add_action( 'woocommerce_ajax_save_product_variations', [$this, 'resetTransitions'] );
+        // Term changes bypass save_post but alter the filter data (term names,
+        // slugs, product assignments via wp-cli/imports) — same invalidation
+        add_action( 'created_term', [$this, 'resetTransitions'] );
+        add_action( 'edited_term', [$this, 'resetTransitions'] );
+        add_action( 'delete_term', [$this, 'resetTransitions'] );
 
         if( isset( $getData['reset_filters_cache'] ) && $getData['reset_filters_cache'] == true ){
             $this->resetTransitions();
@@ -220,11 +225,24 @@ class Plugin
             }
         }
 
-        $variations_key = 'wpc_posts_variations';
+        $variations_key = 'wpc_posts_variations' . FLRT_CACHE_FORMAT_SUFFIX;
         $filter_key     = 'wpc_filters_query';
 
         delete_transient($variations_key);
         delete_transient($filter_key);
+
+        // Static filter-data files (see maybeWriteJsonBlobFile): bump the
+        // version so new URLs are minted, and remove the now-unused files
+        update_option( 'flrt_json_blob_ver', time(), false );
+        $uploads = wp_upload_dir();
+        if ( empty( $uploads['error'] ) ) {
+            $blob_files = glob( trailingslashit( $uploads['basedir'] ) . 'flrt-cache/filters-*.json' );
+            if ( is_array( $blob_files ) ) {
+                foreach ( $blob_files as $blob_file ) {
+                    @unlink( $blob_file );
+                }
+            }
+        }
 
         unset( $terms_transient_key, $post_ids_transient_key, $var_meta_transient_key, $all_filters, $em );
     }
@@ -253,12 +271,11 @@ class Plugin
 
                 $new_fields['instead_custom_posts_container'] = array(
                     'type'          => 'inProButton',
-                    'label'         => esc_html__('HTML id or class of the Posts Container', 'filter-everything'),
+                    'label'         => esc_html__('Results container', 'filter-everything'),
                     'pro_label'     => flrt_pro_promo_label(),
                     'name'          => $filterSet->generateFieldName('instead_custom_posts_container'),
                     'id'            => $filterSet->generateFieldId('instead_custom_posts_container'),
                     'default'       => '',
-                    'placeholder'   => esc_html__('Available in PRO', 'filter-everything'),
                     'settings'      => true
                 );
 
@@ -286,7 +303,10 @@ class Plugin
     public function addSetTailFields(  $fields, $filterSet )
     {
         $new_fields     = [];
-        $insert_after   = defined('FLRT_FILTERS_PRO') ? 'custom_posts_container' : 'show_count';
+        // In PRO the tail block goes right after hide_empty_filter, which pushes
+        // custom_posts_container below the horizontal filters — the same position
+        // its free-mode teaser stub has
+        $insert_after   = defined('FLRT_FILTERS_PRO') ? 'hide_empty_filter' : 'show_count';
 
         foreach ( $fields as $key => $attributes ){
             // Always insert regular 'old' field
@@ -296,7 +316,7 @@ class Plugin
 
                 $new_fields['use_search_field'] =  array(
                     'type'          => 'Checkbox',
-                    'label'         => esc_html__('Search Field', 'filter-everything'),
+                    'label'         => esc_html__('Enable Search Field', 'filter-everything'),
                     'name'          => $filterSet->generateFieldName('use_search_field'),
                     'id'            => $filterSet->generateFieldId('use_search_field'),
                     'class'         => 'wpc-field-use-search-field',
@@ -476,10 +496,9 @@ class Plugin
         $brands         = apply_filters( 'wpc_brands_width_height', [ 'width' => 70, 'height' => 40 ] );
 
         $css = '';
-        $css .= '@media screen and (min-width:'.($wpc_mobile_width+1).'px){.wpc_show_bottom_widget .wpc-filters-widget-content{height:auto!important}body.wpc_show_open_close_button .wpc-filters-widget-content.wpc-closed,body.wpc_show_open_close_button .wpc-filters-widget-content.wpc-opened,body.wpc_show_open_close_button .wpc-filters-widget-content:not(.wpc-opened){display:block!important}}@media screen and (min-width:'.$wpc_mobile_width.'px){.wpc-custom-selected-terms{clear:both;width:100%}.wpc-custom-selected-terms ul.wpc-filter-chips-list{display:flex;overflow-x:auto;padding-left:0}.wpc-filters-main-wrap .wpc-custom-selected-terms ul.wpc-filter-chips-list{display:block;overflow:visible}html.is-active .wpc-filters-overlay{top:0;opacity:.3;background:#fff}.wpc-filters-main-wrap input.wpc-label-input+label:hover{border:1px solid rgba(0,0,0,.25);border-radius:5px}.wpc-filters-main-wrap input.wpc-label-input+label:hover span.wpc-filter-label-wrapper{color:#333;background-color:rgba(0,0,0,.25)}.wpc-filters-main-wrap .wpc-filters-labels li.wpc-term-item input+label:hover a{color:#333}.theme-storefront #primary .storefront-sorting .wpc-custom-selected-terms{font-size:inherit}.theme-storefront #primary .wpc-custom-selected-terms{font-size:.875em}}@media screen and (max-width:'.$wpc_mobile_width.'px){.wpc-filters-labels li.wpc-term-item label:hover .wpc-term-swatch-wrapper:after,.wpc-filters-labels li.wpc-term-item label:hover .wpc-term-swatch-wrapper:before{display:none;}.wpc_show_bottom_widget .wpc-filters-widget-top-container,.wpc_show_open_close_button .wpc-filters-widget-top-container{text-align:center}.wpc_show_bottom_widget .wpc-filters-widget-top-container{position:sticky;top:0;z-index:99999;border-bottom:1px solid #f7f7f7}.wpc-custom-selected-terms:not(.wpc-show-on-mobile),.wpc-edit-filter-set,.wpc_show_bottom_widget .widget_wpc_selected_filters_widget,.wpc_show_bottom_widget .wpc-filters-widget-content .wpc-filter-set-widget-title,.wpc_show_bottom_widget .wpc-filters-main-wrap .widget-title,.wpc_show_bottom_widget .wpc-filters-widget-wrapper .wpc-filter-layout-submit-button,.wpc_show_bottom_widget .wpc-posts-found,body.wpc_show_bottom_widget .wpc-open-close-filters-button,body.wpc_show_open_close_button .wpc-filters-widget-content:not(.wpc-opened){display:none}.wpc_show_bottom_widget .wpc-filters-widget-top-container:not(.wpc-show-on-desktop),.wpc_show_bottom_widget .wpc-spinner.is-active,.wpc_show_bottom_widget .wpc-widget-close-container,html.is-active body:not(.wpc_show_bottom_widget) .wpc-spinner{display:block}body .wpc-filters-main-wrap li.wpc-term-item{padding:2px 0}.wpc-chip-empty{width:0;display:list-item;visibility:hidden;margin-right:0!important}.wpc-overlay-visible #secondary{z-index:auto}html.is-active:not(.wpc-overlay-visible) .wpc-filters-overlay{top:0;opacity:.2;background:#fff}.wpc-custom-selected-terms.wpc-show-on-mobile ul.wpc-filter-chips-list{display:flex;overflow-x:auto;padding-left:0}html.is-active body:not(.wpc_show_bottom_widget) .wpc-filters-overlay{top:0;opacity:.3;background:#fff}body.wpc_show_bottom_widget .wpc-filters-widget-content.wpc-closed,body.wpc_show_bottom_widget .wpc-filters-widget-content.wpc-opened,body.wpc_show_bottom_widget .wpc-filters-widget-content:not(.wpc-opened){display:block!important}.wpc-open-close-filters-button{display:block;margin-bottom:20px}.wpc-overlay-visible body,html.wpc-overlay-visible{overflow:hidden!important}.wpc_show_bottom_widget .widget_wpc_filters_widget,.wpc_show_bottom_widget .wpc-filters-main-wrap{padding:0!important;margin:0!important}.wpc_show_bottom_widget .wpc-filters-range-column{width:48%;max-width:none}.wpc_show_bottom_widget .wpc-filters-toolbar{display:flex;margin:1em 0}.wpc_show_bottom_widget .wpc-inner-widget-chips-wrapper{display:block;padding-left:20px;padding-right:20px}.wpc_show_bottom_widget .wpc-filters-main-wrap .widget-title.wpc-filter-title{display:flex}.wpc_show_bottom_widget .wpc-inner-widget-chips-wrapper .wpc-filter-chips-list,.wpc_show_open_close_button .wpc-inner-widget-chips-wrapper .wpc-filter-chips-list{display:flex;-webkit-box-pack:start;place-content:center flex-start;overflow-x:auto;padding-top:5px;padding-bottom:5px;margin-left:0;padding-left:0}.wpc-overlay-visible .wpc_show_bottom_widget .wpc-filters-overlay{top:0;opacity:.4}.wpc_show_bottom_widget .wpc-filters-main-wrap .wpc-spinner.is-active+.wpc-filters-widget-content .wpc-filters-scroll-container .wpc-filters-widget-wrapper{opacity:.6;pointer-events:none}.wpc_show_bottom_widget .wpc-filters-open-button-container{margin-top:1em;margin-bottom:1em}.wpc_show_bottom_widget .wpc-filters-widget-content{position:fixed;bottom:0;right:0;left:0;top:5%;z-index:999999;padding:0;background-color:#fff;margin:0;box-sizing:border-box;border-radius:7px 7px 0 0;transition:transform .25s;transform:translate3d(0,120%,0);-webkit-overflow-scrolling:touch;height:auto}.wpc_show_bottom_widget .wpc-filters-widget-containers-wrapper{padding:0;margin:0;overflow-y:scroll;box-sizing:border-box;position:fixed;top:56px;left:0;right:0;bottom:0}.wpc_show_bottom_widget .wpc-filters-widget-content.wpc-filters-widget-opened{transform:translate3d(0,0,0)}.theme-twentyfourteen .wpc_show_bottom_widget .wpc-filters-widget-content,.theme-twentyfourteen.wpc_show_bottom_widget .wpc-filters-scroll-container{background-color:#000}.wpc_show_bottom_widget .wpc-filters-section:not(.wpc-filter-post_meta_num):not(.wpc-filter-tax_numeric) .wpc-filter-content ul.wpc-filters-ul-list,.wpc_show_open_close_button .wpc-filters-section:not(.wpc-filter-post_meta_num):not(.wpc-filter-tax_numeric) .wpc-filter-content ul.wpc-filters-ul-list{max-height:none}.wpc_show_bottom_widget .wpc-filters-scroll-container{background:#fff;min-height:100%}.wpc_show_bottom_widget .wpc-filters-widget-wrapper{padding:20px 20px 15px}.wpc-filter-everything-dropdown .select2-search--dropdown .select2-search__field,.wpc-sorting-form select,.wpc_show_bottom_widget .wpc-filters-main-wrap input[type=number],.wpc_show_bottom_widget .wpc-filters-main-wrap input[type=text],.wpc_show_bottom_widget .wpc-filters-main-wrap select,.wpc_show_bottom_widget .wpc-filters-main-wrap textarea,.wpc_show_bottom_widget .wpc-search-field,.wpc_show_open_close_button .wpc-search-field,.wpc_show_open_close_button .wpc-filter-search-field{font-size:16px}.wpc-filter-layout-dropdown .select2-container .select2-selection--single,.wpc-sorting-form .select2-container .select2-selection--single{height:auto;padding:6px}.wpc_show_bottom_widget .wpc-filters-section:not(.wpc-filter-post_meta_num):not(.wpc-filter-tax_numeric) .wpc-filter-content ul.wpc-filters-ul-list{overflow-y:visible}.theme-twentyeleven #primary,.theme-twentyeleven #secondary{margin-left:0;margin-right:0;clear:both;float:none}#main>.fusion-row{max-width:100%}.wpc_show_bottom_widget .wpc-filters-open-button-container,.wpc_show_bottom_widget .wpc-filters-widget-controls-container,.wpc_show_bottom_widget .wpc-filters-widget-top-container,.wpc_show_open_close_button .wpc-filters-open-button-container{display:block}}'."\r\n";
+        $css .= '@media screen and (min-width:'.($wpc_mobile_width+1).'px){.wpc_show_bottom_widget .wpc-filters-widget-content{height:auto!important}body.wpc_show_open_close_button .wpc-filters-widget-content.wpc-closed,body.wpc_show_open_close_button .wpc-filters-widget-content.wpc-opened,body.wpc_show_open_close_button .wpc-filters-widget-content:not(.wpc-opened){display:block!important}}@media screen and (min-width:'.$wpc_mobile_width.'px){.wpc-custom-selected-terms{clear:both;width:100%}.wpc-custom-selected-terms ul.wpc-filter-chips-list{display:flex;overflow-x:auto;overflow-y:clip;padding-left:0}.wpc-filters-main-wrap .wpc-custom-selected-terms ul.wpc-filter-chips-list{display:block;overflow:visible}html.is-active .wpc-filters-overlay{top:0;opacity:.3;background:#fff}.wpc-filters-main-wrap input.wpc-label-input+label:hover{border:1px solid rgba(0,0,0,.25);border-radius:5px}.wpc-filters-main-wrap input.wpc-label-input+label:hover span.wpc-filter-label-wrapper{color:#333;background-color:rgba(0,0,0,.25)}.wpc-filters-main-wrap .wpc-filters-labels li.wpc-term-item input+label:hover a{color:#333}.theme-storefront #primary .storefront-sorting .wpc-custom-selected-terms{font-size:inherit}.theme-storefront #primary .wpc-custom-selected-terms{font-size:.875em}}@media screen and (max-width:'.$wpc_mobile_width.'px){.wpc-filters-labels li.wpc-term-item label:hover .wpc-term-swatch-wrapper:after,.wpc-filters-labels li.wpc-term-item label:hover .wpc-term-swatch-wrapper:before{display:none;}.wpc_show_bottom_widget .wpc-filters-widget-top-container,.wpc_show_open_close_button .wpc-filters-widget-top-container{text-align:center}.wpc_show_bottom_widget .wpc-filters-widget-top-container{position:sticky;top:0;z-index:99999;border-bottom:1px solid #f7f7f7}.wpc-custom-selected-terms:not(.wpc-show-on-mobile),.wpc-edit-filter-set,.wpc_show_bottom_widget .widget_wpc_selected_filters_widget,.wpc_show_bottom_widget .wpc-filters-widget-content .wpc-filter-set-widget-title,.wpc_show_bottom_widget .wpc-filters-main-wrap .widget-title,.wpc_show_bottom_widget .wpc-filters-widget-wrapper .wpc-filter-layout-submit-button,.wpc_show_bottom_widget .wpc-posts-found,body.wpc_show_bottom_widget .wpc-open-close-filters-button,body.wpc_show_open_close_button .wpc-filters-widget-content:not(.wpc-opened),.widget_wpc_chips_widget .widget-title:not(.wpc-show-on-mobile-widget-title), .widget_wpc_chips_widget .widgettitle:not(.wpc-show-on-mobile-widget-title) {display:none}.wpc_show_bottom_widget .wpc-filters-widget-top-container:not(.wpc-show-on-desktop),.wpc_show_bottom_widget .wpc-spinner.is-active,.wpc_show_bottom_widget .wpc-widget-close-container,html.is-active body:not(.wpc_show_bottom_widget) .wpc-spinner{display:block}body .wpc-filters-main-wrap li.wpc-term-item{padding:2px 0}.wpc-chip-empty{width:0;display:list-item;visibility:hidden;margin-right:0!important}.wpc-overlay-visible #secondary{z-index:auto}html.is-active:not(.wpc-overlay-visible) .wpc-filters-overlay{top:0;opacity:.2;background:#fff}.wpc-custom-selected-terms.wpc-show-on-mobile ul.wpc-filter-chips-list{display:flex;overflow-x:auto;padding-left:0}html.is-active body:not(.wpc_show_bottom_widget) .wpc-filters-overlay{top:0;opacity:.3;background:#fff}body.wpc_show_bottom_widget .wpc-filters-widget-content.wpc-closed,body.wpc_show_bottom_widget .wpc-filters-widget-content.wpc-opened,body.wpc_show_bottom_widget .wpc-filters-widget-content:not(.wpc-opened){display:block!important}.wpc-open-close-filters-button{display:block;margin-bottom:20px}.wpc-overlay-visible body,html.wpc-overlay-visible{overflow:hidden!important}.wpc_show_bottom_widget .widget_wpc_filters_widget,.wpc_show_bottom_widget .wpc-filters-main-wrap{padding:0!important;margin:0!important}.wpc_show_bottom_widget .wpc-filters-range-column{width:48%;max-width:none}.wpc_show_bottom_widget .wpc-filters-toolbar{display:flex;margin:1em 0}.wpc_show_bottom_widget .wpc-inner-widget-chips-wrapper{display:block;padding-left:20px;padding-right:20px}.wpc_show_bottom_widget .wpc-filters-main-wrap .widget-title.wpc-filter-title{display:flex}.wpc_show_bottom_widget .wpc-inner-widget-chips-wrapper .wpc-filter-chips-list,.wpc_show_open_close_button .wpc-inner-widget-chips-wrapper .wpc-filter-chips-list{display:flex;-webkit-box-pack:start;place-content:center flex-start;overflow-x:auto;padding-top:5px;padding-bottom:5px;margin-left:0;padding-left:0}.wpc-overlay-visible .wpc_show_bottom_widget .wpc-filters-overlay{top:0;opacity:.4}.wpc_show_bottom_widget .wpc-filters-main-wrap .wpc-spinner.is-active+.wpc-filters-widget-content .wpc-filters-scroll-container .wpc-filters-widget-wrapper{opacity:.6;pointer-events:none}.wpc_show_bottom_widget .wpc-filters-open-button-container{margin-top:1em;margin-bottom:1em}.wpc_show_bottom_widget .wpc-filters-widget-content{position:fixed;bottom:0;right:0;left:0;top:5%;z-index:999999;padding:0;background-color:#fff;margin:0;box-sizing:border-box;border-radius:7px 7px 0 0;transition:transform .25s;transform:translate3d(0,120%,0);-webkit-overflow-scrolling:touch;height:auto}.wpc_show_bottom_widget .wpc-filters-widget-containers-wrapper{padding:0;margin:0;overflow-y:scroll;box-sizing:border-box;position:fixed;top:56px;left:0;right:0;bottom:0}.wpc_show_bottom_widget .wpc-filters-widget-content.wpc-filters-widget-opened{transform:translate3d(0,0,0)}.theme-twentyfourteen .wpc_show_bottom_widget .wpc-filters-widget-content,.theme-twentyfourteen.wpc_show_bottom_widget .wpc-filters-scroll-container{background-color:#000}.wpc_show_bottom_widget .wpc-filters-section:not(.wpc-filter-post_meta_num):not(.wpc-filter-tax_numeric) .wpc-filter-content ul.wpc-filters-ul-list,.wpc_show_open_close_button .wpc-filters-section:not(.wpc-filter-post_meta_num):not(.wpc-filter-tax_numeric) .wpc-filter-content ul.wpc-filters-ul-list{max-height:none}.wpc_show_bottom_widget .wpc-filters-scroll-container{background:#fff;min-height:100%}.wpc_show_bottom_widget .wpc-filters-widget-wrapper{padding:20px 20px 15px}.wpc-filter-everything-dropdown .select2-search--dropdown .select2-search__field,.wpc-sorting-form select,.wpc_show_bottom_widget .wpc-filters-main-wrap input[type=number],.wpc_show_bottom_widget .wpc-filters-main-wrap input[type=text],.wpc_show_bottom_widget .wpc-filters-main-wrap select,.wpc_show_bottom_widget .wpc-filters-main-wrap textarea,.wpc_show_bottom_widget .wpc-search-field,.wpc_show_open_close_button .wpc-search-field,.wpc_show_open_close_button .wpc-filter-search-field{font-size:16px}.wpc-filter-layout-dropdown .select2-container .select2-selection--single,.wpc-sorting-form .select2-container .select2-selection--single{height:auto;padding:6px}.wpc_show_bottom_widget .wpc-filters-section:not(.wpc-filter-post_meta_num):not(.wpc-filter-tax_numeric) .wpc-filter-content ul.wpc-filters-ul-list{overflow-y:visible}.theme-twentyeleven #primary,.theme-twentyeleven #secondary{margin-left:0;margin-right:0;clear:both;float:none}#main>.fusion-row{max-width:100%}.wpc_show_bottom_widget .wpc-filters-open-button-container,.wpc_show_bottom_widget .wpc-filters-widget-controls-container,.wpc_show_bottom_widget .wpc-filters-widget-top-container,.wpc_show_open_close_button .wpc-filters-open-button-container{display:block}}'."\r\n";
         $css .= '.wpc-preload-img{display:none;}';
         // Number of items visible by default in More/Less filters
-        $css .= '.wpc-filter-more-less:not(.wpc-search-active) .wpc-filters-ul-list > li:nth-child(-n+'.flrt_more_less_count().'){display: list-item;}'."\r\n";
 
         $css .= 'li.wpc-term-item label span.wpc-term-swatch,.wpc-term-swatch-wrapper{width:'.$swatches['width'].'px;min-width:'.$swatches['width'].'px;';
 
@@ -536,7 +555,9 @@ class Plugin
                 }'."\r\n";
 
             $css .= 'body .wpc-filters-main-wrap .wpc-term-disabled input.wpc-label-input:checked+label span.wpc-filter-label-wrapper,
-                body .wpc-filters-main-wrap .wpc-filters-labels li.wpc-term-item.wpc-term-disabled input:checked+label a{
+                body .wpc-filters-main-wrap .wpc-filters-labels li.wpc-term-item.wpc-term-disabled input:checked+label a,
+                body .wpc-filters-main-wrap .wpc-filters-labels li.wpc-term-item.wpc-term-disabled input:checked+label span
+                {
                         color: #333333;
                 }'."\r\n";
             // End of disabled label
@@ -546,7 +567,9 @@ class Plugin
                         color: '.$contrastColor.';
                 }'."\r\n";
 
-            $css .= 'body .wpc-filter-chips-list li.wpc-filter-chip:not(.wpc-chip-reset-all) a{
+            $css .= 'body .wpc-filter-chips-list li.wpc-filter-chip:not(.wpc-chip-reset-all) a,
+                body .wpc-filter-chips-list li.wpc-filter-chip:not(.wpc-chip-reset-all) span[data-wpc-span-link],
+                body .wpc-filter-chips-list li.wpc-filter-chip:not(.wpc-chip-reset-all) span.wpc-apply-button-chip{
                     border-color: '.$color.';
                 }'."\r\n";
 
@@ -557,11 +580,15 @@ class Plugin
                     color: '.$contrastColor.';
                 }'."\r\n";
 
-            $css .= 'body .wpc-filter-chips-list li.wpc-filter-chip a:hover{
+            $css .= 'body .wpc-filter-chips-list li.wpc-filter-chip a:hover,
+                body .wpc-filter-chips-list li.wpc-filter-chip span[data-wpc-span-link]:hover,
+                body .wpc-filter-chips-list li.wpc-filter-chip span.wpc-apply-button-chip:hover{
                     opacity: 0.9;
                 }'."\r\n";
 
-            $css .= 'body .wpc-filter-chips-list li.wpc-filter-chip a:active{
+            $css .= 'body .wpc-filter-chips-list li.wpc-filter-chip a:active,
+                body .wpc-filter-chips-list li.wpc-filter-chip span[data-wpc-span-link]:active,
+                body .wpc-filter-chips-list li.wpc-filter-chip span.wpc-apply-button-chip:active{
                     opacity: 0.75;
                 }'."\r\n";
 
@@ -994,6 +1021,29 @@ class Plugin
             $css .= '}'."\r\n";
         }
 
+        if(flrt_is_divi_theme()){
+                $css .= <<<PHP_CSS
+                .wp-theme-Divi .et_builder_inner_content .widget_wpc_sorting_widget,  
+                .wp-theme-Divi .et_builder_inner_content .widget_wpc_filters_widget,
+                .wp-theme-Divi .et_builder_inner_content .widget_wpc_chips_widget
+                {
+                    margin: 0 0 3.7em;
+                }
+                .wp-theme-Divi .et_builder_inner_content .widget_wpc_chips_widget ul.wpc-filter-chips-list{
+                    padding: 0;
+                }
+                .wpc-divi-filter-wrap .wpc-filters-open-button-container{
+                    display: block !important;
+                }
+                @media screen and (max-width: 768px) {
+                    .wpc-filters-open-button-container.et_before_main_content{
+                        display: block !important;
+                    }
+                }
+                PHP_CSS;
+                $css .= "\r\n";
+        }
+
         if( $custom_css ){
             $css .= $custom_css."\r\n";
         }
@@ -1061,6 +1111,49 @@ class Plugin
     /**
      * Clears all plugin data: options and posts
      */
+    /**
+     * Removes the static filter-data cache (uploads/flrt-cache) with its
+     * folder. Defensive on purpose: the path must look exactly like our own
+     * folder, only known file patterns are deleted, every step is
+     * error-suppressed and any unexpected failure is swallowed — the cleanup
+     * is best-effort and must never break the uninstall process.
+     */
+    private static function deleteJsonBlobCache()
+    {
+        try {
+            $uploads = wp_upload_dir();
+            if ( ! empty( $uploads['error'] ) || empty( $uploads['basedir'] ) ) {
+                return;
+            }
+
+            $dir = trailingslashit( $uploads['basedir'] ) . 'flrt-cache';
+
+            if ( substr( $dir, -strlen( '/flrt-cache' ) ) !== '/flrt-cache' || ! is_dir( $dir ) ) {
+                return;
+            }
+
+            $blob_files = glob( $dir . '/filters-*.json' );
+            $tmp_files  = glob( $dir . '/filters-*.json.*.tmp' );
+
+            $to_delete   = array_merge(
+                is_array( $blob_files ) ? $blob_files : [],
+                is_array( $tmp_files ) ? $tmp_files : []
+            );
+            $to_delete[] = $dir . '/index.php';
+
+            foreach ( $to_delete as $file ) {
+                if ( is_file( $file ) ) {
+                    @unlink( $file );
+                }
+            }
+
+            // Removed only when empty — anything unexpected inside stays put
+            @rmdir( $dir );
+        } catch ( \Throwable $e ) {
+            // Best-effort cleanup: never break the uninstall
+        }
+    }
+
     public static function uninstall( $force = false )
     {
         $allow_to_delete = true;
@@ -1105,6 +1198,7 @@ class Plugin
                 'wpc_seo_rules_settings',
                 'wpc_xml_write_date',
                 'wpc_filter_experimental',
+                'flrt_json_blob_ver',
                 'widget_wpc_filters_widget',
                 'widget_wpc_sorting_widget',
                 'widget_wpc_chips_widget',
@@ -1113,6 +1207,8 @@ class Plugin
             foreach ( $options as $option_name ){
                 delete_option( $option_name );
             }
+
+            self::deleteJsonBlobCache();
 
             // Deactivate and erase license if exists
             if ( defined( 'FLRT_FILTERS_PRO' ) && FLRT_FILTERS_PRO ) {
@@ -1233,6 +1329,7 @@ class Plugin
             'prefixesOrderAvailableInPro' => esc_html__( 'Editing the order of URL prefixes is available in the PRO version', 'filter-everything' ),
             'chipsPlaceholder'            => esc_html__( 'Select or enter hooks', 'filter-everything' ),
             'colorSwatchesPlaceholder'    => esc_html__( 'Click to select taxonomies', 'filter-everything' ),
+            'chooseElementHelpText'    => esc_html__( 'Hover over the Results container and click to select it', 'filter-everything' ),
         );
         wp_localize_script( 'wpc-filters-admin', 'wpcFiltersAdminCommon', $l10n );
 
@@ -1258,8 +1355,11 @@ class Plugin
          * string
          */
         $getData  = Container::instance()->getTheGet();
-        if( isset( $getData[FLRT_BEAVER_BUILDER_VAR] ) ){
+        if( isset( $getData['fl_builder'] ) ){
             wp_enqueue_style('wpc-widgets', FLRT_PLUGIN_DIR_URL . 'assets/css/wpc-widgets' . $suffix . '.css', [], $ver );
+        }
+        if ( isset( $getData['flrt_get_html_selector'] ) && $getData['flrt_get_html_selector'] === '1' && current_user_can('manage_options') ) {
+            wp_enqueue_style('wpc-element-picker', FLRT_PLUGIN_DIR_URL . 'assets/css/element-picker' . $suffix . '.css', [], $ver );
         }
 
         // Do not include plugin CSS if there are no Filter Sets on the page
@@ -1288,7 +1388,13 @@ class Plugin
 
         $wpcFrontJsVariables = [];
 
-        if( isset( $getData[FLRT_BEAVER_BUILDER_VAR] ) ){
+        if ( isset( $getData['flrt_get_html_selector'] ) && $getData['flrt_get_html_selector'] === '1' && current_user_can('manage_options') ) {
+            wp_enqueue_script( 'wpc-element-picker-bundle', FLRT_PLUGIN_DIR_URL . 'assets/js/js-element-picker/element-picker.bundle' . $suffix . '.js', array( 'jquery' ), $ver, true );
+            wp_enqueue_script( 'wpc-element-picker', FLRT_PLUGIN_DIR_URL . 'assets/js/element-picker' . $suffix . '.js', array( 'jquery', 'wpc-element-picker-bundle' ), $ver, true );
+            add_action( 'wp_footer', [$this, 'showElementPickerPanel'] );
+        }
+
+        if( isset( $getData['fl_builder'] ) ){
             wp_enqueue_script('wpc-widgets', FLRT_PLUGIN_DIR_URL . 'assets/js/wpc-widgets' . $suffix . '.js', array('jquery'), $ver );
             $l10n = array(
                 'wpcItemNum'  => esc_html__( 'Item #', 'filter-everything' )
@@ -1392,7 +1498,13 @@ class Plugin
 
         $wpcPostContainers = apply_filters( 'wpc_posts_containers', flrt_get_option( 'posts_container', flrt_default_posts_container() ) );
 
+        if ( is_array( $wpcPostContainers ) ) {
+            $wpcPostContainers = array_map( 'wp_specialchars_decode', $wpcPostContainers );
+        }
+
         wp_register_script( 'wc-jquery-ui-touchpunch', FLRT_PLUGIN_DIR_URL . 'assets/js/jquery-ui-touch-punch/jquery-ui-touch-punch'.$suffix.'.js', [], $ver, true );
+
+        $isPro = defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO;
 
         $wpcFrontJsVariables = array(
             'ajaxUrl'                    => admin_url('admin-ajax.php'),
@@ -1410,11 +1522,17 @@ class Plugin
             'wpcWaitCursor'              => $waitCursor,
             'wpcPostsPerPage'            => $per_page,
             'wpcUseSelect2'              => $wpcUseSelect2,
-            'wpcDateFilters'          => false,
+            'wpcDateFilters'             => false,
             'wpcPopupCompatMode'         => $wpcPopupCompatMode,
             'wpcApplyButtonSets'         => $applyButtonSets,
             'wpcQueryOnThePageSets'      => $queryOnThePageSets,
-            'wpcNoPostsContainerMsg'     => esc_html__('It appears that this page does not contain a container with the specified «HTML id or class of the Posts Container». Try to specify the correct one in the Filter Set settings or the common plugin Settings.', 'filter-everything'),
+            'wpcNoPostsContainerMsg'     => esc_html__('It appears that this page does not contain the container specified in the «Results container» option. Try to specify the correct one in the Filter Set settings or the common plugin Settings.', 'filter-everything'),
+            'wpcIsPro'                   => $isPro,
+            'permalinksEnabled'          => FLRT_PERMALINKS_ENABLED,
+            'wpcMoreLessCount'           => flrt_more_less_count(),
+            'wpcSearchChipsText'         => esc_html__('search: %s', 'filter-everything' ),
+            'chipsTitle'                 => esc_html__('Remove %s from results', 'filter-everything'),
+            'chipsReset'                 => esc_html__('Reset all', 'filter-everything'),
         );
 
         /**
@@ -1460,6 +1578,7 @@ class Plugin
                 'dayNamesMin'     => array_values( $wp_locale->weekday_initial ),
                 'dayNamesShort'   => array_values( $wp_locale->weekday_abbrev ),
                 'firstDay'        => get_option( 'start_of_week' ),
+                'applyText'       => _x( 'Apply', 'Date Picker applyText', 'filter-everything' ),
             );
         }
 
@@ -1479,7 +1598,263 @@ class Plugin
 
         wp_localize_script( 'wpc-filter-everything', 'wpcFilterFront', $wpcFrontJsVariables );
 
+        if(!empty($applyButtonSets) && flrt_instant_recount()){
+            $this->inlineScriptJsonData();
+        }
+
         unset( $filterSetService, $wpcFrontJsVariables );
+    }
+
+    private function inlineScriptJsonData()
+    {
+        global $wp, $wp_rewrite, $flrt_json_data;
+        if(!empty($flrt_json_data)){
+            $wpc_filter_permalinks = get_option( 'wpc_filter_permalinks', [] );
+            $permalinksTab = new PermalinksTab();
+            $wpc_filter_permalinks_numbering = [];
+            $wpc_filter_permalinks_entities = [];
+            $permalinks_result = [];
+            $includeEntities = ['post_meta_num', 'tax_numeric', 'post_date', 'post_meta_date'];
+            $i = 1;
+            foreach ($permalinksTab->movePostMetaNumInTheEnd($wpc_filter_permalinks) as $key => $value) {
+                $parts = explode('#', $key);
+                $permalinks_result[$parts[1]] = $value;
+                if(in_array($parts[0], $includeEntities)){
+                    $wpc_filter_permalinks_entities[$parts[1]] = $parts[0];
+                }
+                $wpc_filter_permalinks_numbering[$i++] =  $parts[1];
+            }
+            $flrt_json_data['wpcFilterPermalinks'] = $permalinks_result;
+            $flrt_json_data['wpcFilterPermalinksNum'] = $wpc_filter_permalinks_numbering;
+            $flrt_json_data['wpcFilterEntitiesWithoutSlug'] = $wpc_filter_permalinks_entities;
+            // Pagination must never leak into the Apply URL base: applying a new
+            // selection restarts the results from page 1 (deeper pages may not exist)
+            $request         = (string) $wp->request;
+            $pagination_base = ! empty( $wp_rewrite->pagination_base ) ? $wp_rewrite->pagination_base : 'page';
+            $request         = preg_replace( '#(^|/)' . preg_quote( $pagination_base, '#' ) . '/\d+$#', '', $request );
+
+            $flrt_json_data['domain'] = trailingslashit(home_url(add_query_arg([], $request)));
+            // The site's permalink convention (mirrors user_trailingslashit) —
+            // the client-side URL builder must terminate paths the same way
+            $flrt_json_data['trailingSlash'] = ( user_trailingslashit( 'wpc' ) === 'wpc/' );
+            // On shops that list variations as standalone catalog items (XStore's
+            // variable_products_detach) the client-side recount must keep displayed
+            // counts in variation space — mirrors the server-side
+            // wpc_from_variations_to_products counting gate.
+            $flrt_json_data['variationsAsProducts'] = function_exists( 'flrt_variations_listed_as_products' )
+                ? (bool) flrt_variations_listed_as_products() : false;
+
+            /**
+             * The selection-independent bulk of the data (term post lists,
+             * meta values, the set universe — ~95% of the payload, tens of
+             * MB on large catalogs) is served as a hash-versioned STATIC
+             * FILE: cacheable across pages and visits, fetched off the
+             * critical path. Only the page-scoped part stays inline. When
+             * the file cannot be written, everything falls back inline —
+             * still as an inert JSON block, never as a JS object literal
+             * (the full JS parser needed ~28 s for 32 MB; JSON.parse of the
+             * same payload takes ~60 ms).
+             */
+            $blobUrl  = $this->maybeWriteJsonBlobFile( $flrt_json_data );
+            $pagePart = [];
+
+            if ( $blobUrl ) {
+                foreach ( [ 'wpcFilterPermalinks', 'wpcFilterPermalinksNum', 'wpcFilterEntitiesWithoutSlug', 'domain', 'trailingSlash', 'variationsAsProducts' ] as $rootKey ) {
+                    if ( array_key_exists( $rootKey, $flrt_json_data ) ) {
+                        $pagePart[ $rootKey ] = $flrt_json_data[ $rootKey ];
+                    }
+                }
+                foreach ( $flrt_json_data as $key => $setData ) {
+                    if ( ! is_numeric( $key ) ) {
+                        continue;
+                    }
+                    $pagePart[ $key ] = [
+                        'filteredAllPostsIds' => isset( $setData['filteredAllPostsIds'] ) ? $setData['filteredAllPostsIds'] : [],
+                        'totalFilteredCount'  => isset( $setData['totalFilteredCount'] ) ? $setData['totalFilteredCount'] : 0,
+                    ];
+                }
+                $pagePart['blobUrl'] = $blobUrl;
+                $json = wp_json_encode( $pagePart );
+            } else {
+                $json = wp_json_encode( $flrt_json_data );
+            }
+
+            add_action( 'wp_print_footer_scripts', function () use ( $json ) {
+                echo '<script type="application/json" id="wpc-filter-json-data">' . $json . '</script>' . "\n";
+            }, 1 );
+
+            $bootstrap  = 'try { var wpcFilterJsonDataEl = document.getElementById("wpc-filter-json-data");';
+            $bootstrap .= ' if ( wpcFilterJsonDataEl ) { var wpcFilterPagePart = JSON.parse( wpcFilterJsonDataEl.textContent );';
+            $bootstrap .= ' wpcFilterJsonDataEl.parentNode.removeChild( wpcFilterJsonDataEl );';
+            $bootstrap .= ' if ( wpcFilterPagePart.blobUrl ) {';
+            $bootstrap .= ' window.wpcFilterJsonBlobUrl = wpcFilterPagePart.blobUrl;';
+            $bootstrap .= ' window.wpcFilterJsonDataPromise = fetch( wpcFilterPagePart.blobUrl, { credentials: "same-origin" } )';
+            $bootstrap .= '.then( function (r) { if ( ! r.ok ) { throw new Error( "HTTP " + r.status ); } return r.json(); } )';
+            $bootstrap .= '.then( function (blob) { for ( var k in wpcFilterPagePart ) { if ( k === "blobUrl" ) { continue; }';
+            $bootstrap .= ' if ( blob[k] && typeof blob[k] === "object" && ! Array.isArray( blob[k] ) && wpcFilterPagePart[k] && typeof wpcFilterPagePart[k] === "object" && ! Array.isArray( wpcFilterPagePart[k] ) ) {';
+            $bootstrap .= ' for ( var kk in wpcFilterPagePart[k] ) { blob[k][kk] = wpcFilterPagePart[k][kk]; } } else { blob[k] = wpcFilterPagePart[k]; } }';
+            $bootstrap .= ' window.wpcFilterJsonData = blob; return blob; } )';
+            $bootstrap .= '.catch( function (e) { if ( window.console ) { console.error( "Filter Everything: filter data fetch failed", e ); } } );';
+            $bootstrap .= ' } else { window.wpcFilterJsonData = wpcFilterPagePart; } }';
+            $bootstrap .= ' } catch (e) { if ( window.console ) { console.error( "Filter Everything: filter data JSON parse failed", e ); } }';
+
+            wp_add_inline_script( 'wpc-filter-everything', $bootstrap, 'before' );
+        }
+    }
+
+    /**
+     * Writes the selection-independent part of $flrt_json_data to a static
+     * JSON file in uploads/flrt-cache/ and returns its URL (false = keep
+     * everything inline). The file name carries a hash of the inputs that
+     * define the content (plugin/cache versions, blob version bumped in
+     * resetTransitions(), set group, language, universe), so URLs are
+     * immutable: a stale file is impossible, only unused ones — those are
+     * garbage-collected in resetTransitions().
+     */
+    private function maybeWriteJsonBlobFile( $flrt_json_data )
+    {
+        if ( apply_filters( 'wpc_json_static_file', true ) === false ) {
+            return false;
+        }
+
+        $setIds = array_filter( array_keys( $flrt_json_data ), 'is_numeric' );
+        if ( empty( $setIds ) ) {
+            return false;
+        }
+
+        $firstSet = $flrt_json_data[ reset( $setIds ) ];
+        $group    = isset( $firstSet['relatedSets'] ) && $firstSet['relatedSets'] !== '' ? $firstSet['relatedSets'] : implode( '_', $setIds );
+        $group    = preg_replace( '/[^0-9_]/', '', (string) $group );
+        $universe = ( isset( $firstSet['allPostsIds'] ) && is_array( $firstSet['allPostsIds'] ) ) ? array_keys( $firstSet['allPostsIds'] ) : [];
+        $lang     = defined( 'ICL_LANGUAGE_CODE' ) ? ICL_LANGUAGE_CODE : '';
+
+        $hash = md5( implode( '|', [
+            FLRT_PLUGIN_VER,
+            FLRT_CACHE_FORMAT_SUFFIX,
+            (string) get_option( 'flrt_json_blob_ver', 1 ),
+            // The same DB serves different filter data in free and PRO (PRO-only
+            // fields are gated at read time) — the modes must not share a file
+            defined( 'FLRT_FILTERS_PRO' ) ? 'pro' : 'free',
+            $group,
+            $lang,
+            count( $universe ),
+            md5( implode( ',', $universe ) ),
+        ] ) );
+
+        $uploads = wp_upload_dir();
+        if ( ! empty( $uploads['error'] ) ) {
+            return false;
+        }
+
+        $fileName = 'filters-' . $group . '-' . $hash . '.json';
+        $dir      = trailingslashit( $uploads['basedir'] ) . 'flrt-cache';
+        $file     = $dir . '/' . $fileName;
+        $url      = trailingslashit( $uploads['baseurl'] ) . 'flrt-cache/' . $fileName;
+
+        if ( file_exists( $file ) ) {
+            return $url;
+        }
+
+        if ( ! wp_mkdir_p( $dir ) ) {
+            return false;
+        }
+
+        if ( ! file_exists( $dir . '/index.php' ) ) {
+            @file_put_contents( $dir . '/index.php', "<?php // Silence is golden.\n" );
+        }
+
+        $encoded = wp_json_encode( $this->normalizeJsonBlob( $flrt_json_data ) );
+        if ( ! $encoded ) {
+            return false;
+        }
+
+        // Write to a temp name first: a concurrent request must never fetch
+        // a half-written multi-MB file
+        $tmp = $file . '.' . wp_generate_password( 8, false ) . '.tmp';
+        if ( @file_put_contents( $tmp, $encoded ) === false ) {
+            return false;
+        }
+        if ( ! @rename( $tmp, $file ) ) {
+            @unlink( $tmp );
+            return false;
+        }
+
+        return $url;
+    }
+
+    /**
+     * Strips/zeroes the page-scoped leaves so that every page of the set
+     * group produces an identical blob: filteredAllPostsIds and the current
+     * result counts live inline; cross_count, current range bounds and
+     * per-bucket counts are recomputed client-side on the first recount and
+     * are never read from the JSON before that.
+     */
+    private function normalizeJsonBlob( $flrt_json_data )
+    {
+        // Entities are objects — one encode/decode round-trip detaches a
+        // plain array tree we can normalize without touching the originals
+        $data = json_decode( wp_json_encode( $flrt_json_data ), true );
+
+        $rangeLeaves = [ 'min', 'max', 'from', 'to', 'time_from', 'time_to' ];
+
+        foreach ( $data as $key => &$setData ) {
+            if ( ! is_numeric( $key ) ) {
+                continue;
+            }
+
+            unset( $setData['filteredAllPostsIds'], $setData['totalFilteredCount'] );
+
+            if ( empty( $setData['allEntities'] ) || ! is_array( $setData['allEntities'] ) ) {
+                continue;
+            }
+
+            foreach ( $setData['allEntities'] as &$entity ) {
+                unset( $entity['filter']['values'] );
+
+                if ( array_key_exists( 'new_date_query', $entity ) ) {
+                    $entity['new_date_query'] = [];
+                }
+
+                foreach ( $rangeLeaves as $leaf ) {
+                    if ( array_key_exists( $leaf, $entity ) ) {
+                        $entity[ $leaf ] = false;
+                    }
+                }
+
+                if ( empty( $entity['items'] ) || ! is_array( $entity['items'] ) ) {
+                    continue;
+                }
+
+                foreach ( $entity['items'] as &$item ) {
+                    if ( array_key_exists( 'cross_count', $item ) ) {
+                        $item['cross_count'] = 0;
+                    }
+                    if ( array_key_exists( 'wp_queried', $item ) ) {
+                        $item['wp_queried'] = false;
+                    }
+                    foreach ( $rangeLeaves as $leaf ) {
+                        if ( array_key_exists( $leaf, $item ) ) {
+                            $item[ $leaf ] = false;
+                        }
+                    }
+                    if ( ! empty( $item['range_list_input'] ) && is_array( $item['range_list_input'] ) ) {
+                        foreach ( $item['range_list_input'] as $bucket => $count ) {
+                            if ( is_numeric( $count ) ) {
+                                $item['range_list_input'][ $bucket ] = 0;
+                            }
+                        }
+                    }
+                }
+                unset( $item );
+            }
+            unset( $entity );
+        }
+        unset( $setData );
+
+        // These stay inline (page-scoped or tiny site config)
+        unset( $data['domain'], $data['trailingSlash'], $data['variationsAsProducts'], $data['wpcFilterPermalinks'], $data['wpcFilterPermalinksNum'], $data['wpcFilterEntitiesWithoutSlug'] );
+
+        return $data;
     }
 
     public function removeApplyButtonOrderField( &$set_settings_fields )
@@ -1662,5 +2037,49 @@ class Plugin
         }
 
         return $where;
+    }
+
+    public function showElementPickerPanel()
+    {
+        $getData  = Container::instance()->getTheGet();
+
+        $html = sprintf(
+                '<div id="wpc-choose-selector" data-set-id="%1$s">
+            <div id="wpc-choose-id-css" class="wpc-choose-block">
+               <span>%2$s</span>
+               <input id="wpc-chooses-html-id">
+            </div>
+            <div id="wpc-choose-class-css" class="wpc-choose-block">
+                <span>%3$s</span>
+                <input id="wpc-chooses-html-css">
+            </div>
+            <div id="wpc-choose-empty" class="wpc-choose-block">
+              
+               <span id="wpc-chooses-empty-element">%4$s</span>
+            </div>
+            <div id="wpc-choose-selector-buttons">
+                <button id="wpc-choose-another-selector">%5$s</button>
+                <button id="wpc-choose-save-btn">%6$s</button>
+            </div>
+        </div>',
+                !(empty($getData['flrt_set_id'])) ? esc_attr($getData['flrt_set_id']) : 'global_posts_container',
+                esc_html__( 'Chosen ID: ', 'filter-everything' ),
+                esc_html__( 'Chosen Class: ', 'filter-everything' ),
+                esc_html__( 'The element does not have any CSS selectors', 'filter-everything' ),
+                esc_html__( 'Choose another', 'filter-everything' ),
+                esc_html__( 'Save', 'filter-everything' )
+        );
+
+        // Localize script with nonce and AJAX URL
+        wp_localize_script('wpc-element-picker', 'wpcElementPickerData', array(
+                'ajax_url' => admin_url('admin-ajax.php'),
+                'error_saving_selector' => esc_html__('Error saving selector', 'filter-everything'),
+                'no_element_selected' => esc_html__('Error: No element selected', 'filter-everything'),
+                'failed_to_save_selector' => esc_html__('Error: Failed to save selector. Please try again.', 'filter-everything'),
+                'saving' => esc_html__('Saving...', 'filter-everything'),
+                'save' => esc_html__('Save', 'filter-everything'),
+        ));
+
+        echo $html;
     }
 }

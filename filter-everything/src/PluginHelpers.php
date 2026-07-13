@@ -122,12 +122,14 @@ trait PluginHelpers
 
                     // For All Post type archive pages
                     if (isset($theSet['post_name']['value']) && $theSet['post_name']['value'] === '1' && $query_to_check->is_main_query()) {
-                        if( isset( $theSet['use_apply_button']['value'] ) && $theSet['use_apply_button']['value'] === 'yes' ){
+                       /* if( isset( $theSet['use_apply_button']['value'] ) && $theSet['use_apply_button']['value'] === 'yes' ){
                             continue;
                         }else{
                             $result[] = $set['ID'];
                             break;
-                        }
+                        }*/
+                        $result[] = $set['ID'];
+                        break;
                     }
                 }
             }
@@ -325,8 +327,31 @@ trait PluginHelpers
         $wpPageType = isset( $unserialized['wp_page_type'] ) ? $unserialized['wp_page_type'] : $this->detectWpPageTypeByLocation( $set_post->post_name );
         $applyButtonPageType = isset( $unserialized['apply_button_page_type'] ) ? $unserialized['apply_button_page_type'] : 'no_page___no_page';
 
+        // Location preview URLs (option 'data-link') are language-sensitive under Polylang:
+        // flrt_get_common_location_terms() resolves the language from the global $post_id.
+        // On the edit screen post.php sets that global, but the Filter Set list table does
+        // not — so previews there lost their language prefix (e.g. /shop/ instead of
+        // /en/shop/). Anchor the global to this set's own post while the options are built
+        // so both screens agree. An AJAX $_POST['postId'] still takes priority inside
+        // flrt_get_common_location_terms().
+        $flrt_had_global_post_id = array_key_exists( 'post_id', $GLOBALS );
+        $flrt_prev_global_post_id = $flrt_had_global_post_id ? $GLOBALS['post_id'] : null;
+        if ( is_object( $set_post ) && ! empty( $set_post->ID ) ) {
+            $GLOBALS['post_id'] = $set_post->ID;
+        }
+
         $defaults['post_name']['options'] = flrt_get_set_location_terms( $wpPageType, $postType );
-        $defaults['apply_button_post_name']['options'] = flrt_get_set_location_terms( $applyButtonPageType, $postType, false );
+
+        // The field is defined in PRO only — don't create a value-less stub of it in the free version
+        if ( isset( $defaults['apply_button_post_name'] ) ) {
+            $defaults['apply_button_post_name']['options'] = flrt_get_set_location_terms( $applyButtonPageType, $postType, false );
+        }
+
+        if ( $flrt_had_global_post_id ) {
+            $GLOBALS['post_id'] = $flrt_prev_global_post_id;
+        } else {
+            unset( $GLOBALS['post_id'] );
+        }
 
         return $defaults;
     }

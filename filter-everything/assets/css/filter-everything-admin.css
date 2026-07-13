@@ -1,12 +1,12 @@
 /*!
- * Filter Everything admin 1.9.2.2
+ * Filter Everything admin 1.9.3
  */
 :root {
     --wpc-pro-color: #3858E9;
     --wpc-admin-theme-color: #3858e9;
     --wpc--admin-theme-color-darker-10: #2145e6;
+    --main-color: #3858E9;
 }
-
 #filters-seo-rules .inside,
 #filters-set-items .inside {
     margin: 0;
@@ -279,6 +279,8 @@ li.wpc-filter-slug {
 .wpc-date-format-tr,
 .wpc-field-show-term-names-tr,
 .wpc-field-show-selected-and-above-tr,
+.wpc-field-show-range-list-input-tr,
+.wpc-field-show-range-list-tr,
 .wpc-field-apply-button-text-tr,
 .wpc-field-apply-button-page-type-tr,
 .wpc-field-reset-button-text-tr,
@@ -297,6 +299,8 @@ li.wpc-filter-slug {
 .wpc-filter-post_meta_date .wpc-date-type-tr,
 .taxonomy-has-swatches .wpc-field-show-term-names-tr,
 .selected-and-above-show .wpc-field-show-selected-and-above-tr,
+.wpc-view-range .wpc-field-show-range-list-tr,
+.wpc-view-range-list .wpc-field-show-range-list-input-tr,
 .wpc-filter-has-brands .wpc-field-show-term-names-tr,
 .wpc-field-apply-button-text-tr.wpc-opened,
 .wpc-field-reset-button-text-tr.wpc-opened,
@@ -971,6 +975,22 @@ input[disabled="disabled"] + .wpc-checkbox-placeholder {
 
 .wpc-form-fields-table .wpc-container-handle-wrapper .wpc-help-tip {
     left: 0;
+}
+
+/* Settings pages: keep every option tooltip on one vertical line at the right
+   edge of the label column; the padding reserves that lane so even a long
+   option title wraps instead of running under the icon */
+.wpc-form-table.form-table th {
+    position: relative;
+    padding-right: 36px;
+}
+
+.wpc-form-table.form-table th .wpc-help-tip {
+    font-size: 1.3em;
+    display: block;
+    position: absolute;
+    right: 10px;
+    top: 20px;
 }
 
 #tiptip_holder {
@@ -2410,6 +2430,7 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
     text-decoration: none;
     background: transparent;
     padding: 8px 12px;
+    padding: 8px 20px;
     border-radius: 2px;
     color: var(--wpc-pro-color);
     display: inline-flex;
@@ -2417,20 +2438,23 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
     align-items: center;
     border: 1px solid var(--wpc-pro-color);
 }
+
+.locale-de-de .wpc-available-in-pro-button span{
+    margin-left: 2px;
+}
 .wpc-available-in-pro-button:hover {
     opacity: 0.8;
 }
 
 .wpc-available-in-pro-button:focus, .wpc-available-in-pro-button:active {
+    color: #fff;
     box-shadow: none;
 }
 
 .wpc-available-in-pro-button span {
     margin-left: 8px;
 }
-.locale-de-de .wpc-available-in-pro-button span{
-    margin-left: 2px;
-}
+
 .wpc-available-in-pro-button:hover {
     color: var(--wpc-pro-color);
 }
@@ -2438,6 +2462,9 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
 .wpc-row-pro-only {
     display: flex;
     justify-content: space-between;
+    /* stretch (the default) inflates the PRO badge to the full row height
+       when the option title wraps to a second line */
+    align-items: baseline;
 }
 
 .wpc-icon-help-tip {
@@ -2493,7 +2520,7 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
     display: flex;
     padding: 48px 18px 32px 18px;
     gap: 24px;
-    border-radius: 4px;
+    border-radius: 12px;
 }
 
 .flrt-upgrade-to-pro-popup-close-btn {
@@ -2534,7 +2561,7 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
     font-size: 15px;
     color: #000000;
     vertical-align: middle;
-    line-height: 140%;
+    line-height: 130%;
 }
 
 .flrt-upgrade-to-pro-popup-tr-first .flrt-upgrade-to-pro-popup-td {
@@ -2575,12 +2602,12 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
 }
 
 .flrt-upgrade-to-pro-popup-link-icon {
-    height: 24px;
-    width: 24px;
+    height: 20px;
+    width: 20px;
     background-image: url('data:image/svg+xml,%3Csvg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M18.0001 12.9999V18.9999C18.0001 19.5303 17.7894 20.039 17.4143 20.4141C17.0392 20.7892 16.5305 20.9999 16.0001 20.9999H5.00001C4.46958 20.9999 3.96087 20.7892 3.58579 20.4141C3.21071 20.039 3 19.5303 3 18.9999V7.99983C3 7.46939 3.21071 6.96068 3.58579 6.58561C3.96087 6.21053 4.46958 5.99982 5.00001 5.99982H11.0001" stroke="%23000000" stroke-width="2.02501" stroke-linecap="round" stroke-linejoin="round"/%3E%3Cpath d="M15 2.99994H21V8.99998" stroke="%23000000" stroke-width="2.02501" stroke-linecap="round" stroke-linejoin="round"/%3E%3Cpath d="M10 14L21.0001 2.99994" stroke="%23000000" stroke-width="2.02501" stroke-linecap="round" stroke-linejoin="round"/%3E%3C/svg%3E');
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 24px 24px;
+    background-size: 20px 20px;
     margin: -2px 0 0 10px;
 }
 
@@ -2602,8 +2629,7 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
 }
 
 .flrt-upgrade-to-pro-popup-center-col:last-child {
-    font-weight: 700;
-    /*color: var(--wpc-pro-color);*/
+    font-weight: 600;
 }
 
 .flrt-upgrade-to-pro-popup-see-all-container {
@@ -2640,7 +2666,7 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
 .flrt-upgrade-to-pro-popup-promo-card {
     background-color: #E8ECFF;
     border-radius: 12px;
-    padding: 40px 24px;
+    padding: 24px 24px 24px 24px;
     text-align: center;
 }
 
@@ -2653,10 +2679,70 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
     margin-top: 3px;
 }
 
+.flrt-upgrade-to-pro-popup-modal .flrt-td-feature-flex {
+    display: flex;
+    /* baseline keeps the badge and the help icon on the FIRST line
+       when a translated label wraps to two lines */
+    align-items: baseline;
+}
+
+.flrt-upgrade-to-pro-popup-modal .fetm-new-badge {
+    background: #3858E9;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 14px;
+    margin: 0 10px 0 6px;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.5;
+    display: inline-block;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.flrt-upgrade-to-pro-popup-modal .fetm-help-tip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #929292;
+    border-radius: 50%;
+    color: #929292;
+    background: transparent;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    margin-left: auto;
+    cursor: help;
+}
+
+.flrt-upgrade-to-pro-popup-rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin: -6px 0 12px;
+}
+
+.flrt-upgrade-to-pro-popup-rating svg {
+    display: block;
+    margin: 0 -3px 0 0;
+}
+
+.flrt-upgrade-to-pro-popup-rating-number {
+    color: #000000;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 130%;
+    margin-left: 6px;
+}
+
 .flrt-upgrade-to-pro-popup-subtitle {
     color: #000000;
-    font-size: 15px;
-    font-weight: 400;
+    font-size: 17px;
+    font-weight: 600;
     line-height: 130%;
     margin-bottom: 33px;
 }
@@ -2673,21 +2759,26 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
 .flrt-upgrade-to-pro-popup-price-dot {
     color: #7B879C;
 }
-
 .flrt-upgrade-to-pro-popup-price-tag {
-    font-size: 28px;
-    font-weight: 700;
+    font-size: 34px;
     line-height: 130%;
 }
-
-.flrt-upgrade-to-pro-popup-support-text {
-    margin-top: 10px;
-    font-weight: 700;
+.flrt-upgrade-to-pro-popup-price-year{
     font-size: 14px;
-    color: #000000;
+    font-weight: 700;
+}
+.flrt-upgrade-to-pro-popup-under-button-text,
+.flrt-upgrade-to-pro-popup-support-text {
+    margin-top: 28px;
+    font-weight: 400;
+    font-size: 13px;
+    color: #565656;
     line-height: 130%;
 }
-
+.flrt-upgrade-to-pro-popup-under-button-text{
+    margin: 16px 0 0 0;
+    text-align: center;
+}
 .flrt-upgrade-to-pro-popup-unlock-btn {
     background-color: #3858E9 !important;
     color: white !important;
@@ -2795,4 +2886,108 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
     .wpc-admin-toolbar .wpc-tab.wpc-importujeksportujpro{
         display: none;
     }
+}
+.wpc-range-list-inputs{
+    display: flex;
+}
+.wpc-range-list-inputs div{
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+.wpc-range-list-inputs input {
+    width: 130px !important;
+}
+.wpc-range-list-value-error, .wpc-range-list-value-error-button{
+    color: #d99e00;
+    background: #fff6e1;
+    margin-bottom: 8px;
+    padding: 3px 12px;
+}
+.wpc-field-show-range-list-input{
+    margin-bottom: 8px !important;
+}
+.wpc_set_fields-custom_posts_container-wrap{
+    display: flex;
+}
+a.button.wpc-choose-selector{
+    margin-left: 2px;
+}
+
+#wpc-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.wpc-modal-content {
+    position: relative;
+    width: 95vw;
+    height: 95vh;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.wpc-modal-header {
+    padding: 10px 16px;
+    background: #23282d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wpc-modal-title {
+    color: #fff;
+    font-size: 14px;
+}
+
+.wpc-modal-close {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+}
+#wpc-selector-iframe{
+    flex: 1;
+    border: none;
+    width: 100%;
+}
+.wpc-modal-description{
+    border-radius: 4px;
+    border: 3px solid#ffdd00;
+    background: #000;
+    color: #ffdd00;
+    padding: 10px 24px;
+    position: relative;
+    font-size: 16px;
+    font-weight: bold;
+}
+#wpc-choose-element-loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+#wpc-choose-element-loading-spinner .choose-element-spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--main-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

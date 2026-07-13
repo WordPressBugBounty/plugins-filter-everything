@@ -253,4 +253,17 @@ class Sorting
         remove_filter( 'posts_clauses', [ $this, 'orderByPopularityPostClauses' ] );
     }
 
+    public function prepareForPageBuilder() {
+        $default = [];
+        foreach ($this->getSortingDefaults()['titles'] as $key => $value) {
+            $default[] = [
+                'titles' => $value,
+                'orderbies' => $this->getSortingDefaults()['orderbies'][$key],
+                'orders' => $this->getSortingDefaults()['orders'][$key],
+                'meta_keys' => ''
+            ];
+        }
+        return $default;
+    }
+
 }

@@ -87,7 +87,6 @@ class WalkerCheckbox extends \Walker
      * @param int     $id       Optional. ID of the current category. Default 0.
      */
     public function start_el( &$output, $term, $depth = 0, $args = array(), $id = 0 ) {
-
         $term_name      = esc_attr( $term->name );
         $url_manager    = $args['url_manager'];
         $filter         = $args['filter'];
@@ -109,7 +108,8 @@ class WalkerCheckbox extends \Walker
         }
 
         $atts         = array();
-        $atts['href'] = $url_manager->getTermUrl( $term->slug, $filter['e_name'], $filter['entity'] );
+        $atts['href'] = flrt_get_filtered_term_url($term, $filter, $url_manager);
+
         $atts['class'] = 'wpc-filter-link';
 
         $attributes = '';
@@ -125,6 +125,42 @@ class WalkerCheckbox extends \Walker
         if ( isset( $args['set']['show_count']['value'] ) && $args['set']['show_count']['value'] === 'yes' ) {
             $link .= flrt_filter_get_count( $term );
         }
+        $is_hide_empty_terms = (isset($args['set']['hide_empty']['value']) && $args['set']['hide_empty']['value'] === 'yes');
+        $hide_for_apply_button_mode = flrt_check_apply_buttom_mode($args['set']);
+
+        $show_with_parent_class = '';
+        $isShowWithParentClass = false;
+        if(isset($term->show_with_parent)) {
+            if($term->show_with_parent === true){
+                $isShowWithParentClass = true;
+                $show_with_parent_class = 'wpc-show-with-parent-true';
+            }else{
+                $show_with_parent_class = 'wpc-show-with-parent-false';
+            }
+        }
+
+        if (!isset($term->show_with_parent)) {
+            if ($args['ask_to_select_parent'] !== false && $args['use_apply_button']) {
+                if ((!$checked)) {
+                    $show_with_parent_class = 'wpc-show-with-parent-false';
+                }
+            }
+        }
+
+
+        $hidden_class_for_apply_button_mode = '';
+        $more_less_hidden_class = '';
+        if ($args['isMoreLess']) {
+            if (!empty($term->apply_button_style) && $term->apply_button_style === true) {
+                $more_less_hidden_class = 'wpc-not-hidden-term';
+            }
+        }
+        if($hide_for_apply_button_mode){
+            $hidden_class_for_apply_button_mode = ($term->cross_count <= 0 && $is_hide_empty_terms) ? esc_attr(' wpc-term-count-hidden-0') : '';
+            if($checked){
+                $hidden_class_for_apply_button_mode .= esc_attr('wpc-term-count-hidden-checked-0');
+            }
+        }
 
         $output     .= "\t<li";
         $cross_count = isset( $term->cross_count ) ? esc_attr( $term->cross_count ) : '';
@@ -133,7 +169,10 @@ class WalkerCheckbox extends \Walker
             0 => 'wpc-checkbox-item',
             1 => 'wpc-term-item',
             3 => 'wpc-term-count-' . $cross_count,
-            4 => 'wpc-term-id-'.$id
+            4 => 'wpc-term-id-'.$id,
+            5 => $hidden_class_for_apply_button_mode,
+            6 => $more_less_hidden_class,
+            7 => esc_attr($show_with_parent_class),
         );
 
         if( $this->max_depth > 0 ) {
@@ -177,10 +216,14 @@ class WalkerCheckbox extends \Walker
         $css_classes = implode( ' ', $css_classes );
         $css_classes = $css_classes ? ' class="' . esc_attr( $css_classes ) . '"' : '';
 
+        $rating_slugs = flrt_rating_slugs();
+
+        $rating_data = (isset($rating_slugs[$term->slug])) ? ' data-rating-num="' . esc_attr($rating_slugs[$term->slug])  . '" ' : '';
+
         $output .= $css_classes;
         $output .= ' id="'.flrt_term_id('term', $filter, $id, false).'">';
-        $output .= '<div class="wpc-term-item-content-wrapper"><input '.checked( 1, $checked, false ).' '.disabled( 1, $disabled, false ).' type="checkbox" data-wpc-link="'.esc_url($atts['href']).'"';
-        $output .= ' id="'.flrt_term_id('checkbox', $filter, $id, false).'" />'."\n";
+        $output .= '<div class="wpc-term-item-content-wrapper"><input '.checked( 1, $checked, false ).' '.disabled( 1, $disabled, false ).' type="checkbox" data-wpc-link="'.esc_url($atts['href']).'" data-wpc-e-name="'.esc_attr($filter['e_name']).'" data-wpc-slug="'.esc_attr($term->slug).'" data-term-id="' . esc_attr($id) . '"';
+        $output .= ' id="'.flrt_term_id('checkbox', $filter, $id, false).'"' . $rating_data .' />'."\n";
         $output .= '<label for="'.flrt_term_id('checkbox', $filter, $id, false).'">';
         $output .= "$link\n";
         $output .= "</label>\n";
@@ -219,9 +262,26 @@ class WalkerCheckbox extends \Walker
         $parent_field = $this->db_fields['parent'];
 
         // Flat display.
+        $flrt_more_less_count = flrt_more_less_count();
+        $isParentFilter = flrtParentFilter($args[0]['filter']);
+        $hidden_terms_count = 1;
         if ( -1 == $max_depth ) {
             $empty_array = array();
+
             foreach ( $elements as $e ) {
+                if ( $args[0]['isMoreLess'] ) {
+
+                    $is_visible = !$isParentFilter || ( isset( $e->show_with_parent ) && $e->show_with_parent === true ) || !isset( $e->show_with_parent );
+                    $has_results = !$args[0]['is_hide_empty_terms'] || $e->cross_count > 0;
+
+                    if ( $is_visible && $has_results ) {
+                        if ( $hidden_terms_count <= $flrt_more_less_count ) {
+                            $e->apply_button_style = true;
+                        }
+                        $hidden_terms_count++;
+                    }
+                }
+
                 $this->display_element( $e, $empty_array, 1, 0, $args, $output );
             }
             return $output;

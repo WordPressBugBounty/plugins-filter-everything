@@ -9,6 +9,14 @@ if ( ! defined('ABSPATH') ) {
 class TaxonomyEntity implements Entity
 {
     public $items           = [];
+    /**
+     * Declared explicitly: assigned from the outside in
+     * EntityManager::prepareEntitiesToDisplay(); dynamic properties are
+     * deprecated since PHP 8.2.
+     */
+    public $items_sort = [];
+
+    public $filter = [];
 
     public $excludedTerms   = [];
 
@@ -85,7 +93,21 @@ class TaxonomyEntity implements Entity
         // Check if it is already stored
         $transient_key = flrt_get_post_ids_transient_key( $filter['slug'] );
 
-        if ( false === ( $results = flrt_get_transient( $transient_key ) ) ) {
+        $ids = flrt_get_transient( $transient_key );
+
+        // Cache format v2: aggregated [term_id => [object_id, ...]] int map.
+        // Legacy format cached raw SQL rows (each an assoc array with a 'term_id'
+        // key) — detect and rebuild those. The compact map is 15-30x smaller in
+        // memory and in wp_options.
+        $is_v2 = is_array( $ids );
+        if ( $is_v2 && ! empty( $ids ) ) {
+            $first_item = reset( $ids );
+            if ( is_array( $first_item ) && isset( $first_item['term_id'] ) ) {
+                $is_v2 = false;
+            }
+        }
+
+        if ( ! $is_v2 ) {
 
             // It wasn't there, so regenerate the data and save the transient
             if( defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO ) {
@@ -117,13 +139,18 @@ class TaxonomyEntity implements Entity
 
             $results = $wpdb->get_results($query, ARRAY_A);
 
-            flrt_set_transient( $transient_key, $results, FLRT_TRANSIENT_PERIOD_HOURS * HOUR_IN_SECONDS );
-        }
+            // Note: with the v2 cache this filter runs on the raw rows only when
+            // the cache is being (re)built, not on every request as before.
+            $taxonomy_terms = apply_filters( 'wpc_term_taxonomy_terms', $results, $this );
+            unset( $results );
 
-        $taxonomy_terms = apply_filters( 'wpc_term_taxonomy_terms', $results, $this );
+            $ids = [];
+            foreach ($taxonomy_terms as $key => $result) {
+                $ids[ (int) $result['term_id'] ][] = (int) $result['object_id'];
+            }
+            unset( $taxonomy_terms );
 
-        foreach ($taxonomy_terms as $key => $result) {
-            $ids[$result['term_id']][] = (int) $result['object_id'];
+            flrt_set_transient( $transient_key, $ids, FLRT_TRANSIENT_PERIOD_HOURS * HOUR_IN_SECONDS );
         }
 
         // Add possible empty terms without posts
@@ -190,6 +217,27 @@ class TaxonomyEntity implements Entity
         $wpManager          = Container::instance()->getWpManager();
         $wp_queried_object  = $wpManager->getQueryVar( 'wp_queried_object' );
         $wp_queried_term_id = ( isset( $wp_queried_object['term_id'] ) && $wp_queried_object['term_id'] > 0 ) ? $wp_queried_object['term_id'] : 0;
+
+        // On shops that list variations as standalone products (e.g. XStore's
+        // "variable_products_detach") the set universe contains VARIATIONS while
+        // the variable parents are excluded via post__not_in. Term relationships,
+        // however, live on the parents — a plain intersection below would drop
+        // them and zero out every taxonomy counter. Treat a parent as
+        // "in universe" when any of its variations is: map the in-universe
+        // variations back to their parents (PRO hooks mapVariationIdsToParentIds
+        // here; in the free build the filter is a no-op) and union both lists.
+        // NOTE: this deliberately uses the UNGATED mapping filter — the parent
+        // identity is needed here regardless of how the catalog lists its items,
+        // while wpc_from_variations_to_products is a counting-time collapse that
+        // stays off on variations-as-products shops.
+        // The wpc_items_before_calc_term_count replacement later turns parents
+        // back into their variations, and calcTermCount() intersects against the
+        // real universe again, so the final counts stay exact. On sites whose
+        // universe holds no variation IDs the union changes nothing.
+        $universeParents = apply_filters( 'wpc_variations_to_parents_always', $allWpQueriedPostIds );
+        if ( is_array( $universeParents ) && $universeParents !== $allWpQueriedPostIds ) {
+            $allWpQueriedPostIds = array_merge( $allWpQueriedPostIds, $universeParents );
+        }
 
         $allWpQueriedPostIds = array_flip( $allWpQueriedPostIds );
 
@@ -448,6 +496,38 @@ class TaxonomyEntity implements Entity
             'field'             => 'slug',
             'terms'             => $queried_value['values'],
         );
+
+        /**
+         * On multilingual sites, resolve slugs to term IDs of the current language
+         * before querying.
+         *
+         * With Polylang / WPML a single slug can belong to several terms in
+         * different languages (e.g. an English "leather" term and a Latvian one
+         * sharing the slug "leather"). Querying by slug then matches the
+         * wrong-language term, which makes Polylang fire a canonical 301 redirect.
+         * getTermId() resolves against getAllExistingTerms(), which is already
+         * scoped to the active language, so the query targets the right term.
+         * Falls back to slug matching if any value can't be resolved.
+         *
+         * Gated to multilingual setups so single-language sites keep the original
+         * slug-based path untouched (no extra term lookups).
+         */
+        if ( function_exists( 'pll_current_language' ) || flrt_wpml_active() ) {
+            $term_ids = array();
+            foreach ( (array) $queried_value['values'] as $term_slug ) {
+                $term_id = $this->getTermId( $term_slug );
+                if ( ! $term_id ) {
+                    $term_ids = array();
+                    break;
+                }
+                $term_ids[] = $term_id;
+            }
+
+            if ( ! empty( $term_ids ) ) {
+                $args['field'] = 'term_id';
+                $args['terms'] = $term_ids;
+            }
+        }
 
         if( isset( $queried_value['logic'] ) && $queried_value['logic'] === 'and' ){
             $args['include_children'] = false;

@@ -20,18 +20,10 @@ msgid_plural "%d stars"
 msgstr[0] "%d Sterne"
 msgstr[1] "%d Sterne"
 
-msgid "%s #%s"
-msgstr "%s #%s"
-
 #: pro/Settings/Tabs/IndexingDepth.php:42 pro/Settings/Tabs/SeoRulesTab.php:118
 #, php-format
 msgid "%s ( <span class=\"wpc-settings-post-type-label\">%s</span> )"
 msgstr "%s ( <span class=\"wpc-settings-post-type-label\">%s</span> )"
-
-#: pro/PluginPro.php:306
-#, php-format
-msgid "%s archive for:"
-msgstr "%s Archiv für:"
 
 #: src/Admin/FilterSet.php:136
 #, php-format
@@ -175,9 +167,6 @@ msgid "1 The SEO rule has not been updated. Someone is editing it."
 msgstr ""
 "1 SEO Regel wurde nicht aktualisiert, jemand anders bearbeitet sie gerade."
 
-msgid "6 month of support included"
-msgstr "6 Monate Support inklusive"
-
 #| msgid ""
 #| "<a href=\"%s\" target=\"_blank\">Documentation</a>. Common information "
 #| "how to work with the plugin can be found in our documentation."
@@ -190,13 +179,6 @@ msgstr ""
 "nachgelesen werden."
 
 msgid ""
-"<a href=\"%s\" target=\"_blank\">Documentation</a>. Please, read our "
-"documentation."
-msgstr ""
-"<a href=\"%s\" target=\"_blank\">Dokumentation</a>. Bitte lesen Sie die "
-"Dokumentation."
-
-msgid ""
 "<a href=\"%s\" target=\"_blank\">Support</a>. Create a technical support "
 "request if you are unable to resolve the issue yourself."
 msgstr ""
@@ -205,21 +187,6 @@ msgstr ""
 
 msgid "<a href=\"%s\">Edit</a> Filter Set"
 msgstr "Filter Set <a href=\"%s\">bearbeiten</a> "
-
-#| msgid ""
-#| "<tr><th>_wc_average_rating</th><td>filter by Product Average Rating. "
-#| "Optionally use <a href=\"%s\" target=\"_blank\" class=\"wpc-external-"
-#| "link\">Product Visibility</a> taxonomy instead</td></tr>"
-msgid ""
-"<li><code>_wc_average_rating</code> - filter by Product Average Rating. "
-"Optionally use <a href=\"%s\" target=\"_blank\" class=\"wpc-external-link\">"
-"Product Visibility</a> taxonomy instead</li>"
-msgstr ""
-"<li><code>_wc_average_rating</code> - Nach durchschnittlicher "
-"Produktbewertung filtern. Optional können Sie die Taxonomie <a href=\"%s\" "
-"target=\"_blank\" class=\"wpc-external-link\">Produktsichtbarkeit</a> "
-"nutzen</li>\n"
-"\n"
 
 msgid "<span class=\"%s\">%d</span> %s found"
 msgid_plural "<span class=\"%s\">%d</span> %s found"
@@ -237,9 +204,6 @@ msgstr "Eine Sache, nach welcher Beiträge gefiltert werden"
 
 msgid "a-z, 0-9, \"_\" and \"-\" symbols supported only"
 msgstr "Es werden nur a-z, 0-9, \"_\" und \"-\" Symbole unterstützt"
-
-msgid "About PRO"
-msgstr "Über PRO"
 
 msgid "ACF Fields"
 msgstr "ACF-Felder"
@@ -448,8 +412,8 @@ msgstr ""
 "vermeiden."
 
 msgctxt "benefits-landing"
-msgid "16&nbsp;100+"
-msgstr "16&nbsp;100+"
+msgid "16&nbsp;200+"
+msgstr "16&nbsp;200+"
 
 msgctxt "benefits-landing"
 msgid "160&nbsp;000+"
@@ -462,10 +426,6 @@ msgstr "160'000+"
 msgctxt "benefits-landing"
 msgid "4.88/5"
 msgstr "4.88/5"
-
-msgctxt "benefits-landing"
-msgid "6 months of support included"
-msgstr "6 Monate Support inklusive"
 
 msgctxt "benefits-landing"
 msgid "<span>Full control</span> over filtering,"
@@ -681,20 +641,8 @@ msgid "Is the PRO version compatible with my theme or page builder?"
 msgstr "Ist die PRO-Version mit meinem Theme oder Page Builder kompatibel?"
 
 msgctxt "benefits-landing"
-msgid "Lifetime updates"
-msgstr "Lebenslange Updates"
-
-msgctxt "benefits-landing"
 msgid "Maximum convenience for Mobile devices"
 msgstr "Maximaler Komfort für mobile Geräte"
-
-msgctxt "benefits-landing"
-msgid "mobile & SEO ready<span>.</span>"
-msgstr "mobil- und SEO-bereit<span>.</span>"
-
-msgctxt "benefits-landing"
-msgid "Mobile & UX for E-commerce"
-msgstr "Mobile & UX für E-Commerce"
 
 msgctxt "benefits-landing"
 msgid "Mobile Devices"
@@ -737,20 +685,12 @@ msgid "One-click import & export for Filters, Filter Sets, and settings"
 msgstr "Ein-Klick-Import und -Export für Filter, Filtersets und Einstellungen"
 
 msgctxt "benefits-landing"
-msgid "One-time payment"
-msgstr "Einmalige Zahlung"
-
-msgctxt "benefits-landing"
 msgid ""
 "Page builder content, WooCommerce products, custom post types, and even "
 "custom WP_Query — the PRO version handles it all!"
 msgstr ""
 "Page-Builder-Inhalte, WooCommerce-Produkte, benutzerdefinierte Beitragstypen "
 "und sogar benutzerdefinierte WP_Query — die PRO-Version meistert das alles!"
-
-msgctxt "benefits-landing"
-msgid "page builders support,"
-msgstr "Unterstützung für Page Builder,"
 
 msgctxt "benefits-landing"
 msgid "Priority support"
@@ -906,8 +846,8 @@ msgid "We always do our best to help resolve any issues with the plugin and prov
 msgstr "Wir geben immer unser Bestes, um Probleme mit dem Plugin zu lösen und Ihnen die nötige Unterstützung zu bieten. Sollte dies nicht möglich sein, können Sie die Rückgaberichtlinie nutzen und Ihr Geld gemäss den Regeln der Website zurückerhalten, auf der Sie das Plugin gekauft haben (CodeCanyon oder die offizielle Website <a href=\"%s\" target=\"_blank\">filtereverything.pro</a>)."
 
 msgctxt "benefits-landing"
-msgid "We follow a standard refund period — 14 days from the date of purchase."
-msgstr "Wir halten uns an einen Standard-Rückgabezeitraum — 14 Tage ab Kaufdatum."
+msgid "We follow a standard refund period — 30 days from the date of purchase."
+msgstr "Wir halten uns an einen Standard-Rückgabezeitraum — 30 Tage ab Kaufdatum."
 
 msgctxt "benefits-landing"
 msgid "websites / users worldwide"
@@ -946,17 +886,6 @@ msgstr ""
 msgctxt "benefits-landing"
 msgid "XML sitemap for filtered pages"
 msgstr "XML-Sitemap für gefilterte Seiten"
-
-msgctxt "benefits-landing"
-msgid ""
-"Yes, support is included with the PRO purchase. You receive 6 months of "
-"support with the option to extend it at any time, along with lifetime plugin "
-"updates that include all new features and bug fixes at no additional cost."
-msgstr ""
-"Ja, der Support ist im PRO-Kauf enthalten. Sie erhalten 6 Monate Support mit "
-"der Möglichkeit, ihn jederzeit zu verlängern, sowie lebenslange Plugin-"
-"Updates, die alle neuen Funktionen und Fehlerkorrekturen ohne zusätzliche "
-"Kosten umfassen."
 
 msgctxt "benefits-landing"
 msgid ""
@@ -1061,9 +990,6 @@ msgstr "Chips-Widget"
 msgid "Choose what to export"
 msgstr "Wählen Sie aus, was exportiert werden soll"
 
-msgid "Clean URLs and Permalinks"
-msgstr "URLs und Permalinks säubern"
-
 msgid "Clear search"
 msgstr "Suche löschen"
 
@@ -1089,9 +1015,6 @@ msgstr "Zusammengeklappt und erweitert"
 msgid "Color"
 msgstr "Farbe"
 
-msgid "Color swatches and Brand logos"
-msgstr "Farbmuster und Markenlogos"
-
 msgid "Color swatches for Filters"
 msgstr "Farbmuster für Filter"
 
@@ -1112,9 +1035,6 @@ msgstr "Allgemein"
 msgid "Common WordPress pages"
 msgstr "Allgemeine Wordpress Seiten"
 
-msgid "Compatibility with Page builders"
-msgstr "Kompatibilität mit Seitenerstellungsprogrammen"
-
 msgid "Contains the IDs of ACF fields that are related to the Custom Field"
 msgstr ""
 "Enthält die ID der ACF-Felder, die mit dem benutzerdefinierten Feld dieses "
@@ -1123,17 +1043,11 @@ msgstr ""
 msgid "copy"
 msgstr "kopie"
 
-msgid "Count, dynamic recount in terms"
-msgstr "Zählen, dynamisches Nachzählen in Begriffen"
-
 msgid "Create Filters Automatically"
 msgstr "Filter automatisch erstellen"
 
 msgid "Create Filters Manually"
 msgstr "Filter manuell erstellen"
-
-msgid "Current<br />version"
-msgstr "Aktuelle Version"
 
 #: src/Settings/Tabs/ExperimentalTab.php:59
 msgid "Custom CSS"
@@ -1160,9 +1074,6 @@ msgstr "Benutzerfeld-Filter"
 #: src/Entities/EntityManager.php:119
 msgid "Custom Field Numeric"
 msgstr "Benutzerdefiniertes Feld: Numerisch"
-
-msgid "Custom URL prefixes for filters"
-msgstr "Benutzerdefinierte URL-Präfixe für Filter"
 
 msgid "Custom:"
 msgstr "Benutzerdefiniert:"
@@ -1997,9 +1908,6 @@ msgstr ""
 "Plugin-Daten in eine JSON-Datei exportieren, die Sie später importieren "
 "können."
 
-msgid "Failed to fill temporary table"
-msgstr "Fehler beim Füllen der temporären Tabelle"
-
 msgid ""
 "Failed to generate the XML sitemap. Please try again or contact support if "
 "the issue persists."
@@ -2043,9 +1951,6 @@ msgstr "Filtern nach: Verkaufsstatus des Produkts"
 msgid "filter by Product price"
 msgstr "Filtern nach: Produktpreis"
 
-msgid "filter by Product price (Custom Field Numeric)"
-msgstr "Filtern nach: Produktpreis (Benutzerdefiniertes Feld, numerisch)"
-
 msgid "filter by Product sale price"
 msgstr "Filtern nach: Verkaufspreis des Produkts"
 
@@ -2057,9 +1962,6 @@ msgstr "Filtern nach: Lagerbestand des Produkts"
 
 msgid "filter by Product stock status"
 msgstr "Filtern nach: Lagerstatus des Produkts"
-
-msgid "filter by Product Stock status (Custom Field)"
-msgstr "Filtern nach: Lagerstatus des Produkts (Benutzerdefiniertes Feld)"
 
 msgid "filter by Product total sales"
 msgstr "Filtern nach: Gesamtumsatz des Produkts"
@@ -2097,22 +1999,6 @@ msgstr "Filter Everything Debuggen"
 msgid "Filter Everything plugin"
 msgstr "Filter Everything Plugin"
 
-#| msgid ""
-#| "Filter Everything plugin is also available in a professional version<br />"
-#| " which includes additional features such as clean URLs, ability to "
-#| "customize SEO,<br /> individual Filter Sets for pages and other great "
-#| "features."
-msgid ""
-"Filter Everything plugin is also available in a professional version<br /> "
-"which includes additional features such as clean URLs, the ability to "
-"customize SEO,<br /> individual Filter Sets for pages, and other great "
-"features."
-msgstr ""
-"Das Filter Everything Plugin ist auch in einer professionellen Version<br /> "
-"erhältlich, die zusätzliche Funktionen wie saubere URLs, die Möglichkeit zur "
-"Anpassung von SEO,<br /> individuelle Filter-Sets für Seiten und andere "
-"grossartige Funktionen enthält."
-
 #. Name of the plugin
 msgid "Filter Everything PRO"
 msgstr "Filter Everything PRO"
@@ -2126,9 +2012,6 @@ msgid ""
 msgstr ""
 "Filter Everything — WordPress & WooCommerce Produktfiler Plugin, das es "
 "Ihnen ermöglicht, ein flexibles Filtersystem zu entwerfen."
-
-msgid "Filter Everything&nbsp;— WooCoomerce Product & WordPress Filter"
-msgstr "Filter Everything&nbsp;— WooCoomerce Produkt & WordPress Filter"
 
 #: src/Admin/FilterFields.php:102
 msgid "Filter Logic"
@@ -2184,12 +2067,6 @@ msgstr "Filter Titel"
 msgid "Filtered %s"
 msgstr "Filter %s"
 
-msgid "Filtering by Taxonomies, Custom Fields, Post Author"
-msgstr "Filtern nach Taxonomien, Benutzerfeldern, Beitragsautor"
-
-msgid "Filtering Custom WP Queries"
-msgstr "Benutzerdefinierte WP-Abfragen filtern"
-
 #| msgid ""
 #| "Filtering results will always be on the page with filtered posts. But you "
 #| "can place Filters widget itself on the page(s) specified in the dropdowns"
@@ -2213,26 +2090,9 @@ msgstr "filter"
 msgid "Filters and filter sets"
 msgstr "Filter und Filtersets"
 
-#| msgid "Filters any Post Type (posts, products etc)"
-msgid "Filters any Post Type (posts, products, etc.)"
-msgstr "Filtert jeden Beitragstyp (Beiträge, Produkte, etc.)"
-
 #: views/admin/filters-seo-rules.php:33
 msgid "Filters Combination"
 msgstr "Filterkombination"
-
-#| msgid ""
-#| "Filters everything in WordPress & WooCommerce: Products, any Post types, "
-#| "by Any Criteria. Compatible with WPML, ACF and others popular. Supports "
-#| "AJAX."
-msgid ""
-"Filters everything in WordPress & WooCommerce: Products, Post types, by Any "
-"Criteria. Compatible with WPML, ACF, and other popular plugins. Supports "
-"AJAX."
-msgstr ""
-"Filtert alles in WordPress & WooCommerce: Produkte, beliebige Beitragstypen, "
-"nach beliebigen Kriterien. Kompatibel mit WPML, ACF und anderen gängigen. "
-"Unterstützt AJAX."
 
 #: views/admin/options.php:12
 msgid "Filters Settings"
@@ -2240,11 +2100,6 @@ msgstr "Filter Einstellungen"
 
 msgid "Filters widget on mobile should be"
 msgstr "Das Filter-Widget auf dem Handy sollte sein"
-
-#. Description of the plugin
-#| msgid "Filters Wordpress things."
-msgid "Filters WordPress things."
-msgstr "Filtert Wordpress Dinge"
 
 msgid "First, select another filter"
 msgstr "Wählen Sie zunächst einen anderen Filter"
@@ -2362,9 +2217,6 @@ msgstr "Hilfe & Support"
 msgid "Hide empty Filters"
 msgstr "Leere Filter ausblenden"
 
-msgid "Hide filter if all terms are empty"
-msgstr "Filter ausblenden, wenn alle Begriffe leer sind"
-
 msgid "Hide in the initial Filter only"
 msgstr "Nur im ersten Filter ausblenden"
 
@@ -2379,9 +2231,6 @@ msgstr ""
 #| msgid "Hide entire Filter if no one term contains posts"
 msgid "Hide the Entire Filter if no one term contains posts"
 msgstr "Gesamten Filter ausblenden, wenn ein Begriff keine Beiträge enthält"
-
-msgid "Hide this tab forever"
-msgstr "Diese Registerkarte für immer ausblenden"
 
 #| msgid "Hide until Parent selected"
 msgid "Hide until the Parent selected"
@@ -2408,19 +2257,13 @@ msgstr "Wie geht das?"
 
 #: src/Settings/Tabs/SettingsTab.php:55
 #| msgid "CSS id or class of the Posts Container"
-msgid "HTML id or class of the Posts Container"
-msgstr "HTML Id oder Klasse des Beitrags-Containers"
+msgid "Results container"
+msgstr "Ergebnis-Container"
 
 #. URI of the plugin
 #. Author URI of the plugin
 msgid "https://filtereverything.pro/about/"
 msgstr "https://filtereverything.pro/about/"
-
-msgid "I have an issue with the plugin"
-msgstr "Ich habe ein Problem mit dem Plugin"
-
-msgid "I'm Andrii Stepasiuk, the author of this plugin."
-msgstr "Ich bin Andrii Stepasiuk, der Autor dieses Plugins."
 
 msgid ""
 "If checked, filtering will take into account variations with this attribute "
@@ -2502,12 +2345,6 @@ msgstr ""
 "Die Indexierung für Ihre SEO-Regel funktioniert nicht, da Sie die "
 "Einstellung zur Indexierungstiefe des Filters erhöhen müssen."
 
-msgid "Individual AJAX containers for Filter Sets"
-msgstr "Individuelle AJAX-Container für Filter-Sets"
-
-msgid "Individual Filter Sets for any pages and archives"
-msgstr "Individuelle Filter Sets für beliebige Seiten und Archive"
-
 msgid "Information"
 msgstr "Information"
 
@@ -2530,15 +2367,8 @@ msgstr ""
 #| "It appears that this page does not contain a container with the specified "
 #| "«CSS id or class of the Posts Container». Try to specify the correct one "
 #| "in the Filter Set settings or the common plugin Settings."
-msgid ""
-"It appears that this page does not contain a container with the specified "
-"«HTML id or class of the Posts Container». Try to specify the correct one in "
-"the Filter Set settings or the common plugin Settings."
-msgstr ""
-"Es scheint, dass diese Seite keinen Container mit der angegebenen \"HTML Id "
-"oder Klasse des Beitrags-Containers\" enthält. Versuchen Sie, den korrekten "
-"Container in den Filter-Set-Einstellungen oder in den allgemeinen Plugin-"
-"Einstellungen anzugeben."
+msgid "It appears that this page does not contain the container specified in the «Results container» option. Try to specify the correct one in the Filter Set settings or the common plugin Settings."
+msgstr "Es scheint, dass diese Seite den in der Option \"Ergebnis-Container\" angegebenen Container nicht enthält. Versuchen Sie, den korrekten Container in den Filter-Set-Einstellungen oder in den allgemeinen Plugin-Einstellungen anzugeben."
 
 msgid ""
 "It is fast, convenient, intuitive, and contains unique SEO features (in the "
@@ -2546,10 +2376,6 @@ msgid ""
 msgstr ""
 "Es ist schnell, bequem und intuitiv und enthält auch einzigartige Funktionen "
 "für SEO (in der PRO-Version)."
-
-msgid "It seems you like how Filter Everything does its job."
-msgstr ""
-"Es scheint Ihnen zu gefallen, wie Filter Everything seine Arbeit erledigt."
 
 #: src/wpc-helpers.php:493
 msgid "item"
@@ -2584,9 +2410,6 @@ msgstr "Lizenz-Information"
 
 msgid "License Key"
 msgstr "Lizenzschlüssel"
-
-msgid "Lifetime updates"
-msgstr "Lebenslange Updates"
 
 msgid "Location"
 msgstr "Standort"
@@ -2753,10 +2576,6 @@ msgstr "Mit dem ausgewählten Beitragstyp sind keine Taxonomien verknüpft."
 msgid "No title"
 msgstr "Kein Titel"
 
-#: src/wpc-default-hooks.php:23
-msgid "Not On Sale"
-msgstr "Nicht im Verkauf"
-
 msgid ""
 "Note: if you modify the selected Posts list on the page, please update this "
 "Filter Set"
@@ -2822,9 +2641,6 @@ msgstr "Seiten-Archiv für:"
 msgid "Parent Filter"
 msgstr "Übergeordneter Filter"
 
-msgid "Pay once"
-msgstr "Einmalige Zahlung"
-
 msgid ""
 "Please enable this option only after you have ensured that the filtering is "
 "working correctly"
@@ -2851,19 +2667,6 @@ msgstr "Bitte zuerst Filter hinzufügen"
 msgid "Please, do not call the \"%s\" function before the \"wp\" action"
 msgstr "Bitte rufen Sie die Funktion \"%s\" nicht vor der Aktion \"wp\" auf."
 
-msgid ""
-"Please, do not fire this function, until the \"pre_get_posts\" hook has been "
-"called"
-msgstr ""
-"Bitte rufen Sie diese Funktion nicht auf, bevor der Hook „pre_get_posts“ "
-"aufgerufen wurde."
-
-msgid ""
-"Please, help me make the plugin more popular - leave a good review for it."
-msgstr ""
-"Bitte helfen Sie mir, das Plugin populärer zu machen - hinterlassen Sie eine "
-"gute Bewertung dafür."
-
 #| msgid ""
 #| "Please, specify desired Sorting widget by adding id parameter to the "
 #| "shortcode."
@@ -2876,9 +2679,6 @@ msgstr ""
 
 msgid "Plugin settings"
 msgstr "Plugin-Einstellungen"
-
-msgid "Pop-up filters widget"
-msgstr "Pop-up-Filter-Widget"
 
 msgid "Pop-up Filters Widget compatibility mode"
 msgstr "Kompatibilitätsmodus für Popup-Filter-Widgets"
@@ -2905,9 +2705,6 @@ msgstr "Beitragsauto"
 
 msgid "Post Date"
 msgstr "Veröffentlichungsdatum"
-
-msgid "Post not found or invalid type."
-msgstr "Beitrag nicht gefunden oder ungültiger Typ."
 
 #: pro/Admin/SeoRules.php:159 src/Admin/FilterSet.php:30
 #: views/admin/filters-seo-rules.php:22
@@ -2956,9 +2753,6 @@ msgid ""
 msgstr ""
 "Das Präfix \"%s\" ist nicht zulässig, da dieser Begriff bereits existiert. "
 "Bitte verwenden Sie ein anderes Präfix."
-
-msgid "Premium support"
-msgstr "Premium Support"
 
 #| msgid "Preview selected location in a new tab"
 msgid "Preview the selected location in a new tab"
@@ -3042,12 +2836,6 @@ msgstr "Suchen"
 msgid "Search ..."
 msgstr "Suchen ..."
 
-msgid "Search by keyword"
-msgstr "Nach Schlüsselwort suchen"
-
-msgid "Search Field"
-msgstr "Suchfeld"
-
 msgid "Search Field Placeholder"
 msgstr "Suchfeld Platzhalter"
 
@@ -3112,9 +2900,6 @@ msgstr "Wählen Sie Begriffe und"
 msgid "Select the Post Type you need to filter"
 msgstr "Wählen Sie den zu filternden Beitragstyp"
 
-msgid "Select the settings file to import"
-msgstr "Wählen Sie die Einstellungsdatei zum Importieren aus"
-
 msgid ""
 "Select where to show Chips on your site. Or enter your theme's hooks. For "
 "example: before_main_content"
@@ -3144,13 +2929,6 @@ msgstr "SEO Regeln"
 
 msgid "SEO rules"
 msgstr "SEO-Regeln"
-
-msgid "SEO Rules, indexing filtering result pages by Search Engines"
-msgstr ""
-"SEO-Regeln, Indizierung und Filterung von Ergebnisseiten durch Suchmaschinen"
-
-msgid "SEO settings saved successfully."
-msgstr "SEO-Einstellungen erfolgreich gespeichert."
 
 #: pro/Admin/SeoRules.php:171
 msgid "SEO Title"
@@ -3235,9 +3013,6 @@ msgstr "Schieberegler Schritte"
 msgid "Smart Auto Scroll (on desktop only)"
 msgstr "Intelligentes Auto Scroll (nur auf Desktop)"
 
-msgid "Smart filtering by Woo product variations"
-msgstr "Intelligente Filterung nach Woo-Produktvarianten"
-
 #: views/admin/filters-intersections.php:40
 #| msgid "Sorry. There is no filters active for SEO for selected post type"
 msgid "Sorry. There are no filters active for SEO for the selected post type"
@@ -3317,15 +3092,12 @@ msgstr "Sortier-Widget"
 msgid "Special Pop-up Filters Widget for Mobile"
 msgstr "Spezielles Pop-up-Filter-Widget für mobile Geräte"
 
-msgid "Special Pop-up Filters widget for Mobile Devices"
-msgstr "Spezielles Pop-up-Filter-Widget für mobile Geräte"
-
 msgid "Specify if needed or leave empty"
 msgstr "Bei Bedarf angeben oder leer lassen"
 
 #| msgid "Specify individual CSS selector of Posts Container for AJAX"
-msgid "Specify individual HTML selector of Posts Container for AJAX"
-msgstr "Individuelle HTML-Selektoren für Beitrags-Container für AJAX festlegen"
+msgid "Specify an individual Results container for AJAX"
+msgstr "Individuellen Ergebnis-Container für AJAX festlegen"
 
 #: pro/PluginPro.php:256
 #| msgid "Specify page(s) where posts that should be filtered are located"
@@ -3360,9 +3132,6 @@ msgstr ""
 "target=\"_blank\">%s erstellen</a>, um Filterseiten für die Indexierung "
 "verfügbar zu machen."
 
-msgid "Stars for Product rating filter"
-msgstr "Sterne für Produktbewertungsfilter"
-
 #: src/Admin/FilterFields.php:166
 msgid ""
 "Step 1 means possible values are 1,2,3,4 ...<br />Step 0.1 means possible "
@@ -3373,20 +3142,11 @@ msgstr ""
 "mögliche Werte sind 5.1, 5.2, 5.3, 5.4 ...<br />Schritt 15 bedeutet mögliche "
 "Werte sind 15, 30, 45, 60 ..."
 
-msgid "Step-by-Step filtering"
-msgstr "Schritt-für-Schritt Filterung"
-
 msgid "Styled checkboxes and radio buttons"
 msgstr "Gestaltete Kontrollkästchen und Optionsfelder"
 
 msgid "Success: XML sitemap generated successfully."
 msgstr "Erfolg: XML-Sitemap erfolgreich erstellt."
-
-msgid "Supports AJAX"
-msgstr "Untertützt AJAX"
-
-msgid "Sure, you deserve 5 stars"
-msgstr "Sicher, Sie verdienen 5 Sterne"
 
 msgid "Taxonomies"
 msgstr "Taxonomien"
@@ -3434,9 +3194,6 @@ msgstr ""
 msgid "Terms Search"
 msgstr "Suche nach Begriff"
 
-msgid "Thank you so much!"
-msgstr "Vielen Dank!"
-
 #| msgid ""
 #| "\"Default\" option means that terms will be sorted in the order as they "
 #| "were received from DataBase<br />The \"Menu order\" option is available "
@@ -3457,13 +3214,6 @@ msgstr "Benutzerfeld gelöscht."
 #: pro/Admin/SeoRules.php:111 src/Admin/FilterSet.php:150
 msgid "The Custom field has been updated."
 msgstr "Benutzerfeld wurde aktualisiert."
-
-msgid ""
-"The Filter Everything Sorting widget only works on pages with filtering "
-"posts."
-msgstr ""
-"Das Filter Everything Widget funktioniert nur auf Seiten mit Filtern für "
-"Beiträge."
 
 #: src/Admin/FilterSet.php:158
 msgid "The Filter set draft has been updated."
@@ -3715,10 +3465,8 @@ msgstr ""
 "Versuchen Sie, die Seitenleiste auf mobilen Geräten nach oben zu verschieben"
 
 #: src/Settings/Tabs/SettingsTab.php:81
-msgid "Try to show selected terms above the posts container"
-msgstr ""
-"Versuchen Sie, ausgewählte Begriffe oberhalb des Beitrags-Containers "
-"anzuzeigen"
+msgid "Try to show selected terms above the Results container"
+msgstr "Versuchen Sie, ausgewählte Begriffe oberhalb des Ergebnis-Containers anzuzeigen"
 
 #: src/Settings/Tabs/SettingsTab.php:51
 msgid "Try to use AJAX"
@@ -3737,21 +3485,6 @@ msgstr ""
 
 msgid "Unknown error."
 msgstr "Unbekannter Fehler"
-
-msgid ""
-"Unlike most widgets, the Filters widget does not always show filters. It is "
-"rather a canvas where filters can be displayed if there is a Filter Set "
-"registered for the page. You can specify this page or pages in the \"Where "
-"to filter?\" field of a Filter Set."
-msgstr ""
-"Im Gegensatz zu den meisten Widgets zeigt das Filter-Widget nicht immer "
-"Filter an. Es ist vielmehr eine Leinwand, auf der Filter angezeigt werden "
-"können, wenn für die Seite ein Filter-Set registriert ist. Sie können diese "
-"Seite oder Seiten im Feld \"Wo soll gefiltert werden\" eines Filter-Sets "
-"angeben."
-
-msgid "Unlock all PRO features and capabilities"
-msgstr "Zugriff auf alle PRO-Funktionen und -Möglichkeiten"
 
 msgid "Unlock PRO"
 msgstr "Freischaltung von PRO"
@@ -3836,9 +3569,6 @@ msgstr ""
 
 msgid "Version %s"
 msgstr "Version %s"
-
-msgid "Vertical and Horizontal layouts"
-msgstr "Vertikale und horizontale Anordnung"
 
 #: views/admin/filters-set.php:32
 msgid "View"
@@ -3952,17 +3682,6 @@ msgstr ""
 "Sie nutzen das Plugin seit mehr als zwei Monaten ohne Lizenzschlüssel und "
 "nun ist es gesperrt."
 
-#| msgid ""
-#| "You have been using the plugin for more than two months without license "
-#| "key and now it is locked. Read more on the <a href=\"%1$s\">License "
-#| "page</a>."
-msgid ""
-"You have been using the plugin for over two months without a license key, "
-"and it is now locked. Read more on the <a href=\"%1$s\">License page</a>."
-msgstr ""
-"Sie nutzen das Plugin seit mehr als zwei Monaten ohne Lizenzschlüssel und "
-"nun ist es gesperrt. Lesen Sie mehr auf der <a href=\"%1$s\">Lizenzseite</a>."
-
 #: pro/Admin/SeoRules.php:257
 #, php-format
 msgid ""
@@ -3979,16 +3698,11 @@ msgstr ""
 "Sie müssen sich bei Ihrem Envato-Konto anmelden, um den Lizenzschlüssel zu "
 "generieren."
 
-msgid "You must specify Posts Container, otherwise AJAX will not work properly"
-msgstr ""
-"Sie müssen den Beitrags-Container angeben, andernfalls funktioniert AJAX "
-"nicht ordnungsgemäss"
+msgid "You must specify the Results container, otherwise AJAX will not work properly"
+msgstr "Sie müssen den Ergebnis-Container angeben, andernfalls funktioniert AJAX nicht ordnungsgemäss"
 
 msgid "«Apply Button» mode"
 msgstr "«Anwenden Knopf» Modus"
-
-msgid "«Auto-submission» and «Apply button» modes"
-msgstr "«Auto-Übermittlung» und «Anwenden Knopf» Modi"
 
 #: src/Admin/FilterFields.php:107
 #| msgid ""
@@ -4041,3 +3755,166 @@ msgstr "vor %s"
 
 msgid "Thank you for updating Filter Everything! This release includes a security update related to how <strong>Color swatches</strong> are rendered. Everything should work fine, but just in case, please check how your Color swatches look in the filters on your site's pages. You can see the list of Color swatches you use on %1$s<strong>this settings page</strong>%2$s."
 msgstr "Danke, dass Sie Filter Everything aktualisiert haben! Dieses Release enthält ein Sicherheitsupdate dazu, wie <strong>Farbmuster</strong> dargestellt werden. Es sollte alles wie gewohnt funktionieren, aber prüfen Sie zur Sicherheit, wie Ihre Farbmuster in den Filtern auf den Seiten Ihrer Website aussehen. Die Liste der von Ihnen verwendeten Farbmuster finden Sie auf %1$s<strong>dieser Einstellungsseite</strong>%2$s."
+
+msgid "Select visually"
+msgstr "Visuell auswählen"
+
+msgid "Hover over the Results container and click to select it"
+msgstr "Fahren Sie mit der Maus über den Ergebnis-Container und klicken Sie, um ihn auszuwählen"
+
+msgid "The part of the page where your posts or products are listed. When AJAX is enabled, the plugin refreshes only this area after each filter click, without reloading the whole page.<br /><br />Click «Select visually» and simply click the area with your posts, or enter its CSS id or class if you know it."
+msgstr "Der Bereich der Seite, in dem Ihre Beiträge oder Produkte aufgelistet sind. Wenn AJAX aktiviert ist, aktualisiert das Plugin nach jedem Filter-Klick nur diesen Bereich, ohne die ganze Seite neu zu laden.<br /><br />Klicken Sie auf \"Visuell auswählen\" und klicken Sie einfach auf den Bereich mit Ihren Beiträgen, oder geben Sie dessen CSS-id oder -Klasse ein, wenn Sie sie kennen."
+
+msgid "Instant recount for the «Apply Button» mode"
+msgstr "Sofortige Neuberechnung für den «Anwenden Knopf» Modus"
+
+msgid "Instantly recalculate filter counters in the browser"
+msgstr "Filter-Zähler sofort im Browser neu berechnen"
+
+msgid "When disabled, Filter Sets in the «Apply Button» mode recalculate counters on the server with an AJAX request on every filter click."
+msgstr "Wenn deaktiviert, berechnen Filter-Sets im «Anwenden Knopf» Modus die Zähler bei jedem Filter-Klick mit einer AJAX-Anfrage auf dem Server neu."
+
+msgid "This option greatly speeds up filtering, but the recount runs in the visitor's browser and may be heavy on sites with a large amount of content. If you filter more than 30,000 posts, make sure filtering does not freeze — especially on mobile devices."
+msgstr "Diese Option beschleunigt das Filtern erheblich, aber die Neuberechnung läuft im Browser des Besuchers und kann den Browser auf Websites mit sehr vielen Inhalten stark belasten. Wenn Sie mehr als 30 000 Beiträge filtern, stellen Sie sicher, dass das Filtern nicht stockt — besonders auf Mobilgeräten."
+
+msgid "When enabled, Filter Sets in the «Apply Button» mode recalculate counters instantly in the browser, without an AJAX request on every filter click."
+msgstr "Wenn aktiviert, berechnen Filter-Sets im «Anwenden Knopf» Modus die Zähler sofort im Browser neu — ohne AJAX-Anfrage bei jedem Filter-Klick."
+
+msgid "Replaces &lt;a&gt; tags with &lt;span&gt; in filters to prevent crawlers from following filter links and overloading your site."
+msgstr "Ersetzt &lt;a&gt;-Tags durch &lt;span&gt; in den Filtern, damit Crawler den Filter-Links nicht folgen und Ihre Website nicht belasten."
+
+msgid "Disable filter links for crawlers"
+msgstr "Filter-Links für Crawler deaktivieren"
+
+msgctxt "benefits-landing"
+msgid "New"
+msgstr "Neu"
+
+msgid "Get the full power of filtering, SEO tools, and improve conversions"
+msgstr "Nutzen Sie die volle Power der Filterung, SEO-Tools und verbessern Sie Ihre Conversions"
+
+msgid "Always<br />WP & Woo compatible"
+msgstr "Immer<br />WP- & Woo-kompatibel"
+
+msgid "/yr"
+msgstr "/Jahr"
+
+msgid "1-year updates & support"
+msgstr "1 Jahr Updates & Support"
+
+msgid "Plugin keeps working after expiry"
+msgstr "Plugin funktioniert auch nach Ablauf weiter"
+
+msgid "30-day money-back guarantee"
+msgstr "30 Tage Geld-zurück-Garantie"
+
+msgctxt "benefits-landing"
+msgid "page builder support,"
+msgstr "Unterstützung für Page Builder,"
+
+msgctxt "benefits-landing"
+msgid "SEO ready & instant"
+msgstr "SEO-bereit & blitzschnell"
+
+msgctxt "Date Picker applyText"
+msgid "Apply"
+msgstr "Anwenden"
+
+msgctxt "benefits-landing"
+msgid "Core Features (Free + Pro)"
+msgstr "Kernfunktionen (Free + Pro)"
+
+msgctxt "benefits-landing"
+msgid "Filter counts update instantly as visitors click — no page reload, no server request. Even faster than AJAX."
+msgstr "Filter-Zähler aktualisieren sich sofort beim Klick — ohne Neuladen der Seite und ohne Server-Anfrage. Sogar schneller als AJAX."
+
+msgctxt "benefits-landing"
+msgid "Instant filter counts"
+msgstr "Sofortige Filter-Zähler"
+
+msgid "%s: %s"
+msgstr "%s: %s"
+
+msgid "ASC"
+msgstr "ASC"
+
+msgid "And up"
+msgstr "Und höher"
+
+msgid "Comma-separated list of Set IDs"
+msgstr "Kommagetrennte Liste von Set-IDs"
+
+msgid "DESC"
+msgstr "DESC"
+
+msgid "Error: The minimum value cannot be greater than or equal to the maximum value."
+msgstr "Fehler: Der Minimalwert darf nicht grösser oder gleich dem Maximalwert sein."
+
+msgid "Error: The range list is empty. Please add values to the list."
+msgstr "Fehler: Die Bereichsliste ist leer. Bitte fügen Sie Werte zur Liste hinzu."
+
+msgid "Error: invalid Order field."
+msgstr "Fehler: Ungültiges Sortierfeld."
+
+msgid "Filter Everything Pro"
+msgstr "Filter Everything Pro"
+
+msgid "Item"
+msgstr "Element"
+
+msgid "Meta key"
+msgstr "Meta-Schlüssel"
+
+msgid "Order by"
+msgstr "Sortieren nach"
+
+msgid "Save"
+msgstr "Speichern"
+
+msgid "Show Chips only for Set with IDs"
+msgstr "Chips nur für Sets mit IDs anzeigen"
+
+msgid "Show Range List"
+msgstr "Bereichsliste anzeigen"
+
+msgid "Show"
+msgstr "Anzeigen"
+
+msgid "Sorting Options"
+msgstr "Sortieroptionen"
+
+msgid "Sorting option"
+msgstr "Sortieroption"
+
+msgid "There are no filter sets on this page."
+msgstr "Auf dieser Seite gibt es keine Filter Sets."
+
+msgid "There is no filter widget on this page."
+msgstr "Auf dieser Seite gibt es kein Filter-Widget."
+
+msgid "v%s"
+msgstr "v%s"
+
+msgctxt "benefits-landing"
+msgid "Risk-free purchase, premium support and regular updates"
+msgstr "Risikofreier Kauf, Premium Support und regelmässige Updates"
+
+msgctxt "benefits-landing"
+msgid "Risk-free purchase"
+msgstr "Risikofreier Kauf"
+
+msgctxt "benefits-landing"
+msgid "Premium support"
+msgstr "Premium Support"
+
+msgctxt "benefits-landing"
+msgid "Regular updates"
+msgstr "Regelmässige Updates"
+
+msgctxt "benefits-landing"
+msgid "Yes, of course — support is included with the PRO version. Your purchase comes with 1 year of premium support and plugin updates, with the option to renew. Even if you choose not to renew after a year, you can keep using the plugin — you just won't receive updates anymore."
+msgstr "Ja, natürlich — Support ist in der PRO-Version enthalten. Mit dem Kauf erhalten Sie 1 Jahr Premium-Support und Plugin-Updates mit der Möglichkeit zur Verlängerung. Auch wenn Sie nach einem Jahr nicht verlängern möchten, können Sie das Plugin weiterhin nutzen — Sie erhalten dann nur keine Updates mehr."
+
+
+msgid "Filter combinations produce thousands of URLs, and crawlers may waste your crawl budget and server resources trying to follow them all. This option renders filter links as &lt;span&gt; tags — they keep working for visitors, but crawlers no longer see them as links.<br /><br />Links to pages that your SEO Rules define as indexed always keep the real &lt;a&gt; tag, so search engines can still discover and rank those pages.<br /><br />You can also block unwanted pages and specific bots in the robots.txt file."
+msgstr "Filterkombinationen erzeugen Tausende von URLs, und Crawler können Ihr Crawl-Budget und Ihre Serverressourcen verschwenden, wenn sie ihnen allen folgen. Diese Option gibt Filter-Links als &lt;span&gt;-Tags aus — für Besucher funktionieren sie weiterhin, aber Crawler sehen sie nicht mehr als Links.<br /><br />Links zu Seiten, die Ihre SEO Regeln als indexiert definieren, behalten immer den echten &lt;a&gt;-Tag, damit Suchmaschinen diese Seiten weiterhin finden und ranken können.<br /><br />Sie können unerwünschte Seiten und einzelne Bots auch in der robots.txt-Datei blockieren."

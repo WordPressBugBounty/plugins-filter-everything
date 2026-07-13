@@ -832,6 +832,18 @@ class EntityManager
                 $set_filter_query->set( 'post_status', 'publish' );
                 $set_filter_query->set( 'flrt_query_clone', true );
 
+                // The saved query vars may lack an explicit post_type (e.g. Avada's
+                // fusion_blog element applies it at runtime, not in the stored vars). Without
+                // it, a taxonomy-based clone can fall back to post_type 'any' and pull in
+                // other post types (e.g. Pages that share the filtered taxonomy), inflating
+                // term counters above what the front-end query — restricted to the set's post
+                // type — actually shows. Constrain the count universe to the set's own post
+                // type so the counters match the displayed results.
+                if ( ! $set_filter_query->get( 'post_type' ) ) {
+                    $set_post_type = get_post_field( 'post_excerpt', $setId );
+                    $set_filter_query->set( 'post_type', $set_post_type ? $set_post_type : 'post' );
+                }
+
                 do_action( 'wpc_all_set_wp_queried_posts' , $set_filter_query, $setId );
 
                 $ids = $set_filter_query->get_posts();
@@ -857,8 +869,10 @@ class EntityManager
     // This method must be executed before output
     public function prepareEntitiesToDisplay( $sets )
     {
+        global $flrt_json_data;
         $container  = Container::instance();
         $wpManager  = $container->getWpManager();
+        $fse   = Container::instance()->getFilterService();
         $subkey     = '';
 
         $post_type      = $sets[0]['filtered_post_type'];
@@ -876,6 +890,7 @@ class EntityManager
         }
 
         $subkey = implode( '_', $queryRelatedSets );
+        $jsonQueryRelatedSets = $subkey;
         $key    = 'wpc_entities_prepared_' . $subkey;
 
         if( ! $container->getParam( $key ) ) {
@@ -911,10 +926,36 @@ class EntityManager
                         $entity->setPostTypes( array( $post_type ) );
                     }
 
-                    $entity->populateTermsWithPostIds( $filter['parent'], $post_type );
+                    // Emulated filters (e.g. the Stock status emulation) carry
+                    // parent = "-1", which resolves to an empty set universe in
+                    // populateTermsWithPostIds(). Use the current page set then.
+                    $populate_set_id = ( (int) $filter['parent'] > 0 ) ? $filter['parent'] : $setId;
 
+                    $entity->populateTermsWithPostIds( $populate_set_id, $post_type );
+                    // $entity->filter exists solely for the frontend JSON. With the
+                    // range list switched off the saved rows must not ship: the term
+                    // items carry no per-bucket counters then (calculateRangeCounts
+                    // is gated on show_range_list), and the JS recount enters its
+                    // range branch on the mere presence of the rows and crashes.
+                    // '' matches getEmptyFilter(); the DB and admin UI keep the rows.
+                    if ( ! isset( $filter['show_range_list'] ) || $filter['show_range_list'] !== 'yes' ) {
+                        $filter['range_list_input'] = '';
+                    }
+                    $entity->filter = $filter;
                     $allEntities[$entity->getName()] = $entity;
                 }
+            }
+
+
+            foreach ($allEntities as $entity_key => $entity){
+                $sort_array = [];
+                foreach ($entity->items as $item){
+                    $sort_array[] = $item->slug;
+                }
+
+                $entity->items_sort = array_values($fse->sortTerms($sort_array));
+
+                $allEntities[$entity_key] = $entity;
             }
 
             // Post IDs with variations instead of parent products
@@ -925,11 +966,27 @@ class EntityManager
              * Allows to modify filtered post ids
              */
             $filteredAllPostsIds = apply_filters( 'wpc_filtered_all_posts_before_terms_count', $filteredAllPostsIds, $allEntities );
+            $totalCount = array_sum(array_map('count', $filteredAllPostsIds));
+
+            foreach ( $queryRelatedSets as $set_id ) {
+                $flrt_json_data[$set_id]['relatedSets'] = $jsonQueryRelatedSets;
+                $flrt_json_data[$set_id]['filteredAllPostsIds'] = $filteredAllPostsIds;
+                $flrt_json_data[$set_id]['totalFilteredCount'] = $totalCount;
+            }
+
+
+
 
             /**
              * Allows to modify all post ids
              */
+            $flrt_json_data[$set_id]['totalAllPostsIds'] = count($allPostsIds);
             $allPostsIds         = apply_filters( 'wpc_from_products_to_variations', $allPostsIds );
+            foreach ( $queryRelatedSets as $set_id ) {
+                $flrt_json_data[$set_id]['allPostsIds'] = $allPostsIds;
+            }
+
+
 
             foreach ( $allEntities as $entityName => $entity ) {
                 if ( $entityName === '_stock_status' && ! $filter_by_stock_exists && $post_type === 'product' ) {
@@ -941,7 +998,9 @@ class EntityManager
                     $entity->items[$index]->count = count( $entity->items[$index]->posts );
                 }
 
-                if ( $entity instanceof PostMetaNumEntity || $entity instanceof TaxonomyNumEntity || $entity instanceof PostDateEntity || $entity instanceof PostMetaDateEntity ) {
+                $isRangeEntity = ( $entity instanceof PostMetaNumEntity || $entity instanceof TaxonomyNumEntity || $entity instanceof PostDateEntity || $entity instanceof PostMetaDateEntity );
+
+                if ( $isRangeEntity ) {
                     $postsIn = apply_filters( 'wpc_min_and_max_values_numeric_filters', $this->getAlreadyFilteredPostIds( $setId, $entity ), $entity );
                     $entity->updateMinAndMaxValues( $postsIn );
                 }
@@ -961,7 +1020,10 @@ class EntityManager
                     $filter['orderby'] = 'default';
                 }
 
-                if( $filter['orderby'] === 'default' ) {
+                if ( $isRangeEntity ) {
+                    // Range entities are keyed 'min'/'max' ('from'/'to') — usort() would
+                    // reindex the keys and break items['min'] lookups in the recount JS
+                } elseif( $filter['orderby'] === 'default' ) {
                     $entity->items = apply_filters( 'wpc_default_sorting_terms', $entity->items, $filter );
                 } else {
                     $entity->items = $this->sortTerms( $entity->items, $filter['orderby'] );
@@ -972,11 +1034,27 @@ class EntityManager
                  */
                 $used_for_variations = isset( $filter['used_for_variations'] ) ? $filter['used_for_variations'] : false;
                 $entity->items = apply_filters( 'wpc_items_before_calc_term_count', $entity->items, $entity, $used_for_variations );
-
                 foreach ( $entity->items as $index => $term ) {
-                    $entity->items[$index]->cross_count = $this->calcTermCount( array_flip($term->posts), $filteredAllPostsIds, $allPostsIds, $filter );
+                    $termPostsFlipped = array_flip( $term->posts );
+
+                    $isShowRangeList = ! empty( $filter['show_range_list'] ) && $filter['show_range_list'] === 'yes';
+                    $isMinOrMax      = $index === 'min' || $index === 'max';
+                    $hasRangeInput   = ! empty( $filter['range_list_input'] );
+
+                    $shouldProcessRanges = $isShowRangeList && $isMinOrMax && $hasRangeInput;
+
+                    if ( $shouldProcessRanges ) {
+                        $this->calculateRangeCounts( $entity->items[ $index ], $filter, $termPostsFlipped, $filteredAllPostsIds, $allPostsIds );
+                    }
+
+                    $entity->items[ $index ]->cross_count = $this->calcTermCount( $termPostsFlipped, $filteredAllPostsIds, $allPostsIds, $filter );
                 }
             }
+
+            foreach ( $queryRelatedSets as $set_id ) {
+                $flrt_json_data[$set_id]['allEntities'] = $allEntities;
+            }
+
 
             $container->storeParam( $key, true );
         }
@@ -1050,7 +1128,9 @@ class EntityManager
         };
     }
 
-    public function calcTermCount( $termPostsIds, $filteredPostsIds, $allPostsIds, $filter )
+
+
+    public function calcTermCount( $termPostsIds, $filteredPostsIds, $allPostsIds, $filter)
     {
         if( empty( $termPostsIds ) ){
             return 0;
@@ -1068,7 +1148,7 @@ class EntityManager
 
             $filteredPostsIds[$e_name] += $termPostsIds;
 
-        // Intersection for logic AND between filter terms
+            // Intersection for logic AND between filter terms
         } elseif ( $logic === 'and' ) {
             if( ! empty( $filteredPostsIds[$e_name] ) ){
                 $filteredPostsIds[$e_name] = array_intersect_key( $allPostsIds, $filteredPostsIds[$e_name], $termPostsIds );
@@ -1081,6 +1161,62 @@ class EntityManager
         $finalInterSection = apply_filters( 'wpc_from_variations_to_products', array_flip( array_intersect_key( $betweenFiltersIntersect, $termPostsIds ) ) );
 
         return count( $finalInterSection );
+    }
+
+    public function prepareForCalcTermCount($termPostsIds, $filteredPostsIds, $allPostsIds, $filter)
+    {
+        if( empty( $termPostsIds ) ){
+            return 0;
+        }
+
+        $e_name = $filter['e_name'];
+
+        if( ! isset( $filteredPostsIds[$e_name] ) ){
+            $filteredPostsIds[$e_name] = [];
+        }
+        $filteredPostsIds[$e_name] = $allPostsIds;
+        $termPostsIds = $allPostsIds;
+
+
+        $betweenFiltersIntersect = $this->getBetweenFiltersIntersect( $filteredPostsIds, $allPostsIds );
+        $finalInterSection = apply_filters( 'wpc_from_variations_to_products', array_flip( array_intersect_key( $betweenFiltersIntersect, $termPostsIds ) ) );
+
+        return  $finalInterSection;
+    }
+
+    private function calculateRangeCounts( $termItem, $filter, $termPostsFlipped, $filteredAllPostsIds, $allPostsIds ){
+        foreach ( $filter['range_list_input'] as $rangeKey => $rangeList ) {
+            $rangePostsIds = $this->prepareForCalcTermCount( $termPostsFlipped, $filteredAllPostsIds, $allPostsIds, $filter );
+
+            $minRange = (is_float($rangeList['range_list_min_val']) ) ? $rangeList['range_list_min_val']: (float) $rangeList['range_list_min_val'];
+            $maxRange = (is_float($rangeList['range_list_max_val']) ) ? $rangeList['range_list_max_val']: (float) $rangeList['range_list_max_val'];
+
+            $validPostsCount = [];
+
+            if(!empty($rangePostsIds) && is_array($rangePostsIds)){
+                foreach ( $rangePostsIds as $postId ) {
+                    if ( ! isset( $termItem->meta_values[ $postId ] ) ) {
+                        continue;
+                    }
+
+                    $values = $termItem->meta_values[ $postId ];
+
+                    if(is_array($values)){
+                        foreach ($values as $val) {
+                            if ( $val < $minRange ) {
+                                continue;
+                            }
+                            if ( $val > $maxRange && $maxRange != 0) {
+                                continue;
+                            }
+                            $validPostsCount[] = $postId;
+                        }
+                    }
+                }
+            }
+            $validPostsCount = apply_filters( 'wpc_from_variations_to_products', $validPostsCount );
+            $termItem->range_list_input[ $rangeKey ] = count($validPostsCount);
+        }
     }
 
     public function getBetweenFiltersIntersect( $filteredPostsIds, $allPostsIds )
@@ -1247,15 +1383,15 @@ class EntityManager
         $allSetPostsIds = $this->getAllSetWpQueriedPostIds( $setId );
         $queriedFilters = $wpManager->getQueryVar('queried_values');
 
+        if ( ! $wpManager->getQueryVar('wpc_is_filter_request') ) {
+            return [];
+        }
+
         if( $allSetPostsIds ){
             $allSetPostsIds = array_flip( $allSetPostsIds );
         }
 
         $allSetPostsIds = apply_filters( 'wpc_from_products_to_variations', $allSetPostsIds );
-
-        if ( ! $wpManager->getQueryVar('wpc_is_filter_request') ) {
-            return [];
-        }
 
         $queriedAllPosts = [];
 

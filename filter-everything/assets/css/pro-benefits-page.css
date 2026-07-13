@@ -1,5 +1,5 @@
 /*!
- * Filter Everything 1.9.2.2
+ * Filter Everything 1.9.3
  */
 .wpc-pro-bnf-page-wrap,
 .wpc-pro-bnf-page-wrap * {
@@ -398,7 +398,7 @@
 }
 
 .wpc-pro-bnf-sect-2-title {
-    margin-top: 146px;
+    margin-top: 106px;
     margin-bottom: 30px;
     text-align: center;
     font-size: 36px;
@@ -1040,6 +1040,44 @@
 	padding-left: 0;
 }
 
+.fetm-new-badge {
+    background: #3858E9;
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 14px;
+    /* right margin keeps a minimum gap to the help tip when its
+       margin-left:auto collapses to zero in narrow/wrapped locales */
+    margin: 0 10px 0 6px;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.5;
+    display: inline-block;
+    /* baseline keeps the badge on the FIRST line when the label wraps */
+    align-self: baseline;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.fetm-help-tip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    border: 1px solid #929292;
+    border-radius: 50%;
+    color: #929292;
+    background: transparent;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    margin-left: auto;
+    /* baseline keeps the icon on the FIRST line when the label wraps */
+    align-self: baseline;
+    cursor: help;
+}
+
 .fetm-features-grid .fetm-grid-header .fetm-feature {
     font-size: 24px;
     font-weight: 600;
@@ -1668,7 +1706,7 @@
 .wpc-pro-bnf-sect-rvw-more {
     position: relative;
     overflow: hidden;
-    max-height: 95px;
+    max-height: 145px;
     margin-top: 24px;
     transition: max-height 0.45s ease;
 }
@@ -1682,7 +1720,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    height: 95px;
+    height: 145px;
     background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 1));
     pointer-events: none;
     transition: opacity 0.3s ease;
