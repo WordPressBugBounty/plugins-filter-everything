@@ -1,5 +1,5 @@
 /*!
- * Filter Everything 1.9.3
+ * Filter Everything 1.9.4
  */
 .widget_wpc_filters_widget *{
     box-sizing: border-box;
@@ -393,6 +393,10 @@ body .wpc-filters-main-wrap li.wpc-term-count-0:not(.wpc-has-not-empty-children)
 .wpc-filters-main-wrap .wpc-filter-product_visibility li.wpc-term-item label {
     display: flex;
     align-items: center;
+}
+/* Term count nested spans must stay inline despite the block rule for label spans above */
+.wpc-filter-product_visibility .wpc-term-item label .wpc-term-count span {
+    display: inline;
 }
 .widget-area .widget .wpc-filter-chips-list a:focus,
 .widget-area .widget .wpc-filter-chips-list span[data-wpc-span-link]:focus,

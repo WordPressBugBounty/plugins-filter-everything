@@ -1040,14 +1040,21 @@ if ( flrt_is_divi_theme() ) {
 
 function flrt_divi_filter_button()
 {
-    add_filter('et_module_process_display_conditions', 'modify_specific_module', 10, 3);
-    function modify_specific_module($output, $render_slug, $module)
-    {
-        if ($module->slug === 'filter_everything') {
-            flrt_filters_button(0, '', 'et_before_main_content');
-        }
-        return $output;
+    // et_before_main_content fires more than once per page when a Divi Theme
+    // Builder header layout is present (both header.php and
+    // theme-after-header.php do_action it), so nothing here may declare a
+    // function at runtime — the previous nested declaration fataled with
+    // "Cannot redeclare modify_specific_module" on the second call.
+    // Re-adding the same filter callback is a no-op in WordPress.
+    add_filter('et_module_process_display_conditions', 'flrt_divi_modify_specific_module', 10, 3);
+}
+
+function flrt_divi_modify_specific_module($output, $render_slug, $module)
+{
+    if ($module->slug === 'filter_everything') {
+        flrt_filters_button(0, '', 'et_before_main_content');
     }
+    return $output;
 }
 /**
  * Checks if the Breakdance plugin and its required classes/functions are active and exist.

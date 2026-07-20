@@ -1,5 +1,5 @@
 /*!
- * Filter Everything common admin 1.9.3
+ * Filter Everything common admin 1.9.4
  */
 (function($) {
     "use strict";
@@ -457,12 +457,51 @@
 
     function closeProVersionPopup(){
         $('#flrt-pro-modal-overlay').css('display', 'none');
-        
+
     }
 
     window.wpcGetProVersionPopup = function () {
         $('#flrt-pro-modal-overlay').css('display', 'flex');
     };
+
+    // --- Review request popup (free build) ---
+    // The server already auto-snoozed on render, so hiding is always safe;
+    // the AJAX call just records the explicit choice (later/never/rated).
+    function flrtReviewPopupClose(mode){
+        var $overlay = $('#flrt-review-popup-overlay');
+
+        if (!$overlay.length) {
+            return;
+        }
+
+        $overlay.remove();
+
+        $.post(ajaxurl, {
+            action: 'flrt_review_popup',
+            nonce: $overlay.data('nonce'),
+            mode: mode
+        });
+    }
+
+    $(document).on('click', '.flrt-review-popup-close-btn, .flrt-review-popup-later', function (){
+        flrtReviewPopupClose('later');
+    });
+
+    $(document).on('click', '#flrt-review-popup-overlay', function (e) {
+        if (e.target === this) {
+            flrtReviewPopupClose('later');
+        }
+    });
+
+    $(document).on('click', '.flrt-review-popup-never', function (){
+        flrtReviewPopupClose('never');
+    });
+
+    // Clicking through to the review (stars or the button) counts as done —
+    // never ask again. The links open in a new tab on their own.
+    $(document).on('click', '.flrt-review-popup-star, .flrt-review-popup-rate-btn', function (){
+        flrtReviewPopupClose('rated');
+    });
 
     $(document).on('click', '.wpc-create-auto-filter', function (e) {
         if(!$(this).hasClass('disabled')){

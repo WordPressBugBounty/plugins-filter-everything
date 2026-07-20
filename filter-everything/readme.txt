@@ -1,9 +1,9 @@
 === Filter Everything&nbsp;— WordPress & WooCommerce Filters ===
 Contributors: stepasyuk
 Tags: woocommerce product filter, woocommerce filter, product filter, post filter, ajax filter
-Stable tag: 1.9.3
+Stable tag: 1.9.4
 Requires at least: 4.6
-Tested up to: 7.0.1
+Tested up to: 7.0.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -11,17 +11,17 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Instantly filter any WordPress content & WooCommerce products by attributes, taxonomies, custom fields + AJAX, Elementor, automatic filter creation.
 
 == Description ==
-Filter Everything is a versatile filtering plugin that works with any content — WooCommerce products, posts, listings, events, and more — and includes all the tools you need to build a high-quality filtering system.
+_**Improve your site's navigation and drive more conversions with Filter Everything.**_
 
-_**Use Filter Everything to improve your site's navigation and drive more conversions.**_
+Filter Everything is a versatile filtering plugin that works with any content type — WooCommerce products, posts, listings, events, and more. It covers filtering completely — every filter type, every layout, and every option you may need, all in one plugin.
 
-A video walkthrough of the plugin by [WPTuts](https://www.youtube.com/watch?v=g1_qlJvNdsg).
+Watch a video walkthrough by [WPTuts](https://www.youtube.com/watch?v=g1_qlJvNdsg):
 
 https://www.youtube.com/watch?v=g1_qlJvNdsg
 
 ## Filter everything and everywhere
 Use it to filter WooCommerce products, posts, listings, events, and many more — on any page of your site and any device, whether desktop, tablet, or mobile.
-## See how it works
+## See how it works ↗
 -   See how it filters [WooCommerce products](https://demo.filtereverything.pro/product-category/clothing/women/color-red/brand-hm/c-kind-dress/?max_price=100&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [posts](https://demo.filtereverything.pro/posts/category-health/?max_views=8000&date_from=2018-01-01t15.29.13&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) & any content
 -   See its [SEO Capabilities](https://demo.filtereverything.pro/product-category/electronics/smartphones/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) (PRO version)
 -   See it work together with [Elementor](https://demo.filtereverything.pro/elementor/category-health/image-yes/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [ACF](https://demo.filtereverything.pro/example/acf/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) & [WPML](https://wpml.filtereverything.pro/es/filtros-en-espanol/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org)
@@ -53,7 +53,7 @@ Built-in Filters, Chips, and Sorting widgets for Gutenberg, [Elementor](https://
 Use [checkboxes](https://demo.filtereverything.pro/example/checkboxes/color-blue/brand-issa-plus/size-m/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [radio buttons](https://demo.filtereverything.pro/example/radio-buttons/color-red/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [dropdowns](https://demo.filtereverything.pro/example/dropdowns/color-red/brand-issa-plus/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [labels](https://demo.filtereverything.pro/example/labels/color-green/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [color swatches](https://demo.filtereverything.pro/product-category/clothing/women/color-white/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [rating stars](https://demo.filtereverything.pro/example/by-rating/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), [numeric ranges](https://demo.filtereverything.pro/example/range-sliders/?min_price=90&max_price=800&max_quantity=110&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), or [date ranges](https://demo.filtereverything.pro/posts/?date_from=2018-01-01t15.29.13&date_to=2018-04-01t07.04.11&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), and display filters as [horizontal toolbars](https://demo.filtereverything.pro/5-columns/color-blue/brand-hm/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) or [vertical panels](https://demo.filtereverything.pro/search-and-filter/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org).
 -   **Flexible filtering modes**
 [Step-by-step](https://demo.filtereverything.pro/step-by-step-filtering/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) filtering, [auto-submission](https://demo.filtereverything.pro/product-category/electronics/laptops/brand-dell/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org), or selecting multiple filters and [applying them](https://demo.filtereverything.pro/apply-button/?utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) manually.
--   [Sorting](https://demo.filtereverything.pro/example/by-price/?min_price=75&max_price=250&ordr=price&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) and [keyword search](https://demo.filtereverything.pro/search-and-filter/brand-hm/?srch=coat&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org)**
+-   **[Sorting](https://demo.filtereverything.pro/example/by-price/?min_price=75&max_price=250&ordr=price&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org) and [keyword search](https://demo.filtereverything.pro/search-and-filter/brand-hm/?srch=coat&utm_source=wprepo&utm_medium=referral&utm_campaign=wordpress_org)**
 Allow visitors to sort and search within filtered results.
 -   **Developer-friendly and extensible**
 Customize and extend plugin behavior using WordPress actions and filters.
@@ -113,6 +113,10 @@ Uploading via FTP
 
 == Changelog ==
 
+= 1.9.4 =
+*Release Date - 20 July 2026*
+* Fix   - Fixed a fatal error ("Cannot redeclare modify_specific_module()") that broke the site front end right after plugin activation on Divi websites that use a Theme Builder header layout
+
 = 1.9.3 =
 *Release Date - 14 July 2026*
 * Dev   - NEW: Added native Filters, Chips and Sorting widgets for Beaver Builder, Bricks, Breakdance, Divi and the block editor (Gutenberg)
@@ -120,6 +124,7 @@ Uploading via FTP
 * Dev   - The minimum required PHP version is now 7.4
 * Tweak - Filter Sets with a very large number of filters (100+) can now be saved reliably: the editing form submits only the fields that were actually changed, so the request no longer hits the server's post_max_size limit
 * Fix   - Buttons inside the filtering area keep working after an AJAX results update (previously they could lose their click handlers when the content was refreshed)
+* Fix   - Fixed a fatal error "Call to a member function setExcludedTerms() on false" that could break pages with filters when a filter referenced a parent filter that no longer exists in the Filter Set or does not apply to its post type
 
 = 1.9.2.2 =
 *Release Date - 15 June 2026*
@@ -288,18 +293,11 @@ Uploading via FTP
 * Fix   - Fixed location for the Apply button, when Filter Set is directed to All archive pages/Any taxonomy,post,author
 * Fix   - Fixed posts search count for the search by SKU
 
-= 1.7.10 =
-*Release Date - 26 May 2023*
-* Fix   - Fixed missing styles on Color swatches and logos edit pages in dashboard
 
 [See changelog for all versions](https://demo.filtereverything.pro/changelog.txt).
 
 == Upgrade Notice ==
 
-= 1.9.3 =
-*Release Date - 14 July 2026*
-* Dev   - NEW: Added native Filters, Chips and Sorting widgets for Beaver Builder, Bricks, Breakdance, Divi and the block editor (Gutenberg)
-* Dev   - NEW: Added the Results container option with a visual picker: choose exactly which part of the page AJAX refreshes — enter a CSS selector manually or click «Select visually» and simply click the posts area right on your site
-* Dev   - The minimum required PHP version is now 7.4
-* Tweak - Filter Sets with a very large number of filters (100+) can now be saved reliably: the editing form submits only the fields that were actually changed, so the request no longer hits the server's post_max_size limit
-* Fix   - Buttons inside the filtering area keep working after an AJAX results update (previously they could lose their click handlers when the content was refreshed)
+= 1.9.4 =
+*Release Date - 20 July 2026*
+* Fix   - Fixed a fatal error ("Cannot redeclare modify_specific_module()") that broke the site front end right after plugin activation on Divi websites that use a Theme Builder header layout

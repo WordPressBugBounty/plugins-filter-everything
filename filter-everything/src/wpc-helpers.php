@@ -1677,6 +1677,13 @@ function flrt_get_filter_terms($filter, $posType, $em = false)
     }
 
     $entityObj = $em->getEntityByFilter($filter, $posType);
+
+    // The filter may lack entity/e_name (e.g. a parent_filter reference
+    // to a filter that is absent from the rendered set)
+    if (!$entityObj) {
+        return [];
+    }
+
     // Exclude or include terms
     $isInclude = (isset($filter['include']) && $filter['include'] === 'yes');
     $entityObj->setExcludedTerms($filter['exclude'], $isInclude);

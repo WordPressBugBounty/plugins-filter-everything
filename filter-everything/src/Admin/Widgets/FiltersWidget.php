@@ -289,6 +289,12 @@ class FiltersWidget extends \WP_Widget
                 $terms = flrt_get_filter_terms($filter, $posType, $em);
                 if (!empty($filter['parent_filter']) && $filter['parent_filter'] !== '-1') {
                     $parent_filter_id = (int)$filter['parent_filter'];
+                    // The parent filter can be absent from the rendered set (deleted
+                    // or does not belong to the post type anymore) — do not create
+                    // a stub without entity/e_name for it
+                    if (!isset($filters_and_fields[$parent_filter_id])) {
+                        continue;
+                    }
                     if (!isset($filters_and_fields[$parent_filter_id]['child_values']) || !is_array($filters_and_fields[$parent_filter_id]['child_values'])) {
                         $filters_and_fields[$parent_filter_id]['child_values'] = [];
                     }

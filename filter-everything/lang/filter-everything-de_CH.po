@@ -3918,3 +3918,44 @@ msgstr "Ja, natürlich — Support ist in der PRO-Version enthalten. Mit dem Kau
 
 msgid "Filter combinations produce thousands of URLs, and crawlers may waste your crawl budget and server resources trying to follow them all. This option renders filter links as &lt;span&gt; tags — they keep working for visitors, but crawlers no longer see them as links.<br /><br />Links to pages that your SEO Rules define as indexed always keep the real &lt;a&gt; tag, so search engines can still discover and rank those pages.<br /><br />You can also block unwanted pages and specific bots in the robots.txt file."
 msgstr "Filterkombinationen erzeugen Tausende von URLs, und Crawler können Ihr Crawl-Budget und Ihre Serverressourcen verschwenden, wenn sie ihnen allen folgen. Diese Option gibt Filter-Links als &lt;span&gt;-Tags aus — für Besucher funktionieren sie weiterhin, aber Crawler sehen sie nicht mehr als Links.<br /><br />Links zu Seiten, die Ihre SEO Regeln als indexiert definieren, behalten immer den echten &lt;a&gt;-Tag, damit Suchmaschinen diese Seiten weiterhin finden und ranken können.<br /><br />Sie können unerwünschte Seiten und einzelne Bots auch in der robots.txt-Datei blockieren."
+
+msgid "You've been using Filter Everything for a while now"
+msgstr "Sie nutzen Filter Everything nun schon eine Weile"
+
+msgid "We hope the plugin has made building filters easier for you. If it has, could you take a minute to rate it on WordPress.org?"
+msgstr "Wir hoffen, das Plugin hat Ihnen das Erstellen von Filtern erleichtert. Wenn ja: Hätten Sie eine Minute, um es auf WordPress.org zu bewerten?"
+
+msgid "It takes about a minute — a star rating and a sentence is plenty"
+msgstr "Es dauert nur etwa eine Minute — eine Sternebewertung und ein Satz genügen"
+
+msgid "Reviews help other WordPress users find the plugin"
+msgstr "Bewertungen helfen anderen WordPress-Nutzern, das Plugin zu finden"
+
+msgid "Your feedback shapes what we build next"
+msgstr "Ihr Feedback bestimmt, was wir als Nächstes entwickeln"
+
+#, php-format
+msgid "Something not working right? %1$sContact support%2$s — we'd rather fix it first."
+msgstr "Funktioniert etwas nicht richtig? %1$sSupport kontaktieren%2$s — wir beheben es lieber zuerst."
+
+msgid "Enjoying"
+msgstr "Gefällt Ihnen"
+
+msgid "Filter Everything?"
+msgstr "Filter Everything?"
+
+msgid "Rate us on WordPress.org and help the plugin grow"
+msgstr "Bewerten Sie uns auf WordPress.org und helfen Sie dem Plugin zu wachsen"
+
+#, php-format
+msgid "Trusted by %s active installs"
+msgstr "Im Einsatz bei %s aktiven Installationen"
+
+msgid "Rate Filter Everything"
+msgstr "Filter Everything bewerten"
+
+msgid "Maybe later"
+msgstr "Vielleicht später"
+
+msgid "Don't show this again"
+msgstr "Nicht mehr anzeigen"

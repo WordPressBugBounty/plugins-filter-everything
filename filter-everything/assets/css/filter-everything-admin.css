@@ -1,5 +1,5 @@
 /*!
- * Filter Everything admin 1.9.3
+ * Filter Everything admin 1.9.4
  */
 :root {
     --wpc-pro-color: #3858E9;
@@ -2762,6 +2762,7 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
 .flrt-upgrade-to-pro-popup-price-tag {
     font-size: 34px;
     line-height: 130%;
+    font-weight: 500;
 }
 .flrt-upgrade-to-pro-popup-price-year{
     font-size: 14px;
@@ -2990,4 +2991,302 @@ a.button.wpc-choose-selector{
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* --- Review request popup (free build) --- */
+/* Sized to match the Upgrade-to-PRO popup footprint (max 740px); the
+   original 1060px design is scaled down proportionally. */
+#flrt-review-popup-overlay {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 99999;
+    justify-content: center;
+    align-items: center;
+    padding: 24px 16px;
+    box-sizing: border-box;
+}
+
+.flrt-review-popup-wrapper *,
+.flrt-review-popup-wrapper {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.flrt-review-popup-wrapper {
+    width: 740px;
+    max-width: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.flrt-review-popup-modal {
+    position: relative;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 28px;
+    padding: 36px 32px 28px 32px;
+}
+
+.flrt-review-popup-close-btn {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #9aa0b4;
+    font-size: 20px;
+    line-height: 1;
+    border-radius: 8px;
+}
+
+.flrt-review-popup-close-btn:hover {
+    color: #4a5068;
+    background: #f2f3f8;
+}
+
+.flrt-review-popup-message-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.flrt-review-popup-heading {
+    font-size: 22px;
+    font-weight: 700;
+    color: #16181f;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+}
+
+.flrt-review-popup-subtext {
+    font-size: 14px;
+    color: #4a5068;
+    line-height: 1.55;
+    margin-top: 10px;
+}
+
+.flrt-review-popup-bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.flrt-review-popup-bullet {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.flrt-review-popup-bullet-check {
+    width: 20px;
+    height: 20px;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #3b47e0;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.flrt-review-popup-bullet-text {
+    font-size: 13px;
+    color: #2a2e3b;
+    line-height: 1.5;
+    padding-top: 1px;
+}
+
+.flrt-review-popup-support-line {
+    margin-top: 22px;
+    font-size: 12.5px;
+    color: #6b7186;
+    line-height: 1.5;
+}
+
+.flrt-review-popup-support-line a {
+    color: #3b47e0;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.flrt-review-popup-support-line a:hover {
+    color: #2733b8;
+    text-decoration: underline;
+}
+
+.flrt-review-popup-cta-side {
+    display: flex;
+    flex-direction: column;
+}
+
+.flrt-review-popup-card {
+    background: #e9ebfc;
+    border-radius: 12px;
+    padding: 26px 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.flrt-review-popup-card-title {
+    font-size: 23px;
+    font-weight: 700;
+    color: #16181f;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+
+.flrt-review-popup-stars {
+    display: flex;
+    gap: 5px;
+    margin-top: 14px;
+}
+
+.flrt-review-popup-star {
+    font-size: 25px;
+    line-height: 1;
+    color: #3b47e0;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Hover: stars up to the hovered one go gold, the rest go muted */
+.flrt-review-popup-stars:hover .flrt-review-popup-star {
+    color: #f5a623;
+}
+
+.flrt-review-popup-stars .flrt-review-popup-star:hover ~ .flrt-review-popup-star {
+    color: #c9cde8;
+}
+
+.flrt-review-popup-card-text {
+    font-size: 13.5px;
+    color: #2a2e3b;
+    line-height: 1.5;
+    margin-top: 14px;
+    max-width: 240px;
+}
+
+.flrt-review-popup-social-proof {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 16px;
+    font-size: 12px;
+    color: #4a5068;
+}
+
+.flrt-review-popup-social-proof strong {
+    font-weight: 700;
+    color: #16181f;
+}
+
+.flrt-review-popup-rate-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    background: #3b47e0;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 13px 20px;
+    text-decoration: none;
+}
+
+.flrt-review-popup-rate-btn:hover,
+.flrt-review-popup-rate-btn:focus {
+    background: #2733b8;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.flrt-review-popup-rate-btn-star {
+    font-size: 13px;
+}
+
+.flrt-review-popup-dismiss-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 12px;
+}
+
+.flrt-review-popup-later,
+.flrt-review-popup-never {
+    font-size: 13px;
+    color: #6b7186;
+    cursor: pointer;
+}
+
+.flrt-review-popup-later:hover,
+.flrt-review-popup-never:hover {
+    color: #2a2e3b;
+    text-decoration: underline;
+}
+
+.flrt-review-popup-dismiss-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #c9cde8;
+}
+
+/* Narrow admin / mobile: one column with the CTA (button) side FIRST,
+   compact paddings so the whole popup fits one screen. 782px is the WP
+   admin mobile breakpoint. */
+@media (max-width: 782px) {
+    .flrt-review-popup-wrapper {
+        width: 460px;
+    }
+
+    .flrt-review-popup-modal {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 40px 20px 20px 20px;
+    }
+
+    .flrt-review-popup-cta-side {
+        order: -1;
+    }
+
+    .flrt-review-popup-card {
+        padding: 20px 16px;
+    }
+
+    .flrt-review-popup-heading {
+        font-size: 19px;
+    }
+
+    .flrt-review-popup-card-title {
+        font-size: 20px;
+    }
+
+    .flrt-review-popup-bullets {
+        gap: 8px;
+        margin-top: 14px;
+    }
+
+    .flrt-review-popup-support-line {
+        margin-top: 16px;
+    }
 }
