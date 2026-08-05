@@ -92,7 +92,7 @@ final class DuplicateFilterSet
                     ['post_parent' => $this->new_post_id]
                 ));
                 $post_content = maybe_unserialize($field->post_content);
-                if (isset($post_content['parent_filter']) && !empty($post_content['parent_filter']) && $post_content['parent_filter'] > 0) {
+                if (isset($post_content['parent_filter']) && !empty($post_content['parent_filter']) && (int) $post_content['parent_filter'] > 0) {
                     $parent_filters[$new_field_post_id]['post_name'] = $field->post_name;
                     $parent_filters[$new_field_post_id]['has_parent_filter_post_id'] = $new_field_post_id;
                 }

@@ -20,6 +20,10 @@ $apply_button_page_type = false;
 if(!empty($set['apply_button_page_type']['value']) && $set['apply_button_page_type']['value'] !== 'no_page___no_page'){
     $apply_button_page_type = true;
 }
+// Clean permalink of the Apply button location, WITHOUT the current filter
+// segments. The JS appends the freshly selected segments to this base — using
+// $apply_url for that duplicated the segments already present in the page URL.
+$apply_base_url = isset( $apply_base_url ) ? $apply_base_url : '';
 $term_count_hidden_class = '';
 if(empty($is_filter_request) && !$is_filter_request){
     $term_count_hidden_class .= ' wpc-hidden-term-count';
@@ -30,7 +34,7 @@ if (empty($found_posts)){
 ?>
 <div class="wpc-filters-section wpc-filters-section-<?php echo $set_id; ?> wpc-filter-layout-submit-button <?php echo $horizontal_view ? '' : 'wpc-pc-sticky-buttons'; ?>">
     <div class="wpc-sticky-buttons">
-        <a class="wpc-filters-submit-button" href="<?php echo esc_url( $apply_url ); ?>" data-wpc-apply-url="<?php echo esc_url( $apply_url ); ?>" data-apply-button-page="<?php echo esc_attr( $apply_button_page_type ) ?>">
+        <a class="wpc-filters-submit-button" href="<?php echo esc_url( $apply_url ); ?>" data-wpc-apply-url="<?php echo esc_url( $apply_url ); ?>" data-wpc-apply-base-url="<?php echo esc_url( $apply_base_url ); ?>" data-apply-button-page="<?php echo esc_attr( $apply_button_page_type ) ?>">
             <?php
             $button_text = isset( $set['apply_button_text']['value'] ) ? esc_html( $set['apply_button_text']['value'] ) : esc_html__('Show', 'filter-everything');
             echo $button_text . "<span class='wpc-pc-apply-button " . $term_count_hidden_class . "'>(" . esc_html($found_posts) . ")</span>";

@@ -25,6 +25,7 @@ $args = [
 
 $is_brand = ( in_array( $filter['e_name'], flrt_brand_filter_entities() ) );
 $rating_slugs = flrt_rating_slugs();
+$hide_for_apply_button_mode = flrt_check_apply_buttom_mode($set);
 $is_hide_empty_terms = (isset($set['hide_empty']['value']) && $set['hide_empty']['value'] === 'yes');
 $parent_filter_apply_button_data = flrt_parent_filter_apply_button_data($filter, $view_args);
 $parent_filter_apply_class = flrt_parent_filter_apply_class($filter, $view_args, $terms);
@@ -90,6 +91,16 @@ $isParentFilter = flrtParentFilter($filter);
                                 }
                             }
                         }
+                        $hidden_class_for_apply_button_mode = '';
+                        if($hide_for_apply_button_mode){
+                            $hidden_class_for_apply_button_mode = ($term_object->cross_count <= 0 && $is_hide_empty_terms) ? esc_attr(' wpc-term-count-hidden-0') : '';
+                            if($term_object->cross_count > 0){
+                                $hidden_class_for_apply_button_mode .= esc_attr(' wpc-has-terms');
+                            }
+                            if($checked){
+                                $hidden_class_for_apply_button_mode .= esc_attr(' wpc-term-count-hidden-checked-0');
+                            }
+                        }
                         $more_less_hidden_class = '';
                         if ( $isMoreLess ) {
                             $is_visible   = ! $isParentFilter || ( isset( $term_object->show_with_parent ) && $term_object->show_with_parent === true ) || !isset($term_object->show_with_parent);
@@ -103,7 +114,7 @@ $isParentFilter = flrtParentFilter($filter);
                             }
                         }
                     ?>
-                        <li class="wpc-label-item wpc-term-item<?php echo esc_attr( $active_class ); ?><?php echo esc_attr( $disabled_class ); ?><?php echo esc_attr( $image_class ); ?> wpc-term-count-<?php echo esc_attr( $term_object->cross_count ); ?> wpc-term-id-<?php echo esc_attr( $id ); ?><?php echo esc_attr($show_with_parent_class); ?><?php echo esc_attr( $more_less_hidden_class ); ?>" id="<?php flrt_term_id('term', $filter, $id ); ?>">
+                        <li class="wpc-label-item wpc-term-item<?php echo esc_attr( $active_class ); ?><?php echo esc_attr( $disabled_class ); ?><?php echo esc_attr( $image_class ); ?> wpc-term-count-<?php echo esc_attr( $term_object->cross_count ); ?> wpc-term-id-<?php echo esc_attr( $id ); ?><?php echo $hidden_class_for_apply_button_mode; ?><?php echo esc_attr($show_with_parent_class); ?><?php echo esc_attr( $more_less_hidden_class ); ?>" id="<?php flrt_term_id('term', $filter, $id ); ?>">
                             <div class="wpc-term-item-content-wrapper">
                                 <input class="wpc-label-input" <?php checked( 1, $checked ); disabled( 1, $disabled ); ?> type="checkbox" data-wpc-link="<?php echo esc_url( $link ); ?>" id="<?php flrt_term_id('checkbox', $filter, $id); ?>" data-wpc-e-name="<?php echo esc_attr($filter['e_name']); ?>" data-wpc-slug="<?php echo esc_attr($term_object->slug); ?>" data-term-id="<?php echo esc_attr($id); ?>"<?php echo $rating_data;?>/><label for="<?php flrt_term_id('checkbox', $filter, $id); ?>"><span class="wpc-filter-label-wrapper<?php echo ($is_rating) ? ' wpc-filter-label-stars-wrapper' : ''; ?>"><?php
                                 /**

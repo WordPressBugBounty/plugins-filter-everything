@@ -1,5 +1,5 @@
 /*!
- * Filter Everything 1.9.4
+ * Filter Everything 1.9.5
  */
 (function ($) {
     "use strict";
@@ -55,7 +55,48 @@
         });
     }
 
-    $(document).on('click', '.wpc-filter-content input[type="radio"], .wpc-filter-content input[type="checkbox"]', function (e) {
+    // When a PARENT filter selection changes, its children (and grandchildren)
+    // keep whatever the visitor picked earlier — e.g. Brand switched from BMW
+    // to Audi still kept Model = "5 Series", so the next Apply landed on a
+    // zero-result page. Step-by-step configurators reset the chain instead:
+    // clear every descendant selection; the recount that follows the parent
+    // change re-renders placeholders and counters from the fresh DOM state.
+    // Term selections only — a numeric range child keeps its min/max inputs.
+    function wpcResetChildFilters( parentFid, $widget, visited ) {
+        if ( ! parentFid ) return;
+        visited = visited || {};
+        if ( visited[parentFid] ) return; // parent chains are acyclic, but stay safe
+        visited[parentFid] = true;
+
+        $('.wpc-filters-section[data-parent-filter-id="' + parentFid + '"]', $widget).each(function () {
+            const $childSection = $(this);
+
+            $childSection.find('select.wpc-filters-widget-select').each(function () {
+                const $select  = $(this);
+                const $default = $select.find('option.wpc-dropdown-default');
+                const defVal   = $default.length ? $default.val() : '';
+                if ( $select.val() !== defVal ) {
+                    // change.select2 refreshes the rendered selection without
+                    // re-entering the filter change handlers
+                    $select.val( defVal ).trigger('change.select2');
+                }
+            });
+
+            // Radios/checkboxes (incl. labels view): the recount collector reads
+            // :checked and, for radios, the data-wpc-was-checked attribute
+            $childSection.find('input:checked').not('.wpc-range-list-item').each(function () {
+                $(this).prop('checked', false).attr('data-wpc-was-checked', false).data('wpc-was-checked', false);
+            });
+
+            // Grandchildren may carry a selection too (e.g. arrived via URL)
+            wpcResetChildFilters( $childSection.data('fid'), $widget, visited );
+        });
+    }
+
+    // Named so the label-tap fallback below can invoke the same logic when
+    // the forwarded input click never arrives (iOS Safari, see below)
+    function wpcTermInputClickHandler(e) {
+        this.__wpcClickHandled = Date.now();
         let wpcLink = $(this).data('wpc-link');
         let $el     = $(this).parents(wpcWidgetContainer);
         let setId   = $el.data('set');
@@ -185,6 +226,11 @@
                     $.fn.wpcInitSlider( form );
                 }
             }
+            // Single-choice parents cascade-reset their child filters; checkbox
+            // parents are multi-select, where narrowing is cumulative — keep them
+            if ( $(this).is('input[type="radio"]') && !$(this).hasClass('flrt-star-input') ) {
+                wpcResetChildFilters( $(this).closest('.wpc-filters-section').data('fid'), $el );
+            }
             wpcApplyEngine.applyJsMode($el, setId)
         }else if(wpcAjax){
             e.preventDefault();
@@ -192,6 +238,29 @@
         }else{
             location.href = wpcLink;
         }
+    }
+    $(document).on('click', '.wpc-filter-content input[type="radio"], .wpc-filter-content input[type="checkbox"]', wpcTermInputClickHandler);
+
+    // iOS Safari never dispatches the forwarded click on a display:none
+    // input (the custom-checkbox pattern the labels view uses), so a label
+    // tap toggles the checkbox natively but the delegated input handler
+    // above is never called — the term looks selected, yet no recount runs
+    // and a second tap is needed. Desktop browsers and Android DO forward
+    // the click. Catch the label click itself and, once the native dispatch
+    // has settled, run the same handler manually unless the input click
+    // already arrived.
+    $(document).on('click', '.wpc-filter-content li.wpc-term-item label', function (e) {
+        if ($(e.target).closest('a').length) return;          // <a> terms have their own handler
+        if ($(this).hasClass('flrt-star-label')) return;      // rating stars have their own handler
+        let input = null;
+        const forId = $(this).attr('for');
+        if (forId) { input = document.getElementById(forId); }
+        if (!input) { input = $(this).closest('.wpc-term-item-content-wrapper').find('input[type="checkbox"], input[type="radio"]')[0]; }
+        if (!input || (input.type !== 'checkbox' && input.type !== 'radio')) return;
+        setTimeout(function () {
+            if (input.__wpcClickHandled && Date.now() - input.__wpcClickHandled < 500) return;
+            wpcTermInputClickHandler.call(input, { preventDefault: function () {} });
+        }, 0);
     });
 
     $(document).on('change', '.wpc-orderby-select', function (){
@@ -230,6 +299,8 @@
             e.preventDefault();
             wpcSendFilterRequest( wpcLink, $el, applyButtonMode );
         }else if( applyButtonMode ){
+            // A dropdown is single-choice: its change cascade-resets child filters
+            wpcResetChildFilters( $(this).closest('.wpc-filters-section').data('fid'), $el );
             wpcApplyEngine.applyJsMode($el, setId)
         }else if(wpcAjax){
             e.preventDefault();
@@ -750,10 +821,13 @@
 
         $(".wpc-filters-list-"+fid+" li").each(function( index, value ) {
             let $li = $(value);
-            let $termName = $(value).find('label a').text().toLowerCase();
-            if($termName === undefined) {
-                let $termName = $(value).find('label span').text().toLowerCase();
-            }
+            // The term name may be rendered as a link, a span (when the
+            // "Disable filter links for crawlers" option turns <a> into
+            // <span>), a colour swatch or a brand logo. Reading the whole
+            // label's text covers every case; 'label a' alone is empty
+            // whenever the links are replaced with spans, which made the
+            // search match nothing and hide every term.
+            let $termName = $(value).find('label').text().toLowerCase();
             if ($termName.indexOf($search) > -1) {
                 $li.addClass('showli');
             } else {
@@ -1867,6 +1941,12 @@
         });
     }
 
+    // The found-posts value must always be bare digits — the button template
+    // supplies the literal parentheses around the span
+    function wpcBareCount( value ) {
+        return String( value === undefined || value === null ? '' : value ).replace( /[()\s]/g, '' );
+    }
+
     function wpcReloadFiltersWidget( $response, widgetClass ){
         // Replace parts
         // let targetWidget = '.'+widgetClass;
@@ -1887,9 +1967,13 @@
                 if( newWidget.length > 0 ){
                     $(widgetClass).find('.wpc-filters-scroll-container').replaceWith( newWidget );
                 }
-                // Replace found posts number
+                // Replace found posts number. The template already wraps this
+                // span in literal parentheses, so the value written INSIDE must
+                // be bare digits — wpcBareCount() strips parens that a stale
+                // cached widget response may still carry, which otherwise
+                // rendered as "Show ((60))".
                 if( newPostsFound.length > 0  ){
-                    $(widgetClass).find('.wpc-filters-found-posts').html( newPostsFound.html() );
+                    $(widgetClass).find('.wpc-filters-found-posts').html( wpcBareCount( newPostsFound.html() ) );
                 }
 
                 if( wpcApplyButtonSets.includes( widgetSet ) ){
@@ -2973,7 +3057,10 @@
                                 $filter.removeClass('wpc-filters-section-0');
                             }
 
-                            if(isMoreLess){
+                            // Same as in updateCountersHtml: trust the rendered
+                            // section class when the (possibly stale) JSON config
+                            // says the filter has no More/Less
+                            if(isMoreLess || $filter.hasClass('wpc-filter-more-less')){
                                 if(wpcHasTerms <= +wpcMoreLessCount){
                                     $filter.addClass('wpc-filter-few-terms');
                                 }else{
@@ -3872,7 +3959,12 @@
                 $section.removeClass('wpc-filters-section-0');
             }
 
-            if (isMoreLess) {
+            // The blob can outlive the filter configuration (its file name now
+            // fingerprints the configs, but an already-written stale file or a
+            // missed invalidation must not blank the whole filter): the
+            // server-rendered section class is per-request truth for More/Less
+            const isMoreLessSection = isMoreLess || $section.hasClass('wpc-filter-more-less');
+            if (isMoreLessSection) {
                 if(!isHideEmpty){
                     wpcHasTerms = $wpcTermsItems.length;
                 }
@@ -4020,13 +4112,20 @@
         let baseUrl    = wpcFilterJsonData.domain;
         const $submitButton = $('.wpc-filters-submit-button');
         const applyUrl = $submitButton.data('wpcApplyUrl');
+        // The location permalink WITHOUT current filter segments. data-wpc-apply-url
+        // carries the selections-applied URL (no-JS fallback + sticky-state compare),
+        // so appending fresh segments to IT duplicated the segments already in the
+        // page URL. Fall back to it only when the attribute is absent — a theme
+        // may still ship an overridden copy of the apply-button template.
+        const applyBaseUrl = $submitButton.data('wpcApplyBaseUrl');
         const applyButtonPage = $submitButton.data('applyButtonPage');
-        if(applyUrl !== undefined && applyButtonPage){
+        const applyBase = (applyBaseUrl !== undefined && applyBaseUrl !== '') ? applyBaseUrl : applyUrl;
+        if(applyBase !== undefined && applyButtonPage){
             // Alternative Location: filter segments are appended to this base
             // via RELATIVE URL resolution below, which drops the last path
             // segment of a base without a trailing slash ("/shop" -> "/") —
             // the PHP-rendered location permalink is not slash-terminated
-            const applyUrlObj = new URL(applyUrl, window.location.href);
+            const applyUrlObj = new URL(applyBase, window.location.href);
             if (!applyUrlObj.pathname.endsWith('/')) {
                 applyUrlObj.pathname += '/';
             }

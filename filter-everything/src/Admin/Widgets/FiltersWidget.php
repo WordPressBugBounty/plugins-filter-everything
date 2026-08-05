@@ -287,7 +287,7 @@ class FiltersWidget extends \WP_Widget
         foreach ($filters_and_fields as $filter_id => $filter) {
             if ($filter_id > 0) {
                 $terms = flrt_get_filter_terms($filter, $posType, $em);
-                if (!empty($filter['parent_filter']) && $filter['parent_filter'] !== '-1') {
+                if (flrtParentFilter($filter)) {
                     $parent_filter_id = (int)$filter['parent_filter'];
                     // The parent filter can be absent from the rendered set (deleted
                     // or does not belong to the post type anymore) — do not create
@@ -320,7 +320,7 @@ class FiltersWidget extends \WP_Widget
                 $terms = flrt_get_filter_terms( $filter, $posType, $em );
 
                 // Collect terms for a parent filter, if exists
-                if ( $filter['parent_filter'] > 0 || ($filter['parent_filter'] > 0 && $use_apply_button)) {
+                if ( flrtParentFilter( $filter ) ) {
                     // Here we have to calculate all related with the parent filter
                     $parent_filter_id = (int)$filter['parent_filter'];
                     if(!$instant_recount){
@@ -637,7 +637,7 @@ class FiltersWidget extends \WP_Widget
 
                 // Show Apply button if configured
                 if ( $use_apply_button && $apply_button_menu_order === $filters_counter) {
-                    $templateManager->includeFrontView('apply-button', array('set' => $set, 'apply_url' => $apply_url, 'reset_url' => $reset_url, 'found_posts' => $found_posts, 'is_filter_request' => flrt_is_filter_request() ));
+                    $templateManager->includeFrontView('apply-button', array('set' => $set, 'apply_url' => $apply_url, 'apply_base_url' => $base_permalink, 'reset_url' => $reset_url, 'found_posts' => $found_posts, 'is_filter_request' => flrt_is_filter_request() ));
                     $apply_button_displayed = true;
                 }
             }
@@ -649,7 +649,7 @@ class FiltersWidget extends \WP_Widget
         }
 
         if ( $use_apply_button && $apply_button_displayed === false ) {
-            $templateManager->includeFrontView('apply-button', array('set' => $set, 'apply_url' => $apply_url, 'reset_url' => $reset_url, 'found_posts' => $found_posts, 'is_filter_request' => flrt_is_filter_request() ));
+            $templateManager->includeFrontView('apply-button', array('set' => $set, 'apply_url' => $apply_url, 'apply_base_url' => $base_permalink, 'reset_url' => $reset_url, 'found_posts' => $found_posts, 'is_filter_request' => flrt_is_filter_request() ));
         }
 
         echo '</div>'."\r\n";
@@ -663,7 +663,7 @@ class FiltersWidget extends \WP_Widget
                 </div>';
 
         if( $use_apply_button ){
-            $templateManager->includeFrontView( 'apply-button', array( 'set' => $set, 'apply_url' => $apply_url, 'reset_url' => $reset_url, 'found_posts' => $found_posts, 'is_filter_request' => flrt_is_filter_request() ) );
+            $templateManager->includeFrontView( 'apply-button', array( 'set' => $set, 'apply_url' => $apply_url, 'apply_base_url' => $base_permalink, 'reset_url' => $reset_url, 'found_posts' => $found_posts, 'is_filter_request' => flrt_is_filter_request() ) );
         }
 
         echo '</div>';

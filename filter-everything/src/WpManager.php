@@ -405,11 +405,28 @@ class WpManager
 
             if ($wp_query->is_post_type_archive()) {
                 $post_type_object = $wp_query->get_queried_object();
-                if (isset($post_type_object->name)) {
-                    $wp_queried_object['post_types'][] = $post_type_object->name;
+                $post_type_name   = '';
+
+                if ( $post_type_object instanceof \WP_Post_Type ) {
+                    $post_type_name = $post_type_object->name;
+                } else {
+                    // Since WooCommerce 11 the queried object on the Shop page is
+                    // the shop page WP_Post, not the "product" post type object —
+                    // fall back to the query var to keep the archive recognized.
+                    $query_post_type = $wp_query->get('post_type');
+                    if ( is_array( $query_post_type ) ) {
+                        $query_post_type = reset( $query_post_type );
+                    }
+                    if ( is_string( $query_post_type ) && $query_post_type !== '' ) {
+                        $post_type_name = $query_post_type;
+                    }
+                }
+
+                if ( $post_type_name ) {
+                    $wp_queried_object['post_types'][] = $post_type_name;
 
                     // Shop page
-                    if( $post_type_object->name === 'product' ){
+                    if( $post_type_name === 'product' ){
                         $wp_queried_object['common'][] = 'shop_page';
                     }
 

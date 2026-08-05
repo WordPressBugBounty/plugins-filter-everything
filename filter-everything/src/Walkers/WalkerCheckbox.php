@@ -336,6 +336,29 @@ class WalkerCheckbox extends \Walker
             }
         }
 
+        /*
+         * Same More/Less marking as in the flat branch above. Only top-level terms
+         * are counted: the reveal CSS (.wpc-filters-ul-list > li.wpc-not-hidden-term)
+         * targets direct children of the list, nested children follow their parent.
+         * Without this, a hierarchical More/Less list renders with all terms hidden
+         * until JS re-marks them.
+         */
+        if ( $args[0]['isMoreLess'] ) {
+            $has_not_empty_children_flipped = array_flip( $this->has_not_empty_children );
+
+            foreach ( $top_level_elements as $e ) {
+                $is_visible  = !$isParentFilter || ( isset( $e->show_with_parent ) && $e->show_with_parent === true ) || !isset( $e->show_with_parent );
+                $has_results = !$args[0]['is_hide_empty_terms'] || $e->cross_count > 0 || isset( $has_not_empty_children_flipped[ $e->term_id ] );
+
+                if ( $is_visible && $has_results ) {
+                    if ( $hidden_terms_count <= $flrt_more_less_count ) {
+                        $e->apply_button_style = true;
+                    }
+                    $hidden_terms_count++;
+                }
+            }
+        }
+
         foreach ( $top_level_elements as $e ) {
             $this->display_element( $e, $children_elements, $max_depth, 0, $args, $output );
         }

@@ -955,7 +955,7 @@ function flrt_filter_class($filter, $default_classes = [], $terms = [], $args = 
     }
 
     if (
-            (!empty($filter['parent_filter']) && $filter['parent_filter'] !== '-1')
+            $isParentFilter
             && (!empty($filter['hide_until_parent']) && $filter['hide_until_parent'] === 'yes')
             && (isset($args['hide_until_parent_class']) && $filter['hide_until_parent_class'] !== true)
     ) {
@@ -2564,7 +2564,7 @@ function flrt_check_apply_buttom_mode($set)
 function flrt_parent_filter_apply_button_data($filter, $args = [])
 {
     $data = '';
-    if($args['use_apply_button'] && $filter['parent_filter'] > 0){
+    if($args['use_apply_button'] && (int) $filter['parent_filter'] > 0){
         $hide_until_parent = 0;
         if($filter['hide_until_parent'] === 'yes'){
             $hide_until_parent = 1;
@@ -2577,7 +2577,8 @@ function flrt_parent_filter_apply_button_data($filter, $args = [])
 function flrt_parent_filter_apply_class($filter, $args = [], $terms = [])
 {
     $css_class = '';
-    if($filter['parent_filter'] < 0){
+    // '-1', the legacy 'no' placeholder and anything non-numeric all mean "no parent"
+    if( (int) $filter['parent_filter'] <= 0 ){
         return $css_class;
     }
 
@@ -2601,15 +2602,15 @@ function flrt_parent_filter_apply_class($filter, $args = [], $terms = [])
     }
 
 
-    if($args['use_apply_button'] && $filter['parent_filter'] > 0 && $is_parent_has_terms === false){
+    if($args['use_apply_button'] && $is_parent_has_terms === false){
         $css_class .= ' ' . esc_attr('wpc-parent-filter-terms-unselected');
     }
 
-    if($args['use_apply_button'] && $filter['parent_filter'] > 0  && $is_parent_has_terms === false && $checked){
+    if($args['use_apply_button'] && $is_parent_has_terms === false && $checked){
         $css_class .= ' ' . esc_attr('wpc-child-selected-no-parent');
     }
 
-    if($args['use_apply_button'] && $filter['parent_filter'] > 0 && $is_parent_has_terms === true){
+    if($args['use_apply_button'] && $is_parent_has_terms === true){
         $css_class .= ' ' . esc_attr('wpc-parent-filter-terms-selected');
     }
 
@@ -2617,7 +2618,7 @@ function flrt_parent_filter_apply_class($filter, $args = [], $terms = [])
         return $css_class;
     }
 
-    if($args['use_apply_button'] && !empty($filter['hide_until_parent']) && $filter['hide_until_parent'] === 'yes' && $filter['parent_filter'] > 0 && $is_parent_has_terms === false){
+    if($args['use_apply_button'] && !empty($filter['hide_until_parent']) && $filter['hide_until_parent'] === 'yes' && $is_parent_has_terms === false){
         $css_class .= ' ' . esc_attr('wpc-hide-terms-until-parent-unselected');
     }
 
@@ -2631,7 +2632,10 @@ function flrtIsMoreLess($filter)
 
 function flrtParentFilter($filter)
 {
-    return (!empty($filter['parent_filter']) && $filter['parent_filter'] !== '-1');
+    // Positive filter ID only. '-1' means no parent, and single-filter sets used
+    // to save the 'no' select placeholder — on PHP 8 the string comparison
+    // 'no' > 0 is true, so a plain numeric check would treat it as a parent
+    return !empty($filter['parent_filter']) && (int) $filter['parent_filter'] > 0;
 }
 
 function flrt_get_filtered_term_url( $term, $filter, $url_manager ) {

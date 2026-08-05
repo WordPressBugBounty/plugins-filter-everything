@@ -739,7 +739,32 @@ function flrt_elementor_load_more_anchor( $widget_content, $module ){
         $data_next_page = $module->get_wp_link_page( $next_page );
         $rewrite = $wp_rewrite->wp_rewrite_rules();
 
-        if ( defined('FLRT_PERMALINKS_ENABLED') && FLRT_PERMALINKS_ENABLED ) {
+        /*
+         * Loop widgets (Loop Grid/Loop Carousel) paginate with a widget-scoped
+         * query arg (?e-page-<widget id>=N) instead of /page/N/, so the
+         * path-based base replacement below never matches. Swap the base for
+         * the filtered URL directly and carry the pagination args over.
+         */
+        $next_page_args = array();
+        $next_url_parts = parse_url( $data_next_page );
+        if ( isset( $next_url_parts['query'] ) ) {
+            parse_str( $next_url_parts['query'], $next_page_args );
+        }
+
+        $e_page_args = array();
+        foreach ( $next_page_args as $arg_key => $arg_value ) {
+            if ( strpos( $arg_key, 'e-page-' ) === 0 ) {
+                $e_page_args[ $arg_key ] = $arg_value;
+            }
+        }
+
+        if ( ! empty( $e_page_args ) ) {
+            // The current request may already contain pagination args (page 2+)
+            $data_next_page = remove_query_arg( array_keys( $e_page_args ), $urlManager->getFormActionOrFullPageUrl( true ) );
+            foreach ( $e_page_args as $arg_key => $arg_value ) {
+                $data_next_page = flrt_add_query_arg( $arg_key, $arg_value, $data_next_page );
+            }
+        } else if ( defined('FLRT_PERMALINKS_ENABLED') && FLRT_PERMALINKS_ENABLED ) {
             // This is ok when permalinks are enabled.
             $data_next_page = str_replace( $urlManager->removePaginationBase( $data_next_page ), $urlManager->getFormActionOrFullPageUrl(), $data_next_page );
             $uri_components = explode( "?", $urlManager->getFormActionOrFullPageUrl( true ) );

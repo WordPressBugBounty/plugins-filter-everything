@@ -1,7 +1,7 @@
 === Filter Everything&nbsp;— WordPress & WooCommerce Filters ===
 Contributors: stepasyuk
 Tags: woocommerce product filter, woocommerce filter, product filter, post filter, ajax filter
-Stable tag: 1.9.4
+Stable tag: 1.9.5
 Requires at least: 4.6
 Tested up to: 7.0.2
 Requires PHP: 7.4
@@ -112,6 +112,14 @@ Uploading via FTP
 5. Individual filters for any post type
 
 == Changelog ==
+
+= 1.9.5 =
+*Release Date - 5 August 2026*
+* Fix   - Fixed the search box inside a filter returning no results when the filter's terms are shown as color swatches or when filter links are hidden from search engine crawlers
+* Fix   - Fixed numeric range filters (e.g. price) keeping outdated minimum and maximum values for several hours after a product was edited: the cached filter data is now reset correctly on every product save
+* Fix   - Fixed hierarchical filters with the «See more» option rendering with all terms hidden until the plugin's JavaScript runs: on sites where scripts are delayed or minified by page-speed plugins (e.g. WP Rocket) such filters could stay empty for logged-out visitors, while logged-in users saw them correctly
+* Fix   - Fixed the «Load More» button of the Elementor Loop Grid widget appending unfiltered products on a filtered page: the widget's next-page address (?e-page-…) now keeps the applied filters, and the second and further pages no longer get a malformed address with two «?» characters
+* Fix   - Fixed all filters disappearing from the Shop page and other product archive pages after updating to WooCommerce 11.0: WooCommerce now reports the shop page itself instead of the products archive there, and the plugin no longer recognized the page as a filterable products list
 
 = 1.9.4 =
 *Release Date - 20 July 2026*
@@ -298,6 +306,10 @@ Uploading via FTP
 
 == Upgrade Notice ==
 
-= 1.9.4 =
-*Release Date - 20 July 2026*
-* Fix   - Fixed a fatal error ("Cannot redeclare modify_specific_module()") that broke the site front end right after plugin activation on Divi websites that use a Theme Builder header layout
+= 1.9.5 =
+*Release Date - 5 August 2026*
+* Fix   - Fixed the search box inside a filter returning no results when the filter's terms are shown as color swatches or when filter links are hidden from search engine crawlers
+* Fix   - Fixed numeric range filters (e.g. price) keeping outdated minimum and maximum values for several hours after a product was edited: the cached filter data is now reset correctly on every product save
+* Fix   - Fixed hierarchical filters with the «See more» option rendering with all terms hidden until the plugin's JavaScript runs: on sites where scripts are delayed or minified by page-speed plugins (e.g. WP Rocket) such filters could stay empty for logged-out visitors, while logged-in users saw them correctly
+* Fix   - Fixed the «Load More» button of the Elementor Loop Grid widget appending unfiltered products on a filtered page: the widget's next-page address (?e-page-…) now keeps the applied filters, and the second and further pages no longer get a malformed address with two «?» characters
+* Fix   - Fixed all filters disappearing from the Shop page and other product archive pages after updating to WooCommerce 11.0: WooCommerce now reports the shop page itself instead of the products archive there, and the plugin no longer recognized the page as a filterable products list

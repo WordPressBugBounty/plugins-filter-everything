@@ -260,7 +260,7 @@ class FilterFields
                 'type'          => 'Select',
                 'label'         => esc_html__( 'Parent Filter', 'filter-everything' ),
                 'class'         => 'wpc-field-parent-filter',
-                'options'       => [ 'no' => esc_html__( 'Please, add filters first', 'filter-everything' ) ],
+                'options'       => [ '-1' => esc_html__( 'Please, add filters first', 'filter-everything' ) ],
                 'instructions'  => esc_html__( 'If specified, current Filter terms become available only after the parent Filter selected', 'filter-everything' )
             ),
             'hide_until_parent' => array(
@@ -427,7 +427,7 @@ class FilterFields
             if ( count( $filters ) > 1 ) {
                 $filternames['-1'] = esc_html__( '— Select Filter —', 'filter-everything' ) ;
             } else {
-                $filternames['no'] = esc_html__( 'Please, add filters first', 'filter-everything' );
+                $filternames['-1'] = esc_html__( 'Please, add filters first', 'filter-everything' );
             }
 
             foreach ( $filters as $filter ) {
@@ -569,7 +569,7 @@ class FilterFields
                 $fieldData['value']    = ( $filter[$fieldKey] ) ? $filter[$fieldKey] : $default_value;
 
                 if( $fieldKey === 'hide_until_parent' ){
-                    if( $filter['parent_filter'] > 0 ){
+                    if( (int) $filter['parent_filter'] > 0 ){
                         $fieldData['additional_class'] = 'wpc-opened';
                     }
                 }

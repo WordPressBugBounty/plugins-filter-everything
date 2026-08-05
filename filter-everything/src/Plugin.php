@@ -176,35 +176,19 @@ class Plugin
                 $e_name = isset( $parts[1] ) ? $parts[1] : '';
                 $type   = isset( $parts[0] ) ? $parts[0] : '';
 
-                $terms_transient_key = '';
-
                 if ( in_array( $type, [ 'post_meta_num', 'tax_numeric' ] ) ) {
-                    global $wpdb;
-                    $key = flrt_get_terms_transient_key(  $type . '_'. $e_name, false );
-
-                    $result = $wpdb->get_results( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE '%{$key}%'", ARRAY_A );
-
-                    if ( isset( $result[0]['option_name'] ) ) {
-                        $terms_transient_key = str_replace( '_transient_', '', str_replace( '_transient_timeout_', '', $result[0]['option_name'] ) );
-                    }
+                    // Entity code appends the queried post types between the e_name and
+                    // the format suffix (wpc_terms_post_meta_num__price_product_product_variation_v2),
+                    // so the exact key can not be rebuilt here - match on the unsuffixed base
+                    $this->deleteTermsTransientsLike( 'wpc_terms_' . $type . '_' . $e_name );
                 }
 
                 if ( in_array( $type, [ 'post_date' ] ) ) {
-                    global $wpdb;
-                    $key = 'wpc_terms_post_date_';
-                    $result = $wpdb->get_results( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE '%{$key}%'", ARRAY_A );
-                    if ( isset( $result[0]['option_name'] ) ) {
-                        $terms_transient_key = str_replace( '_transient_', '', str_replace( '_transient_timeout_', '', $result[0]['option_name'] ) );
-                    }
+                    $this->deleteTermsTransientsLike( 'wpc_terms_post_date_' );
                 }
 
                 if ( in_array( $type, [ 'post_meta_date' ] ) ) {
-                    global $wpdb;
-                    $key = 'wpc_terms_post_meta_date_';
-                    $result = $wpdb->get_results( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE '%{$key}%'", ARRAY_A );
-                    if ( isset( $result[0]['option_name'] ) ) {
-                        $terms_transient_key = str_replace( '_transient_', '', str_replace( '_transient_timeout_', '', $result[0]['option_name'] ) );
-                    }
+                    $this->deleteTermsTransientsLike( 'wpc_terms_post_meta_date_' );
                 }
 
                 if ( $type === 'post_meta_exists' ) {
@@ -212,10 +196,10 @@ class Plugin
                     delete_transient( flrt_get_post_ids_transient_key( $e_name .'_no' ) );
                 }
 
-                if( ! $terms_transient_key ){
-                    $terms_transient_key    = flrt_get_terms_transient_key( $type . '_'. $e_name );
-                }
-
+                // With an external object cache transients are not in the options
+                // table and the LIKE lookups above find nothing, so always delete
+                // the post-type-less key variant directly as well
+                $terms_transient_key    = flrt_get_terms_transient_key( $type . '_'. $e_name );
                 $post_ids_transient_key = flrt_get_post_ids_transient_key( $slug );
                 $var_meta_transient_key = flrt_get_variations_transient_key( 'attribute_'. $e_name );
 
@@ -245,6 +229,32 @@ class Plugin
         }
 
         unset( $terms_transient_key, $post_ids_transient_key, $var_meta_transient_key, $all_filters, $em );
+    }
+
+    /**
+     * Deletes all DB-stored transients whose name contains the given base key.
+     * Used by resetTransitions() for term caches whose full key includes parts
+     * unknown at reset time (queried post types, language code, format suffix).
+     */
+    private function deleteTermsTransientsLike( $base_key )
+    {
+        global $wpdb;
+
+        $like  = '%' . $wpdb->esc_like( $base_key ) . '%';
+        $names = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM $wpdb->options WHERE option_name LIKE %s", $like ) );
+
+        if ( ! is_array( $names ) ) {
+            return;
+        }
+
+        $keys = [];
+        foreach ( $names as $name ) {
+            $keys[] = str_replace( [ '_transient_timeout_', '_transient_' ], '', $name );
+        }
+
+        foreach ( array_unique( $keys ) as $key ) {
+            delete_transient( $key );
+        }
     }
 
     public function prepareEntities()
@@ -1728,6 +1738,28 @@ class Plugin
         $universe = ( isset( $firstSet['allPostsIds'] ) && is_array( $firstSet['allPostsIds'] ) ) ? array_keys( $firstSet['allPostsIds'] ) : [];
         $lang     = defined( 'ICL_LANGUAGE_CODE' ) ? ICL_LANGUAGE_CODE : '';
 
+        // The filter CONFIGS (view, More/Less, parent, labels, ...) shape the
+        // stored blob, but no hook is guaranteed to bump flrt_json_blob_ver for
+        // every way a config can change — a missed bump used to freeze a stale
+        // config into the immutable file forever (e.g. a filter switched to
+        // More/Less kept more_less='no' in the blob and the recount hid every
+        // term of it). Fingerprint the configs directly: a config change now
+        // mints a new file name by construction. 'values' is page-scoped and
+        // normalized out of the stored blob — it must not vary the name.
+        $configFingerprint = [];
+        foreach ( $setIds as $sid ) {
+            if ( empty( $flrt_json_data[ $sid ]['allEntities'] ) ) {
+                continue;
+            }
+            foreach ( $flrt_json_data[ $sid ]['allEntities'] as $eName => $entity ) {
+                $filterConf = is_object( $entity )
+                    ? ( isset( $entity->filter ) ? (array) $entity->filter : [] )
+                    : ( isset( $entity['filter'] ) ? (array) $entity['filter'] : [] );
+                unset( $filterConf['values'] );
+                $configFingerprint[ $sid ][ $eName ] = $filterConf;
+            }
+        }
+
         $hash = md5( implode( '|', [
             FLRT_PLUGIN_VER,
             FLRT_CACHE_FORMAT_SUFFIX,
@@ -1739,6 +1771,7 @@ class Plugin
             $lang,
             count( $universe ),
             md5( implode( ',', $universe ) ),
+            md5( (string) wp_json_encode( $configFingerprint ) ),
         ] ) );
 
         $uploads = wp_upload_dir();

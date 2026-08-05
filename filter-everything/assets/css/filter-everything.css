@@ -1,5 +1,5 @@
 /*!
- * Filter Everything 1.9.4
+ * Filter Everything 1.9.5
  */
 .widget_wpc_filters_widget *{
     box-sizing: border-box;
@@ -169,9 +169,19 @@ i.wpc-toggle-children-list {
     position: absolute;
 }
 .wpc-filters-range-inputs .ui-slider-horizontal .ui-slider-handle:hover,
-.wpc-filters-range-inputs .ui-slider-horizontal .ui-slider-range:hover,
-.wpc-filters-main-wrap li.wpc-term-item:not(.wpc-term-disabled) label:hover,
-i.wpc-toggle-children-list:hover {
+.wpc-filters-range-inputs .ui-slider-horizontal .ui-slider-range:hover {
+    cursor: pointer;
+}
+/* Base-state pointer, NOT just :hover: iOS Safari treats an element as
+   clickable — and only then delivers document-delegated click events on a
+   single tap — when its RESTING style already has cursor:pointer. With the
+   hover-only rule, terms rendered as <span data-wpc-span-link> (the
+   crawler-links option) needed two taps on iPhone before the instant
+   recount fired. Identical on desktop: a cursor is only visible on hover
+   anyway. */
+.wpc-filters-main-wrap li.wpc-term-item:not(.wpc-term-disabled) label,
+span[data-wpc-span-link],
+i.wpc-toggle-children-list {
     cursor: pointer;
 }
 i.wpc-toggle-children-list:after,
@@ -1671,8 +1681,11 @@ span.wpc-dropdown-default{
     padding-left: 30px;
     padding-right: 5px;
 }
-.wpc-search-clear:hover {
+.wpc-search-clear {
+    /* base-state cursor for the iOS single-tap clickability heuristic */
     cursor: pointer;
+}
+.wpc-search-clear:hover {
     background: 0 0;
     box-shadow: none;
     border: none;
@@ -2038,7 +2051,7 @@ li.select2-results__option img.wpc-term-image {
 html[lang="es"] .wpc-filters-date-range-column label{
     min-width: 65px;
 }
-.wpc-filters-date-range-column label:hover{
+.wpc-filters-date-range-column label{
     cursor: pointer;
 }
 .wpc-filters-widget-content input[type=email],
