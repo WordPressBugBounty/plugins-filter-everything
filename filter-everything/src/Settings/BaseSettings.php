@@ -29,6 +29,7 @@ abstract class BaseSettings implements TabInterface{
             'file'          => array($this, 'fileCallback'),
             'number'        => array($this, 'numberCallback'),
             'inProButton' => array($this, 'inProButtonCallback'),
+            'html'          => array($this, 'htmlCallback'),
         );
 
         foreach ($settings as $sectionId => $section) {
@@ -450,6 +451,23 @@ abstract class BaseSettings implements TabInterface{
 
         if( isset( $args['description'] ) ){
             printf( '<p class="description">%s</p>', esc_html( $args['description'] ) );
+        }
+    }
+
+    /**
+     * Read-only field: delegates the cell markup to $args['render'] (callable
+     * receiving $args) or echoes pre-escaped $args['html']. Nothing is saved —
+     * for generated previews, hints and code blocks inside a settings table.
+     */
+    public function htmlCallback($args)
+    {
+        if ( isset( $args['render'] ) && is_callable( $args['render'] ) ) {
+            call_user_func( $args['render'], $args );
+            return;
+        }
+
+        if ( isset( $args['html'] ) ) {
+            echo wp_kses_post( $args['html'] );
         }
     }
 }

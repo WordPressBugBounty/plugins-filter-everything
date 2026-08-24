@@ -941,11 +941,12 @@ add_filter('wpc_pre_save_set_fields', function($setFields) {
  * silently drop their values from the option. Carry the previously saved
  * values over — they must survive free-mode saves and start working again
  * after switching back to PRO. Their runtime effect is disabled at read time
- * (flrt_instant_recount, wpc_replace_links_with_spans).
+ * (flrt_instant_recount). Since 1.9.6 «Disable filter links for crawlers» is a
+ * regular option in both builds and no longer belongs here.
  */
 add_filter('pre_update_option_wpc_filter_settings', function($value, $old_value) {
     if( !defined('FLRT_FILTERS_PRO')) {
-        $proOptions = array('apply_button_instant_recount', 'disable_filter_links_for_bots');
+        $proOptions = array('apply_button_instant_recount');
 
         foreach ($proOptions as $proOption) {
             // Values for these keys can not come from the free UI — drop any posted ones
@@ -989,11 +990,14 @@ add_filter('wpc_filter_before_make_default_set_values', function($parsed) {
 if (!function_exists('wpc_replace_links_with_spans')) {
     function wpc_replace_links_with_spans($term_name, $attributes = '', $term = false, $filter = false)
     {
-        // PRO-only option: the value preserved in the DB must stay inert in free
-        if( defined('FLRT_FILTERS_PRO') && flrt_get_option('disable_filter_links_for_bots') === 'on' ) {
+        // Available in both builds since 1.9.6: in free every filter link becomes
+        // a <span> (filter pages are noindex there by design); PRO keeps a real
+        // <a> for the targets its SEO Rules index (smart spans)
+        if( flrt_get_option('disable_filter_links_for_bots') === 'on' ) {
             // Keep a real <a> when the target page is indexable (within the
             // Indexing Depth) — hiding pages the SEO layer indexes would
-            // starve them of internal links; only the noise stays hidden
+            // starve them of internal links; only the noise stays hidden (PRO;
+            // the helper does not exist in free, so nothing is exempt there)
             if ( $term && $filter && function_exists('flrt_indexable_link_target')
                 && flrt_indexable_link_target( $term, $filter ) ) {
                 return $term_name;

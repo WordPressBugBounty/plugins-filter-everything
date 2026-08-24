@@ -10,7 +10,6 @@ if ( ! defined('ABSPATH') ) {
 class Admin
 {
     public $tabRenderer;
-    public $parentSlug;
 
     public function __construct()
     {
@@ -27,7 +26,6 @@ class Admin
 
         add_filter( 'wpc_general_filters_settings', [$this, 'generalFilterSettings'] );
 
-        add_action( 'admin_head', array( $this, 'menuHighlight' ) );
         add_action('admin_head', array($this, 'addAdminStyles'));
 
     }
@@ -57,8 +55,10 @@ class Admin
         if (!defined('FLRT_FILTERS_PRO')) {
             $settings = flrt_vailable_in_pro_attr_link();
 
+            // Import/Export is deliberately NOT a menu entry (free or PRO): it is a
+            // rare task and lives on its Settings tab — the menu and the toolbar
+            // that mirrors it stay short.
             add_submenu_page($page, esc_html__('SEO Rules', 'filter-everything'), esc_html__('SEO Rules', 'filter-everything'), 'manage_options', $settings);
-            add_submenu_page($page, esc_html__('Import/Export', 'filter-everything'), esc_html__('Import/Export', 'filter-everything'), 'manage_options', $settings);
 
             if (isset($submenu[$page])) {
                 foreach ($submenu[$page] as $key => $details) {
@@ -111,23 +111,6 @@ class Admin
         }
 
         $this->tabRenderer->init();
-    }
-
-    public function menuHighlight()
-    {
-        if ( ! is_admin() ) {
-            return;
-        }
-
-        $is_filters_settings = isset($_GET['page']) && $_GET['page'] === 'filters-settings';
-        $is_import_export_tab = isset($_GET['tab']) && $_GET['tab'] === 'import_export';
-
-        if ( $is_filters_settings && $is_import_export_tab ) {
-            global $parent_file, $submenu_file;
-
-            $parent_file = $this->parentSlug ? $this->parentSlug : ('edit.php?post_type=' . FLRT_FILTERS_SET_POST_TYPE);
-            $submenu_file = $parent_file . '&page=filters-settings&tab=import_export';
-        }
     }
 
     public function addAdminStyles()

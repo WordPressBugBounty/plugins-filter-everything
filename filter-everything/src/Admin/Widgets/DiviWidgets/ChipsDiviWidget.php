@@ -20,6 +20,9 @@ class ChipsDiviWidget extends ET_Builder_Module
     public $slug = 'filter_everything_chips';
     public $vb_support = 'off';
 
+    // Declared explicitly — dynamic properties are deprecated since PHP 8.2.
+    public $icon_path;
+
 
     protected $module_credits = array(
         'module_uri' => FLRT_PLUGIN_URL,

@@ -287,7 +287,8 @@ add_filter('wpc_builder_key', function ($source, $builder_id) {
  */
 add_filter('wpc_check_broken_query_vars', function ($query_vars, $query) {
     // Add markers of other post-hiding plugins here if needed; overridable via the filter.
-    $context_hides_posts = defined('IHC_PATH'); // Ultimate Membership Pro
+    $context_hides_posts = defined('IHC_PATH')          // Ultimate Membership Pro
+        || defined('WCB2B_PLUGIN_FILE');                // WooCommerce B2B — hides "unallowed" products from guests/other groups via post__not_in
 
     if ( ! apply_filters('wpc_context_hides_posts', $context_hides_posts, $query) ) {
         return $query_vars;

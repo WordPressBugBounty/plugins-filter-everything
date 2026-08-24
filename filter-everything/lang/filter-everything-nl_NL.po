@@ -3634,9 +3634,6 @@ msgstr "Er zijn geen filtersets op deze pagina."
 msgid "There is no filter widget on this page."
 msgstr "Er is geen filterwidget op deze pagina."
 
-msgid "v%s"
-msgstr "v%s"
-
 msgctxt "benefits-landing"
 msgid "Risk-free purchase, premium support and regular updates"
 msgstr "Risicoloze aankoop, premium ondersteuning en regelmatige updates"
@@ -3657,24 +3654,8 @@ msgctxt "benefits-landing"
 msgid "Yes, of course — support is included with the PRO version. Your purchase comes with 1 year of premium support and plugin updates, with the option to renew. Even if you choose not to renew after a year, you can keep using the plugin — you just won't receive updates anymore."
 msgstr "Ja, natuurlijk — ondersteuning is inbegrepen bij de PRO-versie. Bij je aankoop krijg je 1 jaar premium ondersteuning en plugin-updates, met de optie om te verlengen. Ook als je na een jaar niet verlengt, kun je de plugin blijven gebruiken — je ontvangt alleen geen updates meer."
 
-
 msgid "Filter combinations produce thousands of URLs, and crawlers may waste your crawl budget and server resources trying to follow them all. This option renders filter links as &lt;span&gt; tags — they keep working for visitors, but crawlers no longer see them as links.<br /><br />Links to pages that your SEO Rules define as indexed always keep the real &lt;a&gt; tag, so search engines can still discover and rank those pages.<br /><br />You can also block unwanted pages and specific bots in the robots.txt file."
 msgstr "Filtercombinaties leveren duizenden URL's op, en crawlers kunnen je crawlbudget en serverbronnen verspillen door ze allemaal te volgen. Deze optie toont filterlinks als &lt;span&gt;-tags — ze blijven werken voor bezoekers, maar crawlers zien ze niet meer als links.<br /><br />Links naar pagina's die je SEO Regels als geïndexeerd definiëren, behouden altijd de echte &lt;a&gt;-tag, zodat zoekmachines die pagina's kunnen blijven vinden en ranken.<br /><br />Je kunt ongewenste pagina's en specifieke bots ook blokkeren in het robots.txt-bestand."
-
-msgid "You've been using Filter Everything for a while now"
-msgstr "Je gebruikt Filter Everything nu al een tijdje"
-
-msgid "We hope the plugin has made building filters easier for you. If it has, could you take a minute to rate it on WordPress.org?"
-msgstr "We hopen dat de plugin het bouwen van filters makkelijker heeft gemaakt. Zo ja, zou je een minuutje willen nemen om hem te beoordelen op WordPress.org?"
-
-msgid "It takes about a minute — a star rating and a sentence is plenty"
-msgstr "Het kost ongeveer een minuut — een sterrenbeoordeling en één zin is genoeg"
-
-msgid "Reviews help other WordPress users find the plugin"
-msgstr "Reviews helpen andere WordPress-gebruikers de plugin te vinden"
-
-msgid "Your feedback shapes what we build next"
-msgstr "Jouw feedback bepaalt wat we hierna bouwen"
 
 #, php-format
 msgid "Something not working right? %1$sContact support%2$s — we'd rather fix it first."
@@ -3689,10 +3670,6 @@ msgstr "Filter Everything?"
 msgid "Rate us on WordPress.org and help the plugin grow"
 msgstr "Beoordeel ons op WordPress.org en help de plugin groeien"
 
-#, php-format
-msgid "Trusted by %s active installs"
-msgstr "Vertrouwd door %s actieve installaties"
-
 msgid "Rate Filter Everything"
 msgstr "Beoordeel Filter Everything"
 
@@ -3701,3 +3678,76 @@ msgstr "Misschien later"
 
 msgid "Don't show this again"
 msgstr "Niet meer tonen"
+
+msgid "Crawlers and bots"
+msgstr "Crawlers en bots"
+
+msgid "Filter combinations produce thousands of URLs, and crawlers may waste your crawl budget and server resources trying to follow them all. This option renders filter links as &lt;span&gt; tags — they keep working for visitors, but crawlers no longer see them as links.<br /><br />Filtering result pages are marked noindex in the free version anyway, so hiding the links costs nothing in search visibility. The PRO version keeps the real &lt;a&gt; tag for the filter pages that its SEO Rules make indexable.<br /><br />Crawlers that already know your filter URLs may keep requesting them for a while — the robots.txt rules below stop that too."
+msgstr "Filtercombinaties leveren duizenden URL's op, en crawlers kunnen je crawlbudget en serverbronnen verspillen door ze allemaal te volgen. Deze optie toont filterlinks als &lt;span&gt;-tags — ze blijven werken voor bezoekers, maar crawlers zien ze niet meer als links.<br /><br />Pagina's met filterresultaten zijn in de gratis versie sowieso gemarkeerd als noindex, dus het verbergen van de links kost niets aan zichtbaarheid in zoekmachines. De PRO-versie behoudt de echte &lt;a&gt;-tag voor de filterpagina's die de SEO Regels van PRO indexeerbaar maken.<br /><br />Crawlers die je filter-URL's al kennen, kunnen ze nog een tijdje blijven opvragen — de robots.txt-regels hieronder stoppen ook dat."
+
+msgid "Block filter URLs in robots.txt"
+msgstr "Filter-URL's blokkeren in robots.txt"
+
+msgid "Add Disallow rules for all filter URLs to the robots.txt file"
+msgstr "Disallow-regels voor alle filter-URL's toevoegen aan het robots.txt-bestand"
+
+msgid "Tells search engines and other well-behaved crawlers not to request filtering result pages at all. Bots that ignore robots.txt are not affected."
+msgstr "Geeft zoekmachines en andere fatsoenlijke crawlers de instructie om pagina's met filterresultaten helemaal niet op te vragen. Bots die robots.txt negeren, worden hierdoor niet beïnvloed."
+
+msgid "Hiding the filter links stops crawlers from discovering new filter URLs, but the URLs they already know stay in their queues for weeks or months. A Disallow rule in robots.txt is the only signal that also stops compliant crawlers — Google, Bing and most AI bots — from requesting those pages at all, which frees both your server and your crawl budget.<br /><br />The rules are generated from your filters and stay in sync automatically. When your site has a physical robots.txt file, WordPress cannot add them for you — copy the rules shown below into that file yourself."
+msgstr "Het verbergen van de filterlinks voorkomt dat crawlers nieuwe filter-URL's ontdekken, maar de URL's die ze al kennen, blijven nog weken of maanden in hun wachtrijen staan. Een Disallow-regel in robots.txt is het enige signaal dat ook crawlers die zich aan de regels houden — Google, Bing en de meeste AI-bots — ervan weerhoudt die pagina's überhaupt op te vragen, wat zowel je server als je crawlbudget ontlast.<br /><br />De regels worden gegenereerd op basis van je filters en blijven automatisch gesynchroniseerd. Als je site een fysiek robots.txt-bestand heeft, kan WordPress ze niet voor je toevoegen — kopieer de onderstaande regels dan zelf naar dat bestand."
+
+msgid "Rules for robots.txt"
+msgstr "Regels voor robots.txt"
+
+msgid "No filters are configured yet — the rules will appear here as soon as you create a Filter Set."
+msgstr "Er zijn nog geen filters geconfigureerd — de regels verschijnen hier zodra je een Filterset aanmaakt."
+
+msgid "Your site has a physical robots.txt file, so WordPress cannot add these rules automatically. Copy them into that file yourself."
+msgstr "Je site heeft een fysiek robots.txt-bestand, dus WordPress kan deze regels niet automatisch toevoegen. Kopieer ze zelf naar dat bestand."
+
+msgid "WordPress serves its robots.txt only when pretty permalinks are enabled (Settings → Permalinks). Until then, copy these rules into a physical robots.txt file."
+msgstr "WordPress levert zijn robots.txt alleen als mooie permalinks zijn ingeschakeld (Instellingen → Permalinks). Kopieer deze regels tot die tijd naar een fysiek robots.txt-bestand."
+
+msgid "These rules are added to %s automatically."
+msgstr "Deze regels worden automatisch toegevoegd aan %s."
+
+msgid "Enable the option above to add these rules to robots.txt automatically, or copy them into your own robots.txt file."
+msgstr "Schakel de optie hierboven in om deze regels automatisch aan robots.txt toe te voegen, of kopieer ze naar je eigen robots.txt-bestand."
+
+msgid "Thank you for updating Filter Everything! Bots and AI crawlers increasingly overload websites by requesting endless filter combinations. This version adds two protections — <strong>«Disable filter links for crawlers»</strong> and <strong>«Block filter URLs in robots.txt»</strong>. They stay off on existing sites so that nothing changes without your consent; we recommend enabling both on %1$sthe settings page%2$s."
+msgstr "Bedankt voor het bijwerken van Filter Everything! Bots en AI-crawlers overbelasten websites steeds vaker door eindeloze filtercombinaties op te vragen. Deze versie voegt twee beschermingsmaatregelen toe — <strong>«Filterlinks voor crawlers uitschakelen»</strong> en <strong>«Filter-URL's blokkeren in robots.txt»</strong>. Op bestaande sites blijven ze uitgeschakeld, zodat er niets verandert zonder je toestemming; we raden aan om beide in te schakelen op %1$sde instellingenpagina%2$s."
+
+msgid "What's new"
+msgstr "Wat is nieuw"
+
+msgid "New release notes available"
+msgstr "Nieuwe release-opmerkingen beschikbaar"
+
+msgid "Sorry, you are not allowed to access this page."
+msgstr "Sorry, je hebt geen toestemming om deze pagina te bekijken."
+
+msgid "What's new in %s"
+msgstr "Wat is nieuw in %s"
+
+msgid "Release date: %s"
+msgstr "Releasedatum: %s"
+
+msgid "No release notes were found for this version."
+msgstr "Er zijn geen release-opmerkingen gevonden voor deze versie."
+
+msgid "Full changelog"
+msgstr "Volledige changelog"
+
+msgid "Earlier releases"
+msgstr "Eerdere releases"
+
+msgid "This site identifies itself to the license server as <strong>%s</strong> — register exactly this address in your account and use the key generated for it."
+msgstr "Deze site identificeert zich bij de licentieserver als <strong>%s</strong> — registreer precies dit adres in je account en gebruik de sleutel die daarvoor is gegenereerd."
+
+msgid "This license key was generated for <strong>%1$s</strong>, but this site identifies itself as <strong>%2$s</strong>. Register this exact address in your account (you can delete the other one to free the slot) and use the key generated for it."
+msgstr "Deze licentiesleutel is gegenereerd voor <strong>%1$s</strong>, maar deze site identificeert zich als <strong>%2$s</strong>. Registreer precies dit adres in je account (je kunt het andere verwijderen om de plek vrij te maken) en gebruik de sleutel die daarvoor is gegenereerd."
+
+msgid "Hiding the filter links stops crawlers from discovering new filter URLs, but the URLs they already know stay in their queues for weeks or months. A Disallow rule in robots.txt is the only signal that also stops compliant crawlers — Google, Bing and most AI bots — from requesting those pages at all, which frees both your server and your crawl budget.<br /><br />With pretty permalinks the rules name only the filter URLs that are never indexable: several values of one filter (…/color-red-or-blue/), more filters in one URL than your Indexing Depth allows, and numeric or date ranges. Single-filter pages stay crawlable, so the pages your SEO Rules index are never touched. Review the list before enabling: a product or category slug that starts with one of your filter prefixes would match the same pattern.<br /><br />When your site has a physical robots.txt file, WordPress cannot add the rules for you — copy them into that file yourself."
+msgstr "Het verbergen van filterlinks voorkomt dat crawlers nieuwe filter-URL's ontdekken, maar de URL's die ze al kennen blijven weken of maanden in hun wachtrijen staan. Een Disallow-regel in robots.txt is het enige signaal dat ook nette crawlers — Google, Bing en de meeste AI-bots — ervan weerhoudt die pagina's überhaupt op te vragen, wat zowel je server als je crawlbudget ontlast.<br /><br />Met mooie permalinks benoemen de regels alleen de filter-URL's die nooit indexeerbaar zijn: meerdere waarden van één filter (…/color-red-or-blue/), meer filters in één URL dan je Indexeringsdiepte toestaat, en numerieke of datumbereiken. Pagina's met één filter blijven crawlbaar, dus de pagina's die je SEO Regels indexeren worden nooit geraakt. Controleer de lijst voordat je inschakelt: een product- of categorieslug die begint met een van je filtervoorvoegsels zou met hetzelfde patroon overeenkomen.<br /><br />Als je site een fysiek robots.txt-bestand heeft, kan WordPress de regels niet voor je toevoegen — kopieer ze zelf naar dat bestand."
+

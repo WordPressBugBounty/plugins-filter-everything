@@ -1,14 +1,14 @@
 === Filter Everything&nbsp;— WordPress & WooCommerce Filters ===
 Contributors: stepasyuk
 Tags: woocommerce product filter, woocommerce filter, product filter, post filter, ajax filter
-Stable tag: 1.9.5
+Stable tag: 1.9.6
 Requires at least: 4.6
-Tested up to: 7.0.2
+Tested up to: 7.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Instantly filter any WordPress content & WooCommerce products by attributes, taxonomies, custom fields + AJAX, Elementor, automatic filter creation.
+The most flexible filters for WooCommerce products & WordPress content. Includes everything needed, supports Elementor & builders, AJAX, quick setup.
 
 == Description ==
 _**Improve your site's navigation and drive more conversions with Filter Everything.**_
@@ -87,6 +87,10 @@ This improves navigation, reduces bounce rates, saves visitors’ time, and crea
 
 You can try to find a solution to your problem in the plugin [documentation](https://filtereverything.pro/resources/&utm_source=repository) or ask your question on the support [forum](https://wordpress.org/support/plugin/filter-everything/). PRO version users can get more info about support [here](https://filtereverything.pro/support/).
 
+= Bots and AI crawlers are hammering my filter URLs — what should I do? =
+
+Filter combinations produce a practically unlimited number of URLs, and once crawlers discover them they can keep requesting them for months. Since version 1.9.6 the plugin ships two protections in Settings → General → «Crawlers and bots»: «Disable filter links for crawlers» renders filter links as &lt;span&gt; instead of &lt;a&gt;, so bots stop discovering new filter URLs, and «Block filter URLs in robots.txt» adds Disallow rules for the filter URLs to your robots.txt, which is the only signal that also stops well-behaved crawlers (Google, Bing, most AI bots) from requesting URLs they already know. Both are enabled by default on new installations; on existing sites switch them on. Filtering result pages are noindex in the free version anyway, so neither option costs search visibility. Bots that ignore robots.txt can only be stopped at the server or CDN level — a firewall or rate-limiting rule (e.g. in Cloudflare) matching your filter URL parameters.
+
 == Installation ==
 
 Uploading via WordPress dashboard
@@ -112,6 +116,18 @@ Uploading via FTP
 5. Individual filters for any post type
 
 == Changelog ==
+
+= 1.9.6 =
+*Release Date - 24 August 2026*
+* Dev   - NEW: The «Disable filter links for crawlers» option is now available in the free version too: filter links are rendered as <span> instead of <a>, so search engine bots and AI crawlers no longer discover and hammer endless filter combinations. It is enabled by default on new installations; existing sites can switch it on in Settings → General → Crawlers and bots
+* Dev   - NEW: Added the «Block filter URLs in robots.txt» option: the plugin generates Disallow rules for every filter URL parameter and adds them to the site's robots.txt automatically, so well-behaved crawlers (Google, Bing, most AI bots) stop requesting filtering result pages they already know. The generated rules are also shown on the settings page, so they can be copied into a physical robots.txt file or reused in a firewall rule
+* Tweak - Added the «Crawlers and bots» section to Settings → General and a one-time admin notice after the update pointing to the new protections
+* Tweak - Added the «What's new» page under the Filters menu: release notes of the installed version with a badge on the menu item after an update, so you can see what changed whenever it suits you
+* Tweak - The Import/Export link was removed from the Filters menu and the top toolbar to keep them short; the Import/Export tab in Settings stays where it was
+* Tweak - The installed plugin version is now shown next to the plugin name in the top toolbar on every plugin page (previously it was visible only in the Help tab)
+* Fix   - Fixed filters not working for logged-out visitors on shops that use WooCommerce B2B (the plugin hides restricted products from guests and changed the identity of the page query the Filter Set was saved with)
+* Fix   - Fixed the PHP 8.2 «Creation of dynamic property» deprecation notice triggered by the Filters, Chips and Sorting modules for Divi
+* Fix   - Fixed «Create Filters Automatically» writing a broken entry into the list of global URL prefixes and overwriting the prefixes that had just been registered for the new filters
 
 = 1.9.5 =
 *Release Date - 5 August 2026*
@@ -267,49 +283,18 @@ Uploading via FTP
 * Tweak - Made Numeric Range filters collapsible
 * Fix   - Renamed 'wpc_clean' function to 'flrt_clean' to avoid conflicts
 
-= 1.7.16 =
-*Release Date - 14 December 2023*
-* Dev   - Added support for Dokan store pages
-* Dev   - Added Experimental option that hides variable products with out of stock variations
-* Tweak - Improved search field and added variations to search by SKU
-* Tweak - Added global variable $flrt_plugin to access the class
-* Tweak - Added ability to create translations for "Any %entity%" Filter Set type
-* Fix   - Fixed the issue with double SEO titles and SEO Rules entities on block themes
-* Fix   - Fixed issue with term_taxonomy_id and taxonomy filter counters
-* Fix   - Fixed Select2 CSS conflict in Woocommerce admin forms
-
-= 1.7.15 =
-*Release Date - 01 August 2023*
-* Dev   - Added Spanish translation
-* Dev   - Tested compatibility with WordPress 6.3
-* Fix   - Added 301 redirect to canonical URL with (or without) correct user trailing slash on filtering pages
-* Fix   - Added hook 'wpc_do_filter_request' to the collectFilteredPostsIds(); method to fix term counter
-* Fix   - Fixed hover "checked" effect for Color swatches on mobile devices
-* Fix   - Improved On Sale and Regular price translations for the On Sale filter
-* Tweak - Added hook 'wpc_set_min_max' to modify the $min_and_max array
-* Tweak - Sorted Filter and SEO Rule terms alphabetically for greater convenience
-
-= 1.7.14 =
-*Release Date - 19 June 2023*
-* Dev   - Added German translation. Thanks to Daniel (microteq)
-* Tweak - Added the "How to?" Meta box on the Filter Set edit screen for quick help with popular questions
-* Fix   - Hotfix for the 'MetaBoxes::adviceMetabox() cannot be called statically' error
-
-= 1.7.11 =
-*Release Date - 31 May 2023*
-* Tweak - Added support for multi-currency for the WOOCS and CURCY plugins
-* Fix   - Fixed location for the Apply button, when Filter Set is directed to All archive pages/Any taxonomy,post,author
-* Fix   - Fixed posts search count for the search by SKU
-
-
 [See changelog for all versions](https://demo.filtereverything.pro/changelog.txt).
 
 == Upgrade Notice ==
 
-= 1.9.5 =
-*Release Date - 5 August 2026*
-* Fix   - Fixed the search box inside a filter returning no results when the filter's terms are shown as color swatches or when filter links are hidden from search engine crawlers
-* Fix   - Fixed numeric range filters (e.g. price) keeping outdated minimum and maximum values for several hours after a product was edited: the cached filter data is now reset correctly on every product save
-* Fix   - Fixed hierarchical filters with the «See more» option rendering with all terms hidden until the plugin's JavaScript runs: on sites where scripts are delayed or minified by page-speed plugins (e.g. WP Rocket) such filters could stay empty for logged-out visitors, while logged-in users saw them correctly
-* Fix   - Fixed the «Load More» button of the Elementor Loop Grid widget appending unfiltered products on a filtered page: the widget's next-page address (?e-page-…) now keeps the applied filters, and the second and further pages no longer get a malformed address with two «?» characters
-* Fix   - Fixed all filters disappearing from the Shop page and other product archive pages after updating to WooCommerce 11.0: WooCommerce now reports the shop page itself instead of the products archive there, and the plugin no longer recognized the page as a filterable products list
+= 1.9.6 =
+*Release Date - 24 August 2026*
+* Dev   - NEW: The «Disable filter links for crawlers» option is now available in the free version too: filter links are rendered as <span> instead of <a>, so search engine bots and AI crawlers no longer discover and hammer endless filter combinations. It is enabled by default on new installations; existing sites can switch it on in Settings → General → Crawlers and bots
+* Dev   - NEW: Added the «Block filter URLs in robots.txt» option: the plugin generates Disallow rules for every filter URL parameter and adds them to the site's robots.txt automatically, so well-behaved crawlers (Google, Bing, most AI bots) stop requesting filtering result pages they already know. The generated rules are also shown on the settings page, so they can be copied into a physical robots.txt file or reused in a firewall rule
+* Tweak - Added the «Crawlers and bots» section to Settings → General and a one-time admin notice after the update pointing to the new protections
+* Tweak - Added the «What's new» page under the Filters menu: release notes of the installed version with a badge on the menu item after an update, so you can see what changed whenever it suits you
+* Tweak - The Import/Export link was removed from the Filters menu and the top toolbar to keep them short; the Import/Export tab in Settings stays where it was
+* Tweak - The installed plugin version is now shown next to the plugin name in the top toolbar on every plugin page (previously it was visible only in the Help tab)
+* Fix   - Fixed filters not working for logged-out visitors on shops that use WooCommerce B2B (the plugin hides restricted products from guests and changed the identity of the page query the Filter Set was saved with)
+* Fix   - Fixed the PHP 8.2 «Creation of dynamic property» deprecation notice triggered by the Filters, Chips and Sorting modules for Divi
+* Fix   - Fixed «Create Filters Automatically» writing a broken entry into the list of global URL prefixes and overwriting the prefixes that had just been registered for the new filters

@@ -12,6 +12,14 @@ $parent_slug = 'edit.php?post_type=' . FLRT_FILTERS_SET_POST_TYPE;
 $current_tab = isset($_GET['tab']) ? sanitize_key($_GET['tab']) : '';
 $current_page = isset($_GET['page']) ? sanitize_key($_GET['page']) : '';
 $tabs = array();
+
+// Submenu entries that must NOT become toolbar tabs: the toolbar mirrors the
+// sidebar, but only the everyday destinations belong up there. «What's new»
+// keeps its sidebar entry (and badge) and is reachable from there.
+$hidden_in_toolbar = apply_filters('wpc_header_nav_hidden_slugs', array(
+    class_exists('\FilterEverything\Filter\WhatsNew') ? \FilterEverything\Filter\WhatsNew::PAGE_SLUG : 'filters-whats-new',
+));
+
 if (isset($submenu[$parent_slug])) {
     foreach ($submenu[$parent_slug] as $i => $sub_item) {
 
@@ -20,6 +28,10 @@ if (isset($submenu[$parent_slug])) {
         }
 
         if ($i === 1) {
+            continue;
+        }
+
+        if (in_array($sub_item[2], $hidden_in_toolbar, true)) {
             continue;
         }
 
@@ -53,7 +65,9 @@ if (isset($submenu[$parent_slug])) {
         $is_same_submenu = $tab_matches;
 
         if ($is_same_submenu) {
-            if($current_tab !== 'import_export' && $current_page == 'filters-settings'){
+            // Any Settings tab (Import/Export included — it has no toolbar tab of
+            // its own any more) keeps the «Settings» tab active
+            if($current_page == 'filters-settings'){
                 $tab['is_active'] = true;
             }elseif ($current_tab) {
                 if ($tab_tab && $tab_tab === $current_tab) {
@@ -80,11 +94,15 @@ if ($tabs === false) {
 }
 ?>
 <div class="wpc-admin-toolbar">
-    <h2><img src="<?php
+    <h2><a class="wpc-toolbar-brand" href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . FLRT_FILTERS_SET_POST_TYPE ) ); ?>"><img src="<?php
         echo esc_attr(flrt_get_icon_svg('#333333'));
         ?>" alt="" width="24"/> <?php
         echo esc_html(flrt_get_plugin_name());
-        ?></h2>
+        // The running version, always visible on every plugin screen in both builds
+        // (PRO used to print it on the right next to the licence status); the
+        // logo + name link back to the Filter Sets list
+        echo ' <span class="wpc-plugin-version">' . esc_html( FLRT_PLUGIN_VER ) . '</span>';
+        ?></a></h2>
     <?php foreach ($tabs as $tab) {
         $is_active = !empty($tab['is_active']) ? ' is-active' : '';
         $is_pro = str_contains($tab['text'], 'wpc-pro-badge') ? ' wpc-pro-badge-text' : '';

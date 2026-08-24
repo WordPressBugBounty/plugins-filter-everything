@@ -16,6 +16,11 @@ class FiltersDiviWidget extends ET_Builder_Module
     public $slug = 'filter_everything';
     public $vb_support = 'off';
 
+    // Declared explicitly: ET_Builder_Module does not define it, and dynamic
+    // properties are deprecated since PHP 8.2 (surfaced in Query Monitor via
+    // Divi's class-et-builder-element.php).
+    public $icon_path;
+
     protected $module_credits = array(
         'module_uri' => FLRT_PLUGIN_URL,
         'author_uri' => FLRT_PLUGIN_URL,

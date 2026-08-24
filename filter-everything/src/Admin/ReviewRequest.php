@@ -30,7 +30,6 @@ class ReviewRequest
     const INSTALL_OPTION     = 'flrt_free_installed_at';
     const USER_META          = 'flrt_review_request';
     const NONCE_ACTION       = 'flrt_review_popup';
-    const INSTALLS_TRANSIENT = 'flrt_free_active_installs';
 
     const REVIEW_URL  = 'https://wordpress.org/support/plugin/filter-everything/reviews/#new-post';
     const SUPPORT_URL = 'https://wordpress.org/support/plugin/filter-everything/';
@@ -38,10 +37,6 @@ class ReviewRequest
     const FIRST_DELAY = 14 * DAY_IN_SECONDS;
     const SNOOZE      = 21 * DAY_IN_SECONDS;
     const MAX_SHOWS   = 3;
-
-    // Used when the wordpress.org API is unreachable; matches the listing at
-    // the time this feature shipped.
-    const INSTALLS_FALLBACK = 50000;
 
     public function __construct()
     {
@@ -87,8 +82,7 @@ class ReviewRequest
         $this->saveState( $state );
 
         flrt_include_admin_view( 'review-popup', [
-            'installs_label' => $this->getActiveInstallsLabel(),
-            'review_nonce'   => wp_create_nonce( self::NONCE_ACTION ),
+            'review_nonce' => wp_create_nonce( self::NONCE_ACTION ),
         ] );
     }
 
@@ -172,40 +166,6 @@ class ReviewRequest
     private function saveState( array $state )
     {
         update_user_meta( get_current_user_id(), self::USER_META, $state );
-    }
-
-    /**
-     * "50,000+" — the real active-installs count from the wordpress.org
-     * listing, refreshed weekly. On API failure the last known/fallback count
-     * is cached for a day so the admin never waits on a dead request twice.
-     *
-     * @return string
-     */
-    private function getActiveInstallsLabel()
-    {
-        $installs = get_transient( self::INSTALLS_TRANSIENT );
-
-        if ( false === $installs ) {
-            $installs = 0;
-            $response = wp_remote_get(
-                'https://api.wordpress.org/plugins/info/1.0/filter-everything.json?fields=active_installs',
-                [ 'timeout' => 5 ]
-            );
-
-            if ( ! is_wp_error( $response ) && wp_remote_retrieve_response_code( $response ) === 200 ) {
-                $data     = json_decode( wp_remote_retrieve_body( $response ), true );
-                $installs = isset( $data['active_installs'] ) ? (int) $data['active_installs'] : 0;
-            }
-
-            if ( $installs > 0 ) {
-                set_transient( self::INSTALLS_TRANSIENT, $installs, WEEK_IN_SECONDS );
-            } else {
-                $installs = self::INSTALLS_FALLBACK;
-                set_transient( self::INSTALLS_TRANSIENT, $installs, DAY_IN_SECONDS );
-            }
-        }
-
-        return number_format_i18n( (int) $installs ) . '+';
     }
 }
 

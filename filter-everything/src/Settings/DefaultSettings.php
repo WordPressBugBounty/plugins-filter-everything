@@ -50,6 +50,19 @@ class DefaultSettings
         if( defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO ){
             $defaultOptions['mobile_filter_settings'] = 'show_bottom_widget';
         }
+
+        // Free default options (fresh installs only — activate() seeds this array
+        // once and never touches an existing wpc_filter_settings). Filter pages are
+        // noindex in free by design, so hiding the filter links from crawlers and
+        // keeping crawlers off the filter URLs via robots.txt costs nothing in
+        // search visibility and spares new sites the crawler-trap load out of the
+        // box. Existing installs keep their behaviour until the options are
+        // enabled — the 1.9.6 admin notice points them there.
+        if( ! defined('FLRT_FILTERS_PRO') ){
+            $defaultOptions['disable_filter_links_for_bots'] = 'on';
+            $defaultOptions['robots_txt_block_filters']      = 'on';
+        }
+
         return $defaultOptions;
     }
 }

@@ -80,11 +80,11 @@ class Chips
             $filter_set_params = $filterSet->getSet($setId);
             $use_apply_button = (isset($filter_set_params['use_apply_button'] )  && $filter_set_params['use_apply_button']['value'] === 'yes') && flrt_instant_recount();
 
-            // Smart spans: with the crawler-links option on, a term chip keeps
-            // its real <a> only when its removal target is indexable (PRO)
-            $judge_chip_links = defined('FLRT_FILTERS_PRO')
-                && flrt_get_option('disable_filter_links_for_bots') === 'on'
-                && function_exists('flrt_indexable_link_target');
+            // Crawler-links option: in free every term chip becomes a <span>
+            // (filter pages are noindex there by design); in PRO (smart spans) a
+            // term chip keeps its real <a> only when its removal target is indexable
+            $hide_chip_links  = flrt_get_option('disable_filter_links_for_bots') === 'on';
+            $judge_chip_links = $hide_chip_links && function_exists('flrt_indexable_link_target');
 
             if ($this->showReset) {
                 $reset_button_class = 'wpc-chip-reset-all';
@@ -181,6 +181,9 @@ class Chips
                                     $toAdd['crawlable'] = false;
                                 }
                             }
+                        } elseif ( $hide_chip_links ) {
+                            // Free: no indexability judge — every term chip is a span
+                            $toAdd['crawlable'] = false;
                         }
 
                         if ( $filter['e_name'] === 'product_visibility') {

@@ -18,6 +18,9 @@ class SortingDiviWidget extends ET_Builder_Module
     public $vb_support = 'off';
     public $child_slug = 'filter_everything_sorting_item';
 
+    // Declared explicitly — dynamic properties are deprecated since PHP 8.2.
+    public $icon_path;
+
     protected $module_credits = array(
         'module_uri' => FLRT_PLUGIN_URL,
         'author_uri' => FLRT_PLUGIN_URL,

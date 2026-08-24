@@ -3,7 +3,7 @@
 Plugin Name: Filter Everything&nbsp;— WordPress & WooCommerce Filters
 Plugin URI: https://filtereverything.pro
 Description: Instantly filter any WordPress content & WooCommerce products by attributes, taxonomies, custom fields + AJAX, Elementor, automatic filter creation.
-Version: 1.9.5
+Version: 1.9.6
 Requires PHP: 7.4
 Author: Andrii Stepasiuk
 Author URI: https://filtereverything.pro/about/
@@ -32,9 +32,9 @@ if( ! class_exists( 'FlrtFilter' ) ):
             $this->define( 'FLRT_PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );
             $this->define( 'FLRT_PLUGIN_BASENAME', plugin_basename(__FILE__) );
             $this->define( 'FLRT_PLUGIN_SLUG', 'filter-everything-pro' );
-            $this->define( 'FLRT_PLUGIN_VER', '1.9.5' );
+            $this->define( 'FLRT_PLUGIN_VER', '1.9.6' );
             $this->define( 'FLRT_PLUGIN_URL', 'https://filtereverything.pro' );
-            $this->define( 'FLRT_PLUGIN_TESTED_TO', '7.0.2' );
+            $this->define( 'FLRT_PLUGIN_TESTED_TO', '7.1' );
             $this->define( 'FLRT_PLUGIN_DEBUG', false );
             $this->define( 'FLRT_TEMPLATES_DIR_NAME', 'filters' );
 
@@ -98,13 +98,14 @@ if( ! class_exists( 'FlrtFilter' ) ):
             flrt_include('src/Settings/Tabs/SeoTabTrait.php');
 
             // Include PRO
-//            flrt_include('pro/filters-pro.php');
+            //            flrt_include('pro/filters-pro.php');
 
             flrt_include('src/Entities/DefaultEntity.php');
             flrt_include('src/Entities/EntityManager.php');
 
             flrt_include('src/Settings/DefaultSettings.php');
             flrt_include('src/Settings/Tabs/SettingsTab.php');
+            flrt_include('src/RobotsTxt.php');
             flrt_include('src/Settings/Tabs/PermalinksTab.php');
             flrt_include('src/Settings/Tabs/ImportExportTabFree.php');
             flrt_include('src/Settings/Tabs/ExperimentalTab.php');
@@ -129,6 +130,7 @@ if( ! class_exists( 'FlrtFilter' ) ):
             flrt_include('src/Admin/Admin.php');
             flrt_include('src/Admin/AdminHooks.php');
             flrt_include('src/Admin/AdminNotices.php');
+            flrt_include('src/Admin/WhatsNew.php');
             flrt_include('src/Admin/ReviewRequest.php');
             flrt_include('src/Admin/MetaBoxes.php');
             flrt_include('src/Admin/Widgets/FiltersWidget.php');

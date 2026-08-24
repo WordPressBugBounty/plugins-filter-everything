@@ -1311,7 +1311,7 @@ class Plugin
             $ver    = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? rand(0, 1000) : FLRT_PLUGIN_VER;
             $is_about_pro_tab = isset($_GET['tab']) && $_GET['tab'] === 'aboutpro';
 
-            if ( in_array( $screen->base, [ 'edit', 'post', 'edit-tags', 'term' ] ) || ( strpos( $screen->base, 'filters-settings' ) !== false ) ) {
+            if ( in_array( $screen->base, [ 'edit', 'post', 'edit-tags', 'term' ] ) || ( strpos( $screen->base, 'filters-settings' ) !== false ) || ( strpos( $screen->base, 'filters-whats-new' ) !== false ) ) {
                 wp_enqueue_style( 'wpc-filter-everything-admin', FLRT_PLUGIN_DIR_URL . 'assets/css/filter-everything-admin'.$suffix.'.css', ['wp-color-picker'], $ver );
                 if($is_about_pro_tab){
                     wp_enqueue_style( 'wpc-filter-everything-pro-benefits', FLRT_PLUGIN_DIR_URL . 'assets/css/pro-benefits-page'.$suffix.'.css', ['wpc-filter-everything-admin'], $ver );

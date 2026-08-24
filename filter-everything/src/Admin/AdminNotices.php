@@ -35,6 +35,9 @@ class AdminNotices
     /** Version the site was most recently updated to (drives the 'update' trigger). */
     const UPDATED_OPTION = 'flrt_updated_to';
 
+    /** Unix time of that update (lets WhatsNew stop its badge after a while). */
+    const UPDATED_AT_OPTION = 'flrt_updated_at';
+
     /** Array of permanently dismissed notice ids. */
     const DISMISSED_OPTION = 'flrt_dismissed_notices';
 
@@ -55,6 +58,10 @@ class AdminNotices
 
     public function __construct()
     {
+        // admin_menu fires BEFORE admin_init in wp-admin/admin.php; stamping here
+        // too lets the WhatsNew menu badge appear on the very first request after
+        // an update (the method is idempotent).
+        add_action( 'admin_menu', [ $this, 'detectUpdate' ], 1 );
         add_action( 'admin_init', [ $this, 'detectUpdate' ] );
         add_action( 'admin_init', [ $this, 'maybeAutoDismiss' ] );
         add_action( 'admin_notices', [ $this, 'renderAll' ] );
@@ -69,6 +76,45 @@ class AdminNotices
     protected function notices()
     {
         return [
+            [
+                // 1.9.6: the crawler protections are ON for fresh free installs but
+                // OFF on updated ones (we never change an existing site's markup
+                // silently) — tell those owners once where to switch them on.
+                'id'            => 'crawler-protection-196',
+                'type'          => 'info',
+                'free_only'     => true,
+                'trigger'       => function () {
+                    // 'update' semantics, but only while the option is still off
+                    return get_option( self::UPDATED_OPTION ) === FLRT_PLUGIN_VER
+                        && flrt_get_option( 'disable_filter_links_for_bots' ) !== 'on';
+                },
+                'expires_after' => 30 * DAY_IN_SECONDS,
+                'auto_dismiss'  => function () {
+                    // Gone as soon as the user opens any plugin admin page (Filter
+                    // Sets list/editor or any Settings tab) — they have seen the
+                    // new section by then.
+                    $post_type = isset( $_GET['post_type'] ) ? sanitize_key( wp_unslash( $_GET['post_type'] ) ) : '';
+                    $page      = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+                    $typenow   = ! empty( $GLOBALS['typenow'] ) ? $GLOBALS['typenow'] : '';
+
+                    return $post_type === FLRT_FILTERS_SET_POST_TYPE
+                        || $typenow === FLRT_FILTERS_SET_POST_TYPE
+                        || $page === 'filters-settings';
+                },
+                'message'       => function () {
+                    $settings_url = admin_url( 'edit.php?post_type=' . FLRT_FILTERS_SET_POST_TYPE . '&page=filters-settings' );
+
+                    return sprintf(
+                        /* translators: 1: opening <a> tag to the plugin settings page, 2: closing </a> tag. */
+                        wp_kses(
+                            __( 'Thank you for updating Filter Everything! Bots and AI crawlers increasingly overload websites by requesting endless filter combinations. This version adds two protections — <strong>«Disable filter links for crawlers»</strong> and <strong>«Block filter URLs in robots.txt»</strong>. They stay off on existing sites so that nothing changes without your consent; we recommend enabling both on %1$sthe settings page%2$s.', 'filter-everything' ),
+                            [ 'strong' => [], 'a' => [ 'href' => [] ] ]
+                        ),
+                        '<a href="' . esc_url( $settings_url ) . '">',
+                        '</a>'
+                    );
+                },
+            ],
             [
                 'id'            => 'security-1922',
                 'type'          => 'warning',
@@ -115,6 +161,7 @@ class AdminNotices
         }
 
         update_option( self::UPDATED_OPTION, FLRT_PLUGIN_VER );
+        update_option( self::UPDATED_AT_OPTION, time() );
         update_option( self::VERSION_OPTION, FLRT_PLUGIN_VER );
     }
 

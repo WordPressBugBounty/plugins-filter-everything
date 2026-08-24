@@ -3806,9 +3806,6 @@ msgstr "Na této stránce nejsou žádné sady filtrů."
 msgid "There is no filter widget on this page."
 msgstr "Na této stránce není žádný widget filtrů."
 
-msgid "v%s"
-msgstr "v%s"
-
 msgctxt "benefits-landing"
 msgid "Risk-free purchase, premium support and regular updates"
 msgstr "Nákup bez rizika, prémiová podpora a pravidelné aktualizace"
@@ -3829,24 +3826,8 @@ msgctxt "benefits-landing"
 msgid "Yes, of course — support is included with the PRO version. Your purchase comes with 1 year of premium support and plugin updates, with the option to renew. Even if you choose not to renew after a year, you can keep using the plugin — you just won't receive updates anymore."
 msgstr "Ano, samozřejmě — podpora je součástí verze PRO. S nákupem získáte 1 rok prémiové podpory a aktualizací pluginu s možností prodloužení. I když se po roce rozhodnete neprodloužit, můžete plugin dále používat — jen už nebudete dostávat aktualizace."
 
-
 msgid "Filter combinations produce thousands of URLs, and crawlers may waste your crawl budget and server resources trying to follow them all. This option renders filter links as &lt;span&gt; tags — they keep working for visitors, but crawlers no longer see them as links.<br /><br />Links to pages that your SEO Rules define as indexed always keep the real &lt;a&gt; tag, so search engines can still discover and rank those pages.<br /><br />You can also block unwanted pages and specific bots in the robots.txt file."
 msgstr "Kombinace filtrů vytvářejí tisíce URL a roboti mohou plýtvat crawl budgetem a prostředky serveru, když se je snaží všechny projít. Tato volba vykresluje odkazy filtrů jako značky &lt;span&gt; — pro návštěvníky fungují dál, ale roboti je už nevidí jako odkazy.<br /><br />Odkazy na stránky, které vaše Pravidla SEO označují jako indexované, si vždy ponechávají skutečnou značku &lt;a&gt;, takže vyhledávače tyto stránky nadále nacházejí a hodnotí.<br /><br />Nežádoucí stránky a jednotlivé roboty můžete také zablokovat v souboru robots.txt."
-
-msgid "You've been using Filter Everything for a while now"
-msgstr "Filter Everything už nějakou dobu používáte"
-
-msgid "We hope the plugin has made building filters easier for you. If it has, could you take a minute to rate it on WordPress.org?"
-msgstr "Doufáme, že vám plugin usnadnil tvorbu filtrů. Pokud ano, našli byste minutku na jeho hodnocení na WordPress.org?"
-
-msgid "It takes about a minute — a star rating and a sentence is plenty"
-msgstr "Zabere to asi minutu — stačí hvězdičky a jedna věta"
-
-msgid "Reviews help other WordPress users find the plugin"
-msgstr "Recenze pomáhají ostatním uživatelům WordPressu plugin najít"
-
-msgid "Your feedback shapes what we build next"
-msgstr "Vaše zpětná vazba určuje, co vytvoříme příště"
 
 #, php-format
 msgid "Something not working right? %1$sContact support%2$s — we'd rather fix it first."
@@ -3861,10 +3842,6 @@ msgstr "Filter Everything?"
 msgid "Rate us on WordPress.org and help the plugin grow"
 msgstr "Ohodnoťte nás na WordPress.org a pomozte pluginu růst"
 
-#, php-format
-msgid "Trusted by %s active installs"
-msgstr "Důvěřuje nám %s aktivních instalací"
-
 msgid "Rate Filter Everything"
 msgstr "Ohodnotit Filter Everything"
 
@@ -3873,3 +3850,76 @@ msgstr "Možná později"
 
 msgid "Don't show this again"
 msgstr "Už nezobrazovat"
+
+msgid "Crawlers and bots"
+msgstr "Roboti a boti"
+
+msgid "Filter combinations produce thousands of URLs, and crawlers may waste your crawl budget and server resources trying to follow them all. This option renders filter links as &lt;span&gt; tags — they keep working for visitors, but crawlers no longer see them as links.<br /><br />Filtering result pages are marked noindex in the free version anyway, so hiding the links costs nothing in search visibility. The PRO version keeps the real &lt;a&gt; tag for the filter pages that its SEO Rules make indexable.<br /><br />Crawlers that already know your filter URLs may keep requesting them for a while — the robots.txt rules below stop that too."
+msgstr "Kombinace filtrů vytvářejí tisíce URL a roboti mohou plýtvat crawl budgetem a prostředky serveru, když se je snaží všechny projít. Tato volba vykresluje odkazy filtrů jako značky &lt;span&gt; — pro návštěvníky fungují dál, ale roboti je už nevidí jako odkazy.<br /><br />Stránky s výsledky filtrování jsou ve verzi Free tak jako tak označeny jako noindex, takže skrytí odkazů nijak nesníží viditelnost ve vyhledávání. Verze PRO ponechává skutečnou značku &lt;a&gt; u těch stránek filtrů, které její Pravidla SEO označují jako indexovatelné.<br /><br />Roboti, kteří vaše URL filtrů už znají, je mohou ještě nějakou dobu dál požadovat — i tomu zabrání pravidla pro robots.txt uvedená níže."
+
+msgid "Block filter URLs in robots.txt"
+msgstr "Blokovat URL filtrů v souboru robots.txt"
+
+msgid "Add Disallow rules for all filter URLs to the robots.txt file"
+msgstr "Přidá pravidla Disallow pro všechny URL filtrů do souboru robots.txt"
+
+msgid "Tells search engines and other well-behaved crawlers not to request filtering result pages at all. Bots that ignore robots.txt are not affected."
+msgstr "Říká vyhledávačům a dalším slušně se chovajícím robotům, aby stránky s výsledky filtrování vůbec nepožadovali. Botů, kteří robots.txt ignorují, se to netýká."
+
+msgid "Hiding the filter links stops crawlers from discovering new filter URLs, but the URLs they already know stay in their queues for weeks or months. A Disallow rule in robots.txt is the only signal that also stops compliant crawlers — Google, Bing and most AI bots — from requesting those pages at all, which frees both your server and your crawl budget.<br /><br />The rules are generated from your filters and stay in sync automatically. When your site has a physical robots.txt file, WordPress cannot add them for you — copy the rules shown below into that file yourself."
+msgstr "Skrytí odkazů filtrů zabrání robotům objevovat nové URL filtrů, ale URL, které už znají, zůstávají v jejich frontách týdny až měsíce. Pravidlo Disallow v robots.txt je jediný signál, který navíc zabrání i robotům respektujícím pravidla — Google, Bing a většině AI botů — tyto stránky vůbec požadovat, což uleví vašemu serveru i crawl budgetu.<br /><br />Pravidla se generují z vašich filtrů a automaticky zůstávají aktuální. Pokud má váš web fyzický soubor robots.txt, WordPress je za vás přidat nemůže — zkopírujte pravidla zobrazená níže do tohoto souboru sami."
+
+msgid "Rules for robots.txt"
+msgstr "Pravidla pro robots.txt"
+
+msgid "No filters are configured yet — the rules will appear here as soon as you create a Filter Set."
+msgstr "Zatím nejsou nastaveny žádné filtry — pravidla se zde objeví, jakmile vytvoříte sadu filtrů."
+
+msgid "Your site has a physical robots.txt file, so WordPress cannot add these rules automatically. Copy them into that file yourself."
+msgstr "Váš web má fyzický soubor robots.txt, takže WordPress nemůže tato pravidla přidat automaticky. Zkopírujte je do tohoto souboru sami."
+
+msgid "WordPress serves its robots.txt only when pretty permalinks are enabled (Settings → Permalinks). Until then, copy these rules into a physical robots.txt file."
+msgstr "WordPress poskytuje svůj robots.txt pouze tehdy, když jsou zapnuté hezké trvalé odkazy (Nastavení → Trvalé odkazy). Do té doby zkopírujte tato pravidla do fyzického souboru robots.txt."
+
+msgid "These rules are added to %s automatically."
+msgstr "Tato pravidla se do %s přidávají automaticky."
+
+msgid "Enable the option above to add these rules to robots.txt automatically, or copy them into your own robots.txt file."
+msgstr "Povolte volbu výše, aby se tato pravidla přidala do robots.txt automaticky, nebo je zkopírujte do vlastního souboru robots.txt."
+
+msgid "Thank you for updating Filter Everything! Bots and AI crawlers increasingly overload websites by requesting endless filter combinations. This version adds two protections — <strong>«Disable filter links for crawlers»</strong> and <strong>«Block filter URLs in robots.txt»</strong>. They stay off on existing sites so that nothing changes without your consent; we recommend enabling both on %1$sthe settings page%2$s."
+msgstr "Děkujeme za aktualizaci Filter Everything! Boti a AI roboti stále častěji přetěžují weby tím, že požadují nekonečné kombinace filtrů. Tato verze přidává dvě ochrany — <strong>«Zakázat odkazy filtrů pro roboty»</strong> a <strong>«Blokovat URL filtrů v souboru robots.txt»</strong>. Na stávajících webech zůstávají vypnuté, aby se nic nezměnilo bez vašeho souhlasu; doporučujeme obě povolit na %1$sstránce nastavení%2$s."
+
+msgid "What's new"
+msgstr "Co je nového"
+
+msgid "New release notes available"
+msgstr "K dispozici jsou nové poznámky k vydání"
+
+msgid "Sorry, you are not allowed to access this page."
+msgstr "Je nám líto, nemáte oprávnění pro přístup k této stránce."
+
+msgid "What's new in %s"
+msgstr "Co je nového v %s"
+
+msgid "Release date: %s"
+msgstr "Datum vydání: %s"
+
+msgid "No release notes were found for this version."
+msgstr "Pro tuto verzi nebyly nalezeny žádné poznámky k vydání."
+
+msgid "Full changelog"
+msgstr "Úplný seznam změn"
+
+msgid "Earlier releases"
+msgstr "Předchozí vydání"
+
+msgid "This site identifies itself to the license server as <strong>%s</strong> — register exactly this address in your account and use the key generated for it."
+msgstr "Tento web se licenčnímu serveru identifikuje jako <strong>%s</strong> — zaregistrujte ve svém účtu přesně tuto adresu a použijte klíč vygenerovaný pro ni."
+
+msgid "This license key was generated for <strong>%1$s</strong>, but this site identifies itself as <strong>%2$s</strong>. Register this exact address in your account (you can delete the other one to free the slot) and use the key generated for it."
+msgstr "Tento licenční klíč byl vygenerován pro <strong>%1$s</strong>, ale tento web se identifikuje jako <strong>%2$s</strong>. Zaregistrujte ve svém účtu přesně tuto adresu (tu druhou můžete smazat a uvolnit tak místo) a použijte klíč vygenerovaný pro ni."
+
+msgid "Hiding the filter links stops crawlers from discovering new filter URLs, but the URLs they already know stay in their queues for weeks or months. A Disallow rule in robots.txt is the only signal that also stops compliant crawlers — Google, Bing and most AI bots — from requesting those pages at all, which frees both your server and your crawl budget.<br /><br />With pretty permalinks the rules name only the filter URLs that are never indexable: several values of one filter (…/color-red-or-blue/), more filters in one URL than your Indexing Depth allows, and numeric or date ranges. Single-filter pages stay crawlable, so the pages your SEO Rules index are never touched. Review the list before enabling: a product or category slug that starts with one of your filter prefixes would match the same pattern.<br /><br />When your site has a physical robots.txt file, WordPress cannot add the rules for you — copy them into that file yourself."
+msgstr "Skrytí odkazů filtrů zabrání robotům objevovat nové URL filtrů, ale URL, které už znají, zůstávají v jejich frontách týdny až měsíce. Pravidlo Disallow v robots.txt je jediný signál, který navíc zabrání i robotům respektujícím pravidla — Google, Bing a většině AI botů — tyto stránky vůbec požadovat, což uleví vašemu serveru i crawl budgetu.<br /><br />S hezkými trvalými odkazy pravidla pojmenovávají jen URL filtrů, které nikdy nejsou indexovatelné: více hodnot jednoho filtru (…/color-red-or-blue/), více filtrů v jedné URL, než povoluje vaše Hloubka indexování, a číselné nebo datové rozsahy. Stránky s jedním filtrem zůstávají procházené, takže stránek indexovaných vašimi Pravidly SEO se to nikdy nedotkne. Před zapnutím seznam zkontrolujte: slug produktu nebo kategorie začínající jedním z vašich prefixů filtrů by odpovídal stejnému vzoru.<br /><br />Pokud má váš web fyzický soubor robots.txt, WordPress za vás pravidla přidat nemůže — zkopírujte je do tohoto souboru sami."
+

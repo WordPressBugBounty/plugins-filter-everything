@@ -313,7 +313,6 @@ class AutoFilterSet extends FilterSet
 
     private function addAutoFilters()
     {
-        $filterLinks = get_option('wpc_filter_permalinks', []);
         $filterSets = $this->prepareFilterEntities();
         $filterFields = parent::getFilterFieldService();
 
@@ -379,7 +378,6 @@ class AutoFilterSet extends FilterSet
         $filterFields = parent::getFilterFieldService();
         $saveFiltersTrigger = true;
         $allFiltersValid = true;
-        $filterLinks = get_option('wpc_filter_permalinks', []);
 
         // Save filter fields
         if (!empty($filterSets[$post->post_excerpt]['wpc_filter_fields'])) {
@@ -424,16 +422,13 @@ class AutoFilterSet extends FilterSet
 
                     foreach ($filtersToSave as $filterId => $filter) {
                         // save filter
+                        // saveFilter() runs the wpc_pre_save_filter hook, where
+                        // PermalinksTab::maybeAddGlobalPrefix() forces the slug to the
+                        // global prefix of this entity or registers a new one in
+                        // wpc_filter_permalinks — nothing else must touch that registry
+                        // here (a stale copy written back afterwards used to wipe the
+                        // freshly registered prefixes and leave a junk '#' entry).
                         $saved_filter = $filterFields->saveFilter($filter);
-                        $link_filter = $saved_filter;
-                        $link_filter['post_content'] = maybe_serialize($link_filter['post_content']);
-                        $entity = $link_filter['post_content']['entity'];
-                        $taxonomy = $link_filter['post_content']['e_name'];
-                        if (!empty($filterLinks[$entity . "#" . $taxonomy])) {
-                            $filterField['post_name'] = $filterLinks[$entity . "#" . $taxonomy];
-                        } else {
-                            $filterLinks[$entity . "#" . $taxonomy] = $filterField['post_name'];
-                        }
 
                         if (isset($saved_filter['parent_filter']) && isset($saved_filter['ID'])) {
                             if (strpos($saved_filter['parent_filter'], 'filter_', 0) !== false) {
@@ -446,7 +441,6 @@ class AutoFilterSet extends FilterSet
                         }
                     }
 
-                    update_option('wpc_filter_permalinks', $filterLinks);
                     // Update data after saving Filters and getting IDs of new ones.
                     if (!empty($update_after_save)) {
 

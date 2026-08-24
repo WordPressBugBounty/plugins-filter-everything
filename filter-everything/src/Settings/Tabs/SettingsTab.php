@@ -105,6 +105,10 @@ class SettingsTab extends BaseSettings
                     )
                 )
             ),
+            'crawlers' => array(
+                'label'  => esc_html__('Crawlers and bots', 'filter-everything'),
+                'fields' => $this->crawlerFields(),
+            ),
             'common_settings' => array(
                 'label'  => esc_html__('Other', 'filter-everything'),
                 'fields' => array(
@@ -114,21 +118,6 @@ class SettingsTab extends BaseSettings
                         'id'      => 'wpc_primary_color',
                         'default' => $defaultPrimaryColor,
                         'label'   => '',
-                    ),
-                    'disable_filter_links_for_bots' => array(
-                        'type'  => (defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO) ? 'checkbox' : 'inProButton',
-                        'pro_label'  => (defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO) ? '' : flrt_pro_promo_label(),
-                        'title' => esc_html__('Disable filter links for crawlers', 'filter-everything'),
-                        'id'    => 'disable_filter_links_for_bots',
-                        'description' => esc_html__( 'Replaces &lt;a&gt; tags with &lt;span&gt; in filters to prevent crawlers from following filter links and overloading your site.', 'filter-everything' ),
-                        // The detailed how-it-works lives in the tooltip; in free the
-                        // short promo description is enough
-                        'tooltip' => (defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO)
-                            ? wp_kses(
-                                __( 'Filter combinations produce thousands of URLs, and crawlers may waste your crawl budget and server resources trying to follow them all. This option renders filter links as &lt;span&gt; tags — they keep working for visitors, but crawlers no longer see them as links.<br /><br />Links to pages that your SEO Rules define as indexed always keep the real &lt;a&gt; tag, so search engines can still discover and rank those pages.<br /><br />You can also block unwanted pages and specific bots in the robots.txt file.', 'filter-everything' ),
-                                array( 'br' => array() )
-                            )
-                            : ''
                     ),
                     'container_height' => array(
                         'type'  => 'text',
@@ -163,6 +152,118 @@ class SettingsTab extends BaseSettings
         $settings = apply_filters('wpc_general_filters_settings', $settings);
 
         $this->registerSettings($settings, $this->page, $this->optionName);
+    }
+
+    /**
+     * «Crawlers and bots» section.
+     *
+     * Hiding the filter links is available in both builds since 1.9.6: in free every
+     * filter link becomes a <span> (filter pages are noindex there by design, so the
+     * links only feed crawler traps); PRO keeps a real <a> for the targets its SEO
+     * Rules index (smart spans). The robots.txt helper (both builds; the PRO rule
+     * set names only never-indexable URL classes) follows
+     * flrt_robots_helper_available() — see src/RobotsTxt.php.
+     */
+    protected function crawlerFields()
+    {
+        $is_pro = defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO;
+
+        $fields = array(
+            'disable_filter_links_for_bots' => array(
+                'type'  => 'checkbox',
+                'title' => esc_html__('Disable filter links for crawlers', 'filter-everything'),
+                'id'    => 'disable_filter_links_for_bots',
+                'description' => esc_html__( 'Replaces &lt;a&gt; tags with &lt;span&gt; in filters to prevent crawlers from following filter links and overloading your site.', 'filter-everything' ),
+                'tooltip' => $is_pro
+                    ? wp_kses(
+                        __( 'Filter combinations produce thousands of URLs, and crawlers may waste your crawl budget and server resources trying to follow them all. This option renders filter links as &lt;span&gt; tags — they keep working for visitors, but crawlers no longer see them as links.<br /><br />Links to pages that your SEO Rules define as indexed always keep the real &lt;a&gt; tag, so search engines can still discover and rank those pages.<br /><br />You can also block unwanted pages and specific bots in the robots.txt file.', 'filter-everything' ),
+                        array( 'br' => array() )
+                    )
+                    : wp_kses(
+                        __( 'Filter combinations produce thousands of URLs, and crawlers may waste your crawl budget and server resources trying to follow them all. This option renders filter links as &lt;span&gt; tags — they keep working for visitors, but crawlers no longer see them as links.<br /><br />Filtering result pages are marked noindex in the free version anyway, so hiding the links costs nothing in search visibility. The PRO version keeps the real &lt;a&gt; tag for the filter pages that its SEO Rules make indexable.<br /><br />Crawlers that already know your filter URLs may keep requesting them for a while — the robots.txt rules below stop that too.', 'filter-everything' ),
+                        array( 'br' => array() )
+                    ),
+            ),
+        );
+
+        if ( function_exists( 'flrt_robots_helper_available' ) && flrt_robots_helper_available() ) {
+            $fields['robots_txt_block_filters'] = array(
+                'type'  => 'checkbox',
+                'title' => esc_html__('Block filter URLs in robots.txt', 'filter-everything'),
+                'id'    => 'robots_txt_block_filters',
+                'label' => esc_html__('Add Disallow rules for all filter URLs to the robots.txt file', 'filter-everything'),
+                'description' => esc_html__( 'Tells search engines and other well-behaved crawlers not to request filtering result pages at all. Bots that ignore robots.txt are not affected.', 'filter-everything' ),
+                'tooltip' => $is_pro
+                    ? wp_kses(
+                        __( 'Hiding the filter links stops crawlers from discovering new filter URLs, but the URLs they already know stay in their queues for weeks or months. A Disallow rule in robots.txt is the only signal that also stops compliant crawlers — Google, Bing and most AI bots — from requesting those pages at all, which frees both your server and your crawl budget.<br /><br />With pretty permalinks the rules name only the filter URLs that are never indexable: several values of one filter (…/color-red-or-blue/), more filters in one URL than your Indexing Depth allows, and numeric or date ranges. Single-filter pages stay crawlable, so the pages your SEO Rules index are never touched. Review the list before enabling: a product or category slug that starts with one of your filter prefixes would match the same pattern.<br /><br />When your site has a physical robots.txt file, WordPress cannot add the rules for you — copy them into that file yourself.', 'filter-everything' ),
+                        array( 'br' => array() )
+                    )
+                    : wp_kses(
+                        __( 'Hiding the filter links stops crawlers from discovering new filter URLs, but the URLs they already know stay in their queues for weeks or months. A Disallow rule in robots.txt is the only signal that also stops compliant crawlers — Google, Bing and most AI bots — from requesting those pages at all, which frees both your server and your crawl budget.<br /><br />The rules are generated from your filters and stay in sync automatically. When your site has a physical robots.txt file, WordPress cannot add them for you — copy the rules shown below into that file yourself.', 'filter-everything' ),
+                        array( 'br' => array() )
+                    ),
+            );
+            $fields['robots_txt_rules'] = array(
+                'type'   => 'html',
+                'title'  => esc_html__('Rules for robots.txt', 'filter-everything'),
+                'id'     => 'robots_txt_rules',
+                'render' => array( $this, 'renderRobotsRules' ),
+            );
+        }
+
+        return $fields;
+    }
+
+    /**
+     * The generated robots.txt block plus a status line saying whether WordPress
+     * adds it automatically (virtual robots.txt) or the user has to paste it.
+     */
+    public function renderRobotsRules( $args )
+    {
+        $rules = function_exists( 'flrt_robots_txt_rules' ) ? flrt_robots_txt_rules() : '';
+
+        if ( $rules === '' ) {
+            printf(
+                '<p class="description">%s</p>',
+                esc_html__( 'No filters are configured yet — the rules will appear here as soon as you create a Filter Set.', 'filter-everything' )
+            );
+            return;
+        }
+
+        $rows = min( 20, substr_count( $rules, "\n" ) + 2 );
+
+        printf(
+            '<textarea class="large-text code" rows="%d" id="%s" readonly onclick="this.select()">%s</textarea>',
+            (int) $rows,
+            esc_attr( $args['id'] ),
+            esc_textarea( $rules )
+        );
+
+        if ( flrt_robots_txt_is_physical() ) {
+            printf(
+                '<p class="wpc-warning">%s</p>',
+                esc_html__( 'Your site has a physical robots.txt file, so WordPress cannot add these rules automatically. Copy them into that file yourself.', 'filter-everything' )
+            );
+        } elseif ( ! get_option( 'permalink_structure' ) ) {
+            printf(
+                '<p class="wpc-warning">%s</p>',
+                esc_html__( 'WordPress serves its robots.txt only when pretty permalinks are enabled (Settings → Permalinks). Until then, copy these rules into a physical robots.txt file.', 'filter-everything' )
+            );
+        } elseif ( flrt_get_option( 'robots_txt_block_filters' ) === 'on' ) {
+            printf(
+                '<p class="description">%s</p>',
+                sprintf(
+                    /* translators: %s: link to the site's robots.txt */
+                    esc_html__( 'These rules are added to %s automatically.', 'filter-everything' ),
+                    '<a href="' . esc_url( home_url( '/robots.txt' ) ) . '" target="_blank" rel="noopener">robots.txt</a>'
+                )
+            );
+        } else {
+            printf(
+                '<p class="description">%s</p>',
+                esc_html__( 'Enable the option above to add these rules to robots.txt automatically, or copy them into your own robots.txt file.', 'filter-everything' )
+            );
+        }
     }
 
     public function getLabel()

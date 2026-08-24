@@ -3794,9 +3794,6 @@ msgstr "На цій сторінці немає фільтр сетів."
 msgid "There is no filter widget on this page."
 msgstr "На цій сторінці немає віджета фільтрів."
 
-msgid "v%s"
-msgstr "v%s"
-
 msgctxt "benefits-landing"
 msgid "Risk-free purchase, premium support and regular updates"
 msgstr "Купівля без ризику, преміум підтримка та регулярні оновлення"
@@ -3817,24 +3814,8 @@ msgctxt "benefits-landing"
 msgid "Yes, of course — support is included with the PRO version. Your purchase comes with 1 year of premium support and plugin updates, with the option to renew. Even if you choose not to renew after a year, you can keep using the plugin — you just won't receive updates anymore."
 msgstr "Так, звичайно, підтримка входить у PRO-версію. Оплативши, ви отримаєте 1 рік преміум-підтримки та оновлень плагіна з можливістю їх продовжити. Навіть якщо ви не захочете продовжувати через рік, ви зможете й надалі користуватися плагіном, проте вже не отримуватимете оновлення."
 
-
 msgid "Filter combinations produce thousands of URLs, and crawlers may waste your crawl budget and server resources trying to follow them all. This option renders filter links as &lt;span&gt; tags — they keep working for visitors, but crawlers no longer see them as links.<br /><br />Links to pages that your SEO Rules define as indexed always keep the real &lt;a&gt; tag, so search engines can still discover and rank those pages.<br /><br />You can also block unwanted pages and specific bots in the robots.txt file."
 msgstr "Комбінації фільтрів породжують тисячі URL, і пошукові роботи можуть змарнувати краулінговий бюджет і ресурси сервера, обходячи їх усі. Ця опція виводить посилання фільтрів тегами &lt;span&gt; — для відвідувачів вони працюють як раніше, але роботи більше не бачать у них посилань.<br /><br />Посилання на сторінки, які ваші SEO правила визначають як індексовані, завжди зберігають справжній тег &lt;a&gt; — тож пошукові системи й далі знаходять і ранжують ці сторінки.<br /><br />Також ви можете заблокувати небажані сторінки та окремих ботів у файлі robots.txt."
-
-msgid "You've been using Filter Everything for a while now"
-msgstr "Ви вже якийсь час користуєтесь Filter Everything"
-
-msgid "We hope the plugin has made building filters easier for you. If it has, could you take a minute to rate it on WordPress.org?"
-msgstr "Сподіваємось, з плагіном будувати фільтри стало простіше. Якщо це так — чи не могли б Ви приділити хвилинку, щоб оцінити його на WordPress.org?"
-
-msgid "It takes about a minute — a star rating and a sentence is plenty"
-msgstr "Це займе близько хвилини — досить оцінки зірочками та одного речення"
-
-msgid "Reviews help other WordPress users find the plugin"
-msgstr "Відгуки допомагають іншим користувачам WordPress знайти плагін"
-
-msgid "Your feedback shapes what we build next"
-msgstr "Ваш відгук впливає на те, що ми розробимо далі"
 
 #, php-format
 msgid "Something not working right? %1$sContact support%2$s — we'd rather fix it first."
@@ -3849,10 +3830,6 @@ msgstr "Filter Everything?"
 msgid "Rate us on WordPress.org and help the plugin grow"
 msgstr "Оцініть нас на WordPress.org і допоможіть плагіну рости"
 
-#, php-format
-msgid "Trusted by %s active installs"
-msgstr "Нам довіряють %s активних установок"
-
 msgid "Rate Filter Everything"
 msgstr "Оцінити Filter Everything"
 
@@ -3861,3 +3838,76 @@ msgstr "Можливо, пізніше"
 
 msgid "Don't show this again"
 msgstr "Більше не показувати"
+
+msgid "Crawlers and bots"
+msgstr "Пошукові роботи та боти"
+
+msgid "Filter combinations produce thousands of URLs, and crawlers may waste your crawl budget and server resources trying to follow them all. This option renders filter links as &lt;span&gt; tags — they keep working for visitors, but crawlers no longer see them as links.<br /><br />Filtering result pages are marked noindex in the free version anyway, so hiding the links costs nothing in search visibility. The PRO version keeps the real &lt;a&gt; tag for the filter pages that its SEO Rules make indexable.<br /><br />Crawlers that already know your filter URLs may keep requesting them for a while — the robots.txt rules below stop that too."
+msgstr "Комбінації фільтрів породжують тисячі URL, і пошукові роботи можуть змарнувати краулінговий бюджет і ресурси сервера, обходячи їх усі. Ця опція виводить посилання фільтрів тегами &lt;span&gt; — для відвідувачів вони працюють як раніше, але роботи більше не бачать у них посилань.<br /><br />У безкоштовній версії сторінки результатів фільтрування й так позначені як noindex, тож приховування посилань ніяк не шкодить видимості в пошуку. Версія PRO зберігає справжній тег &lt;a&gt; для тих сторінок фільтрів, які її SEO правила роблять індексованими.<br /><br />Роботи, які вже знають ваші URL фільтрів, можуть ще якийсь час їх запитувати — правила robots.txt нижче зупиняють і це."
+
+msgid "Block filter URLs in robots.txt"
+msgstr "Заблокувати URL фільтрів у robots.txt"
+
+msgid "Add Disallow rules for all filter URLs to the robots.txt file"
+msgstr "Додати правила Disallow для всіх URL фільтрів до файлу robots.txt"
+
+msgid "Tells search engines and other well-behaved crawlers not to request filtering result pages at all. Bots that ignore robots.txt are not affected."
+msgstr "Вказує пошуковим системам та іншим сумлінним роботам узагалі не запитувати сторінки результатів фільтрування. На ботів, які ігнорують robots.txt, це не впливає."
+
+msgid "Hiding the filter links stops crawlers from discovering new filter URLs, but the URLs they already know stay in their queues for weeks or months. A Disallow rule in robots.txt is the only signal that also stops compliant crawlers — Google, Bing and most AI bots — from requesting those pages at all, which frees both your server and your crawl budget.<br /><br />The rules are generated from your filters and stay in sync automatically. When your site has a physical robots.txt file, WordPress cannot add them for you — copy the rules shown below into that file yourself."
+msgstr "Приховування посилань фільтрів не дає роботам знаходити нові URL фільтрів, але вже відомі їм URL залишаються в їхніх чергах тижнями чи місяцями. Правило Disallow у robots.txt є єдиним сигналом, який зупиняє також і сумлінних роботів — Google, Bing та більшість AI-ботів — від запитів до цих сторінок узагалі, а це звільняє і ваш сервер, і краулінговий бюджет.<br /><br />Правила генеруються з ваших фільтрів і автоматично залишаються актуальними. Якщо на вашому сайті є фізичний файл robots.txt, WordPress не може додати їх за вас — скопіюйте наведені нижче правила в цей файл самостійно."
+
+msgid "Rules for robots.txt"
+msgstr "Правила для robots.txt"
+
+msgid "No filters are configured yet — the rules will appear here as soon as you create a Filter Set."
+msgstr "Фільтри ще не налаштовані — правила з'являться тут, щойно ви створите фільтр сет."
+
+msgid "Your site has a physical robots.txt file, so WordPress cannot add these rules automatically. Copy them into that file yourself."
+msgstr "На вашому сайті є фізичний файл robots.txt, тому WordPress не може додати ці правила автоматично. Скопіюйте їх у цей файл самостійно."
+
+msgid "WordPress serves its robots.txt only when pretty permalinks are enabled (Settings → Permalinks). Until then, copy these rules into a physical robots.txt file."
+msgstr "WordPress віддає свій robots.txt лише тоді, коли ввімкнено красиві постійні посилання (Налаштування → Постійні посилання). До того часу скопіюйте ці правила у фізичний файл robots.txt."
+
+msgid "These rules are added to %s automatically."
+msgstr "Ці правила додаються до %s автоматично."
+
+msgid "Enable the option above to add these rules to robots.txt automatically, or copy them into your own robots.txt file."
+msgstr "Увімкніть опцію вище, щоб додавати ці правила до robots.txt автоматично, або скопіюйте їх у власний файл robots.txt."
+
+msgid "Thank you for updating Filter Everything! Bots and AI crawlers increasingly overload websites by requesting endless filter combinations. This version adds two protections — <strong>«Disable filter links for crawlers»</strong> and <strong>«Block filter URLs in robots.txt»</strong>. They stay off on existing sites so that nothing changes without your consent; we recommend enabling both on %1$sthe settings page%2$s."
+msgstr "Дякуємо за оновлення Filter Everything! Боти та AI-роботи дедалі частіше перевантажують сайти, запитуючи нескінченні комбінації фільтрів. Ця версія додає два захисні механізми — <strong>«Вимкнути посилання фільтрів для пошукових роботів»</strong> та <strong>«Заблокувати URL фільтрів у robots.txt»</strong>. На наявних сайтах вони залишаються вимкненими, щоб нічого не змінювалося без вашої згоди; радимо увімкнути обидва на %1$sсторінці налаштувань%2$s."
+
+msgid "What's new"
+msgstr "Що нового"
+
+msgid "New release notes available"
+msgstr "Доступні нові примітки до випуску"
+
+msgid "Sorry, you are not allowed to access this page."
+msgstr "Вибачте, у вас немає доступу до цієї сторінки."
+
+msgid "What's new in %s"
+msgstr "Що нового в %s"
+
+msgid "Release date: %s"
+msgstr "Дата випуску: %s"
+
+msgid "No release notes were found for this version."
+msgstr "Для цієї версії не знайдено приміток до випуску."
+
+msgid "Full changelog"
+msgstr "Повний список змін"
+
+msgid "Earlier releases"
+msgstr "Попередні випуски"
+
+msgid "This site identifies itself to the license server as <strong>%s</strong> — register exactly this address in your account and use the key generated for it."
+msgstr "Цей сайт ідентифікує себе для сервера ліцензій як <strong>%s</strong> — зареєструйте у своєму акаунті саме цю адресу та використайте ключ, згенерований для неї."
+
+msgid "This license key was generated for <strong>%1$s</strong>, but this site identifies itself as <strong>%2$s</strong>. Register this exact address in your account (you can delete the other one to free the slot) and use the key generated for it."
+msgstr "Цей ліцензійний ключ згенеровано для <strong>%1$s</strong>, але цей сайт ідентифікує себе як <strong>%2$s</strong>. Зареєструйте у своєму акаунті саме цю адресу (іншу можна видалити, щоб звільнити слот) і використайте ключ, згенерований для неї."
+
+msgid "Hiding the filter links stops crawlers from discovering new filter URLs, but the URLs they already know stay in their queues for weeks or months. A Disallow rule in robots.txt is the only signal that also stops compliant crawlers — Google, Bing and most AI bots — from requesting those pages at all, which frees both your server and your crawl budget.<br /><br />With pretty permalinks the rules name only the filter URLs that are never indexable: several values of one filter (…/color-red-or-blue/), more filters in one URL than your Indexing Depth allows, and numeric or date ranges. Single-filter pages stay crawlable, so the pages your SEO Rules index are never touched. Review the list before enabling: a product or category slug that starts with one of your filter prefixes would match the same pattern.<br /><br />When your site has a physical robots.txt file, WordPress cannot add the rules for you — copy them into that file yourself."
+msgstr "Приховування посилань фільтрів не дає краулерам знаходити нові URL фільтрів, але вже відомі їм URL лишаються в їхніх чергах тижнями чи місяцями. Правило Disallow у robots.txt — єдиний сигнал, який також зупиняє слухняних краулерів (Google, Bing і більшість AI-ботів) від запитів цих сторінок узагалі, що розвантажує і сервер, і краулінговий бюджет.<br /><br />З красивими постійними посиланнями правила охоплюють лише ті URL фільтрів, які ніколи не індексуються: кілька значень одного фільтра (…/color-red-or-blue/), більше фільтрів в одному URL, ніж дозволяє ваша Глибина індексації, та числові або датові діапазони. Сторінки з одним фільтром лишаються доступними для обходу, тож сторінки, які індексують ваші SEO-правила, не зачіпаються. Перегляньте список перед увімкненням: слаг товару чи категорії, що починається з одного з ваших префіксів фільтрів, збігся б із тим самим шаблоном.<br /><br />Якщо на сайті є фізичний файл robots.txt, WordPress не зможе додати правила за вас — скопіюйте їх у цей файл самостійно."
+
