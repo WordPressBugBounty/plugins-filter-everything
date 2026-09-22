@@ -34,7 +34,7 @@ class WP_Query_Source_Detector
         ],
         'beaver_builder' => [
             'classes'       => ['fl-post-grid', 'fl-post-carousel', 'fl-module-post-grid', 'fl-post-feed'],
-            'data_attrs'    => [''],
+            'data_attrs'    => [],
             'classes_check' => ['FLBuilder'],
             'meta_keys'     => ['_fl_builder_enabled', '_fl_builder_data']
         ],
@@ -348,9 +348,15 @@ class WP_Query_Source_Detector
     private static function detect_builder_from_html($html)
     {
         foreach (self::$builders as $builder => $signatures) {
-            // Check for builder-specific classes
+            // Check for builder-specific classes.
+            // Skip empty signatures: strpos() with an empty needle warns on
+            // PHP 7 ("Empty needle", flooding logs) and matches ANY html on
+            // PHP 8 — both wrong.
             if (isset($signatures['classes'])) {
                 foreach ($signatures['classes'] as $class) {
+                    if ((string) $class === '') {
+                        continue;
+                    }
                     if (strpos($html, $class) !== false) {
                         return $builder;
                     }
@@ -360,8 +366,11 @@ class WP_Query_Source_Detector
             // Check for builder-specific data attributes
             if (isset($signatures['data_attrs'])) {
                 foreach ($signatures['data_attrs'] as $attr) {
+                    if ((string) $attr === '') {
+                        continue;
+                    }
                     if (strpos($html, $attr) !== false) {
-                        return $attr;
+                        return $builder;
                     }
                 }
             }

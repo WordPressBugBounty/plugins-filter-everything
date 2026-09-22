@@ -55,10 +55,13 @@ class Admin
         if (!defined('FLRT_FILTERS_PRO')) {
             $settings = flrt_vailable_in_pro_attr_link();
 
-            // Import/Export is deliberately NOT a menu entry (free or PRO): it is a
-            // rare task and lives on its Settings tab — the menu and the toolbar
-            // that mirrors it stay short.
+            // Two PRO-only destinations in the menu, each with the PRO badge. They
+            // were dropped in 1.9.6 to keep the menu short and are back since 1.9.7:
+            // the owner saw fewer free → PRO visits without them — two PRO-badged
+            // entries in the menu and the toolbar are a visible reminder of what
+            // PRO adds.
             add_submenu_page($page, esc_html__('SEO Rules', 'filter-everything'), esc_html__('SEO Rules', 'filter-everything'), 'manage_options', $settings);
+            add_submenu_page($page, esc_html__('Import/Export', 'filter-everything'), esc_html__('Import/Export', 'filter-everything'), 'manage_options', $settings);
 
             if (isset($submenu[$page])) {
                 foreach ($submenu[$page] as $key => $details) {
@@ -73,6 +76,7 @@ class Admin
 
         add_submenu_page( $page, esc_html__('Settings', 'filter-everything'), esc_html__('Settings', 'filter-everything'), 'manage_options', 'filters-settings', array($this, 'filterSettingsPage'));
 
+        // «What's new» is a Settings tab since 1.9.7 (WhatsNew), not a menu entry
         do_action('wpc_after_add_submenu_pages');
         
     }
@@ -92,6 +96,9 @@ class Admin
         $this->tabRenderer->register(new ExperimentalTab());
 
         if( ! defined('FLRT_FILTERS_PRO') ) {
+            // Free: What's new goes BEFORE «PRO benefits», so the tab that sells
+            // stays last and most visible (owner, 2026-09-22)
+            do_action( 'wpc_settings_tabs_registered', $this->tabRenderer );
             $this->tabRenderer->register( new AboutProTab() );
 
         }else{
@@ -108,6 +115,11 @@ class Admin
             if ( $show_license_tab ) {
                 $this->tabRenderer->register(new LicenseTab( FLRT_LICENSE_KEY ));
             }
+        }
+
+        // PRO: What's new is the last tab, after License
+        if ( defined('FLRT_FILTERS_PRO') ) {
+            do_action( 'wpc_settings_tabs_registered', $this->tabRenderer );
         }
 
         $this->tabRenderer->init();

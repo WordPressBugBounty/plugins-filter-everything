@@ -125,10 +125,27 @@ if (!defined('ABSPATH')) {
                                     array( 'br' => array() )
                             ); ?></span>
                         <span class="flrt-upgrade-to-pro-popup-price-dot">•</span>
-                        <span class="flrt-upgrade-to-pro-popup-price-tag"><?php echo FLRT_PRO_PRICE; ?><span class="flrt-upgrade-to-pro-popup-price-year">&nbsp;<?php echo esc_html__('/yr', 'filter-everything'); ?></span></span>
+                        <?php
+                        // Price from the notifications feed (Messages::pricing()) while a
+                        // sale is on, otherwise the one this version shipped with.
+                        $flrt_pricing = class_exists( 'FilterEverything\\Filter\\Messages' ) ? \FilterEverything\Filter\Messages::pricing() : null;
+                        $flrt_price   = $flrt_pricing ? $flrt_pricing['price'] : FLRT_PRO_PRICE;
+                        ?>
+                        <span class="flrt-upgrade-to-pro-popup-price-tag<?php echo ( $flrt_pricing && $flrt_pricing['was'] ) ? ' flrt-upgrade-to-pro-popup-price-tag--sale' : ''; ?>">
+                            <?php if ( $flrt_pricing && $flrt_pricing['was'] ) : ?>
+                                <span class="flrt-upgrade-to-pro-popup-price-was"><s><?php echo esc_html( $flrt_pricing['was'] ); ?></s><?php if ( $flrt_pricing['off'] ) : ?> <span class="flrt-upgrade-to-pro-popup-price-off"><?php echo esc_html( $flrt_pricing['off'] ); ?></span><?php endif; ?></span>
+                            <?php endif; ?>
+                            <span class="flrt-upgrade-to-pro-popup-price-now"><?php echo esc_html( $flrt_price ); ?></span>
+                        </span>
                         <span class="flrt-upgrade-to-pro-popup-price-dot">•</span>
                         <span><?php echo esc_html__('1-year updates & support', 'filter-everything'); ?></span>
                     </div>
+                    <?php if ( $flrt_pricing && $flrt_pricing['was'] && ! empty( $flrt_pricing['ends'] ) ) : ?>
+                        <div class="flrt-upgrade-to-pro-popup-sale-note"><?php
+                            /* translators: %s: date, e.g. September 30 */
+                            echo esc_html( sprintf( __( 'Sale price — ends %s', 'filter-everything' ), wp_date( 'F j', (int) $flrt_pricing['ends'] ) ) );
+                        ?></div>
+                    <?php endif; ?>
                     <div class="flrt-upgrade-to-pro-popup-support-text">
                         <?php echo esc_html__('Plugin keeps working after expiry', 'filter-everything'); ?>
                     </div>

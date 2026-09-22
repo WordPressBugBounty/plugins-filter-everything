@@ -372,12 +372,12 @@ msgid "16&nbsp;200+"
 msgstr "16&nbsp;200+"
 
 msgctxt "benefits-landing"
-msgid "160&nbsp;000+"
-msgstr "160&nbsp;000+"
+msgid "170&nbsp;000+"
+msgstr "170&nbsp;000+"
 
 msgctxt "benefits-landing"
-msgid "160,000+"
-msgstr "160.000+"
+msgid "170,000+"
+msgstr "170.000+"
 
 msgctxt "benefits-landing"
 msgid "4.88/5"
@@ -495,8 +495,8 @@ msgid "Filter any content — page builders, plugins, or even custom code"
 msgstr "Filter alle content — page builders, plugins of zelfs aangepaste code"
 
 msgctxt "benefits-landing"
-msgid "Filter any posts list, custom query, or page builder content"
-msgstr "Filter elke berichtenlijst, aangepaste query of page builder-content"
+msgid "Filter <strong>any</strong> posts list, custom query, or page builder content"
+msgstr "Filter <strong>elke</strong> berichtenlijst, aangepaste query of page builder-content"
 
 msgctxt "benefits-landing"
 msgid "Filter by any criteria"
@@ -576,10 +576,8 @@ msgid "Import & export settings"
 msgstr "Import- en exportinstellingen"
 
 msgctxt "benefits-landing"
-msgid ""
-"Improve conversions and user experience with advanced filtering capabilities"
-msgstr ""
-"Verhoog conversies en gebruikerservaring met geavanceerde filtermogelijkheden"
+msgid "Improve <strong>conversions</strong>, <strong>sales</strong> and user experience with advanced filtering capabilities"
+msgstr "Verbeter <strong>conversies</strong>, <strong>verkopen</strong> en de gebruikerservaring met geavanceerde filtermogelijkheden"
 
 msgctxt "benefits-landing"
 msgid "Instant Filter Set duplication"
@@ -907,7 +905,7 @@ msgstr "Per titel: alfabetisch"
 msgid "By title: reverse"
 msgstr "Per titel: omgekeerd"
 
-#: src/Admin/Widgets/FiltersWidget.php:67 views/admin/filter-row.php:88
+#: src/Frontend/Widgets/FiltersWidget.php:67 views/admin/filter-row.php:88
 msgid "Cancel"
 msgstr "Annuleren"
 
@@ -1173,7 +1171,7 @@ msgstr ""
 msgid "Displays a dropdown with sort options"
 msgstr "Geeft een vervolgkeuzelijst met sorteeropties weer"
 
-#: src/Admin/Widgets/FiltersWidget.php:13
+#: src/Frontend/Widgets/FiltersWidget.php:13
 msgid "Displays filters"
 msgstr "Geeft filters weer"
 
@@ -1863,7 +1861,7 @@ msgstr "Filteren op: Productbreedte"
 msgid "Filter Container max height, px"
 msgstr "Maximale hoogte filtercontainer, px"
 
-#: src/Admin/Widgets/FiltersWidget.php:12
+#: src/Frontend/Widgets/FiltersWidget.php:12
 msgid "Filter Everything"
 msgstr "Filter Everything"
 
@@ -2758,7 +2756,7 @@ msgstr "Instellingen"
 msgid "Shop page"
 msgstr "Winkelpagina"
 
-#: src/Admin/Widgets/FiltersWidget.php:70
+#: src/Frontend/Widgets/FiltersWidget.php:70
 #, php-format
 msgid "Show %s"
 msgstr "Toon %s"
@@ -2800,14 +2798,14 @@ msgstr "Toon producten met %d+ sterren"
 msgid "Show products with %d star rating"
 msgstr "Toon producten met %d sterren"
 
-#: src/Admin/Widgets/FiltersWidget.php:189
+#: src/Frontend/Widgets/FiltersWidget.php:189
 msgid "Show selected terms (Chips)"
 msgstr "Toon geselecteerde termen (Chips)"
 
 msgid "Show Term names"
 msgstr "Termijnnamen tonen"
 
-#: src/Admin/Widgets/FiltersWidget.php:193
+#: src/Frontend/Widgets/FiltersWidget.php:193
 msgid "Show the number of posts found"
 msgstr "Het aantal gevonden posts weergeven"
 
@@ -3538,8 +3536,6 @@ msgstr "Krijg de volledige kracht van filteren en SEO-tools, en verbeter je conv
 msgid "Always<br />WP & Woo compatible"
 msgstr "Altijd<br />compatibel met WP & Woo"
 
-msgid "/yr"
-msgstr "/jr"
 
 msgid "1-year updates & support"
 msgstr "1 jaar updates & ondersteuning"
@@ -3667,8 +3663,6 @@ msgstr "Tevreden over"
 msgid "Filter Everything?"
 msgstr "Filter Everything?"
 
-msgid "Rate us on WordPress.org and help the plugin grow"
-msgstr "Beoordeel ons op WordPress.org en help de plugin groeien"
 
 msgid "Rate Filter Everything"
 msgstr "Beoordeel Filter Everything"
@@ -3751,3 +3745,190 @@ msgstr "Deze licentiesleutel is gegenereerd voor <strong>%1$s</strong>, maar dez
 msgid "Hiding the filter links stops crawlers from discovering new filter URLs, but the URLs they already know stay in their queues for weeks or months. A Disallow rule in robots.txt is the only signal that also stops compliant crawlers — Google, Bing and most AI bots — from requesting those pages at all, which frees both your server and your crawl budget.<br /><br />With pretty permalinks the rules name only the filter URLs that are never indexable: several values of one filter (…/color-red-or-blue/), more filters in one URL than your Indexing Depth allows, and numeric or date ranges. Single-filter pages stay crawlable, so the pages your SEO Rules index are never touched. Review the list before enabling: a product or category slug that starts with one of your filter prefixes would match the same pattern.<br /><br />When your site has a physical robots.txt file, WordPress cannot add the rules for you — copy them into that file yourself."
 msgstr "Het verbergen van filterlinks voorkomt dat crawlers nieuwe filter-URL's ontdekken, maar de URL's die ze al kennen blijven weken of maanden in hun wachtrijen staan. Een Disallow-regel in robots.txt is het enige signaal dat ook nette crawlers — Google, Bing en de meeste AI-bots — ervan weerhoudt die pagina's überhaupt op te vragen, wat zowel je server als je crawlbudget ontlast.<br /><br />Met mooie permalinks benoemen de regels alleen de filter-URL's die nooit indexeerbaar zijn: meerdere waarden van één filter (…/color-red-or-blue/), meer filters in één URL dan je Indexeringsdiepte toestaat, en numerieke of datumbereiken. Pagina's met één filter blijven crawlbaar, dus de pagina's die je SEO Regels indexeren worden nooit geraakt. Controleer de lijst voordat je inschakelt: een product- of categorieslug die begint met een van je filtervoorvoegsels zou met hetzelfde patroon overeenkomen.<br /><br />Als je site een fysiek robots.txt-bestand heeft, kan WordPress de regels niet voor je toevoegen — kopieer ze zelf naar dat bestand."
 
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "The plugin is locked."
+msgstr "De plugin is vergrendeld."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "It has been running for over two months without a license key, so Filter Sets and SEO Rules cannot be saved until a key is activated. Filtering on the site keeps working."
+msgstr "Hij draait al meer dan twee maanden zonder licentiesleutel, daarom kunnen filtersets en SEO-regels niet worden opgeslagen totdat een sleutel is geactiveerd. Het filteren op de site blijft werken."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Paste it below and click <strong>Activate License</strong>."
+msgstr "Plak hem hieronder en klik op <strong>Licentie activeren</strong>."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Where did you buy Filter Everything PRO?"
+msgstr "Waar heeft u Filter Everything PRO gekocht?"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "The license key depends on where you bought the plugin. Pick your case and follow the three steps."
+msgstr "De licentiesleutel hangt af van waar u de plugin heeft gekocht. Kies uw situatie en volg de drie stappen."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "On CodeCanyon (Envato)"
+msgstr "Op CodeCanyon (Envato)"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "You have an Envato account and a purchase code from Envato."
+msgstr "U heeft een Envato-account en een aankoopcode (purchase code) van Envato."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Click <strong>Get your License Key</strong> and sign in with the Envato account that made the purchase (for agencies this is often the client’s account)."
+msgstr "Klik op <strong>Ontvang uw licentiesleutel</strong> en log in met het Envato-account waarmee de aankoop is gedaan (bij bureaus is dit vaak het account van de klant)."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Copy the license key shown next to your purchase."
+msgstr "Kopieer de licentiesleutel die naast uw aankoop wordt getoond."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Your Envato purchase code (<code>a1b2c3d4-…</code>) is <strong>not</strong> the license key. It is only used on the next page to generate the key."
+msgstr "Uw Envato-aankoopcode (<code>a1b2c3d4-…</code>) is <strong>niet</strong> de licentiesleutel. Hij wordt alleen op de volgende pagina gebruikt om de sleutel te genereren."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "On filtereverything.pro"
+msgstr "Op filtereverything.pro"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "You created an account on our website during checkout."
+msgstr "U heeft tijdens het afrekenen een account op onze website aangemaakt."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Open <strong>My Account → My licenses</strong> and add this site: <code>%s</code>"
+msgstr "Open <strong>My Account → My licenses</strong> en voeg deze site toe: <code>%s</code>"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Copy the key generated for this address."
+msgstr "Kopieer de sleutel die voor dit adres is gegenereerd."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Register exactly <code>%s</code> — that is how this site identifies itself to the license server."
+msgstr "Registreer precies <code>%s</code> — zo identificeert deze site zich bij de licentieserver."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Open My licenses"
+msgstr "My licenses openen"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Don’t have a license yet? <a href=\"%s\" target=\"_blank\">Purchase it here</a>."
+msgstr "Nog geen licentie? <a href=\"%s\" target=\"_blank\">Koop hem hier</a>."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Please paste your license key first."
+msgstr "Plak eerst uw licentiesleutel."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "This looks like your Envato <strong>purchase code</strong>, not a license key. The key is a long string that starts with <code>Y29kZWNhbnlvbn</code>. Click <strong>Get your License Key</strong>, sign in with the Envato account that bought the plugin, and copy the key from there."
+msgstr "Dit lijkt op uw Envato-<strong>aankoopcode</strong>, niet op een licentiesleutel. De sleutel is een lange tekenreeks die begint met <code>Y29kZWNhbnlvbn</code>. Klik op <strong>Ontvang uw licentiesleutel</strong>, log in met het Envato-account waarmee de plugin is gekocht en kopieer de sleutel daar."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "This does not look like a Filter Everything license key. Follow the steps above for the place where you bought the plugin and paste the key exactly as shown there."
+msgstr "Dit lijkt niet op een licentiesleutel van Filter Everything. Volg de stappen hierboven voor de plaats waar u de plugin heeft gekocht en plak de sleutel precies zoals hij daar wordt getoond."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "The license server could not be reached. This is not a problem with your key — please try again in a few minutes, and contact support if it keeps failing."
+msgstr "De licentieserver is niet bereikbaar. Dit ligt niet aan uw sleutel — probeer het over enkele minuten opnieuw en neem contact op met de support als het blijft mislukken."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "This key is already active on two sites. Deactivate it on a site you no longer use (Filters → Settings → License there, or <strong>My licenses</strong> on filtereverything.pro for keys bought on our website) and try again, or contact support with the key."
+msgstr "Deze sleutel is al actief op twee sites. Deactiveer hem op een site die u niet meer gebruikt (daar via Filters → Instellingen → Licentie, of via <strong>My licenses</strong> op filtereverything.pro voor sleutels die op onze website zijn gekocht) en probeer het opnieuw, of neem met de sleutel contact op met de support."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "This key belongs to a filtereverything.pro account. Make sure <code>%s</code> is added in <strong>My licenses</strong> and paste the key generated for it."
+msgstr "Deze sleutel hoort bij een filtereverything.pro-account. Zorg dat <code>%s</code> is toegevoegd in <strong>My licenses</strong> en plak de sleutel die daarvoor is gegenereerd."
+
+#: src/Admin/Messages.php
+msgid "Plugin notifications"
+msgstr "Pluginmeldingen"
+
+#: src/Admin/Messages.php
+msgid "Receive security alerts, update warnings, usage tips and occasional offers"
+msgstr "Beveiligingswaarschuwingen, updatemeldingen, gebruikstips en af en toe aanbiedingen ontvangen"
+
+#: src/Admin/Messages.php
+msgid "Once a day the plugin downloads a small public file from filtereverything.pro. Nothing about your site is sent. Messages appear only on the plugin's own screens, except urgent security alerts."
+msgstr "Eenmaal per dag downloadt de plugin een klein openbaar bestand van filtereverything.pro. Er worden geen gegevens over uw site verzonden. Berichten verschijnen alleen op de schermen van de plugin, behalve dringende beveiligingswaarschuwingen."
+
+#: src/Admin/Messages.php
+msgid "Do you agree to receive helpful notifications?"
+msgstr "Gaat u akkoord met het ontvangen van nuttige meldingen?"
+
+#: src/Admin/Messages.php
+msgid "Filter Everything can alert you to <strong>security issues and important updates</strong>, and share usage tips and occasional offers (we won't spam you). Once a day the plugin downloads a small public file from filtereverything.pro. Nothing about your site is sent. Messages appear only on the plugin's own screens, except urgent security alerts. You can change this any time in Settings."
+msgstr "Filter Everything kan u waarschuwen voor <strong>beveiligingsproblemen en belangrijke updates</strong>, en gebruikstips en af en toe aanbiedingen delen (we spammen niet). Eenmaal per dag downloadt de plugin een klein openbaar bestand van filtereverything.pro. Er worden geen gegevens over uw site verzonden. Berichten verschijnen alleen op de schermen van de plugin, behalve dringende beveiligingswaarschuwingen. U kunt dit altijd wijzigen in de Instellingen."
+
+#: src/Admin/Messages.php
+msgid "Yes, I agree"
+msgstr "Ja, ik ga akkoord"
+
+#: src/Admin/Messages.php
+msgid "No, I don't agree"
+msgstr "Nee, ik ga niet akkoord"
+
+#: src/Admin/Messages.php
+msgid "Dismiss this message"
+msgstr "Dit bericht sluiten"
+
+#: src/Admin/Messages.php
+msgid "Ends in"
+msgstr "Eindigt over"
+
+#: src/Admin/Messages.php
+msgid "(opens in a new tab)"
+msgstr "(opent in een nieuw tabblad)"
+
+#: src/Admin/Messages.php
+msgctxt "countdown unit"
+msgid "days"
+msgstr "dagen"
+
+#: src/Admin/Messages.php
+msgctxt "countdown unit"
+msgid "hrs"
+msgstr "uur"
+
+#: src/Admin/Messages.php
+msgctxt "countdown unit"
+msgid "min"
+msgstr "min"
+
+#: src/Admin/Messages.php
+msgctxt "countdown unit"
+msgid "sec"
+msgstr "sec"
+
+#: src/Admin/WhatsNew.php
+msgid "New release notes and a new notification"
+msgstr "Nieuwe release-opmerkingen en een nieuwe melding"
+
+#: src/Admin/WhatsNew.php
+msgid "New notification"
+msgstr "Nieuwe melding"
+
+#: src/Settings/Tabs/AboutProTab.php
+msgctxt "benefits-landing"
+msgid "Pause"
+msgstr "Pauze"
+
+#: src/Settings/Tabs/AboutProTab.php
+msgctxt "benefits-landing"
+msgid "Better navigation — more sales"
+msgstr "Betere navigatie — meer verkopen"
+
+#: src/Settings/Tabs/AboutProTab.php
+msgctxt "benefits-landing"
+msgid "Better navigation — more conversions"
+msgstr "Betere navigatie — meer conversies"
+
+#. translators: %s: date, e.g. September 30
+#: views/admin/pro-modal.php
+msgid "Sale price — ends %s"
+msgstr "Actieprijs — tot %s"
+
+#: views/admin/review-notice.php
+msgid "Your review on WordPress.org <strong>keeps the free version alive</strong> — it takes a minute."
+msgstr "Jouw review op WordPress.org <strong>houdt de gratis versie in leven</strong> — het kost een minuut."
+
+#: views/admin/review-notice.php
+msgid "A WordPress.org account is needed to post a review."
+msgstr "Voor het plaatsen van een review is een WordPress.org-account nodig."

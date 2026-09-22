@@ -869,8 +869,8 @@ class EntityManager
     // This method must be executed before output
     public function prepareEntitiesToDisplay( $sets )
     {
-        global $flrt_json_data;
         $container  = Container::instance();
+        $flrt_json_data = &$container->getFilterContext()->jsonData();
         $wpManager  = $container->getWpManager();
         $fse   = Container::instance()->getFilterService();
         $subkey     = '';

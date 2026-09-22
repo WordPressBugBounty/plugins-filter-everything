@@ -1,5 +1,5 @@
 /*!
- * Filter Everything 1.9.6
+ * Filter Everything 1.9.7
  */
 (function ($) {
     "use strict";
@@ -96,7 +96,8 @@
     // Named so the label-tap fallback below can invoke the same logic when
     // the forwarded input click never arrives (iOS Safari, see below)
     function wpcTermInputClickHandler(e) {
-        this.__wpcClickHandled = Date.now();
+        // Bumped on every run; the label-tap fallback below compares it
+        this.__wpcClickSeq = (this.__wpcClickSeq || 0) + 1;
         let wpcLink = $(this).data('wpc-link');
         let $el     = $(this).parents(wpcWidgetContainer);
         let setId   = $el.data('set');
@@ -157,6 +158,15 @@
                         }
                         $(this).data('wpc-was-checked', n > 0 && k === n);
                     });
+                    // The count next to the stars has the same two writers. When the
+                    // click target is not an <a> (crawler span-links, a bare label),
+                    // the label handler reads the radio BEFORE the browser toggles it,
+                    // so a deselect kept the old rating's count. Settle it here.
+                    if (n > 0) {
+                        flrtGetRatingTermCount($starContent.find('label.flrt-rating-numb-' + n), true);
+                    } else {
+                        $('#flrt-wpc-term-count').text('');
+                    }
                 }, 0);
             }
 
@@ -252,13 +262,20 @@
     $(document).on('click', '.wpc-filter-content li.wpc-term-item label', function (e) {
         if ($(e.target).closest('a').length) return;          // <a> terms have their own handler
         if ($(this).hasClass('flrt-star-label')) return;      // rating stars have their own handler
+        if ($(e.target).is('input')) return;                  // the forwarded input click itself, already handled
         let input = null;
         const forId = $(this).attr('for');
         if (forId) { input = document.getElementById(forId); }
         if (!input) { input = $(this).closest('.wpc-term-item-content-wrapper').find('input[type="checkbox"], input[type="radio"]')[0]; }
         if (!input || (input.type !== 'checkbox' && input.type !== 'radio')) return;
+        // Where the browser forwards the click, it is dispatched right after this
+        // label click — before any timer — and bumps the counter. Compare the
+        // counter, not the time: a 500 ms window measured from the START of the
+        // handler expired while a large set's synchronous instant recount was
+        // still running, so the handler ran twice and a radio ended unchecked.
+        const seq = input.__wpcClickSeq || 0;
         setTimeout(function () {
-            if (input.__wpcClickHandled && Date.now() - input.__wpcClickHandled < 500) return;
+            if ((input.__wpcClickSeq || 0) !== seq) return;
             wpcTermInputClickHandler.call(input, { preventDefault: function () {} });
         }, 0);
     });
@@ -4155,7 +4172,11 @@
                     }
                 }
 
-                if(typeof wpcFilterJsonData.wpcFilterEntitiesWithoutSlug[data.wpcEName] !== "undefined"){
+                // Permalink maps are keyed by "entity#e_name": e_name alone collides
+                // when two filters share it (Sale Price num vs On Sale exists)
+                const entityKey = entity + '#' + data.wpcEName;
+
+                if(typeof wpcFilterJsonData.wpcFilterEntitiesWithoutSlug[entityKey] !== "undefined"){
 
                     let val = $currentEl.val();
 
@@ -4213,24 +4234,24 @@
                         return;
                     }
                     const sortKey = Object.keys(wpcFilterJsonData.wpcFilterPermalinksNum)
-                        .find(k => wpcFilterJsonData.wpcFilterPermalinksNum[k] === data.wpcEName);
+                        .find(k => wpcFilterJsonData.wpcFilterPermalinksNum[k] === entityKey);
 
                     if (!sortKey) return;
 
                     urlParamsWithoutSlug[sortKey] ??= [];
-                    const wpcEName = wpcFilterJsonData.wpcFilterPermalinks[data.wpcEName];
+                    const wpcEName = wpcFilterJsonData.wpcFilterPermalinks[entityKey];
                     urlParamsWithoutSlug[sortKey][wpcEName] ??= [];
                     urlParamsWithoutSlug[sortKey][wpcEName][data.wpcSlug] = val;
                     return;
                 }
 
                 const sortKey = Object.keys(wpcFilterJsonData.wpcFilterPermalinksNum)
-                    .find(k => wpcFilterJsonData.wpcFilterPermalinksNum[k] === data.wpcEName);
+                    .find(k => wpcFilterJsonData.wpcFilterPermalinksNum[k] === entityKey);
 
                 if (!sortKey) return;
 
                 urlParams[sortKey] ??= [];
-                const wpcEName = wpcFilterJsonData.wpcFilterPermalinks[data.wpcEName];
+                const wpcEName = wpcFilterJsonData.wpcFilterPermalinks[entityKey];
                 urlParams[sortKey][wpcEName] ??= [];
                 if (!urlParams[sortKey][wpcEName].includes(wpcTermSlug(data.wpcSlug))) {
                     urlParams[sortKey][wpcEName].push(wpcTermSlug(data.wpcSlug));
@@ -4279,7 +4300,7 @@
                 if (Object.keys(urlParams).length > 0) {
                     Object.entries(urlParams).forEach(([key, value]) => {
                         Object.entries(value).forEach(([filterName, arr]) => {
-                            let urlKey = wpcFilterPermalinksKeys[filterName]
+                            let urlKey = String(wpcFilterPermalinksKeys[filterName] || '').split('#').pop()
                             const sorted = arr.sort((a, b) =>
                                 Object.values(filterSetData['allEntities'][urlKey].items_sort).indexOf(a) - Object.values(filterSetData['allEntities'][urlKey].items_sort).indexOf(b));
                             let logic = filterSetData['allEntities'][urlKey]['filter']['logic'];
@@ -4294,7 +4315,7 @@
                     if (Object.keys(urlParams).length > 0) {
                         Object.entries(urlParams).forEach(([key, value]) => {
                             Object.entries(value).forEach(([filterName, arr]) => {
-                                let urlKey = wpcFilterPermalinksKeys[filterName]
+                                let urlKey = String(wpcFilterPermalinksKeys[filterName] || '').split('#').pop()
                                 const sorted = arr.sort((a, b) =>
                                     Object.values(filterSetData['allEntities'][urlKey].items_sort).indexOf(a) - Object.values(filterSetData['allEntities'][urlKey].items_sort).indexOf(b));
                                 url.searchParams.set(filterName, sorted.join(';'));
@@ -4343,7 +4364,7 @@
             if (Object.keys(urlParams).length > 0) {
                 Object.entries(urlParams).forEach(([key, value]) => {
                     Object.entries(value).forEach(([filterName, arr]) => {
-                        let urlKey = wpcFilterPermalinksKeys[filterName]
+                        let urlKey = String(wpcFilterPermalinksKeys[filterName] || '').split('#').pop()
                         const sorted = arr.sort((a, b) =>
                             Object.values(filterSetData['allEntities'][urlKey].items_sort).indexOf(a) - Object.values(filterSetData['allEntities'][urlKey].items_sort).indexOf(b));
                         let filterPositon = Number(filterSetData['allEntities'][urlKey]['filter']['menu_order']);
@@ -4356,7 +4377,7 @@
             if (Object.keys(urlParamsWithoutSlug).length > 0) {
                 Object.entries(urlParamsWithoutSlug).forEach(([key, value]) => {
                     Object.entries(value).forEach(([filterName, arr]) => {
-                        let urlKey = wpcFilterPermalinksKeys[filterName]
+                        let urlKey = String(wpcFilterPermalinksKeys[filterName] || '').split('#').pop()
                         let filterPositon = Number(filterSetData['allEntities'][urlKey]['filter']['menu_order']);
                         urlParamsWithoutPermalinks[filterPositon] = arr;
                     });

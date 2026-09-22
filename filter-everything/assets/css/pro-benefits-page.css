@@ -1,5 +1,5 @@
 /*!
- * Filter Everything 1.9.6
+ * Filter Everything 1.9.7
  */
 .wpc-pro-bnf-page-wrap,
 .wpc-pro-bnf-page-wrap * {
@@ -65,14 +65,15 @@
 }
 
 /* logo pro label */
+/* filled like the PRO badges in the admin menu (.wpc-pro-badge) */
 .wpc-pro-bnf-sect-1-logo-label {
-    color: var(--wpc-pro-color);
+    color: #fff;
     font-weight: 600;
     padding: 5px 14px;
     border-radius: 24px;
     font-size: 18px;
-    border: 1px solid var(--wpc-pro-color);;
-    background: transparent;
+    border: 1px solid var(--wpc-pro-color);
+    background: var(--wpc-pro-color);
     position: relative;
     height: min-content;
     width: min-content;
@@ -276,6 +277,15 @@
     line-height: 160%;
 }
 
+/* the takeaway line under the upgrade text */
+.wpc-pro-bnf-sect-1-anwp-motto {
+    margin-top: 10px;
+    color: #1F2028;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 160%;
+}
+
 /* list */
 .wpc-pro-bnf-sect-1-anwp-list {
     display: flex;
@@ -317,6 +327,77 @@
     align-items: center;
     justify-content: flex-start;
     gap: 24px;
+}
+
+/* running offer restated at the top of the page (see AboutProTab::renderSaleStrip) —
+   same visual language as the notifications sale bar: white, yellow frame, black badge, red pill */
+.wpc-pro-bnf-sale-strip {
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: #fff;
+    border: 2px solid #FFD000;
+    color: #1F2028;
+    font-size: 16px;
+    line-height: 150%;
+}
+.wpc-pro-bnf-sale-strip[hidden] {
+    display: none;
+}
+.wpc-pro-bnf-sale-strip-badge {
+    background: #1F2028;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    padding: 5px 11px;
+    border-radius: 999px;
+    white-space: nowrap;
+}
+.wpc-pro-bnf-sale-strip .wpc-msg__pill {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    background: #F64545;
+    padding: 4px 9px;
+    border-radius: 999px;
+    margin: 0 1px;
+}
+.wpc-pro-bnf-sale-strip .wpc-pro-bnf-sale-strip-text {
+    flex: 1;
+    min-width: 220px;
+}
+/* countdown (markup from Messages::countdown, base styles in wpc-messages.css): yellow cards like the bar */
+.wpc-pro-bnf-sale-strip .wpc-msg__count span {
+    background: #FFD000;
+}
+.wpc-pro-bnf-sale-strip .wpc-msg__count i {
+    color: #5A4A00;
+}
+.wpc-pro-bnf-sale-strip-link,
+.wpc-pro-bnf-sale-strip-link:hover,
+.wpc-pro-bnf-sale-strip-link:focus {
+    margin-left: 4px;
+    display: inline-block;
+    padding: 8px 18px;
+    border-radius: 8px;
+    background: var(--wpc-pro-color);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-decoration: none;
+    box-shadow: none;
+}
+.wpc-pro-bnf-sale-strip-link:hover {
+    opacity: 0.85;
 }
 
 .wpc-pro-bnf-sect-1-btns-up-to-pro,
@@ -1010,25 +1091,27 @@
 
 .fetm-features-grid .fetm-feature,
 .fetm-features-grid .fetm-cell {
-    padding: 0;
+    padding: 4px 0;
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 40px;
 }
 
+/* first / last row of a group: the 4px row padding plus the 8px group breathing room */
+
 .fetm-features-grid .fetm-section-group .fetm-row:first-of-type .fetm-cell,
 .fetm-features-grid .fetm-section-group .fetm-row:first-of-type .fetm-feature {
     height: 100%;
     min-height: 48px;
-    padding-top: 8px;
+    padding-top: 12px;
 }
 
 .fetm-features-grid .fetm-section-group .fetm-row:last-of-type .fetm-cell,
 .fetm-features-grid .fetm-section-group .fetm-row:last-of-type .fetm-feature {
     height: 100%;
     min-height: 48px;
-    padding-bottom: 8px;
+    padding-bottom: 12px;
 }
 
 .fetm-features-grid .fetm-feature {
@@ -1522,7 +1605,9 @@
     }
 }
 
-/* ---------------- Reviews section: "Trusted by WordPress Professionals" */
+/* ---------------- Reviews section: "Trusted by WordPress Professionals"
+   Same 3-column grid as on filtereverything.pro (theme .fetm-reviews-wpf / .fetm-rvw-*):
+   video cards carry the video title and a Play Video button, text cards a clamped quote. */
 .wpc-pro-bnf-sect-rvw {
     width: 100%;
 }
@@ -1550,7 +1635,7 @@
 
 .wpc-pro-bnf-sect-rvw-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 24px;
     align-items: stretch;
 }
@@ -1560,15 +1645,14 @@
     border: 1px solid #E8ECF4;
     border-radius: 12px;
     overflow: hidden;
-    aspect-ratio: 16 / 9;
 }
 
 /* --- text review card --- */
 .wpc-pro-bnf-rvw-text {
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 28px;
+    gap: 16px;
+    padding: 20px;
 }
 
 .wpc-pro-bnf-rvw-head {
@@ -1602,23 +1686,21 @@
 }
 
 .wpc-pro-bnf-rvw-text-body {
-    flex: 1 1 0;
-    min-height: 0;
     margin: 0;
     overflow: hidden;
     color: #1F2028;
     font-size: 16px;
     line-height: 180%;
     display: -webkit-box;
-    -webkit-line-clamp: 4;
+    -webkit-line-clamp: 7;
     -webkit-box-orient: vertical;
 }
 
+/* No bottom-pinning: the link hugs the text instead of leaving a gap when a neighbouring card is taller */
 .wpc-pro-bnf-rvw-link,
 .wpc-pro-bnf-rvw-link:visited,
 .wpc-pro-bnf-rvw-link:hover,
 .wpc-pro-bnf-rvw-link:focus {
-    margin-top: auto;
     display: inline-flex;
     align-items: center;
     gap: 12px;
@@ -1626,17 +1708,32 @@
     font-size: 16px;
     font-weight: 500;
     text-decoration: none;
+    transition: opacity 0.2s ease;
+}
+
+.wpc-pro-bnf-rvw-link:hover {
+    opacity: 0.85;
 }
 
 .wpc-pro-bnf-rvw-link svg {
     flex: none;
 }
 
-/* --- video review card (lazy YouTube facade) --- */
+/* --- video card: lazy YouTube facade + title + Play Video button --- */
 .wpc-pro-bnf-rvw-video {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px;
+}
+
+.wpc-pro-bnf-rvw-video-frame {
     position: relative;
-    cursor: pointer;
-    padding: 28px;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    overflow: hidden;
+    flex: none;
+    background-color: #000;
 }
 
 .wpc-pro-bnf-rvw-video-btn {
@@ -1647,8 +1744,6 @@
     padding: 0;
     border: 0;
     background-color: #000;
-    border-radius: 8px;
-    overflow: hidden;
     cursor: pointer;
 }
 
@@ -1686,7 +1781,42 @@
     width: 100%;
     height: 100%;
     border: 0;
+}
+
+.wpc-pro-bnf-rvw-video-quote {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 150%;
+    color: #1F2028;
+}
+
+.wpc-pro-bnf-rvw-video-author {
+    margin: 0;
+    font-size: 14px;
+    color: #6B7280;
+}
+
+/* Ghost button: the solid blue stays reserved for the page's main CTA */
+.wpc-pro-bnf-rvw-video-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border: 1px solid var(--wpc-pro-color);
     border-radius: 8px;
+    background: transparent;
+    color: var(--wpc-pro-color);
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.wpc-pro-bnf-rvw-video-cta:hover {
+    background: #EEF2FF;
 }
 
 /* responsive: title scales to match the sibling section headings */
@@ -1706,7 +1836,7 @@
 .wpc-pro-bnf-sect-rvw-more {
     position: relative;
     overflow: hidden;
-    max-height: 145px;
+    max-height: 190px;
     margin-top: 24px;
     transition: max-height 0.45s ease;
 }
@@ -1747,6 +1877,17 @@
 
 #wpc-rvw-toggle:checked ~ .wpc-pro-bnf-sect-rvw-bottom .fetm-toggle-btn::before {
     transform: rotate(180deg);
+}
+
+/* the admin content area is ~160px narrower than the viewport: one column once three get cramped */
+@media screen and (max-width: 1100px) {
+    .wpc-pro-bnf-sect-rvw-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wpc-pro-bnf-sect-rvw-more {
+        max-height: 160px;
+    }
 }
 
 /* sect-4 "What does PRO unlock?" — left-align the icon, title and text instead of centering them */

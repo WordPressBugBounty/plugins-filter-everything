@@ -1113,8 +1113,10 @@ class FilterSet
 
     public function getPostTypeField( $post_id )
     {
+        // getSet() returns [] for an empty ID (e.g. a Filters block/widget with
+        // no Filter Set chosen) — report "no post type" instead of a warning.
         $set = $this->getSet( $post_id );
-        $field['post_type'] = ( $set['post_type'] ) ? $set['post_type'] : NULL;
+        $field['post_type'] = ! empty( $set['post_type'] ) ? $set['post_type'] : NULL;
         return $field;
     }
 
@@ -1537,7 +1539,7 @@ class FilterSet
 
     private function addFilterSetsToJsonData($filterSets)
     {
-        global $flrt_json_data;
+        $flrt_json_data = &Container::instance()->getFilterContext()->jsonData();
         foreach ($filterSets as $set) {
             $setId = $set['ID'];
             $setSettings = $this->getSet($setId);

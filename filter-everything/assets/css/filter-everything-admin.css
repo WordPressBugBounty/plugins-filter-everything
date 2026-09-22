@@ -1,5 +1,5 @@
 /*!
- * Filter Everything admin 1.9.6
+ * Filter Everything admin 1.9.7
  */
 :root {
     --wpc-pro-color: #3858E9;
@@ -1233,7 +1233,11 @@ body #tiptip_content a:hover {
     align-items: center;
     color: var(--wpc-pro-color);
     box-sizing: border-box;
-    border: 1px solid var(--wpc-pro-color);
+    /* multicolour gradient frame, same as the «Get PRO» button on filtereverything.pro */
+    border: 2px solid transparent;
+    background:
+        linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(135deg, #FFB300 0%, #FF4D8D 35%, #A855F7 68%, #22D3EE 100%) border-box;
 }
 
 .wpc-admin-toolbar .wpc-tab.wpc-get-pro-background {
@@ -1554,16 +1558,30 @@ a#wpc-get-license-key {
     margin-left: 5px;
 }
 
+/* External-link icon. Drawn as a mask filled with currentColor, so it always
+   matches the link it belongs to: the admin link colour of the running
+   WordPress version and colour scheme, its :hover / :focus shade, and white
+   on the primary «Get your License Key» button. It used to be an SVG image
+   with a hard-coded #2271b1, which drifted from the text once WordPress
+   started taking link colours from the admin theme colour. */
 a.wpc-external-link::after,
 a#wpc-get-license-key::after {
-    content: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!-- Svg Vector Icons : http://www.onlinewebfonts.com/icon --%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 1000 1000' enable-background='new 0 0 1000 1000' xml:space='preserve'%3E%3Cmetadata%3E Svg Vector Icons : http://www.onlinewebfonts.com/icon %3C/metadata%3E%3Cg%3E%3Cpath d='M10,10L10,10L10,10z'/%3E%3Cpath d='M663.3,75.3L794,206L336.7,663.3l65.3,65.3l457.3-457.3L990,402V75.3H663.3z M728.7,859.3H206V336.7h261.3L598,206H75.3v784h784V467.3L728.7,598V859.3z' fill='%232271b1'/%3E%3C/g%3E%3C/svg%3E");
-    margin: 0 3px 0 5px;
-    width: 11px;
+    content: "";
     display: inline-block;
+    width: 11px;
+    height: 11px;
+    margin: 0 3px 0 5px;
+    background-color: currentColor;
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cpath d='M663.3,75.3L794,206L336.7,663.3l65.3,65.3l457.3-457.3L990,402V75.3H663.3z M728.7,859.3H206V336.7h261.3L598,206H75.3v784h784V467.3L728.7,598V859.3z'/%3E%3C/svg%3E") no-repeat center / contain;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Cpath d='M663.3,75.3L794,206L336.7,663.3l65.3,65.3l457.3-457.3L990,402V75.3H663.3z M728.7,859.3H206V336.7h261.3L598,206H75.3v784h784V467.3L728.7,598V859.3z'/%3E%3C/svg%3E") no-repeat center / contain;
 }
 
-a#wpc-get-license-key:hover::after {
-    content: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!-- Svg Vector Icons : http://www.onlinewebfonts.com/icon --%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 1000 1000' enable-background='new 0 0 1000 1000' xml:space='preserve'%3E%3Cmetadata%3E Svg Vector Icons : http://www.onlinewebfonts.com/icon %3C/metadata%3E%3Cg%3E%3Cpath d='M10,10L10,10L10,10z'/%3E%3Cpath d='M663.3,75.3L794,206L336.7,663.3l65.3,65.3l457.3-457.3L990,402V75.3H663.3z M728.7,859.3H206V336.7h261.3L598,206H75.3v784h784V467.3L728.7,598V859.3z' fill='%230a4b78'/%3E%3C/g%3E%3C/svg%3E");
+/* Text links are underlined: drop the icon so that its bottom stroke sits on
+   the underline instead of on the text baseline (measured: the underline runs
+   ~0.17em below the baseline at the admin's 13–14px). Not for the button —
+   it has no underline, and there the baseline is the right place. */
+a.wpc-external-link::after {
+    vertical-align: -0.17em;
 }
 
 .td-activate-license .wpc-help-tip {
@@ -2764,9 +2782,47 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
     line-height: 130%;
     font-weight: 600;
 }
-.flrt-upgrade-to-pro-popup-price-year{
-    font-size: 14px;
+/* Sale price from the notifications feed: old price struck out above, new price emphasised */
+.flrt-upgrade-to-pro-popup-price-tag--sale {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.1;
+}
+.flrt-upgrade-to-pro-popup-price-was {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    color: #7B879C;
+}
+.flrt-upgrade-to-pro-popup-price-was s {
+    text-decoration-thickness: 2px;
+}
+.flrt-upgrade-to-pro-popup-price-off {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 999px;
+    background: #D63638;
+    color: #ffffff;
+    font-size: 11px;
     font-weight: 700;
+    letter-spacing: .02em;
+    line-height: 16px;
+}
+.flrt-upgrade-to-pro-popup-price-tag--sale .flrt-upgrade-to-pro-popup-price-now {
+    color: #D63638;
+}
+.flrt-upgrade-to-pro-popup-sale-note {
+    margin-top: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #D63638;
+    line-height: 130%;
+}
+.flrt-upgrade-to-pro-popup-sale-note + .flrt-upgrade-to-pro-popup-support-text {
+    margin-top: 10px;
 }
 .flrt-upgrade-to-pro-popup-under-button-text,
 .flrt-upgrade-to-pro-popup-support-text {
@@ -2876,6 +2932,29 @@ select.wpc-field-entity option[disabled]:not(.tax_numeric-disabled, .post_meta_e
 }
 .wpc-tab-aboutpro {
     display: flex;
+}
+/* «PRO benefits» tab: the same multicolour frame as the toolbar button and the
+   site's «Get PRO». Opaque bottom border on the active tab hides the gradient
+   there so it still merges with the page like every other active tab. */
+.nav-tab-wrapper .nav-tab.wpc-tab-aboutpro {
+    border: 2px solid transparent;
+    border-bottom: none;
+    padding-top: 4px;
+    background:
+        linear-gradient(#dcdcde, #dcdcde) padding-box,
+        linear-gradient(135deg, #FFB300 0%, #FF4D8D 35%, #A855F7 68%, #22D3EE 100%) border-box;
+}
+.nav-tab-wrapper .nav-tab.wpc-tab-aboutpro:hover {
+    background:
+        linear-gradient(#fff, #fff) padding-box,
+        linear-gradient(135deg, #FFB300 0%, #FF4D8D 35%, #A855F7 68%, #22D3EE 100%) border-box;
+}
+.nav-tab-wrapper .nav-tab.wpc-tab-aboutpro.nav-tab-active,
+.nav-tab-wrapper .nav-tab.wpc-tab-aboutpro.nav-tab-active:hover {
+    border-bottom: 1px solid #f0f0f1;
+    background:
+        linear-gradient(#f0f0f1, #f0f0f1) padding-box,
+        linear-gradient(135deg, #FFB300 0%, #FF4D8D 35%, #A855F7 68%, #22D3EE 100%) border-box;
 }
 .wpc-nav-tab-icon{
     display: flex;
@@ -2999,228 +3078,6 @@ a.button.wpc-choose-selector{
     100% { transform: rotate(360deg); }
 }
 
-/* --- Review request popup (free build) --- */
-/* Sized to match the Upgrade-to-PRO popup footprint (max 740px); the
-   original 1060px design is scaled down proportionally. */
-#flrt-review-popup-overlay {
-    display: flex;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 99999;
-    justify-content: center;
-    align-items: center;
-    padding: 24px 16px;
-    box-sizing: border-box;
-}
-
-.flrt-review-popup-wrapper *,
-.flrt-review-popup-wrapper {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-}
-
-/* One compact column (App-Store style): the question card, the button, the
-   two quiet ways out and a support link — nothing to read first. */
-.flrt-review-popup-wrapper {
-    width: 420px;
-    max-width: 100%;
-    max-height: 100%;
-    overflow-y: auto;
-}
-
-.flrt-review-popup-modal {
-    position: relative;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
-    display: flex;
-    flex-direction: column;
-    padding: 44px 28px 22px 28px;
-}
-
-.flrt-review-popup-close-btn {
-    position: absolute;
-    top: 14px;
-    right: 16px;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: #9aa0b4;
-    font-size: 20px;
-    line-height: 1;
-    border-radius: 8px;
-}
-
-.flrt-review-popup-close-btn:hover {
-    color: #4a5068;
-    background: #f2f3f8;
-}
-
-.flrt-review-popup-card {
-    background: #e9ebfc;
-    border-radius: 12px;
-    padding: 26px 22px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.flrt-review-popup-card-title {
-    font-size: 23px;
-    font-weight: 700;
-    color: #16181f;
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-}
-
-.flrt-review-popup-stars {
-    display: flex;
-    gap: 5px;
-    margin-top: 14px;
-}
-
-.flrt-review-popup-star {
-    font-size: 25px;
-    line-height: 1;
-    color: #3b47e0;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-/* Hovering a star lights up it and the ones before it */
-.flrt-review-popup-stars:hover .flrt-review-popup-star {
-    color: #f5a623;
-}
-
-.flrt-review-popup-stars .flrt-review-popup-star:hover ~ .flrt-review-popup-star {
-    color: #c9cde8;
-}
-
-.flrt-review-popup-card-text {
-    font-size: 13.5px;
-    color: #2a2e3b;
-    line-height: 1.5;
-    margin-top: 14px;
-    max-width: 240px;
-}
-
-.flrt-review-popup-rate-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 14px;
-    background: #3b47e0;
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: 600;
-    border-radius: 8px;
-    padding: 13px 20px;
-    text-decoration: none;
-}
-
-.flrt-review-popup-rate-btn:hover,
-.flrt-review-popup-rate-btn:focus {
-    background: #2733b8;
-    color: #ffffff;
-    text-decoration: none;
-}
-
-.flrt-review-popup-rate-btn-star {
-    font-size: 13px;
-}
-
-/* "opens in a new window" hint on the Rate button */
-.flrt-review-popup-rate-btn-ext {
-    display: inline-flex;
-    align-items: center;
-    margin-left: 2px;
-    opacity: 0.9;
-}
-
-.flrt-review-popup-rate-btn-ext svg {
-    display: block;
-    width: 15px;
-    height: 15px;
-}
-
-.flrt-review-popup-dismiss-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 18px;
-    margin-top: 12px;
-}
-
-.flrt-review-popup-later,
-.flrt-review-popup-never {
-    font-size: 13px;
-    color: #6b7186;
-    cursor: pointer;
-}
-
-.flrt-review-popup-later:hover,
-.flrt-review-popup-never:hover {
-    color: #2a2e3b;
-    text-decoration: underline;
-}
-
-.flrt-review-popup-dismiss-dot {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: #c9cde8;
-}
-
-.flrt-review-popup-support-line {
-    margin-top: 18px;
-    font-size: 12.5px;
-    color: #6b7186;
-    line-height: 1.5;
-    text-align: center;
-}
-
-.flrt-review-popup-support-line a {
-    color: #3b47e0;
-    font-weight: 600;
-    text-decoration: none;
-}
-
-.flrt-review-popup-support-line a:hover {
-    color: #2733b8;
-    text-decoration: underline;
-}
-
-/* Narrow admin / mobile (782px is the WP admin mobile breakpoint): tighter
-   paddings so the popup fits one screen. */
-@media (max-width: 782px) {
-    .flrt-review-popup-wrapper {
-        margin-top: 16px;
-    }
-
-    .flrt-review-popup-modal {
-        padding: 40px 18px 18px 18px;
-    }
-
-    .flrt-review-popup-card {
-        padding: 20px 16px;
-    }
-
-    .flrt-review-popup-card-title {
-        font-size: 20px;
-    }
-}
-
 /* What's new page (src/Admin/WhatsNew.php) */
 .wpc-whats-new .wpc-whats-new-date{color:#646970;margin-top:-6px}
 .wpc-whats-new-list{list-style:none;margin:16px 0 20px;padding:0;max-width:860px}
@@ -3234,9 +3091,81 @@ a.button.wpc-choose-selector{
 .wpc-whats-new-earlier ul{list-style:disc;margin:0 0 0 20px}
 .wpc-whats-new-earlier li{margin:0 0 4px;color:#3c434a}
 #adminmenu .flrt-whats-new-badge{margin-left:5px}
+.nav-tab .flrt-whats-new-badge{display:inline-block;margin-left:6px;vertical-align:1px;background:#d63638;color:#fff;font-size:9px;line-height:17px;font-weight:600;min-width:17px;height:17px;padding:0 5px;border-radius:10px;text-align:center;box-sizing:border-box}.nav-tab .flrt-whats-new-badge .plugin-count{display:inline}
+.wpc-whats-new h2{font-size:1.3em;margin:1em 0 .6em}
 
 /* Toolbar brand: logo + name link back to the Filter Sets list; version in the same colour as the name (both builds) */
 .wpc-admin-toolbar h2 .wpc-toolbar-brand{color:inherit;text-decoration:none;display:inline-block}
 .wpc-admin-toolbar h2 .wpc-toolbar-brand:hover,
 .wpc-admin-toolbar h2 .wpc-toolbar-brand:focus{color:inherit;text-decoration:none;box-shadow:none}
 .wpc-admin-toolbar h2 .wpc-plugin-version{font-size:13px;font-weight:400;color:inherit;margin-left:6px;vertical-align:baseline}
+
+/* License tab: purchase-source cards */
+.wpc-license-lock {
+    background: #fcf0f1;
+    border-left: 4px solid #d63638;
+    padding: 10px 14px;
+    margin: 0 0 20px;
+    max-width: 960px;
+}
+
+.wpc-license-sources {
+    max-width: 960px;
+    margin: 0 0 8px;
+}
+
+.wpc-license-sources h3 {
+    margin: 0 0 4px;
+    font-size: 15px;
+}
+
+.wpc-license-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0 18px;
+}
+
+.wpc-license-card {
+    border: 1px solid #c3c4c7;
+    border-radius: 6px;
+    padding: 18px 20px;
+    background: #fbfbfc;
+}
+
+.wpc-license-card h4 {
+    margin: 0 0 4px;
+    font-size: 14px;
+}
+
+.wpc-license-card-sub {
+    color: #646970;
+    margin: 0 0 12px;
+}
+
+.wpc-license-card ol {
+    margin: 0 0 12px 18px;
+    padding: 0;
+}
+
+.wpc-license-card li {
+    margin: 0 0 6px;
+}
+
+.wpc-license-card-warn {
+    background: #fff8e5;
+    border-left: 3px solid #dba617;
+    padding: 6px 10px;
+    margin: 8px 0 14px;
+    font-size: 12px;
+}
+
+.wpc-license-card code {
+    font-size: 12px;
+}
+
+@media (max-width: 960px) {
+    .wpc-license-cards {
+        grid-template-columns: 1fr;
+    }
+}

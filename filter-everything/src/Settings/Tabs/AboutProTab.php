@@ -86,6 +86,7 @@ class AboutProTab extends BaseSettings{
 
             <div class="wpc-pro-bnf-page-wrap wp-exclude-emoji">
                 <div class="wpc-pro-bnf-wrap">
+                    <?php $this->renderSaleStrip(); ?>
                     <section class="wpc-pro-bnf-sect-1">
                         <div class="wpc-pro-bnf-sect-1-logo-wrap">
                             <div class="wpc-pro-bnf-sect-1-logo-icon-svg"></div>
@@ -117,7 +118,7 @@ class AboutProTab extends BaseSettings{
                                     <div class="wpc-pro-bnf-sect-1-trst-scl-laurel trst-scl-laurel-right"></div>
                                     <div class="wpc-pro-bnf-sect-1-trst-scl-card trst-scl-card-card-1">
                                         <span class="wpc-pro-bnf-sect-1-trst-scl-label"><?php echo _x('Trusted by over', 'benefits-landing', 'filter-everything'); ?></span>
-                                        <div class="wpc-pro-bnf-sect-1-trst-scl-big-number-sls"><?php echo _x('160,000+', 'benefits-landing', 'filter-everything'); ?></div>
+                                        <div class="wpc-pro-bnf-sect-1-trst-scl-big-number-sls"><?php echo _x('170,000+', 'benefits-landing', 'filter-everything'); ?></div>
                                         <span class="wpc-pro-bnf-sect-1-trst-scl-subtext-bl"><?php echo _x('users worldwide', 'benefits-landing', 'filter-everything'); ?></span>
                                     </div>
                                     <div class="wpc-pro-bnf-sect-1-trst-scl-card trst-scl-card-card-2">
@@ -142,15 +143,21 @@ class AboutProTab extends BaseSettings{
                                             array('strong' => array(), 'u' => array())
                                     ); ?>
                                 </p>
+                                <?php // The one thought to take away; «sales» for shops, «conversions» for every other site ?>
+                                <p class="wpc-pro-bnf-sect-1-anwp-motto"><?php
+                                    echo esc_html( flrt_is_woocommerce()
+                                        ? _x( 'Better navigation — more sales', 'benefits-landing', 'filter-everything' )
+                                        : _x( 'Better navigation — more conversions', 'benefits-landing', 'filter-everything' ) );
+                                ?> 🎉</p>
                             </div>
                             <ul class="wpc-pro-bnf-sect-1-anwp-list">
                                 <li class="wpc-pro-bnf-sect-1-anwp-list-item">
                                     <div class="wpc-pro-bnf-sect-1-anwp-list-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
-                                    <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo _x('Filter any posts list, custom query, or page builder content','benefits-landing', 'filter-everything'); ?></p>
+                                    <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo wp_kses( _x( 'Filter <strong>any</strong> posts list, custom query, or page builder content', 'benefits-landing', 'filter-everything' ), array( 'strong' => array() ) ); ?></p>
                                 </li>
                                 <li class="wpc-pro-bnf-sect-1-anwp-list-item">
                                     <div class="wpc-pro-bnf-sect-1-anwp-list-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
-                                    <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo _x('Improve conversions and user experience with advanced filtering capabilities','benefits-landing', 'filter-everything'); ?></p>
+                                    <p class="wpc-pro-bnf-sect-1-anwp-list-item-text"><?php echo wp_kses( _x( 'Improve <strong>conversions</strong>, <strong>sales</strong> and user experience with advanced filtering capabilities', 'benefits-landing', 'filter-everything' ), array( 'strong' => array() ) ); ?></p>
                                 </li>
                                 <li class="wpc-pro-bnf-sect-1-anwp-list-item">
                                     <div class="wpc-pro-bnf-sect-1-anwp-list-item-icon"><svg width="24" height="24"><use href="#fetm-icon-check-double"/></svg></div>
@@ -165,60 +172,60 @@ class AboutProTab extends BaseSettings{
                     </section>
 
                     <!-- ------------------------------------- Trusted by WordPress Professionals (reviews) ----------------------------------------- -->
-                    <section class="wpc-pro-bnf-sect-rvw">
+                    <?php
+                    // Same block as on filtereverything.pro (theme template-parts/reviews-grid.php):
+                    // 3-column grid, video cards carry the video title and a Play Video button,
+                    // second row under the "View more" spoiler.
+                    ?>
+                    <section class="wpc-pro-bnf-sect-rvw"
+                             data-label-play="<?php echo esc_attr_x( 'Play video', 'benefits-landing', 'filter-everything' ); ?>"
+                             data-label-pause="<?php echo esc_attr_x( 'Pause', 'benefits-landing', 'filter-everything' ); ?>">
                         <h2 class="wpc-pro-bnf-sect-rvw-title"><?php echo _x('Trusted by WordPress Professionals', 'benefits-landing', 'filter-everything'); ?></h2>
                         <p class="wpc-pro-bnf-sect-rvw-subtitle"><?php echo wp_kses( _x( 'Real reviews from independent experts<br>and verified customers.', 'benefits-landing', 'filter-everything' ), array( 'br' => array() ) ); ?></p>
                         <input type="checkbox" id="wpc-rvw-toggle" class="fetm-toggle-checkbox" hidden>
+                        <?php
+                        // YouTube videos: id, title (shown as the quote) and channel.
+                        $rvw_videos = array(
+                            array( 'id' => 'g1_qlJvNdsg', 'quote' => 'Best WooCommerce Filter Plugin? - Filter Everything', 'author' => 'WPTuts' ),
+                            array( 'id' => 'cNqd210P920', 'quote' => 'How to Set Up WooCommerce Product Filters for Your Online Store', 'author' => 'Hostinger Academy' ),
+                            array( 'id' => 'Ki7LBcrYuAo', 'quote' => 'Advanced Custom Fields ~ Powerful & Free Filtering Tutorial', 'author' => 'WPTuts' ),
+                        );
+
+                        // Real customer reviews (same set as on filtereverything.pro).
+                        $rvw_reviews = array(
+                            array(
+                                'author' => 'ScarletLyn',
+                                'date'   => '2022-03-12',
+                                'url'    => 'https://codecanyon.net/ratings/3352977',
+                                'text'   => "I am crying my eyeballs out of happiness. I cannot thank you enough. I just spent the whole weekend trying to make one myself because all the others that were fitting my shop scenario were way too heavy and chunky. I needed a specific structure for my website along with efficiently displaying filters depending on which section of the shop the user is in, and GOD, your plugin has ALL the freaking options possible to make it possible for me. I love you, marry me! (Just kidding, but you get the idea). My Query Monitor is happy, I am happy, and when my shop will go online, my customers will be happy to enjoy a blazing fast filtering engine for my greeting cards and stationery! Keep the great work, and please please, keep it loading FAST. Take care.",
+                            ),
+                            array(
+                                'author' => 'bsmolyanov',
+                                'date'   => '2024-09-08',
+                                'url'    => 'https://codecanyon.net/ratings/3601791',
+                                'text'   => "Filter Everything Pro is magnificent plugin! I use it for filtering WordPress posts database of more than 150k posts, with more than 10 custom taxonomies and thousands of terms and it does a great job! Not to mention, Filter Everything Pro is working alongside the GeneratePress theme like a charm, where other filtering solutions just do not cut it. The plugin is very well documented and very flexible for customization. Last but not least, the assistance I received was absolutely exceeding any level of support I have received around here - both in terms of speed, thoroughness and accuracy! The support team was extremely helpful, taking the time to review my entire setup (which is quite complex) and to pinpoint an issue which was related to a third-party plugin and has nothing to do with Filter Everything Pro. Outstanding!!! I definitely recommend Filter Everything Pro to everyone who needs a good filtering solution for posts, custom post types or WooCommerce products.",
+                            ),
+                            array(
+                                'author' => 'migge',
+                                'date'   => '2024-10-17',
+                                'url'    => 'https://codecanyon.net/ratings/3605614',
+                                'text'   => "There are many reason to give this plugin a 5-star rating! I picked Customer Support because it's VERY important. Functionality is easier to spot before purchase. The support for this plugin is beyond what you would expect, so i can recommend Filter Everything both as the best filter plugin that comes along with a matching support. Thanks guys!",
+                            ),
+                        );
+                        ?>
                         <div class="wpc-pro-bnf-sect-rvw-grid">
                             <?php
-                            // YouTube video IDs — to add or swap a video, just change the ID here.
-                            $rvw_videos = array( 'g1_qlJvNdsg', 'cNqd210P920', 'Ki7LBcrYuAo' );
-
-                            // Real customer reviews taken from the filtereverything.pro landing page.
-                            $rvw_reviews = array(
-                                    array(
-                                            'author' => 'ScarletLyn',
-                                            'date'   => '2022-03-12',
-                                            'url'    => 'https://codecanyon.net/ratings/3352977',
-                                            'text'   => "I am crying my eyeballs out of happiness. I cannot thank you enough. I just spent the whole weekend trying to make one myself because all the others that were fitting my shop scenario were way too heavy and chunky. I needed a specific structure for my website along with efficiently displaying filters depending on which section of the shop the user is in, and GOD, your plugin has ALL the freaking options possible to make it possible for me. I love you, marry me! (Just kidding, but you get the idea). My Query Monitor is happy, I am happy, and when my shop will go online, my customers will be happy to enjoy a blazing fast filtering engine for my greeting cards and stationery! Keep the great work, and please please, keep it loading FAST. Take care.",
-                                    ),
-                                    array(
-                                            'author' => 'bsmolyanov',
-                                            'date'   => '2024-09-08',
-                                            'url'    => 'https://codecanyon.net/ratings/3601791',
-                                            'text'   => "Filter Everything Pro is magnificent plugin! I use it for filtering WordPress posts database of more than 150k posts, with more than 10 custom taxonomies and thousands of terms and it does a great job! Not to mention, Filter Everything Pro is working alongside the GeneratePress theme like a charm, where other filtering solutions just do not cut it. The plugin is very well documented and very flexible for customization. Last but not least, the assistance I received was absolutely exceeding any level of support I have received around here - both in terms of speed, thoroughness and accuracy! The support team was extremely helpful, taking the time to review my entire setup (which is quite complex) and to pinpoint an issue which was related to a third-party plugin and has nothing to do with Filter Everything Pro. Outstanding!!! I definitely recommend Filter Everything Pro to everyone who needs a good filtering solution for posts, custom post types or WooCommerce products.",
-                                    ),
-                                    array(
-                                            'author' => 'migge',
-                                            'date'   => '2024-10-17',
-                                            'url'    => 'https://codecanyon.net/ratings/3605614',
-                                            'text'   => "There are many reason to give this plugin a 5-star rating! I picked Customer Support because it's VERY important. Functionality is easier to spot before purchase. The support for this plugin is beyond what you would expect, so i can recommend Filter Everything both as the best filter plugin that comes along with a matching support. Thanks guys!",
-                                    ),
-                            );
-
-                            $rvw_total = max( count( $rvw_videos ), count( $rvw_reviews ) );
-
-                            for ( $i = 0; $i < $rvw_total; $i++ ) :
-                            // After the first row (one video + one review) push the rest under the "View more" toggle.
-                            if ( $i === 1 ) :
+                            $this->renderRvwVideoCard( $rvw_videos[0] );
+                            $this->renderRvwReviewCard( $rvw_reviews[0] );
+                            $this->renderRvwVideoCard( $rvw_videos[1] );
                             ?>
                         </div>
                         <div class="wpc-pro-bnf-sect-rvw-more">
                             <div class="wpc-pro-bnf-sect-rvw-grid">
                                 <?php
-                                endif;
-                                $rvw_has_video  = isset( $rvw_videos[ $i ] );
-                                $rvw_has_review = isset( $rvw_reviews[ $i ] );
-
-                                // Checkerboard layout: even rows start with the video card, odd rows start with the text card.
-                                if ( $i % 2 === 0 ) {
-                                    if ( $rvw_has_video )  { $this->renderRvwVideoCard( $rvw_videos[ $i ] ); }
-                                    if ( $rvw_has_review ) { $this->renderRvwReviewCard( $rvw_reviews[ $i ] ); }
-                                } else {
-                                    if ( $rvw_has_review ) { $this->renderRvwReviewCard( $rvw_reviews[ $i ] ); }
-                                    if ( $rvw_has_video )  { $this->renderRvwVideoCard( $rvw_videos[ $i ] ); }
-                                }
-                                endfor;
+                                $this->renderRvwReviewCard( $rvw_reviews[1] );
+                                $this->renderRvwVideoCard( $rvw_videos[2] );
+                                $this->renderRvwReviewCard( $rvw_reviews[2] );
                                 ?>
                             </div>
                             <div class="wpc-pro-bnf-sect-rvw-fade" aria-hidden="true"></div>
@@ -623,7 +630,7 @@ class AboutProTab extends BaseSettings{
                                     array('br' => array())
                             ); ?></h2>
                         <div class="wpc-pro-bnf-sect-3-wbst-wrap">
-                            <h3 class="wpc-pro-bnf-sect-3-wbst-h3"><?php echo _x('160&nbsp;000+', 'benefits-landing', 'filter-everything'); ?></h3>
+                            <h3 class="wpc-pro-bnf-sect-3-wbst-h3"><?php echo _x('170&nbsp;000+', 'benefits-landing', 'filter-everything'); ?></h3>
                             <p class="wpc-pro-bnf-sect-3-wbst-desc"><?php echo _x('websites / users worldwide', 'benefits-landing', 'filter-everything'); ?></p>
                         </div>
                         <div class="wpc-pro-bnf-sect-3-csmt-wrap">
@@ -842,27 +849,103 @@ class AboutProTab extends BaseSettings{
                     if ( ! section ) {
                         return;
                     }
-                    // Delegate from the whole section so the videos under the "View more" area work too.
+
+                    var PLAY_ICON  = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.8v10.4L12 7 3 1.8Z" fill="currentColor"/></svg>';
+                    var PAUSE_ICON = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 1.5h3.2v11H2.5zM8.3 1.5h3.2v11H8.3z" fill="currentColor"/></svg>';
+                    var LABEL_PLAY  = section.getAttribute( 'data-label-play' ) || 'Play video';
+                    var LABEL_PAUSE = section.getAttribute( 'data-label-pause' ) || 'Pause';
+
+                    function setLabel( cta, icon, text ) {
+                        cta.innerHTML = icon + ' ';
+                        cta.appendChild( document.createTextNode( text ) );
+                    }
+
+                    function setState( card, state ) {
+                        if ( card.getAttribute( 'data-state' ) === state ) {
+                            return;
+                        }
+                        card.setAttribute( 'data-state', state );
+                        var cta = card.querySelector( '.wpc-pro-bnf-rvw-video-cta' );
+                        if ( cta ) {
+                            if ( state === 'playing' ) {
+                                setLabel( cta, PAUSE_ICON, LABEL_PAUSE );
+                            } else {
+                                setLabel( cta, PLAY_ICON, LABEL_PLAY );
+                            }
+                        }
+                    }
+
+                    function command( card, func ) {
+                        var iframe = card.querySelector( 'iframe' );
+                        if ( iframe && iframe.contentWindow ) {
+                            iframe.contentWindow.postMessage( JSON.stringify( { event: 'command', func: func, args: [] } ), '*' );
+                        }
+                    }
+
+                    // Thumbnail starts the video; the CTA button toggles play/pause.
+                    // Delegated from the section so the cards under "View more" work too.
                     section.addEventListener( 'click', function ( e ) {
-                        var btn = e.target.closest( '.wpc-pro-bnf-rvw-video-btn' );
+                        var btn = e.target.closest( '.wpc-pro-bnf-rvw-video-btn, .wpc-pro-bnf-rvw-video-cta' );
                         if ( ! btn ) {
                             return;
                         }
-                        var card = btn.closest( '.wpc-pro-bnf-rvw-video' );
-                        var id   = card && card.getAttribute( 'data-ytid' );
-                        if ( ! id ) {
+                        var card  = btn.closest( '.wpc-pro-bnf-rvw-video' );
+                        var id    = card && card.getAttribute( 'data-ytid' );
+                        var frame = card && card.querySelector( '.wpc-pro-bnf-rvw-video-frame' );
+                        if ( ! id || ! frame ) {
                             return;
                         }
-                        var iframe = document.createElement( 'iframe' );
-                        iframe.className = 'wpc-pro-bnf-rvw-video-iframe';
-                        iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1';
-                        iframe.title = 'YouTube video player';
-                        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-                        iframe.setAttribute( 'referrerpolicy', 'strict-origin-when-cross-origin' );
-                        iframe.setAttribute( 'allowfullscreen', '' );
-                        iframe.frameBorder = '0';
-                        card.innerHTML = '';
-                        card.appendChild( iframe );
+
+                        if ( ! card.querySelector( 'iframe' ) ) {
+                            var iframe = document.createElement( 'iframe' );
+                            iframe.className = 'wpc-pro-bnf-rvw-video-iframe';
+                            // enablejsapi lets the CTA button pause/resume the player via postMessage.
+                            iframe.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1&enablejsapi=1';
+                            iframe.title = 'YouTube video player';
+                            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+                            iframe.setAttribute( 'referrerpolicy', 'strict-origin-when-cross-origin' );
+                            iframe.setAttribute( 'allowfullscreen', '' );
+                            iframe.frameBorder = '0';
+                            iframe.addEventListener( 'load', function () {
+                                // Subscribe to player state events so the button stays in sync
+                                // when the user pauses inside the player itself.
+                                iframe.contentWindow.postMessage( JSON.stringify( { event: 'listening', id: id, channel: 'widget' } ), '*' );
+                            } );
+                            frame.innerHTML = '';
+                            frame.appendChild( iframe );
+                            setState( card, 'playing' );
+                        } else if ( card.getAttribute( 'data-state' ) === 'playing' ) {
+                            command( card, 'pauseVideo' );
+                            setState( card, 'paused' );
+                        } else {
+                            command( card, 'playVideo' );
+                            setState( card, 'playing' );
+                        }
+                    } );
+
+                    // Mirror the player's own controls onto the CTA button.
+                    window.addEventListener( 'message', function ( e ) {
+                        if ( typeof e.data !== 'string' || e.origin.indexOf( 'youtube' ) === -1 ) {
+                            return;
+                        }
+                        var data;
+                        try { data = JSON.parse( e.data ); } catch ( err ) { return; }
+                        if ( ! data || ! data.info || typeof data.info.playerState === 'undefined' ) {
+                            return;
+                        }
+                        var cards = section.querySelectorAll( '.wpc-pro-bnf-rvw-video' );
+                        for ( var i = 0; i < cards.length; i++ ) {
+                            var ifr = cards[ i ].querySelector( 'iframe' );
+                            if ( ifr && ifr.contentWindow === e.source ) {
+                                // 1 = playing; 2 = paused, 0 = ended.
+                                if ( data.info.playerState === 1 ) {
+                                    setState( cards[ i ], 'playing' );
+                                } else if ( data.info.playerState === 2 || data.info.playerState === 0 ) {
+                                    setState( cards[ i ], 'paused' );
+                                }
+                                break;
+                            }
+                        }
                     } );
                 } )();
             </script>
@@ -872,25 +955,68 @@ class AboutProTab extends BaseSettings{
     }
 
     /**
-     * Renders a single video review card (lazy YouTube facade) for the "Trusted by WordPress Professionals" section.
-     *
-     * @param string $video_id YouTube video ID.
+     * A running offer restated at the top of the page, for admins who closed
+     * the bar (or have not been shown it yet — the quiet day after an update)
+     * and came here on their own. Same message, same words (Messages::standing()),
+     * hidden while the bar itself is on screen; wpc-messages.js reveals it the
+     * moment the bar is dismissed.
      */
-    protected function renderRvwVideoCard( $video_id ) {
-        $vid = preg_replace( '/[^A-Za-z0-9_-]/', '', $video_id );
+    protected function renderSaleStrip() {
+        if ( ! class_exists( 'FilterEverything\\Filter\\Messages' ) ) {
+            return;
+        }
+        $m = \FilterEverything\Filter\Messages::standingSale();
+        if ( ! $m ) {
+            return;
+        }
+        $c      = \FilterEverything\Filter\Messages::content( $m );
+        $hidden = \FilterEverything\Filter\Messages::renderedId() === $m['id'];
+        $link   = ! empty( $c['cta']['url'] ) ? \FilterEverything\Filter\MessageFeed::resolveUrl( $c['cta']['url'] ) : false;
+        ?>
+        <div class="wpc-pro-bnf-sale-strip" data-wpc-sale-strip="<?php echo esc_attr( $m['id'] ); ?>"<?php echo $hidden ? ' hidden' : ''; ?>>
+            <?php if ( ! empty( $c['badge'] ) ) : ?>
+                <span class="wpc-pro-bnf-sale-strip-badge"><?php echo esc_html( $c['badge'] ); ?></span>
+            <?php endif; ?>
+            <span class="wpc-pro-bnf-sale-strip-text"><?php echo \FilterEverything\Filter\Messages::html( isset( $c['text'] ) ? $c['text'] : '' ); ?></span>
+            <?php if ( ! empty( $m['countdown'] ) ) : ?>
+                <?php echo \FilterEverything\Filter\Messages::countdown( $m['ends'] ); // same live countdown as the bar (wpc-messages.js) ?>
+            <?php endif; ?>
+            <?php if ( $link && ! empty( $c['cta']['label'] ) ) : ?>
+                <a class="wpc-pro-bnf-sale-strip-link" href="<?php echo esc_url( $link['url'] ); ?>"<?php echo $link['external'] ? ' target="_blank" rel="noopener"' : ''; ?>><?php echo esc_html( $c['cta']['label'] ); ?></a>
+            <?php endif; ?>
+        </div>
+        <?php
+    }
+
+    /**
+     * Renders a single video card (lazy YouTube facade + title + Play Video button)
+     * for the "Trusted by WordPress Professionals" section.
+     *
+     * @param array $video id (YouTube video ID), quote (video title), author (channel).
+     */
+    protected function renderRvwVideoCard( $video ) {
+        $vid = preg_replace( '/[^A-Za-z0-9_-]/', '', $video['id'] );
         ?>
         <div class="wpc-pro-bnf-rvw-card wpc-pro-bnf-rvw-video" data-ytid="<?php echo esc_attr( $vid ); ?>">
-            <button type="button" class="wpc-pro-bnf-rvw-video-btn" aria-label="<?php echo esc_attr_x( 'Play video', 'benefits-landing', 'filter-everything' ); ?>">
-                <img class="wpc-pro-bnf-rvw-video-thumb"
-                     src="<?php echo esc_url( 'https://i.ytimg.com/vi/' . $vid . '/maxresdefault.jpg' ); ?>"
-                     onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/<?php echo $vid; ?>/hqdefault.jpg';"
-                     alt="" loading="lazy">
-                <span class="wpc-pro-bnf-rvw-video-play" aria-hidden="true">
-                    <svg viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/>
-                        <path d="M45 24 27 14v20z" fill="#FFFFFF"/>
-                    </svg>
-                </span>
+            <div class="wpc-pro-bnf-rvw-video-frame">
+                <button type="button" class="wpc-pro-bnf-rvw-video-btn" aria-label="<?php echo esc_attr_x( 'Play video', 'benefits-landing', 'filter-everything' ); ?>">
+                    <img class="wpc-pro-bnf-rvw-video-thumb"
+                         src="<?php echo esc_url( 'https://i.ytimg.com/vi/' . $vid . '/maxresdefault.jpg' ); ?>"
+                         onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/<?php echo esc_attr( $vid ); ?>/hqdefault.jpg';"
+                         alt="" loading="lazy">
+                    <span class="wpc-pro-bnf-rvw-video-play" aria-hidden="true">
+                        <svg viewBox="0 0 68 48" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M66.52 7.74c-.78-2.93-2.49-5.41-5.42-6.19C55.79.13 34 0 34 0S12.21.13 6.9 1.55c-2.93.78-4.63 3.26-5.42 6.19C.06 13.05 0 24 0 24s.06 10.95 1.48 16.26c.78 2.93 2.49 5.41 5.42 6.19C12.21 47.87 34 48 34 48s21.79-.13 27.1-1.55c2.93-.78 4.64-3.26 5.42-6.19C67.94 34.95 68 24 68 24s-.06-10.95-1.48-16.26z" fill="#FF0000"/>
+                            <path d="M45 24 27 14v20z" fill="#FFFFFF"/>
+                        </svg>
+                    </span>
+                </button>
+            </div>
+            <p class="wpc-pro-bnf-rvw-video-quote">&ldquo;<?php echo esc_html( $video['quote'] ); ?>&rdquo;</p>
+            <p class="wpc-pro-bnf-rvw-video-author"><?php echo esc_html( $video['author'] ); ?></p>
+            <button type="button" class="wpc-pro-bnf-rvw-video-cta">
+                <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.8v10.4L12 7 3 1.8Z" fill="currentColor"/></svg>
+                <?php echo esc_html_x( 'Play video', 'benefits-landing', 'filter-everything' ); ?>
             </button>
         </div>
         <?php

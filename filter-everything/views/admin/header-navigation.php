@@ -12,13 +12,19 @@ $parent_slug = 'edit.php?post_type=' . FLRT_FILTERS_SET_POST_TYPE;
 $current_tab = isset($_GET['tab']) ? sanitize_key($_GET['tab']) : '';
 $current_page = isset($_GET['page']) ? sanitize_key($_GET['page']) : '';
 $tabs = array();
+$this_page_has_import_export_tab = false;
+if (isset($submenu[$parent_slug])) {
+    foreach ($submenu[$parent_slug] as $sub_item) {
+        if (isset($sub_item[2]) && strpos($sub_item[2], 'tab=import_export') !== false) {
+            $this_page_has_import_export_tab = true;
+        }
+    }
+}
 
-// Submenu entries that must NOT become toolbar tabs: the toolbar mirrors the
-// sidebar, but only the everyday destinations belong up there. «What's new»
-// keeps its sidebar entry (and badge) and is reachable from there.
-$hidden_in_toolbar = apply_filters('wpc_header_nav_hidden_slugs', array(
-    class_exists('\FilterEverything\Filter\WhatsNew') ? \FilterEverything\Filter\WhatsNew::PAGE_SLUG : 'filters-whats-new',
-));
+// Submenu entries that must NOT become toolbar tabs (the toolbar mirrors the
+// sidebar). Empty by default: since 1.9.7 «What's new» is a Settings tab, not
+// a submenu entry, and Import/Export is back in both.
+$hidden_in_toolbar = apply_filters('wpc_header_nav_hidden_slugs', array());
 
 if (isset($submenu[$parent_slug])) {
     foreach ($submenu[$parent_slug] as $i => $sub_item) {
@@ -36,7 +42,9 @@ if (isset($submenu[$parent_slug])) {
         }
 
         $tab = array(
-                'text' => $sub_item[0],
+                // The sidebar's unread badge (WhatsNew) belongs to the sidebar; the
+                // toolbar shows the plain label
+                'text' => preg_replace('#\s*<span class="update-plugins[^"]*">.*?</span></span>#s', '', $sub_item[0]),
                 'url'  => $sub_item[2]
         );
 
@@ -65,10 +73,14 @@ if (isset($submenu[$parent_slug])) {
         $is_same_submenu = $tab_matches;
 
         if ($is_same_submenu) {
-            // Any Settings tab (Import/Export included — it has no toolbar tab of
-            // its own any more) keeps the «Settings» tab active
+            // Settings tabs: Import/Export has a toolbar tab of its own (PRO deep
+            // link), every other tab keeps «Settings» active
             if($current_page == 'filters-settings'){
-                $tab['is_active'] = true;
+                if ($tab_tab) {
+                    $tab['is_active'] = ($tab_tab === $current_tab);
+                } else {
+                    $tab['is_active'] = ($current_tab !== 'import_export') || ! $this_page_has_import_export_tab;
+                }
             }elseif ($current_tab) {
                 if ($tab_tab && $tab_tab === $current_tab) {
                     $tab['is_active'] = true;

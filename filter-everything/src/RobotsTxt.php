@@ -68,7 +68,9 @@ if ( ! function_exists( 'flrt_robots_pretty_mode' ) ) {
      */
     function flrt_robots_pretty_mode()
     {
-        return defined( 'FLRT_PERMALINKS_ENABLED' ) && FLRT_PERMALINKS_ENABLED;
+        // Not the bare constant: on plugin activation it is not defined yet and
+        // the block written by Plugin::activate() got the query-string rule set
+        return flrt_permalinks_enabled();
     }
 }
 

@@ -10,9 +10,8 @@ class WpManager
 {
     private $requestParser;
 
-    private $filterQueryVars;
-
-    private $isFilterRequest;
+    /** @var FilterContext */
+    private $context;
 
     private $em;
     private static $fqcn;
@@ -25,9 +24,7 @@ class WpManager
         global $wp_rewrite;
 
         if ( ! defined( 'FLRT_PERMALINKS_ENABLED' ) ) {
-            $rewrite = $wp_rewrite->wp_rewrite_rules();
-            $permalinksEnabled = ( defined( 'FLRT_FILTERS_PRO' ) && ! empty( $rewrite ) );
-            define( 'FLRT_PERMALINKS_ENABLED', $permalinksEnabled );
+            define( 'FLRT_PERMALINKS_ENABLED', flrt_permalinks_enabled() );
         }
 
         if ( ! defined('FLRT_SET_TRANSIENT_ENABLED')){
@@ -40,7 +37,8 @@ class WpManager
         self::$mg   = 'get_query_builder_name';
 
         $this->requestParser = new RequestParser( $this->prepareRequest() );
-        $this->em = Container::instance()->getEntityManager();
+        $this->context       = Container::instance()->getFilterContext();
+        $this->em            = Container::instance()->getEntityManager();
     }
 
     public function parseRequest($WP)
@@ -50,7 +48,7 @@ class WpManager
                 $this->setQueryVar( $key, $queryVar );
             }
 
-            $this->isFilterRequest = true;
+            $this->context->markFilterRequest();
             $this->setQueryVar('wpc_is_filter_request', true );
 
             if ( $this->getQueryVar('error') === '404' ) {
@@ -178,10 +176,8 @@ class WpManager
     public function addFilterQueryToWpQuery( $wp_query )
     {
         // The main difference is that we need to detect relevantSetId:
-        // - one time and store it into Container
+        // - one time and store it into the FilterContext
         // - do it before comparing with the current query
-        global $wpc_not_fired;
-
         $fqcn = self::$fqcn;
         $m = self::$m;
 
@@ -189,17 +185,15 @@ class WpManager
         $wp_query->set('flrt_detected_source', $source);
 
         $this->collectWPQueries( $wp_query );
-        if ( $wp_query->is_main_query() && $wpc_not_fired ) {
-            global $flrt_sets;
-
+        if ( $wp_query->is_main_query() && $this->context->isMainQueryPending() ) {
             $filterSet = Container::instance()->getFilterSetService();
 
             // Set global filters vars
             $this->setQueryVar('wp_queried_object', $this->identifyWpQueriedObject($wp_query) );
             $sets = $filterSet->findRelevantSets( $this->getQueryVar('wp_queried_object') );
 
-            // Save sets in global var
-            $flrt_sets = $sets;
+            // Queue the sets for the widgets (consumed by flrt_the_set())
+            $this->context->setSets( $sets );
             $this->setQueryVar('wpc_page_related_set_ids', $sets);
 
             do_action( 'wpc_related_set_ids', $sets );
@@ -249,8 +243,8 @@ class WpManager
                     return true;
                 }
             }
-            // To will never fire this section of code again
-            $wpc_not_fired = false;
+            // This section must never run again for this request
+            $this->context->markMainQueryHandled();
         }
 
         // This should be an array!
@@ -377,9 +371,9 @@ class WpManager
             return false;
         }
 
-        // Hard set of filterQueryVars
+        // Deliberate overwrite: queried values now carry the logic separators
         if (!empty($queriedValuesWithLogic)) {
-            $this->filterQueryVars['queried_values'] = $queriedValuesWithLogic;
+            $this->context->replace('queried_values', $queriedValuesWithLogic);
         }
 
         return true;
@@ -618,21 +612,30 @@ class WpManager
         return $where;
     }
 
+    /**
+     * Thin delegates to FilterContext; kept for backward compatibility.
+     * New code should use Container::instance()->getFilterContext() directly.
+     */
     public function getQueryVar($var, $default = false)
     {
-        if (isset($this->filterQueryVars[$var])) {
-            return $this->filterQueryVars[$var];
-        }
-        return $default;
+        return $this->ctx()->get( $var, $default );
     }
 
     public function setQueryVar($var, $value)
     {
-        if (!isset($this->filterQueryVars[$var])) {
-            $this->filterQueryVars[$var] = $value;
-            return true;
+        return $this->ctx()->set( $var, $value );
+    }
+
+    /**
+     * getQueryVar() may be called (e.g. from admin screens) before init() ran;
+     * resolve the context lazily so those callers keep getting the default.
+     */
+    private function ctx()
+    {
+        if ( ! $this->context ) {
+            $this->context = Container::instance()->getFilterContext();
         }
-        return false;
+        return $this->context;
     }
 
     public static function make_404($wp_query, $message = '')
@@ -647,7 +650,7 @@ class WpManager
 
     public function isFilterRequest()
     {
-        return $this->isFilterRequest;
+        return $this->ctx()->isFilterRequest();
     }
 
     private function collectWPQueries( $wp_query )
@@ -850,6 +853,13 @@ class WpManager
 
     public function customParseRequest( $do_parse_request, $WP, $extra_query_vars ){
         global $wp_rewrite;
+
+        // Another router (e.g. Brain\Cortex in WP User Manager) has already parsed
+        // this request and built the query — leave it alone.
+        if ( false === $do_parse_request ) {
+            return $do_parse_request;
+        }
+
         $postData = Container::instance()->getThePost();
 
         $WP->query_vars       = array();
@@ -1119,272 +1129,6 @@ class WpManager
         $WP->query_posts();
         $WP->handle_404();
         $WP->register_globals();
-
-        return $do_parse_request;
-    }
-
-    public function customParseRequestBefore60( $do_parse_request, $WP, $extra_query_vars ){
-        global $wp_rewrite;
-        $postData = Container::instance()->getThePost();
-
-        $WP->query_vars     = [];
-        $post_type_query_vars = [];
-
-        if ( is_array( $extra_query_vars ) ) {
-            $WP->extra_query_vars = & $extra_query_vars;
-        } elseif ( ! empty( $extra_query_vars ) ) {
-            parse_str( $extra_query_vars, $WP->extra_query_vars );
-        }
-        // Process PATH_INFO, REQUEST_URI, and 404 for permalinks.
-
-        // Fetch the rewrite rules.
-        $rewrite = $wp_rewrite->wp_rewrite_rules();
-
-        if ( ! empty( $rewrite ) ) {
-            // If we match a rewrite rule, this will be cleared.
-            $error               = '404';
-            $WP->did_permalink = true;
-
-            $pathinfo         = isset( $_SERVER['PATH_INFO'] ) ? $_SERVER['PATH_INFO'] : '';
-            list( $pathinfo ) = explode( '?', $pathinfo );
-            $pathinfo         = str_replace( '%', '%25', $pathinfo );
-
-            // Cleanup request path from filter segments
-            $request_uri     = $this->getRequestUri();
-            $cleanedRequest  = $this->requestParser->cleanUpRequestPathFromFilterSegments( $request_uri );
-
-            list( $req_uri ) = explode( '?', $cleanedRequest );
-            $self            = $_SERVER['PHP_SELF'];
-            $home_path       = trim( parse_url( home_url(), PHP_URL_PATH ), '/' );
-            $home_path_regex = sprintf( '|^%s|i', preg_quote( $home_path, '|' ) );
-
-            /*
-             * Trim path info from the end and the leading home path from the front.
-             * For path info requests, this leaves us with the requesting filename, if any.
-             * For 404 requests, this leaves us with the requested permalink.
-             */
-            $req_uri  = str_replace( $pathinfo, '', $req_uri );
-            $req_uri  = trim( $req_uri, '/' );
-            $req_uri  = preg_replace( $home_path_regex, '', $req_uri );
-            $req_uri  = trim( $req_uri, '/' );
-            $pathinfo = trim( $pathinfo, '/' );
-            $pathinfo = preg_replace( $home_path_regex, '', $pathinfo );
-            $pathinfo = trim( $pathinfo, '/' );
-            $self     = trim( $self, '/' );
-            $self     = preg_replace( $home_path_regex, '', $self );
-            $self     = trim( $self, '/' );
-
-            // The requested permalink is in $pathinfo for path info requests and
-            // $req_uri for other requests.
-            if ( ! empty( $pathinfo ) && ! preg_match( '|^.*' . $wp_rewrite->index . '$|', $pathinfo ) ) {
-                $requested_path = $pathinfo;
-            } else {
-                // If the request uri is the index, blank it out so that we don't try to match it against a rule.
-                if ( $req_uri == $wp_rewrite->index ) {
-                    $req_uri = '';
-                }
-                $requested_path = $req_uri;
-            }
-            $requested_file = $req_uri;
-
-            $WP->request = $requested_path;
-            $this->setQueryVar('wp_request', $requested_path);
-
-            if( $cleanedRequest === strtolower( $request_uri ) ){
-                // No filter request. Let's allow WordPress and plugins continue their work
-                return $do_parse_request;
-            }
-
-            $do_parse_request = false;
-            // Look for matches.
-            $request_match = $requested_path;
-
-            if ( empty( $request_match ) ) {
-                // An empty request could only match against ^$ regex.
-                if ( isset( $rewrite['$'] ) ) {
-                    $WP->matched_rule = '$';
-                    $query              = $rewrite['$'];
-                    $matches            = array( '' );
-                }
-            } else {
-                foreach ( (array) $rewrite as $match => $query ) {
-                    // If the requested file is the anchor of the match, prepend it to the path info.
-                    if ( ! empty( $requested_file ) && strpos( $match, $requested_file ) === 0 && $requested_file != $requested_path ) {
-                        $request_match = $requested_file . '/' . $requested_path;
-                    }
-
-                    if ( preg_match( "#^$match#", $request_match, $matches ) ||
-                        preg_match( "#^$match#", urldecode( $request_match ), $matches ) ) {
-
-                        if ( $wp_rewrite->use_verbose_page_rules && preg_match( '/pagename=\$matches\[([0-9]+)\]/', $query, $varmatch ) ) {
-                            // This is a verbose page match, let's check to be sure about it.
-                            $page = get_page_by_path( $matches[ $varmatch[1] ] );
-
-                            if ( ! $page ) {
-                                continue;
-                            }
-
-                            $post_status_obj = get_post_status_object( $page->post_status );
-
-                            if ( ! $post_status_obj->public && ! $post_status_obj->protected
-                                && ! $post_status_obj->private && $post_status_obj->exclude_from_search ) {
-                                continue;
-                            }
-                        }
-
-                        // Got a match.
-                        $WP->matched_rule = $match;
-                        break;
-                    }
-                }
-            }
-
-            if ( isset( $WP->matched_rule ) ) {
-                // Trim the query of everything up to the '?'.
-                $query = preg_replace( '!^.+\?!', '', $query );
-
-                // Substitute the substring matches into the query.
-                $query = addslashes( \WP_MatchesMapRegex::apply( $query, $matches ) );
-
-                $WP->matched_query = $query;
-
-                // Parse the query.
-                parse_str( $query, $perma_query_vars );
-
-                // If we're processing a 404 request, clear the error var since we found something.
-                if ( '404' == $error ) {
-                    unset( $error, $_GET['error'] );
-                }
-            }
-
-            // If req_uri is empty or if it is a request for ourself, unset error.
-            if (empty($requested_path) || $requested_file == $self || strpos($_SERVER['PHP_SELF'], 'wp-admin/') !== false) {
-                unset($error, $_GET['error']);
-
-                if (isset($perma_query_vars) && strpos($_SERVER['PHP_SELF'], 'wp-admin/') !== false && (! isset( $postData['flrt_ajax_link'] )) ) {
-                    unset($perma_query_vars);
-                }
-
-                $WP->did_permalink = false;
-            }
-
-        } else {
-            $do_parse_request = false;
-        }
-
-        /**
-         * Filters the query variables whitelist before processing.
-         *
-         * Allows (publicly allowed) query vars to be added, removed, or changed prior
-         * to executing the query. Needed to allow custom rewrite rules using your own arguments
-         * to work, or any other custom query variables you want to be publicly available.
-         *
-         * @since 1.5.0
-         *
-         * @param string[] $public_query_vars The array of whitelisted query variable names.
-         */
-
-        $WP->public_query_vars = apply_filters( 'query_vars', $WP->public_query_vars );
-
-        foreach ( get_post_types( [], 'objects' ) as $post_type => $t ) {
-            if ( is_post_type_viewable( $t ) && $t->query_var ) {
-                $post_type_query_vars[ $t->query_var ] = $post_type;
-            }
-        }
-
-        foreach ( $WP->public_query_vars as $wpvar ) {
-            if ( isset( $WP->extra_query_vars[ $wpvar ] ) ) {
-                $WP->query_vars[ $wpvar ] = $WP->extra_query_vars[ $wpvar ];
-            } elseif ( isset( $_GET[ $wpvar ] ) && isset( $postData[ $wpvar ] ) && $_GET[ $wpvar ] !== $postData[ $wpvar ] ) {
-                wp_die( esc_html__( 'A variable mismatch has been detected.' ), esc_html__( 'Sorry, you are not allowed to view this item.' ), 400 );
-            } elseif ( isset( $postData[ $wpvar ] ) ) {
-                $WP->query_vars[ $wpvar ] = $postData[ $wpvar ];
-            } elseif ( isset( $_GET[ $wpvar ] ) ) {
-                $WP->query_vars[ $wpvar ] = $_GET[ $wpvar ];
-            } elseif ( isset( $perma_query_vars[ $wpvar ] ) ) {
-                $WP->query_vars[ $wpvar ] = $perma_query_vars[ $wpvar ];
-            }
-
-            if ( ! empty( $WP->query_vars[ $wpvar ] ) ) {
-                if ( ! is_array( $WP->query_vars[ $wpvar ] ) ) {
-                    $WP->query_vars[ $wpvar ] = (string) $WP->query_vars[ $wpvar ];
-                } else {
-                    foreach ( $WP->query_vars[ $wpvar ] as $vkey => $v ) {
-                        if ( is_scalar( $v ) ) {
-                            $WP->query_vars[ $wpvar ][ $vkey ] = (string) $v;
-                        }
-                    }
-                }
-
-                if ( isset( $post_type_query_vars[ $wpvar ] ) ) {
-                    $WP->query_vars['post_type'] = $post_type_query_vars[ $wpvar ];
-                    $WP->query_vars['name']      = $WP->query_vars[ $wpvar ];
-                }
-            }
-        }
-
-        // Convert urldecoded spaces back into '+'.
-        foreach ( get_taxonomies( [], 'objects' ) as $taxonomy => $t ) {
-            if ( $t->query_var && isset( $WP->query_vars[ $t->query_var ] ) ) {
-                $WP->query_vars[ $t->query_var ] = str_replace( ' ', '+', $WP->query_vars[ $t->query_var ] );
-            }
-        }
-
-        // Don't allow non-publicly queryable taxonomies to be queried from the front end.
-        if ( ! is_admin() ) {
-            foreach ( get_taxonomies( array( 'publicly_queryable' => false ), 'objects' ) as $taxonomy => $t ) {
-                /*
-                 * Disallow when set to the 'taxonomy' query var.
-                 * Non-publicly queryable taxonomies cannot register custom query vars. See register_taxonomy().
-                 */
-                if ( isset( $WP->query_vars['taxonomy'] ) && $taxonomy === $WP->query_vars['taxonomy'] ) {
-                    unset( $WP->query_vars['taxonomy'], $WP->query_vars['term'] );
-                }
-            }
-        }
-
-        // Limit publicly queried post_types to those that are 'publicly_queryable'.
-        if ( isset( $WP->query_vars['post_type'] ) ) {
-            $queryable_post_types = get_post_types( array( 'publicly_queryable' => true ) );
-            if ( ! is_array( $WP->query_vars['post_type'] ) ) {
-                if ( ! in_array( $WP->query_vars['post_type'], $queryable_post_types ) ) {
-                    unset( $WP->query_vars['post_type'] );
-                }
-            } else {
-                $WP->query_vars['post_type'] = array_intersect( $WP->query_vars['post_type'], $queryable_post_types );
-            }
-        }
-
-        // Resolve conflicts between posts with numeric slugs and date archive queries.
-        $WP->query_vars = wp_resolve_numeric_slug_conflicts( $WP->query_vars );
-
-        foreach ( (array) $WP->private_query_vars as $var ) {
-            if ( isset( $WP->extra_query_vars[ $var ] ) ) {
-                $WP->query_vars[ $var ] = $WP->extra_query_vars[ $var ];
-            }
-        }
-
-        if ( isset( $error ) ) {
-            $WP->query_vars['error'] = $error;
-        }
-
-        /**
-         * Filters the array of parsed query variables.
-         *
-         * @since 2.1.0
-         *
-         * @param array $query_vars The array of requested query variables.
-         */
-        $WP->query_vars = apply_filters( 'request', $WP->query_vars );
-
-        /**
-         * Fires once all query variables for the current request have been parsed.
-         *
-         * @since 2.1.0
-         *
-         * @param WP $this Current WordPress environment instance (passed by reference).
-         */
-        do_action_ref_array( 'parse_request', array( &$WP ) );
 
         return $do_parse_request;
     }

@@ -13,15 +13,19 @@ if ( ! defined('ABSPATH') ) {
  * opens the plugin settings to discover what changed, yet a redirect or a modal
  * would be obnoxious. So:
  *
- *   - a «What's new» submenu page under the Filters menu renders the release
- *     notes of the INSTALLED version straight from the bundled readme.txt
- *     changelog — zero extra maintenance, no remote calls, always in sync with
- *     what actually shipped; earlier releases are listed below, collapsed;
- *   - after an in-place update the Filters menu item (and the submenu entry)
- *     carry the WP-native red «1» badge until THIS admin opens the page — it is
- *     visible from every admin screen but demands nothing, and it stops on its
- *     own after self::BADGE_TTL. Fresh installs never see it: there is nothing
- *     to catch up on.
+ *   - a «What's new» tab on the Settings page (the last one) renders the
+ *     release notes of the INSTALLED version straight from the bundled
+ *     readme.txt changelog — zero extra maintenance, no remote calls, always in
+ *     sync with what actually shipped; earlier releases are listed below,
+ *     collapsed. It used to be a submenu entry (1.9.6); it moved into Settings
+ *     so that the Filters menu stays short with Import/Export back in it;
+ *   - after an in-place update the WP-native red «1» badge sits on the Filters
+ *     menu item (collapsed menu), on «Settings» once the menu is open, and on
+ *     the «What's new» tab inside Settings, until THIS admin opens the tab — it
+ *     is visible from every admin screen but demands nothing, and it stops on
+ *     its own after self::BADGE_TTL. Fresh installs never see it: there is
+ *     nothing to catch up on. An unread plugin notification lights the same
+ *     badge (Messages::hasUnseen()).
  *
  * "Seen" is per user (user meta — each admin gets one quiet nudge), "updated"
  * is per site (AdminNotices' update stamp). Both builds, free and PRO.
@@ -29,9 +33,12 @@ if ( ! defined('ABSPATH') ) {
  * Complements, not replaces, the one-off AdminNotices entries: those are for
  * releases that change behaviour; the badge is the baseline for every release.
  */
-class WhatsNew
+class WhatsNew implements TabInterface
 {
-    /** Submenu slug (?page=…). */
+    /** Settings tab name (?page=filters-settings&tab=…). */
+    const TAB = 'whats_new';
+
+    /** Former submenu slug (?page=…), kept so old links land on the tab. */
     const PAGE_SLUG = 'filters-whats-new';
 
     /** Per-user: the last version whose release notes this admin has opened. */
@@ -49,10 +56,77 @@ class WhatsNew
             return;
         }
 
-        // Registered from inside Admin::adminMenu(), right after «Settings»
-        add_action( 'wpc_after_add_submenu_pages', [ $this, 'addPage' ] );
-        // Runs after every submenu (ours included) exists
+        // Last Settings tab, after License (PRO) / PRO benefits (free)
+        add_action( 'wpc_settings_tabs_registered', [ $this, 'registerTab' ] );
+        // Runs after every submenu exists
         add_action( 'admin_menu', [ $this, 'decorateMenu' ], 99 );
+        // Bookmarked / old links to the former submenu page
+        // The old page is no longer registered, so WordPress denies it in
+        // wp-admin/menu.php before admin_init ever runs; this hook fires right
+        // before that 403 and is the only place a redirect can still happen.
+        add_action( 'admin_page_access_denied', [ $this, 'redirectOldPage' ] );
+    }
+
+    /* ----------------------------------------------------------------- TabInterface */
+
+    public function registerTab( TabRenderer $renderer )
+    {
+        $renderer->register( $this );
+    }
+
+    public function init()
+    {
+    }
+
+    public function getName()
+    {
+        return self::TAB;
+    }
+
+    public function getLabel()
+    {
+        return esc_html__( "What's new", 'filter-everything' );
+    }
+
+    public function valid()
+    {
+        return true;
+    }
+
+    /** The unread badge on the tab itself (options.php prints it after the label): same count as the menu. */
+    public function labelBadge()
+    {
+        if ( self::isWhatsNewPage() ) {
+            return '';
+        }
+        list( $count, $label ) = $this->unread();
+
+        return $count ? self::badgeHtml( $count, $label ) : '';
+    }
+
+    /**
+     * What this admin has not seen yet: release notes and/or a plugin
+     * notification (Messages::hasUnseen()).
+     *
+     * @return array{0:int,1:string} count and screen-reader label
+     */
+    public function unread()
+    {
+        $notes   = $this->badgeDue();
+        $message = class_exists( __NAMESPACE__ . '\\Messages' ) && Messages::hasUnseen();
+        $label   = $notes && $message
+            ? esc_html__( 'New release notes and a new notification', 'filter-everything' )
+            : ( $notes ? esc_html__( 'New release notes available', 'filter-everything' ) : esc_html__( 'New notification', 'filter-everything' ) );
+
+        return array( (int) $notes + (int) $message, $label );
+    }
+
+    public function redirectOldPage()
+    {
+        if ( isset( $_GET['page'] ) && sanitize_key( wp_unslash( $_GET['page'] ) ) === self::PAGE_SLUG ) {
+            wp_safe_redirect( self::pageUrl() );
+            exit;
+        }
     }
 
     public static function parentSlug()
@@ -62,7 +136,7 @@ class WhatsNew
 
     public static function pageUrl()
     {
-        return admin_url( self::parentSlug() . '&page=' . self::PAGE_SLUG );
+        return admin_url( self::parentSlug() . '&page=filters-settings&tab=' . self::TAB );
     }
 
     /** Version as it appears in the changelog: 1.9.6-dev → 1.9.6 */
@@ -73,24 +147,24 @@ class WhatsNew
 
     public static function isWhatsNewPage()
     {
-        return isset( $_GET['page'] ) && sanitize_key( wp_unslash( $_GET['page'] ) ) === self::PAGE_SLUG;
+        return isset( $_GET['page'], $_GET['tab'] )
+            && sanitize_key( wp_unslash( $_GET['page'] ) ) === 'filters-settings'
+            && sanitize_key( wp_unslash( $_GET['tab'] ) ) === self::TAB;
     }
 
-    public function addPage()
+    public static function badgeHtml( $count, $label )
     {
-        add_submenu_page(
-            self::parentSlug(),
-            esc_html__( "What's new", 'filter-everything' ),
-            esc_html__( "What's new", 'filter-everything' ),
-            flrt_plugin_user_caps(),
-            self::PAGE_SLUG,
-            [ $this, 'renderPage' ]
-        );
+        return ' <span class="update-plugins count-' . (int) $count . ' flrt-whats-new-badge"><span class="plugin-count" aria-hidden="true">' . (int) $count . '</span>'
+             . '<span class="screen-reader-text">' . $label . '</span></span>';
     }
 
     /**
-     * Appends the badge to the Filters menu item and to the «What's new» entry
-     * while this admin has unread release notes. Opening the page marks them read.
+     * Appends the badge to the Filters menu item and to the «Settings» entry
+     * while this admin has unread release notes and/or an unread plugin
+     * notification (Messages::hasUnseen()). Inside Settings the same count
+     * sits on the «What's new» tab (labelBadge()). Opening the tab marks the
+     * notes read; the notification counts as read once it has been shown on
+     * any of the plugin's screens — the tab included, so one click clears both.
      */
     public function decorateMenu()
     {
@@ -103,15 +177,16 @@ class WhatsNew
             return;
         }
 
-        if ( ! $this->badgeDue() ) {
+        list( $count, $label ) = $this->unread();
+
+        if ( ! $count ) {
             return;
         }
 
         global $menu, $submenu;
 
         $parent = self::parentSlug();
-        $badge  = ' <span class="update-plugins count-1 flrt-whats-new-badge"><span class="plugin-count" aria-hidden="true">1</span>'
-                . '<span class="screen-reader-text">' . esc_html__( 'New release notes available', 'filter-everything' ) . '</span></span>';
+        $badge  = self::badgeHtml( $count, $label );
 
         foreach ( (array) $menu as $i => $item ) {
             if ( isset( $item[2] ) && $item[2] === $parent ) {
@@ -122,7 +197,7 @@ class WhatsNew
 
         if ( isset( $submenu[ $parent ] ) ) {
             foreach ( $submenu[ $parent ] as $i => $item ) {
-                if ( isset( $item[2] ) && $item[2] === self::PAGE_SLUG ) {
+                if ( isset( $item[2] ) && $item[2] === 'filters-settings' ) {
                     $submenu[ $parent ][ $i ][0] .= $badge;
                     break;
                 }
@@ -156,10 +231,10 @@ class WhatsNew
         }
     }
 
-    public function renderPage()
+    public function render()
     {
         if ( ! current_user_can( flrt_plugin_user_caps() ) ) {
-            wp_die( esc_html__( 'Sorry, you are not allowed to access this page.', 'filter-everything' ) );
+            return '';
         }
 
         $releases = self::changelog();
@@ -177,12 +252,15 @@ class WhatsNew
         $earlier = $releases;
         unset( $earlier[ $version ] );
 
+        ob_start();
         flrt_include_admin_view( 'whats-new', [
             'version'       => $version,
             'current'       => $current,
             'earlier'       => $earlier,
             'changelog_url' => self::CHANGELOG_URL,
         ] );
+
+        return ob_get_clean();
     }
 
     /**

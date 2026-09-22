@@ -195,7 +195,7 @@ class SettingsTab extends BaseSettings
                 'description' => esc_html__( 'Tells search engines and other well-behaved crawlers not to request filtering result pages at all. Bots that ignore robots.txt are not affected.', 'filter-everything' ),
                 'tooltip' => $is_pro
                     ? wp_kses(
-                        __( 'Hiding the filter links stops crawlers from discovering new filter URLs, but the URLs they already know stay in their queues for weeks or months. A Disallow rule in robots.txt is the only signal that also stops compliant crawlers — Google, Bing and most AI bots — from requesting those pages at all, which frees both your server and your crawl budget.<br /><br />With pretty permalinks the rules name only the filter URLs that are never indexable: several values of one filter (…/color-red-or-blue/), more filters in one URL than your Indexing Depth allows, and numeric or date ranges. Single-filter pages stay crawlable, so the pages your SEO Rules index are never touched. Review the list before enabling: a product or category slug that starts with one of your filter prefixes would match the same pattern.<br /><br />When your site has a physical robots.txt file, WordPress cannot add the rules for you — copy them into that file yourself.', 'filter-everything' ),
+                        __( 'Hiding the filter links stops crawlers from discovering new filter URLs, but the URLs they already know stay in their queues for weeks or months. A Disallow rule in robots.txt is the only signal that also stops compliant crawlers — Google, Bing and most AI bots — from requesting those pages at all, which frees both your server and your crawl budget.<br /><br />With pretty permalinks the rules name only the filter URLs that are never indexable: several values of one filter (…/color-red-or-blue/), more filters in one URL than your Indexing Depth allows, and numeric or date ranges. Single-filter pages stay crawlable, so the pages your SEO Rules index are never touched. Review the list before enabling: a product or category slug that starts with one of your filter prefixes would match the same pattern.<br /><br />When your site has a physical robots.txt file, the PRO version writes the rules into it for you, inside a # BEGIN / # END Filter Everything block, and rewrites that block whenever your filters, URL prefixes, Indexing Depth or SEO Rules change — the rest of the file is never touched.', 'filter-everything' ),
                         array( 'br' => array() )
                     )
                     : wp_kses(
@@ -240,10 +240,26 @@ class SettingsTab extends BaseSettings
         );
 
         if ( flrt_robots_txt_is_physical() ) {
-            printf(
-                '<p class="wpc-warning">%s</p>',
-                esc_html__( 'Your site has a physical robots.txt file, so WordPress cannot add these rules automatically. Copy them into that file yourself.', 'filter-everything' )
-            );
+            // PRO writes the block into the file itself — see pro/RobotsTxtFile.php.
+            $pro_status = function_exists( 'flrt_robots_file_status_html' ) ? flrt_robots_file_status_html() : '';
+
+            if ( $pro_status !== '' ) {
+                if ( isset( $_GET['wpc-robots-file'] ) ) {
+                    printf(
+                        '<p class="%s">%s</p>',
+                        $_GET['wpc-robots-file'] === 'ok' ? 'description' : 'wpc-warning',
+                        $_GET['wpc-robots-file'] === 'ok'
+                            ? esc_html__( 'robots.txt has been updated.', 'filter-everything' )
+                            : esc_html__( 'robots.txt could not be updated — see the reason below.', 'filter-everything' )
+                    );
+                }
+                echo $pro_status; // Escaped in flrt_robots_file_status_html().
+            } else {
+                printf(
+                    '<p class="wpc-warning">%s</p>',
+                    esc_html__( 'Your site has a physical robots.txt file, so WordPress cannot add these rules automatically. Copy them into that file yourself.', 'filter-everything' )
+                );
+            }
         } elseif ( ! get_option( 'permalink_structure' ) ) {
             printf(
                 '<p class="wpc-warning">%s</p>',

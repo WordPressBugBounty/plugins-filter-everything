@@ -416,12 +416,12 @@ msgid "16&nbsp;200+"
 msgstr "16&nbsp;200+"
 
 msgctxt "benefits-landing"
-msgid "160&nbsp;000+"
-msgstr "160&nbsp;000+"
+msgid "170&nbsp;000+"
+msgstr "170&nbsp;000+"
 
 msgctxt "benefits-landing"
-msgid "160,000+"
-msgstr "160.000+"
+msgid "170,000+"
+msgstr "170.000+"
 
 msgctxt "benefits-landing"
 msgid "4.88/5"
@@ -539,10 +539,8 @@ msgid "Filter any content — page builders, plugins, or even custom code"
 msgstr "Filtern Sie beliebige Inhalte — Page Builder, Plugins oder sogar eigenen Code"
 
 msgctxt "benefits-landing"
-msgid "Filter any posts list, custom query, or page builder content"
-msgstr ""
-"Filtern Sie beliebige Beitragslisten, benutzerdefinierte Abfragen oder Page-"
-"Builder-Inhalte"
+msgid "Filter <strong>any</strong> posts list, custom query, or page builder content"
+msgstr "Filtern Sie <strong>jede</strong> Beitragsliste, Custom Query oder Page-Builder-Inhalte"
 
 msgctxt "benefits-landing"
 msgid "Filter by any criteria"
@@ -622,11 +620,8 @@ msgid "Import & export settings"
 msgstr "Import- und Exporteinstellungen"
 
 msgctxt "benefits-landing"
-msgid ""
-"Improve conversions and user experience with advanced filtering capabilities"
-msgstr ""
-"Steigern Sie Conversions und das Nutzererlebnis mit erweiterten "
-"Filterfunktionen"
+msgid "Improve <strong>conversions</strong>, <strong>sales</strong> and user experience with advanced filtering capabilities"
+msgstr "Steigern Sie <strong>Conversions</strong>, <strong>Verkäufe</strong> und das Nutzererlebnis mit erweiterten Filterfunktionen"
 
 msgctxt "benefits-landing"
 msgid "Instant Filter Set duplication"
@@ -963,7 +958,7 @@ msgstr "nach Titel (alphabetisch):"
 msgid "By title: reverse"
 msgstr "Nach Titel (umgekehrt)"
 
-#: src/Admin/Widgets/FiltersWidget.php:67 views/admin/filter-row.php:88
+#: src/Frontend/Widgets/FiltersWidget.php:67 views/admin/filter-row.php:88
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -1240,7 +1235,7 @@ msgstr ""
 msgid "Displays a dropdown with sort options"
 msgstr "Zeigt ein Dropdown-Menü mit Sortieroptionen an"
 
-#: src/Admin/Widgets/FiltersWidget.php:13
+#: src/Frontend/Widgets/FiltersWidget.php:13
 msgid "Displays filters"
 msgstr "Zeigt Filter an"
 
@@ -1979,7 +1974,7 @@ msgstr "Filtern nach: Produktbreite"
 msgid "Filter Container max height, px"
 msgstr "Maximale Höhe des Filter Containers (px)"
 
-#: src/Admin/Widgets/FiltersWidget.php:12
+#: src/Frontend/Widgets/FiltersWidget.php:12
 msgid "Filter Everything"
 msgstr "Filter Everything"
 
@@ -2942,7 +2937,7 @@ msgstr "Einstellungen"
 msgid "Shop page"
 msgstr "Shop Seite"
 
-#: src/Admin/Widgets/FiltersWidget.php:70
+#: src/Frontend/Widgets/FiltersWidget.php:70
 #, php-format
 msgid "Show %s"
 msgstr "Anwenden %s"
@@ -2985,14 +2980,14 @@ msgstr "Produkte mit %d+ Sternen anzeigen"
 msgid "Show products with %d star rating"
 msgstr "Produkte mit %d Sternenbewertung anzeigen"
 
-#: src/Admin/Widgets/FiltersWidget.php:189
+#: src/Frontend/Widgets/FiltersWidget.php:189
 msgid "Show selected terms (Chips)"
 msgstr "Gewählte Begriffe (Chips) anzeigen"
 
 msgid "Show Term names"
 msgstr "Namen der Begridffe anzeigen"
 
-#: src/Admin/Widgets/FiltersWidget.php:193
+#: src/Frontend/Widgets/FiltersWidget.php:193
 #| msgid "Show number of posts found"
 msgid "Show the number of posts found"
 msgstr "Anzahl gefundener Beiträge anzeigen"
@@ -3796,8 +3791,6 @@ msgstr "Nutzen Sie die volle Power der Filterung, SEO-Tools und verbessern Sie I
 msgid "Always<br />WP & Woo compatible"
 msgstr "Immer<br />WP- & Woo-kompatibel"
 
-msgid "/yr"
-msgstr "/Jahr"
 
 msgid "1-year updates & support"
 msgstr "1 Jahr Updates & Support"
@@ -3925,8 +3918,6 @@ msgstr "Gefällt Ihnen"
 msgid "Filter Everything?"
 msgstr "Filter Everything?"
 
-msgid "Rate us on WordPress.org and help the plugin grow"
-msgstr "Bewerten Sie uns auf WordPress.org und helfen Sie dem Plugin zu wachsen"
 
 msgid "Rate Filter Everything"
 msgstr "Filter Everything bewerten"
@@ -4009,3 +4000,190 @@ msgstr "Dieser Lizenzschlüssel wurde für <strong>%1$s</strong> erzeugt, diese 
 msgid "Hiding the filter links stops crawlers from discovering new filter URLs, but the URLs they already know stay in their queues for weeks or months. A Disallow rule in robots.txt is the only signal that also stops compliant crawlers — Google, Bing and most AI bots — from requesting those pages at all, which frees both your server and your crawl budget.<br /><br />With pretty permalinks the rules name only the filter URLs that are never indexable: several values of one filter (…/color-red-or-blue/), more filters in one URL than your Indexing Depth allows, and numeric or date ranges. Single-filter pages stay crawlable, so the pages your SEO Rules index are never touched. Review the list before enabling: a product or category slug that starts with one of your filter prefixes would match the same pattern.<br /><br />When your site has a physical robots.txt file, WordPress cannot add the rules for you — copy them into that file yourself."
 msgstr "Das Ausblenden der Filter-Links hindert Crawler daran, neue Filter-URLs zu entdecken, doch bereits bekannte URLs bleiben wochen- oder monatelang in ihren Warteschlangen. Eine Disallow-Regel in der robots.txt ist das einzige Signal, das auch regelkonforme Crawler — Google, Bing und die meisten KI-Bots — davon abhält, diese Seiten überhaupt anzufordern, was sowohl Ihren Server als auch Ihr Crawl-Budget entlastet.<br /><br />Mit schönen Permalinks benennen die Regeln nur jene Filter-URLs, die nie indexierbar sind: mehrere Werte eines Filters (…/color-red-or-blue/), mehr Filter in einer URL als Ihre Indexierungstiefe erlaubt sowie Zahlen- oder Datumsbereiche. Seiten mit einem einzelnen Filter bleiben crawlbar, sodass die von Ihren SEO Regeln indexierten Seiten nie betroffen sind. Prüfen Sie die Liste vor dem Aktivieren: Ein Produkt- oder Kategorie-Slug, der mit einem Ihrer Filter-Präfixe beginnt, würde demselben Muster entsprechen.<br /><br />Hat Ihre Website eine physische robots.txt-Datei, kann WordPress die Regeln nicht für Sie hinzufügen — kopieren Sie sie selbst in diese Datei."
 
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "The plugin is locked."
+msgstr "Das Plugin ist gesperrt."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "It has been running for over two months without a license key, so Filter Sets and SEO Rules cannot be saved until a key is activated. Filtering on the site keeps working."
+msgstr "Es läuft seit über zwei Monaten ohne Lizenzschlüssel, daher können Filter-Sets und SEO-Regeln erst gespeichert werden, wenn ein Schlüssel aktiviert ist. Das Filtern auf der Website funktioniert weiterhin."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Paste it below and click <strong>Activate License</strong>."
+msgstr "Fügen Sie ihn unten ein und klicken Sie auf <strong>Lizenz aktivieren</strong>."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Where did you buy Filter Everything PRO?"
+msgstr "Wo haben Sie Filter Everything PRO gekauft?"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "The license key depends on where you bought the plugin. Pick your case and follow the three steps."
+msgstr "Der Lizenzschlüssel hängt davon ab, wo Sie das Plugin gekauft haben. Wählen Sie Ihren Fall und folgen Sie den drei Schritten."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "On CodeCanyon (Envato)"
+msgstr "Auf CodeCanyon (Envato)"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "You have an Envato account and a purchase code from Envato."
+msgstr "Sie haben ein Envato-Konto und einen Purchase Code von Envato."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Click <strong>Get your License Key</strong> and sign in with the Envato account that made the purchase (for agencies this is often the client’s account)."
+msgstr "Klicken Sie auf <strong>Lizenzschlüssel holen</strong> und melden Sie sich mit dem Envato-Konto an, mit dem der Kauf getätigt wurde (bei Agenturen ist das oft das Konto des Kunden)."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Copy the license key shown next to your purchase."
+msgstr "Kopieren Sie den Lizenzschlüssel, der neben Ihrem Kauf angezeigt wird."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Your Envato purchase code (<code>a1b2c3d4-…</code>) is <strong>not</strong> the license key. It is only used on the next page to generate the key."
+msgstr "Ihr Envato-Purchase-Code (<code>a1b2c3d4-…</code>) ist <strong>nicht</strong> der Lizenzschlüssel. Er wird nur auf der nächsten Seite verwendet, um den Schlüssel zu erzeugen."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "On filtereverything.pro"
+msgstr "Auf filtereverything.pro"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "You created an account on our website during checkout."
+msgstr "Sie haben beim Kauf ein Konto auf unserer Website erstellt."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Open <strong>My Account → My licenses</strong> and add this site: <code>%s</code>"
+msgstr "Öffnen Sie <strong>My Account → My licenses</strong> und fügen Sie diese Website hinzu: <code>%s</code>"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Copy the key generated for this address."
+msgstr "Kopieren Sie den für diese Adresse erzeugten Schlüssel."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Register exactly <code>%s</code> — that is how this site identifies itself to the license server."
+msgstr "Registrieren Sie genau <code>%s</code> — so identifiziert sich diese Website gegenüber dem Lizenzserver."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Open My licenses"
+msgstr "My licenses öffnen"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Don’t have a license yet? <a href=\"%s\" target=\"_blank\">Purchase it here</a>."
+msgstr "Noch keine Lizenz? <a href=\"%s\" target=\"_blank\">Hier kaufen</a>."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Please paste your license key first."
+msgstr "Bitte fügen Sie zuerst Ihren Lizenzschlüssel ein."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "This looks like your Envato <strong>purchase code</strong>, not a license key. The key is a long string that starts with <code>Y29kZWNhbnlvbn</code>. Click <strong>Get your License Key</strong>, sign in with the Envato account that bought the plugin, and copy the key from there."
+msgstr "Das sieht nach Ihrem Envato-<strong>Purchase Code</strong> aus, nicht nach dem Lizenzschlüssel. Der Schlüssel ist eine lange Zeichenfolge, die mit <code>Y29kZWNhbnlvbn</code> beginnt. Klicken Sie auf <strong>Lizenzschlüssel holen</strong>, melden Sie sich mit dem Envato-Konto an, mit dem das Plugin gekauft wurde, und kopieren Sie den Schlüssel von dort."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "This does not look like a Filter Everything license key. Follow the steps above for the place where you bought the plugin and paste the key exactly as shown there."
+msgstr "Das sieht nicht nach einem Filter-Everything-Lizenzschlüssel aus. Folgen Sie den Schritten oben für den Ort, an dem Sie das Plugin gekauft haben, und fügen Sie den Schlüssel genau so ein, wie er dort angezeigt wird."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "The license server could not be reached. This is not a problem with your key — please try again in a few minutes, and contact support if it keeps failing."
+msgstr "Der Lizenzserver ist nicht erreichbar. Das liegt nicht an Ihrem Schlüssel — bitte versuchen Sie es in einigen Minuten erneut und wenden Sie sich an den Support, falls es weiterhin fehlschlägt."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "This key is already active on two sites. Deactivate it on a site you no longer use (Filters → Settings → License there, or <strong>My licenses</strong> on filtereverything.pro for keys bought on our website) and try again, or contact support with the key."
+msgstr "Dieser Schlüssel ist bereits auf zwei Websites aktiv. Deaktivieren Sie ihn auf einer Website, die Sie nicht mehr nutzen (dort unter Filter → Einstellungen → Lizenz, oder unter <strong>My licenses</strong> auf filtereverything.pro bei Schlüsseln, die auf unserer Website gekauft wurden), und versuchen Sie es erneut — oder wenden Sie sich mit dem Schlüssel an den Support."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "This key belongs to a filtereverything.pro account. Make sure <code>%s</code> is added in <strong>My licenses</strong> and paste the key generated for it."
+msgstr "Dieser Schlüssel gehört zu einem Konto auf filtereverything.pro. Stellen Sie sicher, dass <code>%s</code> unter <strong>My licenses</strong> hinzugefügt ist, und fügen Sie den dafür erzeugten Schlüssel ein."
+
+#: src/Admin/Messages.php
+msgid "Plugin notifications"
+msgstr "Plugin-Benachrichtigungen"
+
+#: src/Admin/Messages.php
+msgid "Receive security alerts, update warnings, usage tips and occasional offers"
+msgstr "Sicherheitswarnungen, Hinweise zu Updates, Tipps zur Nutzung und gelegentlich Angebote erhalten"
+
+#: src/Admin/Messages.php
+msgid "Once a day the plugin downloads a small public file from filtereverything.pro. Nothing about your site is sent. Messages appear only on the plugin's own screens, except urgent security alerts."
+msgstr "Einmal täglich lädt das Plugin eine kleine öffentliche Datei von filtereverything.pro herunter. Es werden keine Daten über Ihre Website gesendet. Mitteilungen erscheinen nur auf den Seiten des Plugins, außer dringenden Sicherheitswarnungen."
+
+#: src/Admin/Messages.php
+msgid "Do you agree to receive helpful notifications?"
+msgstr "Stimmen Sie dem Erhalt nützlicher Benachrichtigungen zu?"
+
+#: src/Admin/Messages.php
+msgid "Filter Everything can alert you to <strong>security issues and important updates</strong>, and share usage tips and occasional offers (we won't spam you). Once a day the plugin downloads a small public file from filtereverything.pro. Nothing about your site is sent. Messages appear only on the plugin's own screens, except urgent security alerts. You can change this any time in Settings."
+msgstr "Filter Everything kann Sie auf <strong>Sicherheitsprobleme und wichtige Updates</strong> hinweisen sowie Tipps zur Nutzung und gelegentlich Angebote teilen (kein Spam, versprochen). Einmal täglich lädt das Plugin eine kleine öffentliche Datei von filtereverything.pro herunter. Es werden keine Daten über Ihre Website gesendet. Mitteilungen erscheinen nur auf den Seiten des Plugins, außer dringenden Sicherheitswarnungen. Sie können das jederzeit in den Einstellungen ändern."
+
+#: src/Admin/Messages.php
+msgid "Yes, I agree"
+msgstr "Ja, ich stimme zu"
+
+#: src/Admin/Messages.php
+msgid "No, I don't agree"
+msgstr "Nein, ich stimme nicht zu"
+
+#: src/Admin/Messages.php
+msgid "Dismiss this message"
+msgstr "Diese Mitteilung schließen"
+
+#: src/Admin/Messages.php
+msgid "Ends in"
+msgstr "Endet in"
+
+#: src/Admin/Messages.php
+msgid "(opens in a new tab)"
+msgstr "(öffnet in einem neuen Tab)"
+
+#: src/Admin/Messages.php
+msgctxt "countdown unit"
+msgid "days"
+msgstr "Tage"
+
+#: src/Admin/Messages.php
+msgctxt "countdown unit"
+msgid "hrs"
+msgstr "Std"
+
+#: src/Admin/Messages.php
+msgctxt "countdown unit"
+msgid "min"
+msgstr "Min"
+
+#: src/Admin/Messages.php
+msgctxt "countdown unit"
+msgid "sec"
+msgstr "Sek"
+
+#: src/Admin/WhatsNew.php
+msgid "New release notes and a new notification"
+msgstr "Neue Versionshinweise und eine neue Benachrichtigung"
+
+#: src/Admin/WhatsNew.php
+msgid "New notification"
+msgstr "Neue Benachrichtigung"
+
+#: src/Settings/Tabs/AboutProTab.php
+msgctxt "benefits-landing"
+msgid "Pause"
+msgstr "Pause"
+
+#: src/Settings/Tabs/AboutProTab.php
+msgctxt "benefits-landing"
+msgid "Better navigation — more sales"
+msgstr "Bessere Navigation — mehr Verkäufe"
+
+#: src/Settings/Tabs/AboutProTab.php
+msgctxt "benefits-landing"
+msgid "Better navigation — more conversions"
+msgstr "Bessere Navigation — mehr Conversions"
+
+#. translators: %s: date, e.g. September 30
+#: views/admin/pro-modal.php
+msgid "Sale price — ends %s"
+msgstr "Aktionspreis — bis %s"
+
+#: views/admin/review-notice.php
+msgid "Your review on WordPress.org <strong>keeps the free version alive</strong> — it takes a minute."
+msgstr "Ihre Bewertung auf WordPress.org <strong>hält die kostenlose Version am Leben</strong> — es dauert nur eine Minute."
+
+#: views/admin/review-notice.php
+msgid "A WordPress.org account is needed to post a review."
+msgstr "Zum Schreiben einer Bewertung ist ein WordPress.org-Konto erforderlich."

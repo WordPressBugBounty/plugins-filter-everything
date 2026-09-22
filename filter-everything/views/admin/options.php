@@ -23,6 +23,9 @@ if ( ! defined('ABSPATH') ) {
                    href='<?php echo esc_url( $tabUrl ); ?>'><?php echo $label ?>
                     <?php if (method_exists($tab, 'labelIcon')) {
                         echo '<span class="' . esc_attr('wpc-nav-tab-icon') . '">' .$tab->labelIcon() . '</span>';
+                    }
+                    if (method_exists($tab, 'labelBadge')) {
+                        echo $tab->labelBadge(); // escaped by the tab
                     }?>
                 </a>
                 <?php

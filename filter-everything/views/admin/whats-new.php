@@ -1,6 +1,6 @@
 <?php
 /**
- * «What's new» admin page — release notes of the installed version, parsed from
+ * «What's new» Settings tab — release notes of the installed version, parsed from
  * the bundled readme.txt by WhatsNew::changelog().
  *
  * @var string      $version       version whose notes are shown (e.g. 1.9.6)
@@ -26,11 +26,11 @@ $flrt_render_items = static function ( array $items ) {
     }
 };
 ?>
-<div class="wrap wpc-whats-new">
-    <h1><?php
+<div class="wpc-whats-new">
+    <h2><?php
         /* translators: %s: plugin name with version, e.g. "Filter Everything 1.9.6" */
         printf( esc_html__( "What's new in %s", 'filter-everything' ), esc_html( 'Filter Everything ' . $version ) );
-    ?></h1>
+    ?></h2>
 
     <?php if ( $current && ! empty( $current['items'] ) ) : ?>
         <?php if ( ! empty( $current['date'] ) ) : ?>

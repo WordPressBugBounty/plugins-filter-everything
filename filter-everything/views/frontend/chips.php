@@ -12,10 +12,9 @@
 if ( ! defined('ABSPATH') ) {
     exit;
 }
-global $chips_count;
-// Iterate global chips widget count
+// Unique index of this chips list on the page
+$chips_count = \FilterEverything\Filter\Container::instance()->getFilterContext()->nextChipsIndex();
 $selected_and_above_status = (isset($filter['selected_and_above']) && $filter['selected_and_above'] === 'yes') ? true : false;
-$chips_count++;
 ?>
 <ul class="wpc-filter-chips-list wpc-filter-chips-<?php echo esc_attr( $setid .'-' .$chips_count ); ?> wpc-filter-chips-<?php echo esc_attr( $setid ); ?><?php if( ! $chips ){echo ' wpc-empty-chips-container';} ?>" data-set="<?php echo esc_attr( $setid ); ?>" data-setcount="<?php echo $setid .'-' .$chips_count ; ?>">
     <?php if( $chips ) : ?>

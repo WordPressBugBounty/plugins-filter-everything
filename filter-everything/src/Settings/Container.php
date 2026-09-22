@@ -148,6 +148,20 @@ class Container
         return $this->getService('tabrenderer');
     }
 
+    /**
+     * Per-request filter state (parsed request, relevant sets, JSON payload).
+     * @since 1.9.7
+     * @return FilterContext
+     */
+    public function getFilterContext()
+    {
+        if ( ! isset( $this->services['filtercontext'] ) ) {
+            $this->addService( 'filtercontext', new FilterContext() );
+        }
+
+        return $this->getService( 'filtercontext' );
+    }
+
     public function getSwatches()
     {
         if ( !isset( $this->services['swatches'] ) ) {

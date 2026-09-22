@@ -411,12 +411,12 @@ msgid "16&nbsp;200+"
 msgstr "16&nbsp;200+"
 
 msgctxt "benefits-landing"
-msgid "160&nbsp;000+"
-msgstr "160&nbsp;000+"
+msgid "170&nbsp;000+"
+msgstr "170&nbsp;000+"
 
 msgctxt "benefits-landing"
-msgid "160,000+"
-msgstr "160 000+"
+msgid "170,000+"
+msgstr "170 000+"
 
 msgctxt "benefits-landing"
 msgid "4.88/5"
@@ -531,8 +531,8 @@ msgid "Filter any content — page builders, plugins, or even custom code"
 msgstr "Фільтрування будь-якого контенту — пейдж-білдери, плагіни або навіть власний код"
 
 msgctxt "benefits-landing"
-msgid "Filter any posts list, custom query, or page builder content"
-msgstr "Фільтрування будь-якого списку записів, кастомного запиту або контенту з пейдж-білдера"
+msgid "Filter <strong>any</strong> posts list, custom query, or page builder content"
+msgstr "Фільтрування <strong>будь-якого</strong> списку записів, кастомного запиту або контенту з пейдж-білдера"
 
 msgctxt "benefits-landing"
 msgid "Filter by any criteria"
@@ -611,9 +611,8 @@ msgid "Import & export settings"
 msgstr "Імпорт та експорт налаштувань"
 
 msgctxt "benefits-landing"
-msgid ""
-"Improve conversions and user experience with advanced filtering capabilities"
-msgstr "Підвищуйте конверсії та покращуйте досвід користувачів завдяки розширеним можливостям фільтрування"
+msgid "Improve <strong>conversions</strong>, <strong>sales</strong> and user experience with advanced filtering capabilities"
+msgstr "Підвищуйте <strong>конверсії</strong>, <strong>продажі</strong> та покращуйте досвід користувачів завдяки розширеним можливостям фільтрування"
 
 msgctxt "benefits-landing"
 msgid "Instant Filter Set duplication"
@@ -925,7 +924,7 @@ msgstr "За назвою: по алфавіту"
 msgid "By title: reverse"
 msgstr "За назвою: в зворотньому порядку"
 
-#: src/Admin/Widgets/FiltersWidget.php:67 views/admin/filter-row.php:88
+#: src/Frontend/Widgets/FiltersWidget.php:67 views/admin/filter-row.php:88
 msgid "Cancel"
 msgstr "Відміна"
 
@@ -1197,7 +1196,7 @@ msgstr ""
 msgid "Displays a dropdown with sort options"
 msgstr "Відображає випадачий список з параметрами сортування"
 
-#: src/Admin/Widgets/FiltersWidget.php:13
+#: src/Frontend/Widgets/FiltersWidget.php:13
 msgid "Displays filters"
 msgstr "Відображає фільтри"
 
@@ -1918,7 +1917,7 @@ msgstr "фільтр за Шириною товару"
 msgid "Filter Container max height, px"
 msgstr "Макс. висота контейнера з фільтром, px"
 
-#: src/Admin/Widgets/FiltersWidget.php:12
+#: src/Frontend/Widgets/FiltersWidget.php:12
 msgid "Filter Everything"
 msgstr "Filter Everything"
 
@@ -2864,7 +2863,7 @@ msgstr "Налаштування"
 msgid "Shop page"
 msgstr "Сторінка магазину"
 
-#: src/Admin/Widgets/FiltersWidget.php:70
+#: src/Frontend/Widgets/FiltersWidget.php:70
 #, php-format
 msgid "Show %s"
 msgstr "Показати %s"
@@ -2906,14 +2905,14 @@ msgstr "Показати товари з рейтингом %d+ зірок"
 msgid "Show products with %d star rating"
 msgstr "Показати товари з рейтингом %d зірок"
 
-#: src/Admin/Widgets/FiltersWidget.php:189
+#: src/Frontend/Widgets/FiltersWidget.php:189
 msgid "Show selected terms (Chips)"
 msgstr "Показувати вибрані терми (Чіпси)"
 
 msgid "Show Term names"
 msgstr "Показувати назви термів"
 
-#: src/Admin/Widgets/FiltersWidget.php:193
+#: src/Frontend/Widgets/FiltersWidget.php:193
 #| msgid "Show number of posts found"
 msgid "Show the number of posts found"
 msgstr "Показувати кількість знайдених дописів"
@@ -3698,8 +3697,6 @@ msgstr "Отримайте всю потужність фільтрації, SEO
 msgid "Always<br />WP & Woo compatible"
 msgstr "Завжди<br />сумісний з WP та Woo"
 
-msgid "/yr"
-msgstr "/рік"
 
 msgid "1-year updates & support"
 msgstr "Оновлення й підтримка на 1 рік"
@@ -3827,8 +3824,6 @@ msgstr "Подобається"
 msgid "Filter Everything?"
 msgstr "Filter Everything?"
 
-msgid "Rate us on WordPress.org and help the plugin grow"
-msgstr "Оцініть нас на WordPress.org і допоможіть плагіну рости"
 
 msgid "Rate Filter Everything"
 msgstr "Оцінити Filter Everything"
@@ -3911,3 +3906,190 @@ msgstr "Цей ліцензійний ключ згенеровано для <st
 msgid "Hiding the filter links stops crawlers from discovering new filter URLs, but the URLs they already know stay in their queues for weeks or months. A Disallow rule in robots.txt is the only signal that also stops compliant crawlers — Google, Bing and most AI bots — from requesting those pages at all, which frees both your server and your crawl budget.<br /><br />With pretty permalinks the rules name only the filter URLs that are never indexable: several values of one filter (…/color-red-or-blue/), more filters in one URL than your Indexing Depth allows, and numeric or date ranges. Single-filter pages stay crawlable, so the pages your SEO Rules index are never touched. Review the list before enabling: a product or category slug that starts with one of your filter prefixes would match the same pattern.<br /><br />When your site has a physical robots.txt file, WordPress cannot add the rules for you — copy them into that file yourself."
 msgstr "Приховування посилань фільтрів не дає краулерам знаходити нові URL фільтрів, але вже відомі їм URL лишаються в їхніх чергах тижнями чи місяцями. Правило Disallow у robots.txt — єдиний сигнал, який також зупиняє слухняних краулерів (Google, Bing і більшість AI-ботів) від запитів цих сторінок узагалі, що розвантажує і сервер, і краулінговий бюджет.<br /><br />З красивими постійними посиланнями правила охоплюють лише ті URL фільтрів, які ніколи не індексуються: кілька значень одного фільтра (…/color-red-or-blue/), більше фільтрів в одному URL, ніж дозволяє ваша Глибина індексації, та числові або датові діапазони. Сторінки з одним фільтром лишаються доступними для обходу, тож сторінки, які індексують ваші SEO-правила, не зачіпаються. Перегляньте список перед увімкненням: слаг товару чи категорії, що починається з одного з ваших префіксів фільтрів, збігся б із тим самим шаблоном.<br /><br />Якщо на сайті є фізичний файл robots.txt, WordPress не зможе додати правила за вас — скопіюйте їх у цей файл самостійно."
 
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "The plugin is locked."
+msgstr "Плагін заблоковано."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "It has been running for over two months without a license key, so Filter Sets and SEO Rules cannot be saved until a key is activated. Filtering on the site keeps working."
+msgstr "Він працює понад два місяці без ліцензійного ключа, тому набори фільтрів і SEO-правила не можна зберегти, доки ключ не буде активовано. Фільтрація на сайті працює й далі."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Paste it below and click <strong>Activate License</strong>."
+msgstr "Вставте його нижче і натисніть <strong>Активувати ліцензію</strong>."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Where did you buy Filter Everything PRO?"
+msgstr "Де ви придбали Filter Everything PRO?"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "The license key depends on where you bought the plugin. Pick your case and follow the three steps."
+msgstr "Ліцензійний ключ залежить від того, де ви придбали плагін. Оберіть свій випадок і виконайте три кроки."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "On CodeCanyon (Envato)"
+msgstr "На CodeCanyon (Envato)"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "You have an Envato account and a purchase code from Envato."
+msgstr "У вас є акаунт Envato і код покупки (purchase code) від Envato."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Click <strong>Get your License Key</strong> and sign in with the Envato account that made the purchase (for agencies this is often the client’s account)."
+msgstr "Натисніть <strong>Отримати Ліцензійний ключ</strong> і увійдіть акаунтом Envato, з якого було зроблено покупку (для агенцій це часто акаунт клієнта)."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Copy the license key shown next to your purchase."
+msgstr "Скопіюйте ліцензійний ключ, показаний поруч із вашою покупкою."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Your Envato purchase code (<code>a1b2c3d4-…</code>) is <strong>not</strong> the license key. It is only used on the next page to generate the key."
+msgstr "Ваш код покупки Envato (<code>a1b2c3d4-…</code>) <strong>не</strong> є ліцензійним ключем. Він потрібен лише на наступній сторінці, щоб згенерувати ключ."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "On filtereverything.pro"
+msgstr "На filtereverything.pro"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "You created an account on our website during checkout."
+msgstr "Під час оформлення замовлення ви створили акаунт на нашому сайті."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Open <strong>My Account → My licenses</strong> and add this site: <code>%s</code>"
+msgstr "Відкрийте <strong>My Account → My licenses</strong> і додайте цей сайт: <code>%s</code>"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Copy the key generated for this address."
+msgstr "Скопіюйте ключ, згенерований для цієї адреси."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Register exactly <code>%s</code> — that is how this site identifies itself to the license server."
+msgstr "Зареєструйте саме <code>%s</code> — саме так цей сайт представляється серверу ліцензій."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Open My licenses"
+msgstr "Відкрити My licenses"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Don’t have a license yet? <a href=\"%s\" target=\"_blank\">Purchase it here</a>."
+msgstr "Ще не маєте ліцензії? <a href=\"%s\" target=\"_blank\">Придбайте її тут</a>."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Please paste your license key first."
+msgstr "Спершу вставте ваш ліцензійний ключ."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "This looks like your Envato <strong>purchase code</strong>, not a license key. The key is a long string that starts with <code>Y29kZWNhbnlvbn</code>. Click <strong>Get your License Key</strong>, sign in with the Envato account that bought the plugin, and copy the key from there."
+msgstr "Це схоже на ваш <strong>код покупки</strong> Envato, а не на ліцензійний ключ. Ключ — це довгий рядок, який починається з <code>Y29kZWNhbnlvbn</code>. Натисніть <strong>Отримати Ліцензійний ключ</strong>, увійдіть акаунтом Envato, з якого купували плагін, і скопіюйте ключ звідти."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "This does not look like a Filter Everything license key. Follow the steps above for the place where you bought the plugin and paste the key exactly as shown there."
+msgstr "Це не схоже на ліцензійний ключ Filter Everything. Виконайте кроки вище для місця, де ви придбали плагін, і вставте ключ саме так, як він там показаний."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "The license server could not be reached. This is not a problem with your key — please try again in a few minutes, and contact support if it keeps failing."
+msgstr "Сервер ліцензій недоступний. Це не проблема вашого ключа — спробуйте ще раз за кілька хвилин, а якщо помилка повторюється, зверніться до підтримки."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "This key is already active on two sites. Deactivate it on a site you no longer use (Filters → Settings → License there, or <strong>My licenses</strong> on filtereverything.pro for keys bought on our website) and try again, or contact support with the key."
+msgstr "Цей ключ уже активний на двох сайтах. Деактивуйте його на сайті, яким більше не користуєтесь (там у Фільтри → Налаштування → Ліцензія, або в <strong>My licenses</strong> на filtereverything.pro для ключів, куплених на нашому сайті), і спробуйте знову, або зверніться до підтримки, вказавши ключ."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "This key belongs to a filtereverything.pro account. Make sure <code>%s</code> is added in <strong>My licenses</strong> and paste the key generated for it."
+msgstr "Цей ключ належить акаунту на filtereverything.pro. Переконайтесь, що <code>%s</code> додано в <strong>My licenses</strong>, і вставте ключ, згенерований для нього."
+
+#: src/Admin/Messages.php
+msgid "Plugin notifications"
+msgstr "Сповіщення плагіна"
+
+#: src/Admin/Messages.php
+msgid "Receive security alerts, update warnings, usage tips and occasional offers"
+msgstr "Отримувати сповіщення безпеки, попередження про оновлення, поради з використання та зрідка — пропозиції"
+
+#: src/Admin/Messages.php
+msgid "Once a day the plugin downloads a small public file from filtereverything.pro. Nothing about your site is sent. Messages appear only on the plugin's own screens, except urgent security alerts."
+msgstr "Раз на добу плагін завантажує невеликий публічний файл із filtereverything.pro. Жодних даних про ваш сайт не надсилається. Повідомлення з'являються лише на сторінках плагіна, крім термінових сповіщень безпеки."
+
+#: src/Admin/Messages.php
+msgid "Do you agree to receive helpful notifications?"
+msgstr "Ви погоджуєтесь отримувати корисні сповіщення?"
+
+#: src/Admin/Messages.php
+msgid "Filter Everything can alert you to <strong>security issues and important updates</strong>, and share usage tips and occasional offers (we won't spam you). Once a day the plugin downloads a small public file from filtereverything.pro. Nothing about your site is sent. Messages appear only on the plugin's own screens, except urgent security alerts. You can change this any time in Settings."
+msgstr "Filter Everything може попереджати вас про <strong>проблеми безпеки та важливі оновлення</strong>, а також ділитися порадами з використання та зрідка — пропозиціями (спамити не будемо). Раз на добу плагін завантажує невеликий публічний файл із filtereverything.pro. Жодних даних про ваш сайт не надсилається. Повідомлення з'являються лише на сторінках плагіна, крім термінових сповіщень безпеки. Змінити це можна будь-коли в налаштуваннях."
+
+#: src/Admin/Messages.php
+msgid "Yes, I agree"
+msgstr "Так, погоджуюсь"
+
+#: src/Admin/Messages.php
+msgid "No, I don't agree"
+msgstr "Ні, не погоджуюсь"
+
+#: src/Admin/Messages.php
+msgid "Dismiss this message"
+msgstr "Закрити це повідомлення"
+
+#: src/Admin/Messages.php
+msgid "Ends in"
+msgstr "Закінчується через"
+
+#: src/Admin/Messages.php
+msgid "(opens in a new tab)"
+msgstr "(відкривається в новій вкладці)"
+
+#: src/Admin/Messages.php
+msgctxt "countdown unit"
+msgid "days"
+msgstr "дн."
+
+#: src/Admin/Messages.php
+msgctxt "countdown unit"
+msgid "hrs"
+msgstr "год"
+
+#: src/Admin/Messages.php
+msgctxt "countdown unit"
+msgid "min"
+msgstr "хв"
+
+#: src/Admin/Messages.php
+msgctxt "countdown unit"
+msgid "sec"
+msgstr "сек"
+
+#: src/Admin/WhatsNew.php
+msgid "New release notes and a new notification"
+msgstr "Нові примітки до випуску та нове сповіщення"
+
+#: src/Admin/WhatsNew.php
+msgid "New notification"
+msgstr "Нове сповіщення"
+
+#: src/Settings/Tabs/AboutProTab.php
+msgctxt "benefits-landing"
+msgid "Pause"
+msgstr "Пауза"
+
+#: src/Settings/Tabs/AboutProTab.php
+msgctxt "benefits-landing"
+msgid "Better navigation — more sales"
+msgstr "Краща навігація — більше продажів"
+
+#: src/Settings/Tabs/AboutProTab.php
+msgctxt "benefits-landing"
+msgid "Better navigation — more conversions"
+msgstr "Краща навігація — більше конверсій"
+
+#. translators: %s: date, e.g. September 30
+#: views/admin/pro-modal.php
+msgid "Sale price — ends %s"
+msgstr "Акційна ціна — до %s"
+
+#: views/admin/review-notice.php
+msgid "Your review on WordPress.org <strong>keeps the free version alive</strong> — it takes a minute."
+msgstr "Ваш відгук на WordPress.org <strong>підтримує життя безкоштовної версії</strong> — це займе хвилину."
+
+#: views/admin/review-notice.php
+msgid "A WordPress.org account is needed to post a review."
+msgstr "Щоб залишити відгук, потрібен обліковий запис WordPress.org."

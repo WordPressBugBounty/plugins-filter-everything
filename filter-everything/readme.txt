@@ -1,8 +1,8 @@
 === Filter Everything&nbsp;— WordPress & WooCommerce Filters ===
 Contributors: stepasyuk
-Tags: woocommerce product filter, woocommerce filter, product filter, post filter, ajax filter
-Stable tag: 1.9.6
-Requires at least: 4.6
+Tags: woocommerce product filter, woocommerce filter, product filter, post filter, faceted search
+Stable tag: 1.9.7
+Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 7.4
 License: GPLv2 or later
@@ -115,11 +115,36 @@ Uploading via FTP
 4. All the necessary filter options
 5. Individual filters for any post type
 
+== External services ==
+
+**Plugin notifications (optional, off by default in the free version).** If you allow it — by answering «Yes, I agree» to the one-off question on the plugin's Settings or What's new screen (asked only once you have published a Filter Set), or by ticking Filters → Settings → Other → «Plugin notifications» — the plugin downloads one small public file once a day:
+
+`https://filtereverything.pro/plugin-feed/messages.json`
+
+The file lists our current notifications: security alerts, update warnings, usage tips and occasional offers, plus the current PRO price for the «Upgrade to PRO» popup. The plugin decides on your site which of them, if any, applies to you, and shows at most one message at a time on its own admin screens. A new message also puts the usual red «1» on the Filters menu until you have seen it. Only an urgent security alert may appear on other admin screens, and every message can be dismissed.
+
+* A release may also carry a message inside the plugin itself (for example a time-limited offer); that one involves no request at all and follows the same rules on where it appears and how it is dismissed.
+* The request runs in WP-Cron, never while a visitor or an administrator is loading a page.
+* **Nothing about your site is sent**: no parameters, no cookies, no site address, and the User-Agent header is a fixed string (`FilterEverything`) instead of the WordPress default that contains your site URL. As with any web request, the server sees the IP address the request comes from.
+* The file is data, not code. Texts are sanitised with a short list of allowed tags, links are limited to filtereverything.pro and wordpress.org, and no images, scripts or styles are loaded from it.
+* Untick «Plugin notifications» to stop the requests at once; the scheduled task and the cached file are removed. Developers can also set `define( 'FLRT_DISABLE_MESSAGES', true );`.
+
+The service is provided by Filter Everything (Andrii Stepasiuk): [Terms](https://filtereverything.pro/terms-and-conditions/), [Privacy Policy](https://filtereverything.pro/privacy-policy/).
+
 == Changelog ==
+
+= 1.9.7 =
+*Release Date - 22 September 2026*
+* Security - A security fix related to the Elementor Pro «Load More» / infinite scroll pagination on filtered pages
+* Dev   - NEW: optional «Plugin notifications» (off unless you allow them) — see «External services» for details
+* Fix   - Fixed the Apply button building a broken GET link (e.g. ?yes=on) instead of the pretty filter URL when two filters share the same custom field with different filter types — such as a numeric «Sale Price» filter and an «On Sale» checkbox both based on _sale_price
+* Fix   - Fixed a fatal error «Call to undefined function is_plugin_active()» when the plugin was loaded outside wp-admin (WP-CLI, cron) — the Breakdance compatibility check now falls back to the active-plugins option
+* Fix   - Fixed a PHP warning «Undefined array key "post_type"» shown to administrators when a Filters widget or block with no Filter Set selected was displayed on a page that has no relevant Filter Set
+* Fix   - Fixed the rating stars filter keeping the count of a rating next to the stars after that rating was clicked again to deselect it, when «Disable filter links for crawlers» is on
 
 = 1.9.6 =
 *Release Date - 24 August 2026*
-* Dev   - NEW: The «Disable filter links for crawlers» option is now available in the free version too: filter links are rendered as <span> instead of <a>, so search engine bots and AI crawlers no longer discover and hammer endless filter combinations. It is enabled by default on new installations; existing sites can switch it on in Settings → General → Crawlers and bots
+* Dev   - NEW: The «Disable filter links for crawlers» option is now available in the free version too: filter links are rendered as `<span>` instead of `<a>`, so search engine bots and AI crawlers no longer discover and hammer endless filter combinations. It is enabled by default on new installations; existing sites can switch it on in Settings → General → Crawlers and bots
 * Dev   - NEW: Added the «Block filter URLs in robots.txt» option: the plugin generates Disallow rules for every filter URL parameter and adds them to the site's robots.txt automatically, so well-behaved crawlers (Google, Bing, most AI bots) stop requesting filtering result pages they already know. The generated rules are also shown on the settings page, so they can be copied into a physical robots.txt file or reused in a firewall rule
 * Tweak - Added the «Crawlers and bots» section to Settings → General and a one-time admin notice after the update pointing to the new protections
 * Tweak - Added the «What's new» page under the Filters menu: release notes of the installed version with a badge on the menu item after an update, so you can see what changed whenever it suits you
@@ -128,6 +153,7 @@ Uploading via FTP
 * Fix   - Fixed filters not working for logged-out visitors on shops that use WooCommerce B2B (the plugin hides restricted products from guests and changed the identity of the page query the Filter Set was saved with)
 * Fix   - Fixed the PHP 8.2 «Creation of dynamic property» deprecation notice triggered by the Filters, Chips and Sorting modules for Divi
 * Fix   - Fixed «Create Filters Automatically» writing a broken entry into the list of global URL prefixes and overwriting the prefixes that had just been registered for the new filters
+* Fix   - Fixed the error log filling up with PHP warnings «strpos(): Empty needle» from the page-builder detector on PHP 7 sites (reported after the WordPress 7.1 update); markup-based builder detection now also reports the builder name correctly
 
 = 1.9.5 =
 *Release Date - 5 August 2026*
@@ -277,24 +303,15 @@ Uploading via FTP
 * Fix   - Fixed warning message on the login screen
 * Fix   - Fixed issue with resetting filters cache
 
-= 1.8.0 =
-*Release Date - 08 January 2024*
-* Dev   - Added new filter type by Post Date
-* Tweak - Made Numeric Range filters collapsible
-* Fix   - Renamed 'wpc_clean' function to 'flrt_clean' to avoid conflicts
-
 [See changelog for all versions](https://demo.filtereverything.pro/changelog.txt).
 
 == Upgrade Notice ==
 
-= 1.9.6 =
-*Release Date - 24 August 2026*
-* Dev   - NEW: The «Disable filter links for crawlers» option is now available in the free version too: filter links are rendered as <span> instead of <a>, so search engine bots and AI crawlers no longer discover and hammer endless filter combinations. It is enabled by default on new installations; existing sites can switch it on in Settings → General → Crawlers and bots
-* Dev   - NEW: Added the «Block filter URLs in robots.txt» option: the plugin generates Disallow rules for every filter URL parameter and adds them to the site's robots.txt automatically, so well-behaved crawlers (Google, Bing, most AI bots) stop requesting filtering result pages they already know. The generated rules are also shown on the settings page, so they can be copied into a physical robots.txt file or reused in a firewall rule
-* Tweak - Added the «Crawlers and bots» section to Settings → General and a one-time admin notice after the update pointing to the new protections
-* Tweak - Added the «What's new» page under the Filters menu: release notes of the installed version with a badge on the menu item after an update, so you can see what changed whenever it suits you
-* Tweak - The Import/Export link was removed from the Filters menu and the top toolbar to keep them short; the Import/Export tab in Settings stays where it was
-* Tweak - The installed plugin version is now shown next to the plugin name in the top toolbar on every plugin page (previously it was visible only in the Help tab)
-* Fix   - Fixed filters not working for logged-out visitors on shops that use WooCommerce B2B (the plugin hides restricted products from guests and changed the identity of the page query the Filter Set was saved with)
-* Fix   - Fixed the PHP 8.2 «Creation of dynamic property» deprecation notice triggered by the Filters, Chips and Sorting modules for Divi
-* Fix   - Fixed «Create Filters Automatically» writing a broken entry into the list of global URL prefixes and overwriting the prefixes that had just been registered for the new filters
+= 1.9.7 =
+*Release Date - 22 September 2026*
+* Security - A security fix related to the Elementor Pro «Load More» / infinite scroll pagination on filtered pages
+* Dev   - NEW: optional «Plugin notifications» (off unless you allow them) — see «External services» for details
+* Fix   - Fixed the Apply button building a broken GET link (e.g. ?yes=on) instead of the pretty filter URL when two filters share the same custom field with different filter types — such as a numeric «Sale Price» filter and an «On Sale» checkbox both based on _sale_price
+* Fix   - Fixed a fatal error «Call to undefined function is_plugin_active()» when the plugin was loaded outside wp-admin (WP-CLI, cron) — the Breakdance compatibility check now falls back to the active-plugins option
+* Fix   - Fixed a PHP warning «Undefined array key "post_type"» shown to administrators when a Filters widget or block with no Filter Set selected was displayed on a page that has no relevant Filter Set
+* Fix   - Fixed the rating stars filter keeping the count of a rating next to the stars after that rating was clicked again to deselect it, when «Disable filter links for crawlers» is on

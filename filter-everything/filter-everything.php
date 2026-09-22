@@ -3,7 +3,8 @@
 Plugin Name: Filter Everything&nbsp;— WordPress & WooCommerce Filters
 Plugin URI: https://filtereverything.pro
 Description: Instantly filter any WordPress content & WooCommerce products by attributes, taxonomies, custom fields + AJAX, Elementor, automatic filter creation.
-Version: 1.9.6
+Version: 1.9.7
+Requires at least: 6.0
 Requires PHP: 7.4
 Author: Andrii Stepasiuk
 Author URI: https://filtereverything.pro/about/
@@ -22,17 +23,11 @@ if( ! class_exists( 'FlrtFilter' ) ):
 
         public function init()
         {
-            global $flrt_sets, $wpc_not_fired, $chips_count, $flrt_json_data;
-
-            $chips_count   = 0;
-            $wpc_not_fired = true;
-            $flrt_sets     = [];
-
             $this->define( 'FLRT_PLUGIN_DIR_PATH', plugin_dir_path( __FILE__ ) );
             $this->define( 'FLRT_PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );
             $this->define( 'FLRT_PLUGIN_BASENAME', plugin_basename(__FILE__) );
             $this->define( 'FLRT_PLUGIN_SLUG', 'filter-everything-pro' );
-            $this->define( 'FLRT_PLUGIN_VER', '1.9.6' );
+            $this->define( 'FLRT_PLUGIN_VER', '1.9.7' );
             $this->define( 'FLRT_PLUGIN_URL', 'https://filtereverything.pro' );
             $this->define( 'FLRT_PLUGIN_TESTED_TO', '7.1' );
             $this->define( 'FLRT_PLUGIN_DEBUG', false );
@@ -72,78 +67,43 @@ if( ! class_exists( 'FlrtFilter' ) ):
 
             require_once FLRT_PLUGIN_DIR_PATH . 'src/wpc-helpers.php';
 
-            flrt_include('src/wp_query_source_detector.php');
+            // Thematic helper files split out of wpc-helpers.php (same functions, no renames)
+            flrt_include('src/helpers/dates.php');
+            flrt_include('src/helpers/colors.php');
+            flrt_include('src/helpers/cache-keys.php');
+            flrt_include('src/helpers/ui.php');
+            flrt_include('src/helpers/migrations.php');
+            flrt_include('src/helpers/instant-recount.php');
+
+            // Class autoloading (src/classmap.php + PSR-4 fallback for new sub-namespaced code).
+            // Only side-effect-free class files are autoloaded; see bin/build-classmap.php.
+            require_once FLRT_PLUGIN_DIR_PATH . 'src/Autoloader.php';
+            \FilterEverything\Filter\Autoloader::register();
+            \FilterEverything\Filter\Autoloader::addClassMap( require FLRT_PLUGIN_DIR_PATH . 'src/classmap.php', FLRT_PLUGIN_DIR_PATH . 'src' );
+            \FilterEverything\Filter\Autoloader::addNamespace( 'FilterEverything\\Filter', FLRT_PLUGIN_DIR_PATH . 'src' );
+
+            // Files that do work at include time (functions, hooks, instantiation) — kept explicit, in order.
             flrt_include('src/wpc-compat.php');
             flrt_include('src/wpc-utility-functions.php');
             flrt_include('src/wpc-default-hooks.php');
             flrt_include('src/wpc-third-party.php');
-            flrt_include('src/PluginHelpers.php');
-
-            flrt_include('src/Plugin.php');
             flrt_include('src/PostTypes.php');
-            flrt_include('src/Settings/TabInterface.php');
-            flrt_include('src/Settings/BaseSettings.php');
-            flrt_include('src/Settings/TabRenderer.php');
-            flrt_include('src/Settings/Container.php');
 
-            flrt_include('src/Entities/Entity.php');
-            flrt_include('src/Entities/PostMetaTrait.php');
+            // PRO bootstrap. Comment out this single line (or ship without the pro/ folder)
+            // to run the plugin as the free version: it is the only place that registers
+            // PRO classes, constants and hooks.
+//            flrt_include('pro/filters-pro.php');
 
-            flrt_include('src/Entities/TaxonomyEntity.php');
-            flrt_include('src/Entities/PostMetaEntity.php');
-            flrt_include('src/Entities/PostMetaNumEntity.php');
-            flrt_include('src/Entities/AuthorEntity.php');
-            flrt_include('src/Entities/PostDateEntity.php');
-            flrt_include('src/Entities/PostMetaDateEntity.php');
-            flrt_include('src/Settings/Tabs/SeoTabTrait.php');
-
-            // Include PRO
-            //            flrt_include('pro/filters-pro.php');
-
-            flrt_include('src/Entities/DefaultEntity.php');
-            flrt_include('src/Entities/EntityManager.php');
-
-            flrt_include('src/Settings/DefaultSettings.php');
-            flrt_include('src/Settings/Tabs/SettingsTab.php');
             flrt_include('src/RobotsTxt.php');
-            flrt_include('src/Settings/Tabs/PermalinksTab.php');
-            flrt_include('src/Settings/Tabs/ImportExportTabFree.php');
-            flrt_include('src/Settings/Tabs/ExperimentalTab.php');
-            flrt_include('src/Settings/Tabs/AboutProTab.php');
-
-            flrt_include('src/Settings/Filter.php');
-
-            flrt_include('src/RequestParser.php');
-            flrt_include('src/UrlManager.php');
-            flrt_include('src/Chips.php');
-            flrt_include('src/Sorting.php');
             flrt_include('src/Swatches.php');
-
-            flrt_include('src/Walkers/WalkerCheckbox.php');
-
-            flrt_include('src/TemplateManager.php');
-            flrt_include('src/WpManager.php');
-
-            flrt_include('src/Admin/FilterSet.php');
-            flrt_include('src/Admin/AutoFilterSet.php');
-            flrt_include('src/Admin/FilterFields.php');
-            flrt_include('src/Admin/Admin.php');
             flrt_include('src/Admin/AdminHooks.php');
             flrt_include('src/Admin/AdminNotices.php');
             flrt_include('src/Admin/WhatsNew.php');
             flrt_include('src/Admin/ReviewRequest.php');
             flrt_include('src/Admin/MetaBoxes.php');
-            flrt_include('src/Admin/Widgets/FiltersWidget.php');
-            flrt_include('src/Admin/Widgets/ChipsWidget.php');
-            flrt_include('src/Admin/Widgets/SortingWidget.php');
-            flrt_include('src/Admin/Widgets.php');
-            flrt_include('src/Admin/Shortcodes.php');
-            flrt_include('src/Admin/Validator.php');
-            flrt_include('src/Admin/DuplicateFilterSet.php');
-
-            flrt_include('src/FormFields/Input.php');
+            flrt_include('src/Frontend/Widgets.php');
             flrt_include('src/wpc-api.php');
-            flrt_include('src/Admin/Widgets/gutenberg/gutenberg.php');
+            flrt_include('src/Frontend/Builders/gutenberg/gutenberg.php');
 
             $this->registerHooks();
 
@@ -173,6 +133,8 @@ if( ! class_exists( 'FlrtFilter' ) ):
             add_action( 'after_setup_theme', [$this, 'afterSetupTheme'] );
 
             register_activation_hook(__FILE__, ['FilterEverything\Filter\Plugin', 'activate']);
+
+            register_deactivation_hook(__FILE__, ['FilterEverything\Filter\Plugin', 'deactivate']);
 
             register_uninstall_hook(__FILE__, ['FilterEverything\Filter\Plugin', 'uninstall']);
 

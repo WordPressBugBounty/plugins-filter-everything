@@ -408,12 +408,12 @@ msgid "16&nbsp;200+"
 msgstr "16&nbsp;200+"
 
 msgctxt "benefits-landing"
-msgid "160&nbsp;000+"
-msgstr "160&nbsp;000+"
+msgid "170&nbsp;000+"
+msgstr "170&nbsp;000+"
 
 msgctxt "benefits-landing"
-msgid "160,000+"
-msgstr "160 000+"
+msgid "170,000+"
+msgstr "170 000+"
 
 msgctxt "benefits-landing"
 msgid "4.88/5"
@@ -530,9 +530,8 @@ msgid "Filter any content — page builders, plugins, or even custom code"
 msgstr "Filtrujte libovolný obsah — page buildery, pluginy nebo i vlastní kód"
 
 msgctxt "benefits-landing"
-msgid "Filter any posts list, custom query, or page builder content"
-msgstr ""
-"Filtrujte libovolný seznam příspěvků, vlastní dotaz nebo obsah page builderu"
+msgid "Filter <strong>any</strong> posts list, custom query, or page builder content"
+msgstr "Filtrujte <strong>jakýkoli</strong> seznam příspěvků, vlastní dotaz nebo obsah page builderu"
 
 msgctxt "benefits-landing"
 msgid "Filter by any criteria"
@@ -611,10 +610,8 @@ msgid "Import & export settings"
 msgstr "Nastavení importu a exportu"
 
 msgctxt "benefits-landing"
-msgid ""
-"Improve conversions and user experience with advanced filtering capabilities"
-msgstr ""
-"Zvyšte konverze a uživatelský zážitek díky pokročilým možnostem filtrování"
+msgid "Improve <strong>conversions</strong>, <strong>sales</strong> and user experience with advanced filtering capabilities"
+msgstr "Zvyšte <strong>konverze</strong>, <strong>prodeje</strong> a uživatelský komfort díky pokročilým možnostem filtrování"
 
 msgctxt "benefits-landing"
 msgid "Instant Filter Set duplication"
@@ -945,7 +942,7 @@ msgstr "Podle názvu: abecedně"
 msgid "By title: reverse"
 msgstr "Podle názvu: reverzní"
 
-#: src/Admin/Widgets/FiltersWidget.php:67 views/admin/filter-row.php:88
+#: src/Frontend/Widgets/FiltersWidget.php:67 views/admin/filter-row.php:88
 msgid "Cancel"
 msgstr "Zrušit"
 
@@ -1214,7 +1211,7 @@ msgstr ""
 msgid "Displays a dropdown with sort options"
 msgstr "Zobrazí rozevírací seznam s možnostmi třídění"
 
-#: src/Admin/Widgets/FiltersWidget.php:13
+#: src/Frontend/Widgets/FiltersWidget.php:13
 msgid "Displays filters"
 msgstr "Zobrazuje filtry"
 
@@ -1930,7 +1927,7 @@ msgstr "Filtrovat podle: Šířka produktu"
 msgid "Filter Container max height, px"
 msgstr "Maximální výška kontejneru filtru, px"
 
-#: src/Admin/Widgets/FiltersWidget.php:12
+#: src/Frontend/Widgets/FiltersWidget.php:12
 msgid "Filter Everything"
 msgstr "Filtrovat vše"
 
@@ -2876,7 +2873,7 @@ msgstr "Nastavení"
 msgid "Shop page"
 msgstr "Stránka obchodu"
 
-#: src/Admin/Widgets/FiltersWidget.php:70
+#: src/Frontend/Widgets/FiltersWidget.php:70
 #, php-format
 msgid "Show %s"
 msgstr "Zobrazit %s"
@@ -2918,14 +2915,14 @@ msgstr "Zobrazit produkty ohodnocené %d+ hvězdičkami"
 msgid "Show products with %d star rating"
 msgstr "Zobrazit produkty s %d hvězdiček"
 
-#: src/Admin/Widgets/FiltersWidget.php:189
+#: src/Frontend/Widgets/FiltersWidget.php:189
 msgid "Show selected terms (Chips)"
 msgstr "Zobrazit vybrané pojmy (Štítky)"
 
 msgid "Show Term names"
 msgstr "Zobrazit názvy termínů"
 
-#: src/Admin/Widgets/FiltersWidget.php:193
+#: src/Frontend/Widgets/FiltersWidget.php:193
 #| msgid "Show number of posts found"
 msgid "Show the number of posts found"
 msgstr "Zobrazit počet nalezených příspěvků"
@@ -3710,8 +3707,6 @@ msgstr "Získejte plnou sílu filtrování, SEO nástroje a zlepšete konverze"
 msgid "Always<br />WP & Woo compatible"
 msgstr "Vždy<br />kompatibilní s WP a Woo"
 
-msgid "/yr"
-msgstr "/rok"
 
 msgid "1-year updates & support"
 msgstr "Aktualizace a podpora na 1 rok"
@@ -3839,8 +3834,6 @@ msgstr "Líbí se vám"
 msgid "Filter Everything?"
 msgstr "Filter Everything?"
 
-msgid "Rate us on WordPress.org and help the plugin grow"
-msgstr "Ohodnoťte nás na WordPress.org a pomozte pluginu růst"
 
 msgid "Rate Filter Everything"
 msgstr "Ohodnotit Filter Everything"
@@ -3923,3 +3916,190 @@ msgstr "Tento licenční klíč byl vygenerován pro <strong>%1$s</strong>, ale 
 msgid "Hiding the filter links stops crawlers from discovering new filter URLs, but the URLs they already know stay in their queues for weeks or months. A Disallow rule in robots.txt is the only signal that also stops compliant crawlers — Google, Bing and most AI bots — from requesting those pages at all, which frees both your server and your crawl budget.<br /><br />With pretty permalinks the rules name only the filter URLs that are never indexable: several values of one filter (…/color-red-or-blue/), more filters in one URL than your Indexing Depth allows, and numeric or date ranges. Single-filter pages stay crawlable, so the pages your SEO Rules index are never touched. Review the list before enabling: a product or category slug that starts with one of your filter prefixes would match the same pattern.<br /><br />When your site has a physical robots.txt file, WordPress cannot add the rules for you — copy them into that file yourself."
 msgstr "Skrytí odkazů filtrů zabrání robotům objevovat nové URL filtrů, ale URL, které už znají, zůstávají v jejich frontách týdny až měsíce. Pravidlo Disallow v robots.txt je jediný signál, který navíc zabrání i robotům respektujícím pravidla — Google, Bing a většině AI botů — tyto stránky vůbec požadovat, což uleví vašemu serveru i crawl budgetu.<br /><br />S hezkými trvalými odkazy pravidla pojmenovávají jen URL filtrů, které nikdy nejsou indexovatelné: více hodnot jednoho filtru (…/color-red-or-blue/), více filtrů v jedné URL, než povoluje vaše Hloubka indexování, a číselné nebo datové rozsahy. Stránky s jedním filtrem zůstávají procházené, takže stránek indexovaných vašimi Pravidly SEO se to nikdy nedotkne. Před zapnutím seznam zkontrolujte: slug produktu nebo kategorie začínající jedním z vašich prefixů filtrů by odpovídal stejnému vzoru.<br /><br />Pokud má váš web fyzický soubor robots.txt, WordPress za vás pravidla přidat nemůže — zkopírujte je do tohoto souboru sami."
 
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "The plugin is locked."
+msgstr "Plugin je uzamčen."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "It has been running for over two months without a license key, so Filter Sets and SEO Rules cannot be saved until a key is activated. Filtering on the site keeps working."
+msgstr "Běží déle než dva měsíce bez licenčního klíče, proto nelze ukládat Sady filtrů a SEO pravidla, dokud nebude klíč aktivován. Filtrování na webu funguje dál."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Paste it below and click <strong>Activate License</strong>."
+msgstr "Vložte jej níže a klikněte na <strong>Aktivovat Licenci</strong>."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Where did you buy Filter Everything PRO?"
+msgstr "Kde jste Filter Everything PRO zakoupili?"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "The license key depends on where you bought the plugin. Pick your case and follow the three steps."
+msgstr "Licenční klíč závisí na tom, kde jste plugin zakoupili. Vyberte svůj případ a postupujte podle tří kroků."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "On CodeCanyon (Envato)"
+msgstr "Na CodeCanyon (Envato)"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "You have an Envato account and a purchase code from Envato."
+msgstr "Máte účet Envato a purchase code od Envato."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Click <strong>Get your License Key</strong> and sign in with the Envato account that made the purchase (for agencies this is often the client’s account)."
+msgstr "Klikněte na <strong>Získejte svůj Licenční Klíč</strong> a přihlaste se účtem Envato, ze kterého byl nákup proveden (u agentur to bývá účet klienta)."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Copy the license key shown next to your purchase."
+msgstr "Zkopírujte licenční klíč zobrazený u vašeho nákupu."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Your Envato purchase code (<code>a1b2c3d4-…</code>) is <strong>not</strong> the license key. It is only used on the next page to generate the key."
+msgstr "Váš purchase code od Envato (<code>a1b2c3d4-…</code>) <strong>není</strong> licenční klíč. Slouží pouze na další stránce k vygenerování klíče."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "On filtereverything.pro"
+msgstr "Na filtereverything.pro"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "You created an account on our website during checkout."
+msgstr "Při nákupu jste si vytvořili účet na našem webu."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Open <strong>My Account → My licenses</strong> and add this site: <code>%s</code>"
+msgstr "Otevřete <strong>My Account → My licenses</strong> a přidejte tento web: <code>%s</code>"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Copy the key generated for this address."
+msgstr "Zkopírujte klíč vygenerovaný pro tuto adresu."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Register exactly <code>%s</code> — that is how this site identifies itself to the license server."
+msgstr "Zaregistrujte přesně <code>%s</code> — právě tak se tento web identifikuje vůči licenčnímu serveru."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Open My licenses"
+msgstr "Otevřít My licenses"
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Don’t have a license yet? <a href=\"%s\" target=\"_blank\">Purchase it here</a>."
+msgstr "Ještě nemáte licenci? <a href=\"%s\" target=\"_blank\">Zakupte ji zde</a>."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "Please paste your license key first."
+msgstr "Nejprve prosím vložte svůj licenční klíč."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "This looks like your Envato <strong>purchase code</strong>, not a license key. The key is a long string that starts with <code>Y29kZWNhbnlvbn</code>. Click <strong>Get your License Key</strong>, sign in with the Envato account that bought the plugin, and copy the key from there."
+msgstr "Vypadá to jako váš <strong>purchase code</strong> od Envato, ne licenční klíč. Klíč je dlouhý řetězec začínající na <code>Y29kZWNhbnlvbn</code>. Klikněte na <strong>Získejte svůj Licenční Klíč</strong>, přihlaste se účtem Envato, ze kterého byl plugin zakoupen, a zkopírujte klíč odtud."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "This does not look like a Filter Everything license key. Follow the steps above for the place where you bought the plugin and paste the key exactly as shown there."
+msgstr "Toto nevypadá jako licenční klíč Filter Everything. Postupujte podle kroků výše pro místo, kde jste plugin zakoupili, a vložte klíč přesně tak, jak je tam zobrazen."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "The license server could not be reached. This is not a problem with your key — please try again in a few minutes, and contact support if it keeps failing."
+msgstr "Licenční server není dostupný. Není to problém vašeho klíče — zkuste to prosím za pár minut znovu, a pokud potíže přetrvávají, kontaktujte podporu."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "This key is already active on two sites. Deactivate it on a site you no longer use (Filters → Settings → License there, or <strong>My licenses</strong> on filtereverything.pro for keys bought on our website) and try again, or contact support with the key."
+msgstr "Tento klíč je již aktivní na dvou webech. Deaktivujte jej na webu, který už nepoužíváte (tam v Filtry → Nastavení → Licence, nebo v <strong>My licenses</strong> na filtereverything.pro u klíčů zakoupených na našem webu) a zkuste to znovu, případně kontaktujte podporu s tímto klíčem."
+
+#: pro/Settings/Tabs/LicenseTab.php
+msgid "This key belongs to a filtereverything.pro account. Make sure <code>%s</code> is added in <strong>My licenses</strong> and paste the key generated for it."
+msgstr "Tento klíč patří k účtu na filtereverything.pro. Ujistěte se, že je <code>%s</code> přidán v <strong>My licenses</strong>, a vložte klíč vygenerovaný pro něj."
+
+#: src/Admin/Messages.php
+msgid "Plugin notifications"
+msgstr "Oznámení pluginu"
+
+#: src/Admin/Messages.php
+msgid "Receive security alerts, update warnings, usage tips and occasional offers"
+msgstr "Dostávat bezpečnostní upozornění, varování k aktualizacím, tipy k používání a občas nabídky"
+
+#: src/Admin/Messages.php
+msgid "Once a day the plugin downloads a small public file from filtereverything.pro. Nothing about your site is sent. Messages appear only on the plugin's own screens, except urgent security alerts."
+msgstr "Plugin jednou denně stáhne malý veřejný soubor z filtereverything.pro. O vašem webu se nic neodesílá. Zprávy se zobrazují pouze na obrazovkách pluginu, s výjimkou naléhavých bezpečnostních upozornění."
+
+#: src/Admin/Messages.php
+msgid "Do you agree to receive helpful notifications?"
+msgstr "Souhlasíte s odběrem užitečných oznámení?"
+
+#: src/Admin/Messages.php
+msgid "Filter Everything can alert you to <strong>security issues and important updates</strong>, and share usage tips and occasional offers (we won't spam you). Once a day the plugin downloads a small public file from filtereverything.pro. Nothing about your site is sent. Messages appear only on the plugin's own screens, except urgent security alerts. You can change this any time in Settings."
+msgstr "Filter Everything vás může upozorňovat na <strong>bezpečnostní problémy a důležité aktualizace</strong> a sdílet tipy k používání a občas nabídky (spamovat nebudeme). Plugin jednou denně stáhne malý veřejný soubor z filtereverything.pro. O vašem webu se nic neodesílá. Zprávy se zobrazují pouze na obrazovkách pluginu, s výjimkou naléhavých bezpečnostních upozornění. Kdykoli to můžete změnit v Nastavení."
+
+#: src/Admin/Messages.php
+msgid "Yes, I agree"
+msgstr "Ano, souhlasím"
+
+#: src/Admin/Messages.php
+msgid "No, I don't agree"
+msgstr "Ne, nesouhlasím"
+
+#: src/Admin/Messages.php
+msgid "Dismiss this message"
+msgstr "Zavřít tuto zprávu"
+
+#: src/Admin/Messages.php
+msgid "Ends in"
+msgstr "Končí za"
+
+#: src/Admin/Messages.php
+msgid "(opens in a new tab)"
+msgstr "(otevře se na nové kartě)"
+
+#: src/Admin/Messages.php
+msgctxt "countdown unit"
+msgid "days"
+msgstr "dny"
+
+#: src/Admin/Messages.php
+msgctxt "countdown unit"
+msgid "hrs"
+msgstr "hod"
+
+#: src/Admin/Messages.php
+msgctxt "countdown unit"
+msgid "min"
+msgstr "min"
+
+#: src/Admin/Messages.php
+msgctxt "countdown unit"
+msgid "sec"
+msgstr "s"
+
+#: src/Admin/WhatsNew.php
+msgid "New release notes and a new notification"
+msgstr "Nové poznámky k vydání a nové oznámení"
+
+#: src/Admin/WhatsNew.php
+msgid "New notification"
+msgstr "Nové oznámení"
+
+#: src/Settings/Tabs/AboutProTab.php
+msgctxt "benefits-landing"
+msgid "Pause"
+msgstr "Pozastavit"
+
+#: src/Settings/Tabs/AboutProTab.php
+msgctxt "benefits-landing"
+msgid "Better navigation — more sales"
+msgstr "Lepší navigace — více prodejů"
+
+#: src/Settings/Tabs/AboutProTab.php
+msgctxt "benefits-landing"
+msgid "Better navigation — more conversions"
+msgstr "Lepší navigace — více konverzí"
+
+#. translators: %s: date, e.g. September 30
+#: views/admin/pro-modal.php
+msgid "Sale price — ends %s"
+msgstr "Akční cena — do %s"
+
+#: views/admin/review-notice.php
+msgid "Your review on WordPress.org <strong>keeps the free version alive</strong> — it takes a minute."
+msgstr "Vaše recenze na WordPress.org <strong>udržuje bezplatnou verzi při životě</strong> — zabere to minutu."
+
+#: views/admin/review-notice.php
+msgid "A WordPress.org account is needed to post a review."
+msgstr "K napsání recenze je potřeba účet na WordPress.org."

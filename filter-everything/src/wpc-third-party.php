@@ -790,7 +790,25 @@ function flrt_elementor_load_more_anchor( $widget_content, $module ){
             }
         }
 
-        $widget_content = preg_replace('%data-next-page\="[^"]+"%', 'data-next-page="' . $data_next_page . '"', $widget_content);
+        /*
+         * $data_next_page carries the GET part of the current request, and
+         * getFormActionOrFullPageUrl() hands it back URL-DECODED (parse_str()
+         * + build_query(), which does not re-encode). Printed raw, a request
+         * like ?x="><script>… closed the attribute and injected markup —
+         * reflected XSS, reported by Wordfence (CVE-2026-87869). esc_url()
+         * drops the characters that can break out of the attribute and
+         * re-encodes the ampersands for the HTML context.
+         * A callback instead of a replacement string: in a string "$1" or
+         * "\1" coming from the URL would be read as a backreference.
+         */
+        $next_page_attr = 'data-next-page="' . esc_url( $data_next_page ) . '"';
+        $widget_content = preg_replace_callback(
+            '%data-next-page\="[^"]+"%',
+            function () use ( $next_page_attr ) {
+                return $next_page_attr;
+            },
+            $widget_content
+        );
     }
 
     return $widget_content;
@@ -858,9 +876,9 @@ if ( flrt_is_elementor_active() ) {
 
     function wpc_register_elementor_widget( $widgets_manager ) {
 
-        flrt_include('src/Admin/Widgets/ElementorWidgets/ChipsElementorWidget.php');
-        flrt_include('src/Admin/Widgets/ElementorWidgets/FiltersElementorWidget.php');
-        flrt_include('src/Admin/Widgets/ElementorWidgets/SortingElementorWidget.php');
+        flrt_include('src/Frontend/Builders/ElementorWidgets/ChipsElementorWidget.php');
+        flrt_include('src/Frontend/Builders/ElementorWidgets/FiltersElementorWidget.php');
+        flrt_include('src/Frontend/Builders/ElementorWidgets/SortingElementorWidget.php');
 
         $widgets_manager->register( new \FilterEverything\Filter\ChipsElementorWidget() );
         $widgets_manager->register( new \FilterEverything\Filter\FiltersElementorWidget() );
@@ -1044,9 +1062,9 @@ if ( flrt_is_divi_theme() ) {
             return;
         }
 
-        flrt_include('src/Admin/Widgets/DiviWidgets/ChipsDiviWidget.php');
-        flrt_include('src/Admin/Widgets/DiviWidgets/FiltersDiviWidget.php');
-        flrt_include('src/Admin/Widgets/DiviWidgets/SortingDiviWidget.php');
+        flrt_include('src/Frontend/Builders/DiviWidgets/ChipsDiviWidget.php');
+        flrt_include('src/Frontend/Builders/DiviWidgets/FiltersDiviWidget.php');
+        flrt_include('src/Frontend/Builders/DiviWidgets/SortingDiviWidget.php');
     }
 
     add_action('et_builder_ready', 'wpc_initialize_divi_custom_module');
@@ -1091,7 +1109,17 @@ function flrt_divi_modify_specific_module($output, $render_slug, $module)
  * @return bool True if Breakdance is active and its required components exist, false otherwise.
  */
 function flrt_check_breakdance() {
-    if (!is_plugin_active('breakdance/plugin.php')) {
+    // is_plugin_active() lives in wp-admin/includes/plugin.php and is not loaded
+    // on the frontend, in WP-CLI or in cron. Fall back to the raw option list.
+    if ( ! function_exists( 'is_plugin_active' ) ) {
+        $active = (array) get_option( 'active_plugins', [] );
+        if ( is_multisite() ) {
+            $active = array_merge( $active, array_keys( (array) get_site_option( 'active_sitewide_plugins', [] ) ) );
+        }
+        if ( ! in_array( 'breakdance/plugin.php', $active, true ) ) {
+            return false;
+        }
+    } elseif ( ! is_plugin_active( 'breakdance/plugin.php' ) ) {
         return false;
     }
 
@@ -1110,7 +1138,7 @@ if(flrt_check_breakdance()){
     </style>';
     }
     add_action('wp_head', 'flrt_breakdance_custom_css');
-    flrt_include('src/Admin/Widgets/breakdance/widgets/breakdance.php');
+    flrt_include('src/Frontend/Builders/breakdance/widgets/breakdance.php');
 }
 
 /**
@@ -1151,9 +1179,9 @@ add_action('init', 'flrt_init_bricks_widgets', 11);
 function flrt_init_bricks_widgets() {
     if (flrt_is_bricks_ready_for_elements()) {
         $element_files = [
-                FLRT_PLUGIN_DIR_PATH .'src/Admin/Widgets/bricks/ChipsBricksWidget.php',
-                FLRT_PLUGIN_DIR_PATH .'src/Admin/Widgets/bricks/FiltersBricksWidget.php',
-                FLRT_PLUGIN_DIR_PATH .'src/Admin/Widgets/bricks/SortingBricksWidget.php',
+                FLRT_PLUGIN_DIR_PATH .'src/Frontend/Builders/bricks/ChipsBricksWidget.php',
+                FLRT_PLUGIN_DIR_PATH .'src/Frontend/Builders/bricks/FiltersBricksWidget.php',
+                FLRT_PLUGIN_DIR_PATH .'src/Frontend/Builders/bricks/SortingBricksWidget.php',
         ];
         foreach ($element_files as $file) {
             \Bricks\Elements::register_element($file);
@@ -1194,9 +1222,9 @@ function flrt_init_bricks_widgets() {
 
 function wpc_beaver_builder_widgets_load() {
     if ( class_exists( 'FLBuilder' ) ) {
-        flrt_include('src/Admin/Widgets/beaver/chips/ChipsBeaverWidget.php');
-        flrt_include('src/Admin/Widgets/beaver/filters/FiltersBeaverWidget.php');
-        flrt_include('src/Admin/Widgets/beaver/sorting/SortingBeaverWidget.php');
+        flrt_include('src/Frontend/Builders/beaver/chips/ChipsBeaverWidget.php');
+        flrt_include('src/Frontend/Builders/beaver/filters/FiltersBeaverWidget.php');
+        flrt_include('src/Frontend/Builders/beaver/sorting/SortingBeaverWidget.php');
     }
 }
 add_action( 'init', 'wpc_beaver_builder_widgets_load' );
