@@ -460,7 +460,7 @@ class EntityManager
 
         $filters = [];
         foreach ( $results  as $result ) {
-            $filterData = maybe_unserialize( $result->post_content );
+            $filterData = flrt_safe_unserialize( $result->post_content );
 
             if( ! is_array( $filterData ) ){
                 continue;
@@ -614,7 +614,7 @@ class EntityManager
             return false;
         }
 
-        $raw_data       = (array) maybe_unserialize( $filter_post->post_content );
+        $raw_data       = (array) flrt_safe_unserialize( $filter_post->post_content );
         $fse            = Container::instance()->getFilterService();
         $empty_filter   = $fse->getEmptyFilter();
 
@@ -801,7 +801,7 @@ class EntityManager
                 $savedQueryVars = get_post_meta( $setId, 'wpc_filter_set_query_vars', true );
 
                 if( $savedQueryVars ){
-                    $query_vars = maybe_unserialize( $savedQueryVars );
+                    $query_vars = flrt_safe_unserialize( $savedQueryVars );
 
                     if( is_array( $query_vars ) ){
                         $set_filter_query = new \WP_Query();

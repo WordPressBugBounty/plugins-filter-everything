@@ -826,7 +826,7 @@ class WpManager
         $postData = Container::instance()->getThePost();
         if( isset( $postData['flrt_ajax_link'] ) ){
 
-            $home_url = home_url();
+            $home_url = flrt_home_url();
 
             if( flrt_wpml_active() ){
                 $home_url = apply_filters( 'wpml_home_url', home_url() );

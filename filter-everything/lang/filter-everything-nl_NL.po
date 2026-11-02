@@ -3932,3 +3932,23 @@ msgstr "Jouw review op WordPress.org <strong>houdt de gratis versie in leven</st
 #: views/admin/review-notice.php
 msgid "A WordPress.org account is needed to post a review."
 msgstr "Voor het plaatsen van een review is een WordPress.org-account nodig."
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Integrations"
+msgstr "Integraties"
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Woo Discount Rules"
+msgstr "Woo Discount Rules"
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Apply the discounts of Woo Discount Rules to the Price and «On sale» filters"
+msgstr "Kortingen van Woo Discount Rules toepassen op de filters «Prijs» en «Op uitverkoop»"
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Apply the discounts of Woo Discount Rules to the Price filter"
+msgstr "Kortingen van Woo Discount Rules toepassen op het filter «Prijs»"
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Products fall into the price ranges by their discounted price. The discounted prices are calculated once and cached, so only the first page view after a change of the rules or of the product prices takes longer. Turn the option off if regular prices are fine for your filters."
+msgstr "Producten vallen in de prijsbereiken op basis van hun kortingsprijs. De kortingsprijzen worden één keer berekend en gecachet, zodat alleen de eerste paginaweergave na een wijziging van de regels of de productprijzen langer duurt. Schakel de optie uit als gewone prijzen volstaan voor uw filters."

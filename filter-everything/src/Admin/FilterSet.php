@@ -294,6 +294,8 @@ class FilterSet
                 'lessOptions'        => esc_html__( 'Less options', 'filter-everything' ),
                 'filtersPro'         => defined( 'FLRT_FILTERS_PRO' ),
                 'wPQuerySelectId'    => $this->generateFieldId('wp_filter_query'),
+                'wpQueriesUser'      => get_current_user_id(),
+                'wpQueriesToken'     => flrt_wp_queries_token( get_current_user_id() ),
                 'excludePlaceholder' => esc_html__( 'Select terms and', 'filter-everything' ),
                 'newFilter'          => esc_html__( 'New Filter', 'filter-everything' ),
                 'addFilter'          => esc_html__( 'Please, add filters first', 'filter-everything' ),
@@ -734,7 +736,7 @@ class FilterSet
 
                         foreach ( $update_after_save as $filter_post_id => $fields_to_update ){
                             $filter_post_data = get_post( $filter_post_id );
-                            $filter_data = maybe_unserialize( $filter_post_data->post_content );
+                            $filter_data = flrt_safe_unserialize( $filter_post_data->post_content );
 
                             if( ! $filter_data ){
                                 continue;
@@ -906,7 +908,7 @@ class FilterSet
 
         $defaults = apply_filters( 'wpc_prepare_filter_set_parameters', $defaults, $set_post );
 
-        $unserialized = maybe_unserialize( $set_post->post_content );
+        $unserialized = flrt_safe_unserialize( $set_post->post_content );
 
         // For backward compatibility. From v.1.1.24
         if( isset( $unserialized['wp_page_type'] ) ){
@@ -1385,7 +1387,7 @@ class FilterSet
 
     private function safelyUnserializePostContent($raw)
     {
-        $content = maybe_unserialize($raw);
+        $content = flrt_safe_unserialize($raw);
         return is_array($content) ? $content : [];
     }
 

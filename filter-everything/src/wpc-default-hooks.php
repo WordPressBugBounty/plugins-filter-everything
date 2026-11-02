@@ -897,7 +897,7 @@ add_filter('wpc_pre_save_filter', function($filter) {
             $savedPost = get_post((int) $filter['ID']);
 
             if ($savedPost && $savedPost->post_type === FLRT_FILTERS_POST_TYPE) {
-                $savedFields = (array) maybe_unserialize($savedPost->post_content);
+                $savedFields = (array) flrt_safe_unserialize($savedPost->post_content);
 
                 foreach ($proFields as $proField) {
                     if (isset($savedFields[$proField])) {
@@ -922,7 +922,7 @@ add_filter('wpc_pre_save_set_fields', function($setFields) {
             $savedPost = get_post((int) $setFields['ID']);
 
             if ($savedPost && $savedPost->post_type === FLRT_FILTERS_SET_POST_TYPE) {
-                $savedFields = (array) maybe_unserialize($savedPost->post_content);
+                $savedFields = (array) flrt_safe_unserialize($savedPost->post_content);
 
                 foreach ($proFields as $proField) {
                     if (isset($savedFields[$proField])) {

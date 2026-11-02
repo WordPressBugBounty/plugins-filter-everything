@@ -86,7 +86,7 @@ if ( ! function_exists( 'flrt_robots_registry' ) ) {
         $registry = get_option( 'wpc_filter_permalinks', [] );
 
         if ( ! is_array( $registry ) ) {
-            $registry = maybe_unserialize( $registry );
+            $registry = flrt_safe_unserialize( $registry );
         }
         if ( ! is_array( $registry ) ) {
             $registry = [];

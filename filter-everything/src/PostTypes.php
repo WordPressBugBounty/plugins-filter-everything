@@ -14,6 +14,34 @@ class PostTypes
     }
 
     function registerPostType() {
+        /**
+         * Both post types store their configuration (including serialized data) in
+         * post_content / post_excerpt and are managed only through the plugin's own
+         * admin screens, which are already gated by flrt_plugin_user_caps(). The
+         * default 'post' capability_type would let any edit_posts-level user
+         * (Contributor/Author) create or edit these posts and smuggle crafted
+         * serialized data into post_content. Only the primitive caps are overridden
+         * so only privileged users can create, edit or delete them. The meta caps
+         * edit_post/read_post/delete_post are left to WordPress' own map_meta_cap():
+         * reusing a shared cap like manage_options for those would make
+         * _post_type_meta_capabilities() register it as a global meta cap and break
+         * current_user_can('manage_options') everywhere.
+         */
+        $pluginCap = flrt_plugin_user_caps();
+        $capabilities = array(
+            'create_posts'           => $pluginCap,
+            'edit_posts'             => $pluginCap,
+            'edit_others_posts'      => $pluginCap,
+            'edit_private_posts'     => $pluginCap,
+            'edit_published_posts'   => $pluginCap,
+            'publish_posts'          => $pluginCap,
+            'read_private_posts'     => $pluginCap,
+            'delete_posts'           => $pluginCap,
+            'delete_private_posts'   => $pluginCap,
+            'delete_published_posts' => $pluginCap,
+            'delete_others_posts'    => $pluginCap,
+        );
+
         // No need to escape
         register_post_type( FLRT_FILTERS_SET_POST_TYPE, array(
             'label'    => esc_html__( 'Filter Sets', 'filter-everything' ),
@@ -34,6 +62,8 @@ class PostTypes
             'show_ui'			=> true,
             '_builtin'			=> false,
             'capability_type'	=> 'post',
+            'map_meta_cap'      => true,
+            'capabilities'      => $capabilities,
             'hierarchical'		=> true,
             'rewrite'			=> false,
             'query_var'			=> false,
@@ -58,6 +88,8 @@ class PostTypes
             'show_ui'			=> false,
             '_builtin'			=> false,
             'capability_type'	=> 'post',
+            'map_meta_cap'      => true,
+            'capabilities'      => $capabilities,
             'hierarchical'		=> true,
             'rewrite'			=> false,
             'query_var'			=> false,

@@ -3571,3 +3571,23 @@ msgstr ""
 #: views/admin/review-notice.php
 msgid "A WordPress.org account is needed to post a review."
 msgstr ""
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Integrations"
+msgstr ""
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Woo Discount Rules"
+msgstr ""
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Apply the discounts of Woo Discount Rules to the Price and «On sale» filters"
+msgstr ""
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Apply the discounts of Woo Discount Rules to the Price filter"
+msgstr ""
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Products fall into the price ranges by their discounted price. The discounted prices are calculated once and cached, so only the first page view after a change of the rules or of the product prices takes longer. Turn the option off if regular prices are fine for your filters."
+msgstr ""

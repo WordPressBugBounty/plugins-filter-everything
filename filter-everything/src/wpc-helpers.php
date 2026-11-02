@@ -20,6 +20,51 @@ function flrt_plugin_user_caps()
     return apply_filters('wpc_plugin_user_caps', 'manage_options');
 }
 
+/**
+ * Safe replacement for maybe_unserialize() for any data that originates from
+ * the database (post_content, post_excerpt, post meta, options). The plugin only
+ * ever stores arrays or scalars there, never objects, so unserializing with
+ * allowed_classes = false keeps the same result while preventing PHP Object
+ * Injection: a crafted serialized object can no longer be instantiated, even if
+ * a malicious value is already sitting in the DB. Such an object is also dropped
+ * from the result: callers read it as an array, and PHP stops with a fatal error
+ * on __PHP_Incomplete_Class, which would take down the admin of that site.
+ *
+ * @param mixed $data
+ * @return mixed
+ */
+function flrt_safe_unserialize($data)
+{
+    if (is_string($data) && is_serialized($data)) {
+        return flrt_drop_stored_objects(@unserialize(trim($data), array('allowed_classes' => false)));
+    }
+
+    return $data;
+}
+
+/**
+ * @param mixed $value an unserialized value
+ * @return mixed the same value without objects; an object itself becomes an empty array
+ */
+function flrt_drop_stored_objects($value)
+{
+    if (is_object($value)) {
+        return array();
+    }
+
+    if (is_array($value)) {
+        foreach ($value as $key => $item) {
+            if (is_object($item)) {
+                unset($value[$key]);
+            } elseif (is_array($item)) {
+                $value[$key] = flrt_drop_stored_objects($item);
+            }
+        }
+    }
+
+    return $value;
+}
+
 function flrt_the_set($set_id = 0)
 {
     if (function_exists('brizy_load')) {
@@ -344,6 +389,68 @@ function flrt_array_contains_duplicate($array)
 function flrt_create_filters_nonce()
 {
     return FilterSet::createNonce();
+}
+
+/**
+ * Token for the "What to filter" request of the Filter Set screen.
+ *
+ * That request goes from the admin straight to the front-end page. When the page
+ * lives on another host than the admin (Polylang with a domain or sub-domain per
+ * language, a site address different from the WordPress address) the browser sends
+ * no cookies with it, so the nonce and the capability check cannot pass. The token
+ * is derived from the site salts and does not need a session.
+ *
+ * @param int $user_id
+ * @param int $tick_offset 0 for the current nonce tick, 1 for the previous one
+ * @return string
+ */
+function flrt_wp_queries_token( $user_id, $tick_offset = 0 )
+{
+    $tick = wp_nonce_tick() - (int) $tick_offset;
+    return wp_hash( 'flrt_wp_queries|' . $tick . '|' . (int) $user_id, 'nonce' );
+}
+
+function flrt_verify_wp_queries_token( $token, $user_id )
+{
+    $user_id = (int) $user_id;
+
+    if( ! is_string( $token ) || $token === '' || $user_id < 1 ){
+        return false;
+    }
+
+    if( ! hash_equals( flrt_wp_queries_token( $user_id ), $token )
+        && ! hash_equals( flrt_wp_queries_token( $user_id, 1 ), $token ) ){
+        return false;
+    }
+
+    return user_can( $user_id, flrt_plugin_user_caps() );
+}
+
+/**
+ * Checks if the origin belongs to this site: its site address, its WordPress
+ * address or one of the Polylang language domains.
+ *
+ * @param string $origin
+ * @return bool
+ */
+function flrt_is_own_origin( $origin )
+{
+    $host = wp_parse_url( $origin, PHP_URL_HOST );
+
+    if( ! $host ){
+        return false;
+    }
+
+    $hosts = array(
+        wp_parse_url( get_option( 'home' ), PHP_URL_HOST ),
+        wp_parse_url( get_option( 'siteurl' ), PHP_URL_HOST ),
+    );
+
+    if( function_exists( 'PLL' ) && isset( PLL()->links_model ) && method_exists( PLL()->links_model, 'get_hosts' ) ){
+        $hosts = array_merge( $hosts, array_values( (array) PLL()->links_model->get_hosts() ) );
+    }
+
+    return in_array( $host, array_filter( $hosts ), true );
 }
 
 function flrt_get_filter_fields_mapping()
@@ -924,6 +1031,39 @@ if (!function_exists('flrt_is_sitemap_exists')) {
         return file_exists($filepath);
     }
 }
+if ( ! function_exists( 'flrt_range_list_input_step' ) ) {
+    /**
+     * The "step" attribute for the Min/Max inputs of a Range list.
+     *
+     * The inputs follow the precision of the filter's Slider Step: 0.01 allows
+     * 1.49, 0.5 allows 1.5, an integer step keeps whole numbers. Only the precision
+     * is taken, not the step itself — ranges like 0–99 with a step of 10 stay valid.
+     *
+     * @param string|int|float $step the filter's "step" setting
+     * @return string
+     */
+    function flrt_range_list_input_step( $step )
+    {
+        $step = (string) $step;
+        $pos  = strpos( $step, '.' );
+
+        if ( false === $pos ) {
+            return '1';
+        }
+
+        $decimals = strlen( rtrim( substr( $step, $pos + 1 ), '0' ) );
+
+        if ( $decimals < 1 ) {
+            return '1';
+        }
+
+        // Numeric filters are compared as DECIMAL(15,6)
+        $decimals = min( $decimals, 6 );
+
+        return '0.' . str_repeat( '0', $decimals - 1 ) . '1';
+    }
+}
+
 if (!function_exists('flrt_get_index_sitemap')) {
     function flrt_get_index_sitemap()
     {

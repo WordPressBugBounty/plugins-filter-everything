@@ -89,6 +89,16 @@ trait PluginHelpers
         $filterSet = Container::instance()->getFilterSetService();
         remove_filter('wpc_prepare_filter_set_parameters', [$this, 'prepareSetParameters'], 10, 2);
 
+        // A builder module that renders the archive's own listing (see
+        // WP_Query_Source_Detector::is_archive_listing_query()) stands in for the main query
+        $isArchiveListing = (bool) $query_to_check->get('flrt_archive_listing');
+        $isMainListing    = $query_to_check->is_main_query() || $isArchiveListing;
+        $mainQueryHash    = '';
+
+        if( $isArchiveListing && isset( $GLOBALS['wp_the_query'] ) && $GLOBALS['wp_the_query'] instanceof \WP_Query ){
+            $mainQueryHash = $GLOBALS['wp_the_query']->get('flrt_query_hash');
+        }
+
         foreach ( $sets as $set ){
 
             $theSet = $filterSet->getSet( $set['ID'] );
@@ -99,6 +109,9 @@ trait PluginHelpers
                 if(!empty($query_to_check->get('flrt_query_hash')) && $savedValue === $query_to_check->get('flrt_query_hash') /*&& isset($set['query_on_the_page']) &&
                     $set['query_on_the_page'] === true*/
                 ){
+                    $result[] = $set['ID'];
+                }elseif( $mainQueryHash && $savedValue === $mainQueryHash ){
+                    // The Filter Set targets the main query, which the archive listing replaces on the page
                     $result[] = $set['ID'];
                 }
             }
@@ -114,14 +127,14 @@ trait PluginHelpers
                     $savedValue = $theSet['wp_filter_query']['value'];
 
                     // For backward compatibility, when savedValue isn't specified and is default -1
-                    if ($query_to_check->is_main_query() && $savedValue === '-1') {
+                    if ($isMainListing && $savedValue === '-1') {
                         $result[] = $set['ID'];
 
                         break;
                     }
 
                     // For All Post type archive pages
-                    if (isset($theSet['post_name']['value']) && $theSet['post_name']['value'] === '1' && $query_to_check->is_main_query()) {
+                    if (isset($theSet['post_name']['value']) && $theSet['post_name']['value'] === '1' && $isMainListing) {
                        /* if( isset( $theSet['use_apply_button']['value'] ) && $theSet['use_apply_button']['value'] === 'yes' ){
                             continue;
                         }else{
@@ -157,11 +170,24 @@ trait PluginHelpers
             }
 
             if ( $do_security_check ) {
-                if( ! isset( $postData['_wpnonce'] ) || ! wp_verify_nonce( $postData['_wpnonce'], FilterSet::NONCE_ACTION ) ){
-                    return $wp_query;
+                $allowed = isset( $postData['_wpnonce'] )
+                    && wp_verify_nonce( $postData['_wpnonce'], FilterSet::NONCE_ACTION )
+                    && current_user_can( flrt_plugin_user_caps() );
+
+                // The page is on another host than the admin (e.g. Polylang with a domain per
+                // language): the request comes without cookies and has to be readable cross-origin.
+                if( ! $allowed && isset( $postData['flrt_queries_token'], $postData['flrt_queries_user'] )
+                    && flrt_verify_wp_queries_token( wp_unslash( $postData['flrt_queries_token'] ), $postData['flrt_queries_user'] ) ){
+                    $allowed = true;
+                    $origin  = get_http_origin();
+
+                    if( $origin && flrt_is_own_origin( $origin ) && ! headers_sent() ){
+                        header( 'Access-Control-Allow-Origin: ' . esc_url_raw( $origin ) );
+                        header( 'Vary: Origin', false );
+                    }
                 }
 
-                if( ! current_user_can( flrt_plugin_user_caps() ) ) {
+                if( ! $allowed ){
                     return $wp_query;
                 }
             }
@@ -317,7 +343,7 @@ trait PluginHelpers
     {
         // Set location dropdown fields related to saved post_type and wp_page_type
         $postType = $set_post->post_excerpt ? $set_post->post_excerpt : 'post';
-        $unserialized = maybe_unserialize( $set_post->post_content );
+        $unserialized = flrt_safe_unserialize( $set_post->post_content );
 
         // For backward compatibility. From v.1.1.24
         if( isset( $unserialized['wp_page_type'] ) ){

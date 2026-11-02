@@ -110,6 +110,7 @@ class Plugin
 
         if( isset( $getData['reset_filters_cache'] ) && $getData['reset_filters_cache'] == true ){
             $this->resetTransitions();
+            WooDiscountRules::resetCache();
         }
 
         add_action( 'wpc_before_filter_set_settings_fields', [$this, 'removeApplyButtonOrderField'] );
@@ -637,6 +638,8 @@ class Plugin
                 'wpc_xml_write_date',
                 'wpc_filter_experimental',
                 'flrt_json_blob_ver',
+                'wpc_filter_token',
+                'wpc_filter_token_attempt',
                 'widget_wpc_filters_widget',
                 'widget_wpc_sorting_widget',
                 'widget_wpc_chips_widget',
@@ -663,7 +666,7 @@ class Plugin
                 $saved_value         = get_option( FLRT_LICENSE_KEY );
 
                 if( isset( $saved_value['license_key'] ) ) {
-                    $saved_value_arr = maybe_unserialize( base64_decode( $saved_value['license_key'] ) );
+                    $saved_value_arr = flrt_safe_unserialize( base64_decode( $saved_value['license_key'] ) );
                     $to_send         = $saved_value_arr;
                 }
 
@@ -972,6 +975,9 @@ class Plugin
             'wpcQueryOnThePageSets'      => $queryOnThePageSets,
             'wpcNoPostsContainerMsg'     => esc_html__('It appears that this page does not contain the container specified in the «Results container» option. Try to specify the correct one in the Filter Set settings or the common plugin Settings.', 'filter-everything'),
             'wpcIsPro'                   => $isPro,
+            // The default wpc_set_num_shift hook rounds the slider bounds outwards
+            // (floor the min, ceil the max); the JS recount rounds its bounds the same way
+            'wpcRoundNumericBounds'      => false !== has_filter( 'wpc_set_num_shift', 'flrt_round_numeric_values' ),
             'permalinksEnabled'          => FLRT_PERMALINKS_ENABLED,
             'wpcMoreLessCount'           => flrt_more_less_count(),
             'wpcSearchChipsText'         => esc_html__('search: %s', 'filter-everything' ),
@@ -1082,7 +1088,7 @@ class Plugin
             $pagination_base = ! empty( $wp_rewrite->pagination_base ) ? $wp_rewrite->pagination_base : 'page';
             $request         = preg_replace( '#(^|/)' . preg_quote( $pagination_base, '#' ) . '/\d+$#', '', $request );
 
-            $flrt_json_data['domain'] = trailingslashit(home_url(add_query_arg([], $request)));
+            $flrt_json_data['domain'] = trailingslashit( flrt_home_url( add_query_arg( [], $request ) ) );
             // The site's permalink convention (mirrors user_trailingslashit) —
             // the client-side URL builder must terminate paths the same way
             $flrt_json_data['trailingSlash'] = ( user_trailingslashit( 'wpc' ) === 'wpc/' );

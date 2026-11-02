@@ -537,6 +537,19 @@ class TaxonomyEntity implements Entity
 
         if( isset( $wp_query->tax_query->queries ) && count( $wp_query->tax_query->queries ) ){
             foreach($wp_query->tax_query->queries as $single_tax_query ){
+                /**
+                 * Polylang keeps its language clause only inside the WP_Tax_Query
+                 * object (field term_taxonomy_id) and re-adds it itself after WP
+                 * re-parses the query (parse_tax_query). Copying that clause into
+                 * query_vars['tax_query'] makes it the FIRST 'language' clause, so
+                 * WP_Tax_Query::$queried_terms['language'] carries a term_taxonomy_id
+                 * instead of the language slug; PLL_Canonical::check_canonical_url()
+                 * then resolves the queried term in the wrong language and 301-redirects
+                 * filtered pages of a non-default language to the default one.
+                 */
+                if ( isset( $single_tax_query['taxonomy'] ) && 'language' === $single_tax_query['taxonomy'] && function_exists( 'pll_current_language' ) ) {
+                    continue;
+                }
                 $this->addTaxQueryArray( $single_tax_query );
             }
         }

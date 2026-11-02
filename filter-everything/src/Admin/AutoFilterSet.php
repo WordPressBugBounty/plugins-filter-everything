@@ -446,7 +446,7 @@ class AutoFilterSet extends FilterSet
 
                         foreach ($update_after_save as $filter_post_id => $fields_to_update) {
                             $filter_post_data = get_post($filter_post_id);
-                            $filter_data = maybe_unserialize($filter_post_data->post_content);
+                            $filter_data = flrt_safe_unserialize($filter_post_data->post_content);
 
                             if (!$filter_data) {
                                 continue;

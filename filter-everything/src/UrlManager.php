@@ -184,7 +184,7 @@ class UrlManager
     public function getFormActionOrFullPageUrl( $fullPageUrl = false )
     {
         $query          = [];
-        $homeUrl        = parse_url(home_url());
+        $homeUrl        = parse_url( flrt_home_url() );
         $post           = Container::instance()->getThePost();
 
         if( isset( $post['flrt_ajax_link'] ) ){
@@ -251,7 +251,7 @@ class UrlManager
             // For compatibility with some Nginx configurations
             unset($get['q']);
 
-            $this->resetUrl = home_url( $this->wpManager->getQueryVar('wp_request', '') );
+            $this->resetUrl = flrt_home_url( $this->wpManager->getQueryVar('wp_request', '') );
             $requested      = $this->wpManager->getQueryVar('queried_values', [] );
 
             $this->resetUrl = $this->removePaginationBase( $this->resetUrl );

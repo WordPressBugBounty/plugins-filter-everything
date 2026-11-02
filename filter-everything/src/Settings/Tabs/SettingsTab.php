@@ -109,6 +109,10 @@ class SettingsTab extends BaseSettings
                 'label'  => esc_html__('Crawlers and bots', 'filter-everything'),
                 'fields' => $this->crawlerFields(),
             ),
+            'integrations' => array(
+                'label'  => esc_html__('Integrations', 'filter-everything'),
+                'fields' => $this->integrationFields(),
+            ),
             'common_settings' => array(
                 'label'  => esc_html__('Other', 'filter-everything'),
                 'fields' => array(
@@ -143,6 +147,11 @@ class SettingsTab extends BaseSettings
                 )
             )
         );
+
+        // The section exists only while a plugin it integrates with is active
+        if ( empty( $settings['integrations']['fields'] ) ) {
+            unset( $settings['integrations'] );
+        }
 
         if (!defined('FLRT_FILTERS_PRO')) {
             $settings['mobile_devices']['fields']['mobile_filter_settings']['options'][''] = esc_html__('Appear as a Pop-up', 'filter-everything') . ' &mdash; ' . esc_html__('Available in PRO', 'filter-everything');
@@ -208,6 +217,35 @@ class SettingsTab extends BaseSettings
                 'title'  => esc_html__('Rules for robots.txt', 'filter-everything'),
                 'id'     => 'robots_txt_rules',
                 'render' => array( $this, 'renderRobotsRules' ),
+            );
+        }
+
+        return $fields;
+    }
+
+    /**
+     * «Integrations» section — switches of the third-party integrations. Each
+     * field appears only while the plugin it belongs to is active.
+     *
+     * Woo Discount Rules: on by default, as the integration always was; the
+     * option lets a shop whose filters are fine with regular prices skip the
+     * discount calculation altogether. Checked by WooDiscountRules::isEnabled().
+     */
+    protected function integrationFields()
+    {
+        $fields = array();
+        $is_pro = defined('FLRT_FILTERS_PRO') && FLRT_FILTERS_PRO;
+
+        if ( WooDiscountRules::isPluginActive() ) {
+            $fields['woo_discount_rules'] = array(
+                'type'    => 'checkbox',
+                'title'   => esc_html__( 'Woo Discount Rules', 'filter-everything' ),
+                'id'      => 'woo_discount_rules',
+                'default' => 'on',
+                'label'   => $is_pro
+                    ? esc_html__( 'Apply the discounts of Woo Discount Rules to the Price and «On sale» filters', 'filter-everything' )
+                    : esc_html__( 'Apply the discounts of Woo Discount Rules to the Price filter', 'filter-everything' ),
+                'description' => esc_html__( 'Products fall into the price ranges by their discounted price. The discounted prices are calculated once and cached, so only the first page view after a change of the rules or of the product prices takes longer. Turn the option off if regular prices are fine for your filters.', 'filter-everything' ),
             );
         }
 

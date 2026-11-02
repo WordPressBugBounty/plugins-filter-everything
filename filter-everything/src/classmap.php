@@ -64,6 +64,7 @@ return [
     'FilterEverything\\Filter\\Validator' => 'Admin/Validator.php',
     'FilterEverything\\Filter\\WP_Query_Source_Detector' => 'wp_query_source_detector.php',
     'FilterEverything\\Filter\\WalkerCheckbox' => 'Walkers/WalkerCheckbox.php',
+    'FilterEverything\\Filter\\WooDiscountRules' => 'WooDiscountRules.php',
     'FilterEverything\\Filter\\WpManager' => 'WpManager.php',
     'FilterEverything\\Filter\\Wpeditor' => 'FormFields/Input.php',
     'FilterEverything\\Filter\\inProButton' => 'FormFields/Input.php',

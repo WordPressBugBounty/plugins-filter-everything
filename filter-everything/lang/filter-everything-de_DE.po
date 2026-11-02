@@ -4187,3 +4187,23 @@ msgstr "Ihre Bewertung auf WordPress.org <strong>hält die kostenlose Version am
 #: views/admin/review-notice.php
 msgid "A WordPress.org account is needed to post a review."
 msgstr "Zum Schreiben einer Bewertung ist ein WordPress.org-Konto erforderlich."
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Integrations"
+msgstr "Integrationen"
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Woo Discount Rules"
+msgstr "Woo Discount Rules"
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Apply the discounts of Woo Discount Rules to the Price and «On sale» filters"
+msgstr "Rabatte von Woo Discount Rules auf die Filter «Preis» und «Im Angebot» anwenden"
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Apply the discounts of Woo Discount Rules to the Price filter"
+msgstr "Rabatte von Woo Discount Rules auf den Filter «Preis» anwenden"
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Products fall into the price ranges by their discounted price. The discounted prices are calculated once and cached, so only the first page view after a change of the rules or of the product prices takes longer. Turn the option off if regular prices are fine for your filters."
+msgstr "Produkte werden nach ihrem rabattierten Preis in die Preisbereiche eingeordnet. Die rabattierten Preise werden einmal berechnet und zwischengespeichert, sodass nur der erste Seitenaufruf nach einer Änderung der Regeln oder der Produktpreise länger dauert. Schalten Sie die Option aus, wenn reguläre Preise für Ihre Filter ausreichen."

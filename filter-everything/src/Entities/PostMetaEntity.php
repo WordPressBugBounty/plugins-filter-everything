@@ -319,7 +319,7 @@ class PostMetaEntity implements Entity
         foreach ( $result as $index => $post_meta_row ){
 
             if( is_serialized( $post_meta_row['meta_value'] ) ){
-                $data = maybe_unserialize( $post_meta_row['meta_value'] );
+                $data = flrt_safe_unserialize( $post_meta_row['meta_value'] );
                 foreach ( $data as $i => $meta_value ){
                     // For multidimensional arrays stored in post meta
                     if( is_array( $meta_value ) ){

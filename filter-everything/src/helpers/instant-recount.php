@@ -69,7 +69,7 @@ function flrt_is_query_on_page($setPosts, $searchKey)
 
     foreach ($setPosts as $set) {
 
-        $parameters = maybe_unserialize($set->post_content);
+        $parameters = flrt_safe_unserialize($set->post_content);
         $query = isset($parameters['wp_filter_query']) ? $parameters['wp_filter_query'] : '-1';
         if ($filterSet->under_limit_filter_set($set->ID)) {
             continue;

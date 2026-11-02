@@ -462,5 +462,5 @@ function flrt_default_selector_page_link()
     // static and no posts page is assigned
     $link = get_post_type_archive_link( 'post' );
 
-    return $link ? $link : home_url( '/' );
+    return $link ? $link : flrt_home_url( '/' );
 }

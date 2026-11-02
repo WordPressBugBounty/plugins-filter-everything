@@ -450,6 +450,87 @@ function flrt_maybe_has_translation( $post_id, $lang = '' ){
     return $post_id;
 }
 
+/**
+ * Origin (scheme://host[:port]) of the current language when Polylang keeps the
+ * language in the HOST: "a different domain per language" or "sub-domains".
+ *
+ * @return string|false false when the language does not live in the host
+ */
+function flrt_pll_language_origin(){
+    if( ! function_exists( 'PLL' ) || ! function_exists( 'pll_current_language' ) || ! function_exists( 'pll_home_url' ) ){
+        return false;
+    }
+
+    $pll = PLL();
+
+    // 2 = sub-domains, 3 = domains. In the other modes the language sits in the
+    // request path (or in the content), which the filter URLs already carry.
+    if( ! isset( $pll->options ) || empty( $pll->options['force_lang'] ) || (int) $pll->options['force_lang'] < 2 ){
+        return false;
+    }
+
+    if( ! pll_current_language() ){
+        return false;
+    }
+
+    $parts = wp_parse_url( pll_home_url() );
+
+    if( empty( $parts['host'] ) ){
+        return false;
+    }
+
+    $origin = ( isset( $parts['scheme'] ) ? $parts['scheme'] : ( is_ssl() ? 'https' : 'http' ) ) . '://' . $parts['host'];
+
+    if( ! empty( $parts['port'] ) ){
+        $origin .= ':' . $parts['port'];
+    }
+
+    return $origin;
+}
+
+/**
+ * home_url() for building and parsing filter URLs.
+ *
+ * Polylang translates home_url() only for white-listed callers (the theme, nav
+ * menus, a few core blocks) and only after template_redirect, so a plugin always
+ * gets the default language's address. With one domain (or sub-domain) per language
+ * every filter link, the Reset link and the AJAX request parser then pointed to the
+ * default domain on the other languages' domains.
+ *
+ * Only the origin is swapped: with language directories the language is already in
+ * the request path, and home_url() has to stay as it is.
+ *
+ * @param string      $path
+ * @param string|null $scheme
+ * @return string
+ */
+function flrt_home_url( $path = '', $scheme = null ){
+    $url    = home_url( $path, $scheme );
+    $origin = flrt_pll_language_origin();
+
+    if( ! $origin ){
+        return $url;
+    }
+
+    $parts = wp_parse_url( $url );
+
+    if( empty( $parts['scheme'] ) || empty( $parts['host'] ) ){
+        return $url;
+    }
+
+    $default = $parts['scheme'] . '://' . $parts['host'];
+
+    if( ! empty( $parts['port'] ) ){
+        $default .= ':' . $parts['port'];
+    }
+
+    if( $default === $origin || strpos( $url, $default ) !== 0 ){
+        return $url;
+    }
+
+    return $origin . substr( $url, strlen( $default ) );
+}
+
 function flrt_pll_pro_active(){
     if ( defined('POLYLANG_PRO') ) {
         return true;
@@ -683,7 +764,7 @@ function flrt_acf_terms_order( $entity_items, $filter ){
         $field_terms = [];
         foreach ( $results as $acf_field ){
             if( isset( $acf_field['post_content'] ) ) {
-                $field_options = maybe_unserialize( $acf_field['post_content'] );
+                $field_options = flrt_safe_unserialize( $acf_field['post_content'] );
 
                 if( isset( $field_options['choices'] ) && is_array( $field_options['choices'] ) ){
                     foreach ( $field_options['choices'] as $value => $label ){
@@ -824,33 +905,15 @@ function flrt_remove_pagination_base( $url ){
     return $url;
 }
 
+/**
+ * Whether the Price (and PRO «On sale») filters take Woo Discount Rules into
+ * account. Decided once per request — see WooDiscountRules::isEnabled().
+ *
+ * @return bool
+ */
 function flrt_is_woo_discount_rules()
 {
-    $check_woo_discount_rules = apply_filters('flrt_woo_discount_rules_enabled', true);
-    if(!$check_woo_discount_rules) return false;
-    if( flrt_is_woocommerce() &&
-        class_exists('Wdr\App\Helpers\Woocommerce') &&
-        class_exists('Wdr\App\Controllers\Base') &&
-        class_exists('Wdr\App\Helpers\Rule') &&
-        class_exists('Wdr\App\Controllers\ManageDiscount') &&
-        class_exists('Wdr\App\Controllers\DiscountCalculator') &&
-        class_exists('Wdr\App\Models\DBTable')
-    )
-    {
-        $tb_table = new Wdr\App\Models\DBTable();
-        $wdr_rules = $tb_table::getRules();
-        if(!empty($wdr_rules)){
-            $discount_types = [];
-            foreach ($wdr_rules as $rule){
-                $discount_types[] = $rule->discount_type;
-            }
-            $allowed_discount_types = ['wdr_simple_discount', 'wdr_bulk_discount', 'wdr_set_discount'];
-            if(!empty(array_intersect($allowed_discount_types, $discount_types))){
-                return true;
-            }
-        }
-    }
-    return false;
+    return \FilterEverything\Filter\WooDiscountRules::isEnabled();
 }
 
 function flrt_is_elementor_active()
@@ -1098,6 +1161,63 @@ function flrt_divi_modify_specific_module($output, $render_slug, $module)
         flrt_filters_button(0, '', 'et_before_main_content');
     }
     return $output;
+}
+
+/**
+ * Divi 4 and Divi 5 Blog module set to «Current Category» in a Theme Builder
+ * category archive template: it does not show the archive's main query but runs its
+ * own query_posts() for the category of the archive (post_type + cat=<term ID>). The
+ * module then shows the same posts as the archive itself, so it is filtered as the
+ * archive listing — otherwise the widget showed the filtered counts while the posts
+ * stayed unfiltered. Explicitly chosen categories or other conditions are not touched.
+ */
+add_filter( 'wpc_is_archive_listing_query', 'flrt_divi_is_archive_listing_query', 10, 3 );
+function flrt_divi_is_archive_listing_query( $is_listing, $query, $main_query )
+{
+    if ( $is_listing || ! $main_query->is_category() ) {
+        return $is_listing;
+    }
+
+    $term = $main_query->get_queried_object();
+    if ( ! isset( $term->term_id ) ) {
+        return $is_listing;
+    }
+
+    // Exactly the category of the archive (child categories are included by WP the same way)
+    $categories = $query->get( 'category__in' );
+    if ( empty( $categories ) ) {
+        $categories = explode( ',', (string) $query->get( 'cat' ) );
+    }
+    $categories = array_values( array_filter( array_map( 'intval', (array) $categories ) ) );
+    if ( $categories !== [ (int) $term->term_id ] ) {
+        return $is_listing;
+    }
+
+    $post_types = array_filter( (array) $query->get( 'post_type' ) );
+    if ( $post_types && array_diff( $post_types, (array) get_taxonomy( 'category' )->object_type ) ) {
+        return $is_listing;
+    }
+
+    foreach ( [ 'tax_query', 'meta_query', 'post__in', 'author', 'author__in', 'author_name', 's', 'tag', 'tag_id', 'tag__in', 'category_name' ] as $narrowing_var ) {
+        if ( ! empty( $query->get( $narrowing_var ) ) ) {
+            return $is_listing;
+        }
+    }
+
+    // Built by the Blog module of Divi 4 or Divi 5 through query_posts()
+    $blog_modules = [ 'ET_Builder_Module_Blog', 'ET\\Builder\\Packages\\ModuleLibrary\\Blog\\BlogModule' ];
+    $via_query_posts = false;
+
+    foreach ( debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 30 ) as $frame ) {
+        if ( isset( $frame['function'] ) && $frame['function'] === 'query_posts' ) {
+            $via_query_posts = true;
+        }
+        if ( isset( $frame['class'] ) && in_array( $frame['class'], $blog_modules, true ) ) {
+            return $via_query_posts;
+        }
+    }
+
+    return $is_listing;
 }
 /**
  * Checks if the Breakdance plugin and its required classes/functions are active and exist.

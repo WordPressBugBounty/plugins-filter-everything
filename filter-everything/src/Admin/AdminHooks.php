@@ -138,7 +138,7 @@ class AdminHooks
         $savedPrefixes      = get_option( 'wpc_filter_permalinks', [] );
 
         if ( ! is_array( $savedPrefixes ) ) {
-            $savedPrefixes = maybe_unserialize( $savedPrefixes );
+            $savedPrefixes = flrt_safe_unserialize( $savedPrefixes );
         }
         if ( ! is_array( $savedPrefixes ) ) {
             $savedPrefixes = []; // If still not an array, default to an empty array

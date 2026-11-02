@@ -275,7 +275,7 @@ class PermalinksTab extends BaseSettings
 
         if( ! empty( $postsToChange ) ){
             foreach ( $postsToChange as $post){
-                $post->post_excerpt = maybe_unserialize($post->post_excerpt);
+                $post->post_excerpt = flrt_safe_unserialize($post->post_excerpt);
                 if (is_array($post->post_excerpt) && isset($post->post_excerpt[$entity])) {
                     if (mb_strpos($post->post_title, $slugChangeFrom) !== false) {
                         $slugChangeFrom = preg_quote($slugChangeFrom, '/');

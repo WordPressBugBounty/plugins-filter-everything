@@ -331,11 +331,14 @@ class RangeList extends Input {
         $disabled = '';
         $range_list = $this->getAttribute('value');
         if(!empty($range_list)){
+            // Without "step" a number input accepts whole numbers only
+            $step = $this->getAttribute('data-step') ? $this->getAttribute('data-step') : '1';
+
             foreach ($range_list as $key => $value) {
-                $html .= '<div class="range-list-value" data-list-number="' . $key .'">';
-                $html .= '<div class="wpc-range-list-inputs"><div><input class="wpc-range-list-min-value" type="number" name="' . $this->getAttribute('name' ) .'[' . $key . '][range_list_min_val]" placeholder="' . esc_html__('Min Value', 'filter-everything')  . '" value="' . $value['range_list_min_val'] . '"></div>';
-                $html .= '<div><input class="wpc-range-list-max-value" type="number" name="' . $this->getAttribute('name' ) .'[' . $key . '][range_list_max_val]" placeholder="' . esc_html__('Max Value', 'filter-everything')  . '" value="' . $value['range_list_max_val'] . '"></div>';
-                $html .= '<div><input type="text" class="wpc-range-list-range-text" name="' . $this->getAttribute('name' ) .'[' . $key . '][range_list_range_text]" placeholder="' . esc_html__('Label', 'filter-everything')  . '" value="' . $value['range_list_range_text'] . '"></div>';
+                $html .= '<div class="range-list-value" data-list-number="' . esc_attr( $key ) .'">';
+                $html .= '<div class="wpc-range-list-inputs"><div><input class="wpc-range-list-min-value" type="number" step="' . esc_attr( $step ) . '" name="' . $this->getAttribute('name' ) .'[' . $key . '][range_list_min_val]" placeholder="' . esc_html__('Min Value', 'filter-everything')  . '" value="' . esc_attr( $value['range_list_min_val'] ) . '"></div>';
+                $html .= '<div><input class="wpc-range-list-max-value" type="number" step="' . esc_attr( $step ) . '" name="' . $this->getAttribute('name' ) .'[' . $key . '][range_list_max_val]" placeholder="' . esc_html__('Max Value', 'filter-everything')  . '" value="' . esc_attr( $value['range_list_max_val'] ) . '"></div>';
+                $html .= '<div><input type="text" class="wpc-range-list-range-text" name="' . $this->getAttribute('name' ) .'[' . $key . '][range_list_range_text]" placeholder="' . esc_html__('Label', 'filter-everything')  . '" value="' . esc_attr( $value['range_list_range_text'] ) . '"></div>';
                 $html .= '<div><button class="button remove-range-list-value">' . esc_html__('Remove', 'filter-everything') . '</button></div>';
                 $html .= '</div></div>';
             }

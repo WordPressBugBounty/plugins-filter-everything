@@ -4103,3 +4103,23 @@ msgstr "Vaše recenze na WordPress.org <strong>udržuje bezplatnou verzi při ž
 #: views/admin/review-notice.php
 msgid "A WordPress.org account is needed to post a review."
 msgstr "K napsání recenze je potřeba účet na WordPress.org."
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Integrations"
+msgstr "Integrace"
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Woo Discount Rules"
+msgstr "Woo Discount Rules"
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Apply the discounts of Woo Discount Rules to the Price and «On sale» filters"
+msgstr "Uplatňovat slevy z Woo Discount Rules ve filtrech «Cena» a «V prodeji»"
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Apply the discounts of Woo Discount Rules to the Price filter"
+msgstr "Uplatňovat slevy z Woo Discount Rules ve filtru «Cena»"
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Products fall into the price ranges by their discounted price. The discounted prices are calculated once and cached, so only the first page view after a change of the rules or of the product prices takes longer. Turn the option off if regular prices are fine for your filters."
+msgstr "Produkty spadají do cenových rozsahů podle své zlevněné ceny. Zlevněné ceny se vypočítají jednou a uloží do mezipaměti, takže déle trvá jen první zobrazení stránky po změně pravidel nebo cen produktů. Vypněte tuto volbu, pokud vašim filtrům stačí běžné ceny."

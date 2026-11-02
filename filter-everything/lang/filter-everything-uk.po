@@ -4093,3 +4093,23 @@ msgstr "Ваш відгук на WordPress.org <strong>підтримує жит
 #: views/admin/review-notice.php
 msgid "A WordPress.org account is needed to post a review."
 msgstr "Щоб залишити відгук, потрібен обліковий запис WordPress.org."
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Integrations"
+msgstr "Інтеграції"
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Woo Discount Rules"
+msgstr "Woo Discount Rules"
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Apply the discounts of Woo Discount Rules to the Price and «On sale» filters"
+msgstr "Застосовувати знижки Woo Discount Rules у фільтрах «Ціна» та «Акція»"
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Apply the discounts of Woo Discount Rules to the Price filter"
+msgstr "Застосовувати знижки Woo Discount Rules у фільтрі «Ціна»"
+
+#: src/Settings/Tabs/SettingsTab.php
+msgid "Products fall into the price ranges by their discounted price. The discounted prices are calculated once and cached, so only the first page view after a change of the rules or of the product prices takes longer. Turn the option off if regular prices are fine for your filters."
+msgstr "Товари потрапляють у цінові діапазони за ціною зі знижкою. Ціни зі знижкою обчислюються один раз і кешуються, тож довше триватиме лише перший показ сторінки після зміни правил або цін товарів. Вимкніть опцію, якщо вашим фільтрам достатньо звичайних цін."

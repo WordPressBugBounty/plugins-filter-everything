@@ -67,6 +67,20 @@ abstract class BaseSettings implements TabInterface{
             $checked = 'on';
         }
 
+        // A field with 'default' => 'on' is checked until the site owner clears
+        // it. The hidden input posts 'off' for a cleared box, so a missing option
+        // (the field was never saved) can be told apart from a cleared one.
+        if ( isset( $args['default'] ) && 'on' === $args['default'] ) {
+            if ( null === $checked || '' === $checked || false === $checked ) {
+                $checked = 'on';
+            }
+            printf(
+                '<input type="hidden" name="%s[%s]" value="off">',
+                esc_attr( $args['option_name'] ),
+                esc_attr( $args['label_for'] )
+            );
+        }
+
         $disabled = ( $args['disabled'] === true ) ? 'disabled' : '';
 
         printf(

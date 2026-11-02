@@ -19,8 +19,6 @@ class PostMetaNumEntity implements Entity
 
     public $filter = [];
 
-    protected $product_cache  = [];
-
     public $entityName      = '';
 
     public $excludedTerms   = [];
@@ -349,9 +347,15 @@ class PostMetaNumEntity implements Entity
                 }
             }
 
-            if($this->is_woo_discount_rules && (strpos($this->entityName, '_price') !== false)){
-                $wdr_woo_discount_rules = $this->getWooDiscountRulesClass();
-                $this->preloadProducts( array_keys( $meta_vals ) );
+            /**
+             * Woo Discount Rules: products fall into the price ranges by their
+             * discounted price. The prices come from a cache that is refreshed
+             * only for the products or rules that changed — see WooDiscountRules.
+             */
+            $wdr_prices = [];
+            if ( $this->is_woo_discount_rules && strpos( $this->entityName, '_price' ) !== false ) {
+                $wdr_ids    = empty( $alreadyFilteredPosts ) ? array_keys( $meta_vals ) : array_keys( array_intersect_key( $meta_vals, $postsIn_flipped ) );
+                $wdr_prices = WooDiscountRules::getDiscountedPrices( $wdr_ids );
             }
 
             foreach ( $meta_vals as $post_id => $post_values ) {
@@ -365,16 +369,8 @@ class PostMetaNumEntity implements Entity
                     }
                 }
 
-                if ($this->is_woo_discount_rules) {
-                    if (strpos($this->entityName, '_price') !== false) {
-                        $product = $this->getProductCached($post_id);
-                        if ($product) {
-                            $wdr_product_has_sale = $wdr_woo_discount_rules->getProductPriceToDisplay($product);
-                            if ($wdr_product_has_sale) {
-                                $post_values = (float) $wdr_product_has_sale['discounted_price'];
-                            }
-                        }
-                    }
+                if ( isset( $wdr_prices[ $post_id ] ) ) {
+                    $post_values = $wdr_prices[ $post_id ];
                 }
 
                 /**
@@ -422,28 +418,19 @@ class PostMetaNumEntity implements Entity
 
             $all_values = array_merge(...array_values($post_and_meta_values));
 
-            $abs_min = min($all_values);
-            $abs_max = max($all_values);
-
-            $min_post_id = null;
-            $max_post_id = null;
-
-            foreach ($post_and_meta_values as $post_id => $values) {
-                if (in_array($abs_min, $values)) {
-                    $min_post_id = $post_id;
-                }
-                if (in_array($abs_max, $values)) {
-                    $max_post_id = $post_id;
-                }
-            }
-
+            /**
+             * meta_values keep the REAL value of every post. Until 1.9.8 the
+             * posts holding the absolute min and max were given the shifted
+             * slider bounds instead (floor/ceil via wpc_set_num_shift) so that
+             * the JS recount derived the same bounds as the server — but the
+             * Range list counters and the JS filtering then saw a $1.75 product
+             * as $1 and put it into the wrong range. The JS now rounds the
+             * bounds itself (wpcRoundNumericBounds); the values stay untouched.
+             */
             $abs_min_and_max = [
-                'abs_min' => $abs_min,
-                'abs_max' => $abs_max,
+                'abs_min' => min($all_values),
+                'abs_max' => max($all_values),
             ];
-
-            $post_and_meta_values[$min_post_id] = [$min_and_max['min']];
-            $post_and_meta_values[$max_post_id] = [$min_and_max['max']];
         }
 
         $min_and_max = apply_filters( 'wpc_set_min_max', $min_and_max, $this->getName() );
@@ -641,29 +628,4 @@ class PostMetaNumEntity implements Entity
         return $query_post_in;
     }
 
-    public function getWooDiscountRulesClass(){
-        return flrt_woo_discount_rules_class();
-    }
-
-    protected function preloadProducts($product_ids) {
-        if (empty($product_ids)) {
-            return;
-        }
-
-        $products = wc_get_products([
-            'include' => $product_ids,
-            'limit'   => -1,
-        ]);
-
-        foreach ($products as $product) {
-            $this->product_cache[$product->get_id()] = $product;
-        }
-    }
-
-    protected function getProductCached($product_id) {
-        if (!isset($this->product_cache[$product_id])) {
-            $this->product_cache[$product_id] = wc_get_product($product_id);
-        }
-        return $this->product_cache[$product_id];
-    }
 }

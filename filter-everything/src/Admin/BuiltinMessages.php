@@ -33,36 +33,38 @@ class BuiltinMessages
      */
     public static function raw()
     {
-        return array(
-            // Autumn sale 2026, extended to 2026-09-30 23:59:59 Europe/Kyiv.
-            array(
-                'id'        => '2026-09-autumn-sale',
-                'type'      => 'promo',
-                'layout'    => 'bar',
-                'theme'     => 'sale',
-                'countdown' => true,
-                'ends'      => '2026-09-30T20:59:59Z',
-                'audience'  => array( 'build' => array( 'free' ) ),
-                'content'   => array(
-                    'en' => array(
-                        'badge' => 'Autumn Sale',
-                        'text'  => 'Up to <span class="wpc-msg__pill">29%</span> off any PRO license — ends <strong>September 30</strong>',
-                        'cta'   => array(
-                            'label' => 'See prices',
-                            'url'   => 'https://filtereverything.pro/pricing/?utm_source=free_plugin&utm_medium=internal&utm_campaign=autumn_sale_2026',
-                        ),
-                    ),
-                    'uk' => array(
-                        'badge' => 'Осінній розпродаж',
-                        'text'  => 'Знижка до <span class="wpc-msg__pill">29%</span> на будь-яку PRO-ліцензію — до <strong>30 вересня</strong>',
-                        'cta'   => array(
-                            'label' => 'Дивитись ціни',
-                            'url'   => 'https://filtereverything.pro/pricing/?utm_source=free_plugin&utm_medium=internal&utm_campaign=autumn_sale_2026',
-                        ),
-                    ),
-                ),
-            ),
-        );
+        // No sale is running. Example of an entry, the autumn sale of 2026:
+        //
+        // // Autumn sale 2026, extended to 2026-09-30 23:59:59 Europe/Kyiv.
+        // array(
+        //     'id'        => '2026-09-autumn-sale',
+        //     'type'      => 'promo',
+        //     'layout'    => 'bar',
+        //     'theme'     => 'sale',
+        //     'countdown' => true,
+        //     'ends'      => '2026-09-30T20:59:59Z',
+        //     'audience'  => array( 'build' => array( 'free' ) ),
+        //     'content'   => array(
+        //         'en' => array(
+        //             'badge' => 'Autumn Sale',
+        //             'text'  => 'Up to <span class="wpc-msg__pill">29%</span> off any PRO license — ends <strong>September 30</strong>',
+        //             'cta'   => array(
+        //                 'label' => 'See prices',
+        //                 'url'   => 'https://filtereverything.pro/pricing/?utm_source=free_plugin&utm_medium=internal&utm_campaign=autumn_sale_2026',
+        //             ),
+        //         ),
+        //         'uk' => array(
+        //             'badge' => 'Осінній розпродаж',
+        //             'text'  => 'Знижка до <span class="wpc-msg__pill">29%</span> на будь-яку PRO-ліцензію — до <strong>30 вересня</strong>',
+        //             'cta'   => array(
+        //                 'label' => 'Дивитись ціни',
+        //                 'url'   => 'https://filtereverything.pro/pricing/?utm_source=free_plugin&utm_medium=internal&utm_campaign=autumn_sale_2026',
+        //             ),
+        //         ),
+        //     ),
+        // ),
+
+        return array();
     }
 
     /**
@@ -73,12 +75,10 @@ class BuiltinMessages
      */
     public static function rawPricing()
     {
-        return array(
-            'price' => '$49',
-            'was'   => '$69',
-            'off'   => '−29%',
-            'ends'  => '2026-09-30T20:59:59Z',
-        );
+        // No sale is running. Example, the autumn sale of 2026:
+        // array( 'price' => '$49', 'was' => '$69', 'off' => '−29%', 'ends' => '2026-09-30T20:59:59Z' )
+
+        return null;
     }
 
     /** @return array|null */

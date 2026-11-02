@@ -85,6 +85,10 @@ class WP_Query_Source_Detector
             return 'main_query';
         }
 
+        if (self::is_archive_listing_query($query)) {
+            return 'main_query';
+        }
+
         if (self::is_gutenberg_query($query, $content)) {
             return 'gutenberg';
         }
@@ -114,6 +118,47 @@ class WP_Query_Source_Detector
 
 
         return 'custom';
+    }
+
+    /**
+     * A secondary query that renders the listing of the current archive page — e.g. a
+     * page builder's posts module set to the current category inside an archive
+     * template. It shows exactly the posts of the archive, so it is filtered like the
+     * main query (flagged with flrt_archive_listing) instead of as a builder query.
+     * Builders recognise their own queries via the 'wpc_is_archive_listing_query' filter.
+     *
+     * @param WP_Query $query
+     * @return bool
+     */
+    public static function is_archive_listing_query($query)
+    {
+        global $wp_the_query;
+
+        if (!$query instanceof \WP_Query || !$wp_the_query instanceof \WP_Query || $query->is_main_query()) {
+            return false;
+        }
+
+        if ($query->get('flrt_archive_listing')) {
+            return true;
+        }
+
+        // Only archive pages have a listing of their own. Queries that already carry
+        // the filter (e.g. built from the main query vars) and FE's own queries are left alone.
+        if (!$wp_the_query->is_archive()
+            || $query->get('flrt_filtered_query')
+            || $query->get('flrt_query_clone')
+            || $query->get('flrt_set_query')
+        ) {
+            return false;
+        }
+
+        if (!apply_filters('wpc_is_archive_listing_query', false, $query, $wp_the_query)) {
+            return false;
+        }
+
+        $query->set('flrt_archive_listing', true);
+
+        return true;
     }
 
     /**

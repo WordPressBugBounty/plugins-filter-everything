@@ -1,5 +1,5 @@
 /*!
- * Filter Everything 1.9.7
+ * Filter Everything 1.9.8
  */
 (function ($) {
     "use strict";
@@ -2694,6 +2694,15 @@
         }
         return max;
     }
+    // The server renders the slider bounds rounded outwards by its default
+    // wpc_set_num_shift hook (floor for min, ceil for max). Bounds recomputed
+    // here from the REAL meta_values must round the same way, otherwise a
+    // recount would show 1.75 where the page load showed 1.
+    const wpcRoundNumericBounds = !!wpcFilterFront.wpcRoundNumericBounds;
+    function wpcShiftBound(value, edge) {
+        if (!wpcRoundNumericBounds || !isFinite(value)) return value;
+        return edge === 'min' ? Math.floor(value) : Math.ceil(value);
+    }
 
     function updateCounters($el, setId) {
 
@@ -3643,7 +3652,7 @@
 
 
                                         if (minValuePostIds.length) {
-                                            minVal = wpcArrayMin(minValuePostIds);
+                                            minVal = wpcShiftBound(wpcArrayMin(minValuePostIds), 'min');
                                             dataMin = minVal;
                                         }
                                     } else if (hasOnlyOneElement) {
@@ -3684,7 +3693,7 @@
                                         }
 
                                         if (maxValuePostIds.length) {
-                                            maxVal = wpcArrayMax(maxValuePostIds);
+                                            maxVal = wpcShiftBound(wpcArrayMax(maxValuePostIds), 'max');
                                             dataMax = maxVal;
                                         }else{
                                             maxVal = dataMax = 0;

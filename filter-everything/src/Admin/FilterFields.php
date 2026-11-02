@@ -645,6 +645,12 @@ class FilterFields
                 }
 
 
+                if ( $fieldKey === 'range_list_input' ) {
+                    // Min/Max inputs of the Range list follow the precision of the Slider Step.
+                    // 'data-' keys are the only custom ones Input::sanitizeAttributes() lets through.
+                    $fieldData['data-step'] = flrt_range_list_input_step( isset( $filter['step'] ) ? $filter['step'] : 1 );
+                }
+
                 if( $fieldKey === 'exclude' ){
                     // We always add terms even they are empty array to fill Select2 with related terms.
                     $fieldData['options'] = $terms;

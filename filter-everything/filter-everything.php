@@ -3,7 +3,7 @@
 Plugin Name: Filter Everything&nbsp;— WordPress & WooCommerce Filters
 Plugin URI: https://filtereverything.pro
 Description: Instantly filter any WordPress content & WooCommerce products by attributes, taxonomies, custom fields + AJAX, Elementor, automatic filter creation.
-Version: 1.9.7
+Version: 1.9.8
 Requires at least: 6.0
 Requires PHP: 7.4
 Author: Andrii Stepasiuk
@@ -27,7 +27,7 @@ if( ! class_exists( 'FlrtFilter' ) ):
             $this->define( 'FLRT_PLUGIN_DIR_URL', plugin_dir_url( __FILE__ ) );
             $this->define( 'FLRT_PLUGIN_BASENAME', plugin_basename(__FILE__) );
             $this->define( 'FLRT_PLUGIN_SLUG', 'filter-everything-pro' );
-            $this->define( 'FLRT_PLUGIN_VER', '1.9.7' );
+            $this->define( 'FLRT_PLUGIN_VER', '1.9.8' );
             $this->define( 'FLRT_PLUGIN_URL', 'https://filtereverything.pro' );
             $this->define( 'FLRT_PLUGIN_TESTED_TO', '7.1' );
             $this->define( 'FLRT_PLUGIN_DEBUG', false );
@@ -88,6 +88,7 @@ if( ! class_exists( 'FlrtFilter' ) ):
             flrt_include('src/wpc-default-hooks.php');
             flrt_include('src/wpc-third-party.php');
             flrt_include('src/PostTypes.php');
+            flrt_include('src/WooDiscountRules.php');
 
             // PRO bootstrap. Comment out this single line (or ship without the pro/ folder)
             // to run the plugin as the free version: it is the only place that registers

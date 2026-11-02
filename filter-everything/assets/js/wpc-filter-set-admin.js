@@ -1,5 +1,5 @@
 /*!
- * Filter Everything set admin 1.9.7
+ * Filter Everything set admin 1.9.8
  */
 (function($) {
     "use strict";
@@ -1053,6 +1053,34 @@
             $('.wpc-location-preview-not-pro').removeClass('display-none');
         }
     });
+    // Min/Max inputs of the Range list follow the precision of the Slider Step:
+    // 0.01 allows 1.49, an integer step keeps whole numbers (mirrors flrt_range_list_input_step())
+    function wpcRangeListInputStep(stepValue){
+        const step = String(stepValue === undefined || stepValue === null ? '' : stepValue).replace(/[^\d.]+/g, '');
+        const pos  = step.indexOf('.');
+
+        if (pos === -1) {
+            return '1';
+        }
+
+        const decimals = Math.min(step.slice(pos + 1).replace(/0+$/, '').length, 6);
+
+        if (decimals < 1) {
+            return '1';
+        }
+
+        return '0.' + '0'.repeat(decimals - 1) + '1';
+    }
+
+    function wpcSyncRangeListInputStep($filterItem){
+        const step = wpcRangeListInputStep($filterItem.find('.wpc-field-value-step').val());
+        $filterItem.find('.wpc-range-list-min-value, .wpc-range-list-max-value').attr('step', step);
+    }
+
+    $('body').on('input change', '.wpc-field-value-step', function (){
+        wpcSyncRangeListInputStep($(this).closest('.wpc-filter-item'));
+    });
+
     $('body').on('click', '.wpc-field-show-range-list-input', function (e){
         e.preventDefault();
         let $prevRow = $(this).prev('.range-list-value');
@@ -1091,6 +1119,7 @@
             </div>
         </div>`;
         $(this).before(html);
+        wpcSyncRangeListInputStep($(this).closest('.wpc-filter-item'));
         if(wpcSetVars.limitForRangeList <= $(this).parent().find('.range-list-value').length){
             $(this).prop('disabled', true);
             return false;
@@ -1307,6 +1336,9 @@
         requestParams.postType      = postType;
         requestParams.postId        = $("#post_ID").val();
         requestParams.action        = 'wpc_get_wp_queries';
+        // The page may be on another host than the admin, where cookies are not sent
+        requestParams.flrt_queries_user  = wpcSetVars.wpQueriesUser;
+        requestParams.flrt_queries_token = wpcSetVars.wpQueriesToken;
 
         let chooseButtonLink = new URL(filterPagelink);
 
